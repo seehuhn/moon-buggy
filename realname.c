@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: realname.c,v 1.13 2000/03/17 23:02:00 voss Rel $";
+static const  char  rcsid[] = "$Id: realname.c,v 1.14 2000/03/31 11:14:12 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -26,12 +26,13 @@ static const  char  rcsid[] = "$Id: realname.c,v 1.13 2000/03/17 23:02:00 voss R
 #include "moon-buggy.h"
 
 
-void
+int
 get_real_user_name (char *buffer, size_t size)
 /* Query the real user name.
  * Store the result into BUFFER, but do not write more then SIZE
  * characters.  */
 {
+  int  res;
   char *tmp;
 
   tmp = xmalloc (size);
@@ -65,14 +66,15 @@ get_real_user_name (char *buffer, size_t size)
     wprintw (message, tmpl, buffer);
   }
 
+  show_cursor ();
   echo ();
-  leaveok (message, FALSE);
-  wgetnstr (message, tmp, size);
+  res = wgetnstr (message, tmp, size);
   noecho ();
-  leaveok (message, TRUE);
+  hide_cursor ();
   if (tmp[0]) {
     strncpy (buffer, tmp, size);
   }
 
   free (tmp);
+  return  res;
 }
