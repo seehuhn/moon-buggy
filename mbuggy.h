@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: mbuggy.h,v 1.14 1999/06/06 19:30:45 voss Exp $ */
+ * $Id: mbuggy.h,v 1.15 1999/06/17 14:44:09 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -107,6 +107,7 @@ extern  void  remove_client_data (void *client_data);
 extern  void  fix_game_time (void);
 extern  void  quit_main_loop (void);
 extern  int  main_loop (double dt, void (*key_handler)(game_time));
+extern  void  xsleep (double dt);
 
 extern  void  quit_main_loop_h (game_time, void *);
 extern  void  print_message_h (game_time t, void *client_data);
