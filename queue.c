@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.1 1998/12/18 23:14:38 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.2 1998/12/20 00:44:50 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -28,6 +28,18 @@ struct event {
 static  struct event *queue = NULL;
 struct lagmeter *queuelag;
 
+
+void
+clear_queue (void)
+{
+  struct event *ev = queue;
+  while (ev) {
+    struct event *old = ev;
+    ev = old->next;
+    free (old);
+  }
+  queue = NULL;
+}
 
 void
 add_event (double t, enum event_type type)
