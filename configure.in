@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.24 $)
+AC_REVISION($Revision: 1.25 $)
 AC_INIT(mbuggy.h)
 AM_INIT_AUTOMAKE(mbuggy, 0.4.1)
 AM_CONFIG_HEADER(config.h)
@@ -34,6 +34,7 @@ LIBS="$CURSLIB $LIBS"
 fi
 
 dnl Checks for header files.
+AC_HEADER_STDC
 AC_CHECK_HEADERS(getopt.h errno.h)
 
 # Check if <sys/select.h> needs to be included for fd_set
