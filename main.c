@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.42 2000/11/13 20:49:34 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.43 2001/05/24 07:18:28 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -157,7 +157,7 @@ main (int argc, char **argv)
   my_name = strrchr (argv[0], '/');
   my_name = xstrdup (my_name ? my_name+1 : argv[0]);
 
-  while (! error_flag) {
+  do {
     int  c;
 #ifdef HAVE_GETOPT_LONG
     int  ind;
@@ -188,7 +188,7 @@ main (int argc, char **argv)
     default:
       error_flag = 1;
     }
-  }
+  } while (! error_flag);
 
   if (argc != optind) {
     fputs ("too many arguments\n", stderr);
