@@ -2,18 +2,12 @@
  *
  * Copyright (C) 1998  Jochen Voss.
  *
- * $Id: darray.h,v 1.2 1999/05/08 12:50:02 voss Exp $ */
+ * $Id: darray.h,v 1.3 1999/05/30 18:57:31 voss Exp $ */
 
 #ifndef FILE_DARRAY_H_SEEN
 #define FILE_DARRAY_H_SEEN
 
-#if STDC_HEADERS
-# include <string.h>
-#else
-# ifndef HAVE_MEMMOVE
-#  define memmove(d, s, n) bcopy ((s), (d), (n))
-# endif
-#endif
+#include <string.h>
 
 #ifndef DA_MALLOC
 #define DA_MALLOC xmalloc
