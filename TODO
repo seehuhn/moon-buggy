@@ -3,11 +3,14 @@ acceptable for the moment, because (almost) all items should be
 resolved before the first stable release, i.e. before version 1.0.
 
 BUG FIXES:
+· Levels für Zwergenhighscores -> history-Datei einführen
 · Auf nereid: Schüsse werden invers dargestellt, die Highscoreliste
 blinkend.  Auf io/jupiter ist alles noch schlimmer!
 · Auf hpux wird der Cursor nicht abgeschaltet.
 Man sollte ihn evtl. auf eine günstige Position stellen.
 · gnome-libs/macros/curses.m4 verwenden
+· Speichere die Zeit in der Highscoreliste als GMT.  Wegen `mktime' in
+`parse_date' ist das schwierig.
 
 IMPROVEMENTS:
 · Ist `addchstr' sinnvoll (wg. Geschwindigkeit)
@@ -29,10 +32,7 @@ kann.  Erklärung der Tastaturbelegung.
 genau 100 Punkte geben?)
 · Sollte der schwierige Teil der Level am Anfang (statt Ende) sein,
 damit der Spieler nicht deprimiert wird.  Insbesondere bei Level 2.
-· Wie kann man verhindern, daß sich schwächere Spieler langweilen,
-weil sie nicht in die Highscoreliste kommen?
 · Prüfsumme für das Scorefile.
-· Neue "--show-highscores" Option.
 · Score file locking: recover from failure, i.e. use an alternative method.
 (What happens if two new score files are created at the same time?)
 · Use a timeout when waiting for a file lock
@@ -41,6 +41,7 @@ weil sie nicht in die Highscoreliste kommen?
 · Portabilität bekümmern
 · Ufos einführen
 · Internationalisieren
+· Level-Hinweise über das Auto schreiben
 
 ; Local Variables:
 ; mode: auto-fill
