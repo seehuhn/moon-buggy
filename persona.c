@@ -2,18 +2,20 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: persona.c,v 1.10 1999/05/22 13:43:58 voss Rel $";
-
-#define _XOPEN_SOURCE 1
-#define _XOPEN_SOURCE_EXTENDED 1
+static const  char  rcsid[] = "$Id: persona.c,v 1.11 1999/05/25 15:34:02 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#define _XOPEN_SOURCE_EXTENDED 1
 
 #include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
+
+#if defined(__hp9000s800)
+#include <stdarg.h>
+#endif
 
 #include "mbuggy.h"
 

@@ -2,14 +2,13 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.14 1999/05/22 14:35:34 voss Rel $";
-
-#define _XOPEN_SOURCE 1
-#define _XOPEN_SOURCE_EXTENDED 1
+static const  char  rcsid[] = "$Id: highscore.c,v 1.15 1999/05/25 15:35:36 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+
+#define _XOPEN_SOURCE_EXTENDED 1
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,6 +23,10 @@ static const  char  rcsid[] = "$Id: highscore.c,v 1.14 1999/05/22 14:35:34 voss 
 #include <errno.h>
 #else
 extern  int  errno;
+#endif
+
+#if defined(__hp9000s800)
+#include <stdarg.h>
 #endif
 
 #include "mbuggy.h"
