@@ -2,22 +2,21 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: signal.c,v 1.5 1999/05/22 14:33:40 voss Rel $";
-
-#define _POSIX_SOURCE 1
-#define _SVID_SOURCE 1
+static const  char  rcsid[] = "$Id: signal.c,v 1.6 1999/05/26 21:01:49 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#define _SVID_SOURCE
 
 #include <stdio.h>
 #include <signal.h>
+#include <assert.h>
 
 #include "mbuggy.h"
 
 
-static  void (*handlers [NSIG]) (int);
+static  void (*handlers[NSIG]) (int);
 static volatile  sig_atomic_t  pending [NSIG];
 static volatile  sig_atomic_t  signal_arrived;
 
@@ -64,7 +63,7 @@ my_signal (int signum, void (*handler)(int), int ignore_test)
 {
   struct sigaction  action;
 
-  handlers [signum] = handler;
+  handlers[signum] = handler;
   if (ignore_test) {
     sigaction (signum, NULL, &action);
     if (action.sa_handler == SIG_IGN)  return;
