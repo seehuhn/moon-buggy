@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: ground.c,v 1.3 2000/11/01 19:48:06 voss Exp $";
+static const  char  rcsid[] = "$Id: ground.c,v 1.4 2000/11/13 21:00:37 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -71,7 +71,7 @@ scroll_handler (game_time t, void *client_data)
   if (crash_detected)  shift_buggy (1);
   if (crash_detected || crash_check ()) {
     ++crash_detected;
-    if (crash_detected > 2)  mode_change (pause_mode, 1);
+    if (crash_detected > 2)  mode_change (crash_mode, 1);
   }
 
   if (can_jump () && stakes) {

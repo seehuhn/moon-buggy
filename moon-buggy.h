@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss
  *
- * $Id: moon-buggy.h,v 1.18 2000/11/13 20:48:29 voss Exp $ */
+ * $Id: moon-buggy.h,v 1.19 2000/11/13 21:00:27 voss Exp $ */
 
 #ifndef FILE_MOON_BUGGY_H_SEEN
 #define FILE_MOON_BUGGY_H_SEEN
@@ -65,7 +65,7 @@ extern  void  setup_pager_mode (void);
 
 /* from "game.c" */
 extern  struct mode *game_mode;
-extern  struct mode *pause_mode;
+extern  struct mode *crash_mode;
 extern  int  crash_detected;
 extern  int  stakes;
 
