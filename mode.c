@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: mode.c,v 1.3 2000/04/08 12:59:06 voss Exp $";
+static const  char  rcsid[] = "$Id: mode.c,v 1.4 2000/04/12 20:23:59 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -97,8 +97,11 @@ mode_leave (void)
 void
 mode_redraw (void)
 {
-  werase (moon);
+  if (! mode_entered)  return;
+  wclear (moon);
   wnoutrefresh (moon);
+  wclear (status);
+  wnoutrefresh (status);
   describe_keys (current->keys.used, current->keys.data);
   current->redraw ();
   doupdate ();
