@@ -1,8 +1,8 @@
-/* ground.c - implement the moon to drive on
+/* ground.c - implement the ground to drive on
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: ground.c,v 1.1 2000/06/01 19:11:13 voss Exp $";
+static const  char  rcsid[] = "$Id: ground.c,v 1.2 2000/06/16 10:52:21 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
