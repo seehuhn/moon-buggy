@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-# $Id: Makefile.am,v 1.4 1998/12/23 10:13:55 voss Exp $
+# $Id: Makefile.am,v 1.5 1998/12/23 15:16:15 voss Exp $
 
 EXTRA_DIST = mbpaths.c manpage.in
 DISTCLEANFILES = moon-buggy.6
@@ -19,7 +19,7 @@ install-data-hook:
 	$(mkinstalldirs) $(DESTDIR)$(scoredir)
 
 uninstall-local:
-	-rmdir $(scoredir)
+	-rmdir $(DESTDIR)$(scoredir)
 
 if short_getopt
 mbsep = \\\\\"
