@@ -1,6 +1,6 @@
 # img.sed - used by "Makefile.am" to create "buggy.h"
 # Copyright 1999  Jochen Voﬂ
-# $Id: img.sed,v 1.1 1999/04/23 22:20:35 voss Exp $
+# $Id: img.sed,v 1.2 1999/05/22 11:54:55 voss Rel $
 
 # initialisation
 1 {
@@ -9,7 +9,7 @@
  * Automatically created from file "car.img".\
  * DO NOT EDIT !!! */\
 \
-static char *image[][4] = {
+static char *image[][2] = {
 	x
 	s/^.*$/  /
 	x
