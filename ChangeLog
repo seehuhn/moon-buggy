@@ -1,4 +1,86 @@
+1999-06-25  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: Added 1999-06-13 to 1999-06-25
+
+	* mbuggy.spec: Updated to moon-buggy version "0.4".
+
+	* TODO: Cleaned up the file.
+
+	* Makefile.am: Include the new file "ANNOUNCE" in the distribution.
+	Renamed old "moon-buggy.gif" and "moon-buggy.png" to new "mbuggy.gif"
+	and "mbuggy.png"
+
+	* ANNOUNCE: initital revision
+
+	* mbuggy.png, moon-buggy.png: moved moon-buggy.png to mbuggy.png
+
+	* mbuggy.gif, moon-buggy.gif: moved moon-buggy.gif to mbuggy.gif
+
+	* NEWS: Updated the news for version 0.4.
+
+	* Makefile.am: Include "mbuggy.lsm" in the distribution.
+	(install-data-hook): minor fixes
+
+1999-06-17  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* highscore.c (load_table): prepare to handle corrupted score files.
+
+	* getdate.c, keyboard.c, laser.c, level.c: doc fix
+
+	* main.c: Fixed the copyright notice.
+
+	* mbuggy.h:
+	Added a declaration for the new functio `xsleep' from "queue.c".
+
+	* meteor.c, mvwaddnstr.c: doc fix
+
+1999-06-13  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* queue.c (xsleep): new function
+
+	* random.c, signal.c: doc fix
+
+	* title.c (print_title): fixed the copyright date.
+
+	* vclock.c, xstrdup.c: doc fix
+
+	* Makefile.am: Do not use GNU make's $< any more.
+
+	* README: Reflect the changes in the manual.
+
+	* TODO: Removed many items.
+
+	* configure.in:
+	Renamed old option "--with-suid" to new "--with-setuid".  Check for
+	missing user name.
+
+	* darray.h: White space fixes.
+
+	* keyboard.c: Fixed one error message.
+
+	* mbuggy.texi: Improved the "shared score files" chapter.
+	Renamed old option "--with-suid" to new "--with-setuid".
+
+	* pager.c (lines_used, current_line): changed the type to `int'.
+
+	* persona.c: Fixed some error messages.
+
+	* queue.c: Include <stdarg.h> on __hp9000s800.
+
+	* realname.c:
+	Define _XOPEN_SOURCE_EXTENDED and on __hp9000s800 include <stdarg.h>.
+
+	* vclock.c: Include <stdarg.h> on __hp9000s800.
+
+	* wgetnstr.c (wgetnstr): fixed an error message
+
 1999-06-06  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* configure.in: Changed the version string to "0.3.95".
+
+	* Makefile.am (uninst.pre.in): fixed the dependencies.
+
+	* TODO: Removed just another item.
 
 	* ChangeLog: Added 1999-06-05 to 1999-06-06
 
