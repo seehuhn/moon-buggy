@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: realname.c,v 1.14 2000/03/31 11:14:12 voss Exp $";
+static const  char  rcsid[] = "$Id: realname.c,v 1.15 2000/04/08 12:58:16 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -14,6 +14,7 @@ static const  char  rcsid[] = "$Id: realname.c,v 1.14 2000/03/31 11:14:12 voss E
 
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <pwd.h>
@@ -32,7 +33,7 @@ get_real_user_name (char *buffer, size_t size)
  * Store the result into BUFFER, but do not write more then SIZE
  * characters.  */
 {
-  int  res;
+  int  res, start;
   char *tmp;
 
   tmp = xmalloc (size);
@@ -71,10 +72,13 @@ get_real_user_name (char *buffer, size_t size)
   res = wgetnstr (message, tmp, size);
   noecho ();
   hide_cursor ();
-  if (tmp[0]) {
-    strncpy (buffer, tmp, size);
+  
+  start = 0;
+  while (start < size && tmp[start] && isspace (tmp[start]))  ++start;
+  if (start<size && tmp[start]) {
+    strncpy (buffer, tmp+start, size-start);
+    if (start>0)  buffer[size-start] = '\0';
   }
-
   free (tmp);
   return  res;
 }
