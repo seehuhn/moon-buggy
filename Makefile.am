@@ -1,14 +1,15 @@
 ## Process this file with automake to produce Makefile.in
 # Copyright 1999  Jochen Voﬂ
-# $Id: Makefile.am,v 1.17 1999/03/08 20:27:47 voss Exp $
+# $Id: Makefile.am,v 1.18 1999/04/23 22:26:20 voss Exp $
 
-EXTRA_DIST = hpath.c moonman.in maintman.in instcmds text2c.sed merge.sed \
+EXTRA_DIST = hpath.c moonman.in maintman.in instcmds car.img \
+	text2c.sed merge.sed img.sed \
 	mbuggy.spec moon-buggy.gif moon-buggy.png title.eps
 DISTCLEANFILES = moon-buggy.6 maint-buggy maint-buggy.6 uninst.pre uninst.post
 
 bin_PROGRAMS = moon-buggy
 moon_buggy_SOURCES = moon.h main.c title.c pager.c copying.h game.c \
-	moon.c buggy.c highscore.c realname.c queue.c vclock.c \
+	moon.c buggy.c buggy.h highscore.c realname.c queue.c vclock.c \
 	persona.c signal.c xgetch.c error.c xmalloc.c xstrdup.c hpath.c
 moon_buggy_LDADD = @LIBOBJS@
 
@@ -27,9 +28,11 @@ scoredir = $(sharedstatedir)/moon-buggy
 hpath.o: hpath.c moon.h Makefile
 	$(COMPILE) -DSCORE_DIR=\"$(scoredir)\" -c $<
 
-BUILT_SOURCES = copying.h
+BUILT_SOURCES = copying.h buggy.h
 copying.h: COPYING text2c.sed
 	cd $(srcdir) && sed -f text2c.sed $< >$@
+buggy.h: car.img img.sed
+	cd $(srcdir) && sed -n -f img.sed $< >$@
 
 install-exec-hook:
 	if test "x@GAMEUSER@" != "x"; then \
