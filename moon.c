@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: moon.c,v 1.8 1999/04/21 19:19:30 voss Exp $";
+static const  char  rcsid[] = "$Id: moon.c,v 1.9 1999/04/24 17:56:10 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -62,7 +62,6 @@ d_rnd (int limit)
 void
 print_ground (void)
 {
-  mvwaddnstr (moon, LINES-5, 0, ground3, ground_width);
   mvwaddnstr (moon, LINES-4, 0, ground2, ground_width);
   mvwaddnstr (moon, LINES-3, 0, ground1, ground_width);
   wnoutrefresh (moon);
