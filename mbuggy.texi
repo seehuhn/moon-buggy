@@ -1,5 +1,5 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: mbuggy.texi,v 1.9 1999/01/02 12:22:01 voss Exp $
+@c $Id: mbuggy.texi,v 1.10 1999/01/02 15:07:01 voss Rel $
 @c %**start of header
 @setfilename mbuggy.info
 @settitle Moon-Buggy Usage and Maintenance
@@ -122,7 +122,7 @@ are only supported on some system types.
 shows a short usage message.
 
 @item -n
-@itemx --no-tile
+@itemx --no-title
 skips the title screen.
 
 @item -V
