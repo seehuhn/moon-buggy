@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: xstrdup.c,v 1.3 1998/12/29 00:40:57 voss Rel $";
+static const  char  rcsid[] = "$Id: xstrdup.c,v 1.4 1999/01/18 21:01:55 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -15,9 +15,9 @@ static const  char  rcsid[] = "$Id: xstrdup.c,v 1.3 1998/12/29 00:40:57 voss Rel
 
 char *
 xstrdup (const char *str)
+/* Duplicate STR as `strdup' does, but never return NULL.  */
 {
   char *tmp = xmalloc (strlen(str) + 1);
-  if (tmp == NULL)  fatal ("Memory exhausted");
   strcpy (tmp, str);
   return  tmp;
 }

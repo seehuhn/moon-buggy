@@ -66,6 +66,6 @@ There are some points of interest:
 Example: On GNU/Linux systems you probably can use the following
 commands.  For the last one you may need root user permissions.
 
-	configure --sharedstatedir=/var/games --with-suid=games
+	./configure --sharedstatedir=/var/games --with-suid=games
 	make
 	make install
