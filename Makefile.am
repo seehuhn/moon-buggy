@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 # Copyright 1999  Jochen Voﬂ
-# $Id: Makefile.am,v 1.12 1999/01/02 14:12:42 voss Rel $
+# $Id: Makefile.am,v 1.13 1999/01/09 12:38:00 voss Exp $
 
 EXTRA_DIST = hpath.c moonman.in maintman.in instcmds text2c.sed merge.sed \
 	mbuggy.spec moon-buggy.gif moon-buggy.png title.eps
@@ -53,6 +53,7 @@ install-data-hook:
 	fi
 
 uninstall-local:
+	rm -f $(DESTDIR)$(scoredir)/mbscore
 	-rmdir $(DESTDIR)$(scoredir)
 
 if short_getopt
