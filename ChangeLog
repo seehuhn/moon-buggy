@@ -1,3 +1,65 @@
+1999-03-08  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: added 1999-02-24 to 1999-03-08
+
+	* TODO: Neuer Punkt "messen" ersetzt alten Punkt "lag.c".
+
+	* moon.h: Added a new type `game_time'.
+	Fixed the declarations for "queue.c".
+	Removed the declarations from the obsolete file "lag.c".
+
+	* game.c: Use the new `game_time' type.
+	Removed `load_meter'.
+
+	* queue.c: Use the new `game_time' type.
+	Remove `sleep_meter'.
+	(clock_adjust_delay): do not ignore errors.
+	(get_event): do not use `lagmeter' any more.
+
+	* Makefile.am: Remove the obsolete file "lag.c".
+
+	* lag.c: removed obsolete file
+
+	* main.c: Do not allocate `queuelag' any more.
+
+	* mbuggy.texi: minor fix
+
+	* moon.c, pager.c: minor simplifications
+
+	* lag.c, persona.c, title.c: white space fixes
+
+1999-03-03  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* mbuggy.texi, maintman.in:
+	Warn even more of maint-buggy's `--uninstall' option.
+
+1999-03-02  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* TODO: Removed one item, added several.
+
+	* configure.in: Changed the version string to "0.3.90".
+
+	* Makefile.am: Add the new file "signal.c".
+
+	* signal.c: initial revision
+
+	* buggy.c, game.c: Changed the spelling of "initialise".
+
+	* main.c: Moved the signal handling code to the new file "signal.c".
+
+	* moon.h: Changed the spelling of "initialise".
+	Added declarations for the new file "signal.c".
+
+	* persona.c: Changed the spelling of "initialise".
+
+	* queue.c (my_select): new function.
+
+	* title.c: Changed the spelling of "initialise".
+
+1999-02-24  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* configure.in: Changed the version string to "0.3.3".
+
 1999-01-31  Jochen Voss  <voss@tatonka.pfalz.de>
 
 	* ChangeLog: added 1999-01-31
