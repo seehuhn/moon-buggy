@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.20 1999/05/23 14:18:19 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.21 1999/05/24 19:16:05 voss Rel $";
 
 #define _POSIX_SOURCE 1
 
@@ -34,14 +34,11 @@ int  car_base;
 
 void
 print_message (const char *str)
-/* Display STR in the message line.  */
+/* Display STR in the message line.  T must be the current game time.  */
 {
   werase (message);
   waddstr (message, str);
   wnoutrefresh (message);
-  
-  remove_event (clear_message_h);
-  add_event (3, clear_message_h, NULL);
 }
 
 void
