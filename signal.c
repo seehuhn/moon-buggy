@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: signal.c,v 1.15 2000/04/15 19:45:29 voss Exp $";
+static const  char  rcsid[] = "$Id: signal.c,v 1.16 2000/04/24 18:39:55 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -147,10 +147,8 @@ winch_handler (int signum)
   delwin (message);
   endwin ();
   
-  refresh ();
-  clearok (curscr, TRUE);
   allocate_windows ();
-  hide_cursor ();
+  refresh ();
   mode_redraw ();
   clock_thaw ();
 }
