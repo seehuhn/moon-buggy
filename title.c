@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: title.c,v 1.1 1998/12/29 00:37:26 voss Exp $";
+static const  char  rcsid[] = "$Id: title.c,v 1.2 1998/12/29 18:06:34 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -63,6 +63,7 @@ setup_screen (void)
 {
   wclear (moon);
   print_title ();
+  resize_ground (1);
   print_ground ();
 
   wclear (status);
@@ -76,13 +77,8 @@ title_mode (void)
   int  done = 0;
   int  abort = 0;
   
-  screen_done = 0;
   game_state = TITLE;
-
-  initialize_ground ();
   setup_screen ();
-  
-  screen_done = 1;
   doupdate ();
 
   do {
@@ -105,18 +101,14 @@ title_mode (void)
 	break;
       case 'c':
 	pager_mode (0);
-	screen_done = 0;
 	game_state = TITLE;
 	setup_screen ();
-	screen_done = 1;
 	doupdate ();
 	break;
       case 'w':
 	pager_mode (1);
-	screen_done = 0;
 	game_state = TITLE;
 	setup_screen ();
-	screen_done = 1;
 	doupdate ();
 	break;
       default:
@@ -129,4 +121,11 @@ title_mode (void)
   } while (! done);
 
   return  abort;
+}
+
+void
+resize_title (void)
+{
+  setup_screen ();
+  doupdate ();
 }
