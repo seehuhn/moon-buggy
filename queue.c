@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.19 1999/05/25 15:32:52 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.20 1999/06/03 12:22:09 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -93,10 +93,12 @@ static  double  cpu_load = 0;
 
 static int
 my_select (struct timeval *timeout)
-/* Wait until input is ready on from stdin or a timeout is reached.
+/* Wait until input is ready on stdin or a timeout is reached.
  * TIMEOUT has the same meaning, as is has for the `select' system
- * call.  The return value is 0 if we return because of a timeout, and
- * positive when input is ready.  */
+ * call.  The return value is 0 if we return because of a timeout,
+ * positive if input is ready, and negative if a signal occured.  In
+ * the latter case we must calculate a new TIMEOUT value and call
+ * `my_select' again.  */
 {
   fd_set  rfds;
   int  retval;
@@ -106,12 +108,14 @@ my_select (struct timeval *timeout)
   FD_SET (0, &rfds);
 
   handle_signals ();
-  do {
-    retval = select (FD_SETSIZE, &rfds, NULL, NULL, timeout);
-    if (retval < 0 && errno == EINTR)  handle_signals ();
-  } while (retval < 0 && errno == EINTR);
-  if (retval < 0)  fatal ("Select failed: %s", strerror (errno));
-
+  retval = select (FD_SETSIZE, &rfds, NULL, NULL, timeout);
+  if (retval < 0) {
+    if (errno == EINTR) {
+      handle_signals ();
+    } else {
+      fatal ("Select failed: %s", strerror (errno));
+    }
+  }
   return  retval;
 }
 
@@ -119,11 +123,16 @@ static int
 key_ready (void)
 /* Return a positive value iff keyboard input is ready.  */
 {
-  struct timeval  ancient_time;
+  int  res;
 
-  ancient_time.tv_sec = 0;
-  ancient_time.tv_usec = 0;
-  return  my_select (&ancient_time);
+  do {
+    struct timeval  ancient_time;
+    
+    ancient_time.tv_sec = 0;
+    ancient_time.tv_usec = 0;
+    res = my_select (&ancient_time);
+  } while (res < 0);
+  return  res;
 }
 
 static int
@@ -132,33 +141,36 @@ wait_until (real_time *t)
  * Return a positive value, if a key was pressed, and 0 else.
  * Set *T to the return time.  */
 {
-  double  start, stop, dt;
-  double  sec, usec;
-  struct timeval  tv;
-  int  retval;
+  double  start, stop;
+  int  res;
 
-  start = vclock ();
-  dt = *t - start;
-  if (dt <= 0) {
-    *t = start;
-    return  key_ready ();
-  }
+  do {
+    double  dt, sec, usec;
+    struct timeval  tv;
     
-  usec = 1e6 * modf (dt, &sec) + 0.5;
-  tv.tv_sec = sec + 0.5;
-  tv.tv_usec = usec + 0.5;
-  retval = my_select (&tv);
+    start = vclock ();
+    dt = *t - start;
+    if (dt <= 0) {
+      *t = start;
+      return  key_ready ();
+    }
+    
+    usec = 1e6 * modf (dt, &sec) + 0.5;
+    tv.tv_sec = sec + 0.5;
+    tv.tv_usec = usec + 0.5;
+    res = my_select (&tv);
+  } while (res < 0);
 
   *t = stop = vclock ();
   time_slept += stop-start;
-  if (! retval && stop-sleep_base > 0.1) {
+  if (! res && stop-sleep_base > 0.1) {
     double  q = exp (-ALPHA*(stop-sleep_base));
     cpu_load = q*cpu_load + (1-q)*(1-time_slept/(stop-sleep_base));
     time_slept = 0;
     sleep_base = stop;
   }
   
-  return  retval;
+  return  res;
 }
 
 void
