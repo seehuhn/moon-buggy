@@ -1,8 +1,8 @@
-since version 0.3.2
-  new score file format
-  different levels introduced
-  added a mining laser
-  game engine rewritten
+version 0.4:
+  New score file format
+  Introduced different levels
+  Added a mining laser
+  Rewritten game engine
 
 version 0.3.2:
   minor bug fixes
