@@ -18,5 +18,5 @@ Für Distributionen:
 · run
 	./autogen.sh
 	./configure
-· make
-· make distcheck
+	make
+	make distcheck
