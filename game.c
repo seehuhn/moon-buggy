@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.29 2000/01/13 18:14:34 voss Rel $";
+static const  char  rcsid[] = "$Id: game.c,v 1.30 2000/03/29 07:56:19 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -127,6 +127,7 @@ game_mode (void)
   print_lives ();
   remove_meteors ();
 
+  clear_hint_h (0, NULL);
 #ifdef A_BLINK
   wattron (moon, A_BLINK);
 #endif
