@@ -1,44 +1,95 @@
 dnl acinclude.m4 - aclocal include file for "aclocal.m4"
 dnl Copyright 2000  Jochen Voss
-dnl $Id: acinclude.m4,v 1.1 2000/03/14 20:34:31 voss Exp $
+dnl $Id: acinclude.m4,v 1.2 2000/03/17 23:04:17 voss Rel $
+
+dnl The idea of this tests, is to be as simple, as possible.
+dnl The only special case we check for, is old versions of
+dnl ncurses.  Any other problems must be handled by the user
+dnl via configure's --with-curses-includedir,
+dnl --with-curses-header, and --with-curses-libs options.
 
 AC_DEFUN(AC_CHECK_CURSES,[
-  AC_MSG_CHECKING("for curses linker flags")
-  CURSES_LIBS="-lcurses"
-  AC_ARG_WITH(curses-libs,
-    [  --with-curses-libs[=ARG]
-                          the -l and -L linker flags for the curses library
-			  [-lcurses]],
-    if test "x$withval" != xyes; then
-      CURSES_LIBS="$withval"
-    fi
-  )
-  AC_SUBST(CURSES_LIBS)
-  AC_MSG_RESULT($CURSES_LIBS)
-
+  dnl step 1: find the correct preprocessor flags
+  dnl         This is completely left to the user.
   AC_MSG_CHECKING("for curses preprocessor flags")
-  CURSES_INCLUDEDIR=""
   AC_ARG_WITH(curses-includedir,
     [  --with-curses-includedir[=DIR]
-                          the header file location for the curses library
-			  [empty]],
-    if test "x$withval" != xyes; then
-      CURSES_INCLUDEDIR="-I$withval"
-    fi
-  )
+                          special header file location for the curses library
+			  [none]],[
+    case "$withval" in
+      yes|no) ;;
+      *) CURSES_INCLUDEDIR="-I$withval" ;;
+    esac
+  ])
   AC_SUBST(CURSES_INCLUDEDIR)
-  AC_MSG_RESULT($CURSES_INCLUDEDIR)
+  if test -z "$CURSES_INCLUDEDIR"; then
+    mb_result="none"
+  else
+    mb_result="$CURSES_INCLUDEDIR"
+  fi
+  AC_MSG_RESULT($mb_result)
 
-  AC_MSG_CHECKING("how to include the curses header file")
-  CURSES_HEADER="<curses.h>"
+
+  dnl step 2: find the correct header file name
+  dnl         When nothing is specified on the command line, we try to guess.
   AC_ARG_WITH(curses-header,
     [  --with-curses-header[=ARG]
                           the curses header file name (including brackets)
-			  [<curses.h>]],
-    if test "x$withval" != xyes; then
-      CURSES_HEADER="$withval"
+			  [<curses.h>]],[
+    case "$withval" in
+      yes|no) ;;
+      *) CURSES_HEADER="$withval" ;;
+    esac
+  ])
+  if test -z "$CURSES_HEADER"; then
+    mb_save_CPPFLAGS="$CPPFLAGS"
+    CPPFLAGS="$CPPFLAGS $CURSES_INCLUDEDIR"
+    AC_CHECK_HEADERS(curses.h ncurses.h ncurses/ncurses.h ncurses/curses.h, break)
+    CPPFLAGS="$mb_save_CPPFLAGS"
+
+    if test "$ac_cv_header_curses_h" = yes; then
+      CURSES_HEADER="<curses.h>"
+    elif test "$ac_cv_header_ncurses_h" = yes; then
+      CURSES_HEADER="<ncurses.h>"
+    elif test "$ac_cv_header_ncurses_ncurses_h" = yes; then
+      CURSES_HEADER="<ncurses/ncurses.h>"
+    elif test "$ac_cv_header_ncurses_curses_h" = yes; then
+      CURSES_HEADER="<ncurses/curses.h>"
     fi
-  )
-  AC_DEFINE_UNQUOTED(CURSES_HEADER, $CURSES_HEADER, [define to the curses header file name (including brackets). ])
-  AC_MSG_RESULT($CURSES_HEADER)
+  fi
+  AC_MSG_CHECKING("how to include the curses header file")
+  if test -n "$CURSES_HEADER"; then
+    AC_DEFINE_UNQUOTED(CURSES_HEADER, $CURSES_HEADER, [define to the curses header file name (including brackets). ])
+    AC_MSG_RESULT($CURSES_HEADER)
+  else
+    AC_MSG_RESULT("unknown")
+    AC_MSG_WARN([no curses header found, try --with-curses-header])
+  fi
+
+
+  dnl step 3: try to find the correct linker flags
+  dnl         When nothing is specified on the command line, we try to guess.
+  AC_ARG_WITH(curses-libs,
+    [  --with-curses-libs[=ARG]
+                          the -l and -L linker flags for the curses library
+			  [-lcurses]],[
+    case "$withval" in
+      yes|no) ;;
+      *) CURSES_LIBS="$withval" ;;
+    esac
+  ])
+  if test -z "$CURSES_LIBS"; then
+    AC_CHECK_LIB(curses,initscr,CURSES_LIBS=-lcurses)
+    if test -z "$CURSES_LIBS"; then
+      AC_CHECK_LIB(ncurses,initscr,CURSES_LIBS=-lncurses)
+    fi
+  fi
+  AC_MSG_CHECKING("for curses linker flags")
+  if test -n "$CURSES_LIBS"; then
+    AC_SUBST(CURSES_LIBS)
+    AC_MSG_RESULT($CURSES_LIBS)
+  else
+    AC_MSG_RESULT("unknown")
+    AC_MSG_WARN([curses library not found, try --with-curses-libs])
+  fi
 ])
