@@ -13,11 +13,14 @@ Für Distributionen:
 · Quelltexte neu auschecken
 	cvs checkout moon-buggy
 	cd moon-buggy
-· Das "debian/" Verzeichnis wieder hinkopieren
-	cp -a ~/src/games/moon-buggy/debian .
 · unset LANG
 · run
 	./autogen.sh
 	./configure
 	make
 	make distcheck
+
+· Versionsnummer in "configure.in" erhöhen
+
+· Mail an "Felix Kronlage <fkr@grummel.net>" wegen OpenBSD
+und Christian
