@@ -2,9 +2,15 @@
  *
  * Copyright (C) 1997  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: basename.c,v 1.1 1998/12/17 19:59:24 voss Exp $";
+static const  char  rcsid[] = "$Id: basename.c,v 1.2 1999/01/01 18:06:04 voss Exp $";
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include <string.h>
+
+#include "moon.h"
 
 const char *
 basename (const char *name)
