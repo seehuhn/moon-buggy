@@ -1,13 +1,8 @@
-CHECKLIST:
-· ChangeLog
-· Copyright
-· make
-· make distcheck
-· CVS Tags setzen
+This file is mostly written in German.  I think that this is
+acceptable for the moment, because (almost) all items should be
+resolved before the first stable release, i.e. before version 1.0.
 
 BUG FIXES:
-· Remove score files from different versions on installation.
-· Copyrightdaten richtigstellen!
 · Auf nereid: Schüsse werden invers dargestellt, die Highscoreliste
 blinkend.  Auf io/jupiter ist alles noch schlimmer!
 · Auf hpux wird der Cursor nicht abgeschaltet.
@@ -17,35 +12,37 @@ nicht.  Sollte moon-buggy darauf vorbereitet sein?
 
 IMPROVEMENTS:
 · Ist `addchstr' sinnvoll (wg. Geschwindigkeit)
-· rpm Zeugs: "Autoreq: false" ausprobieren, "BuildRoot" wieder einführen
-· rpm Zeugs: "mbuggy.spec" aus "mbuggy.spec.in" erzeugen
-· Was ist mit der Loadanzeige?
-· Hilfetext für den Pager, den man von der Titelseite aus aufrufen
-kann.  Erklärung der Tastaturbelegung.
-· Neue "--show-highscores" Option.
-
-· Punkteverteilung verbessern
 · setgid ist evtl. besser als setuid.
-· Wie kann man verhindern, daß sich schwächere Spieler langweilen,
-weil sie nicht in die Highscoreliste kommen?
-· Prüfsumme für das Scorefile.
+· Was ist mit der Loadanzeige?
 · Könnte man die Events einen Tick (oder 0.1 Sekunden) zu früh
 ausführen und nur das `doupdate' verzögern?  Wie ist das dann mit
 Tastendrücken während der letzen zehntel Sekunde?  Bringt das
 überhaupt eine signifikante Verbesserung?
 · Wäre eine asynchrone Behandlung von Tastendrücken sinnvoll?  (siehe
 "Interrupt Input" in der glibc-Anleitung)
+· wgetnstr-Ersatz verbessern
 · Den `fd_set' Teil von "configure.in" verbessern.  Zumindest
 sollte der cache verwendet werden.
-· wgetnstr-Ersatz verbessern
+· rpm Zeugs: "Autoreq: false" ausprobieren
+· rpm Zeugs: "mbuggy.spec" aus "mbuggy.spec.in" erzeugen
+· Hilfetext für den Pager, den man von der Titelseite aus aufrufen
+kann.  Erklärung der Tastaturbelegung.
+· Punkteverteilung verbessern (sollte der erste Level nicht immer
+genau 100 Punkte geben?)
+· Sollte der schwierige Teil der Level am Anfang (statt Ende) sein,
+damit der Spieler nicht deprimiert wird.  Insbesondere bei Level 2.
+· Wie kann man verhindern, daß sich schwächere Spieler langweilen,
+weil sie nicht in die Highscoreliste kommen?
+· Prüfsumme für das Scorefile.
+· Neue "--show-highscores" Option.
 · Score file locking: recover from failure, i.e. use an alternative method.
 (What happens if two new score files are created at the same time?)
 · Use a timeout when waiting for a file lock
 · "make uninstall" braucht "install-info".  Ist das sinnvoll?
 · Was soll mit dem (im Moment leeren) uninst.post Zeugs geschehen?
 · Portabilität bekümmern
-· Internationalisieren
 · Ufos einführen
+· Internationalisieren
 
 ; Local Variables:
 ; mode: auto-fill
