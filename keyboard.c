@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: keyboard.c,v 1.14 2000/11/01 13:17:26 voss Exp $";
+static const  char  rcsid[] = "$Id: keyboard.c,v 1.15 2000/11/01 19:44:33 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -86,9 +86,7 @@ install_keys (void)
   add_key (27, mbk_end, 80);
 
   add_key ('a', mbk_fire, 100);
-  add_key ('A', mbk_fire, 50);
   add_key ('l', mbk_fire, 60);
-  add_key ('L', mbk_fire, 10);
 
   add_key ('<', mbk_first, 90);
 #ifdef KEY_HOME
@@ -97,7 +95,6 @@ install_keys (void)
 
   add_key (' ', mbk_jump, 100);
   add_key ('j', mbk_jump, 50);
-  add_key ('J', mbk_jump, 10);
   
   add_key ('>', mbk_last, 90);
 #ifdef KEY_END
@@ -144,6 +141,7 @@ read_key (void)
 #ifdef KEY_RESIZE
   if (key_code == KEY_RESIZE)  return -1;
 #endif
+  if (key_code < 256 && isalpha (key_code))  key_code = tolower (key_code);
   entry_p = locate (key_code);
   return  *entry_p ? (*entry_p)->meaning : 0;
 }
