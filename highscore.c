@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.11 1999/01/30 17:11:14 voss Rel $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.12 1999/05/19 21:13:21 voss Exp $";
 
 #define _XOPEN_SOURCE 1
 #define _XOPEN_SOURCE_EXTENDED 1
@@ -258,7 +258,7 @@ generate_table (void)
     hiscores[i].day = day;
     hiscores[i].month = month;
     hiscores[i].year = year;
-    strcpy (hiscores[i].player, names[d_rnd(13)]);
+    strcpy (hiscores[i].player, names[uniform_rnd(13)]);
     hiscores[i].new = 0;
   }
 }
