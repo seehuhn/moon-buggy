@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.31 2000/03/31 11:17:29 voss Exp $";
+static const  char  rcsid[] = "$Id: game.c,v 1.32 2000/04/01 07:54:53 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -48,8 +48,6 @@ print_lives (void)
 static void
 setup_screen (void)
 {
-  werase (moon);
-  werase (status);
   resize_ground (1);
 }
 
@@ -83,16 +81,14 @@ static void
 game_leave (void)
 {
   --lives;
-  extinguish_laser ();
   level = current_level ();
+  extinguish_laser ();
+  remove_meteors ();
 }
 
 static void
 resize_game (void)
 {
-  werase (moon);
-  werase (status);
-
   resize_meteors ();
   resize_laser ();
   resize_ground (0);
@@ -163,16 +159,11 @@ pause_enter (int seed)
   clock_reset ();
   add_event (1.5, print_lives_h, NULL);
   add_event (2.0, leave_pause_mode, NULL);
-}
-
-static void
-pause_leave (void)
-{
-  remove_meteors ();
-
-  if (lives <= 0) {
-    print_lives ();
-    clear_hint_h (0, NULL);
+  print_ground ();
+  adjust_score (0);
+  print_lives ();
+  print_buggy ();
+  if (lives <= 10) {
 #ifdef A_BLINK
     wattron (moon, A_BLINK);
 #endif
@@ -214,7 +205,6 @@ setup_game_mode (void)
 
   pause_mode = new_mode ();
   pause_mode->enter = pause_enter;
-  pause_mode->leave = pause_leave;
   pause_mode->keypress = pause_key_handler;
   mode_add_key (pause_mode, mbk_start, "continue", 1);
   mode_add_key (pause_mode, mbk_end, "abort game", 3);
