@@ -1,5 +1,5 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: mbuggy.texi,v 1.7 1998/12/26 19:59:44 voss Exp $
+@c $Id: mbuggy.texi,v 1.8 1999/01/01 19:09:22 voss Exp $
 @c %**start of header
 @setfilename mbuggy.info
 @settitle Moon-Buggy Usage and Maintainance
@@ -76,6 +76,7 @@ version @value{VERSION} of the program.
 @menu
 * Introduction::                Introduction
 * Invocation::                  Invocation
+* Playing the Game::            Playing the Game
 * Installation::                Installation and setup
 * References::                  References
 @end menu
@@ -87,29 +88,62 @@ Moon-buggy is a simple, curses-based game, where you drive some kind
 of car across the surface of the moon.  Unfortunately there are
 dangerous craters there.  Fortunately your car can jump!
 
-Moon-buggy is free software.  Read the file COPYING of the source code
-distribution for details.
+Moon-Buggy comes with NO WARRANTY, to the extent permitted by law.  You
+may redistribute copies of Moon-Buggy under the terms of the GNU General
+Public License.  For more information about these matters, read the file
+COPYING of the source code distribution or press @kbd{c} at moon-buggy's
+title screen.
 
 Please mail any suggestions and bug reports to
 @email{voss@@mathematik.uni-kl.de}.  Your message should include the
 moon-buggy version number, as obtained by the command @samp{moon-buggy -V}.
 
 
-@node Invocation, Installation, Introduction, Top
+@node Invocation, Playing the Game, Introduction, Top
 @chapter Invocation
 
-Just start it.  Use the @key{SPC} bar to jump.
+Moon-buggy understands the following options.  The long options starting
+with @samp{--} are only supported on some system types.
+
+@table @samp
+@item -h
+@itemx --help
+shows a short but helpful message.
+
+@item -n
+@itemx --no-tile
+skips the title screen.
+
+@item -V
+@itemx --version
+prints the program's version to standard output and exits.
+@end table
 
 
-@node Installation, References, Invocation, Top
+@node Playing the Game, Installation, Invocation, Top
+@chapter Playing the Game
+
+Just start it.  Follow the instructions and use the @key{SPC} bar to
+jump.
+
+
+@node Installation, References, Playing the Game, Top
 @chapter Installation
 
 Moon-buggy requires the curses library as a prerequisite.  If curses is
 not installed on your system, you may obtain the ncurses package
 (@pxref{References}).
 
-When you unpack the moon-buggy distribution, you get one directory, which
-holds all the source files and the documentation.  If you have built
+When you unpack the moon-buggy distribution, you get one directory,
+which holds all the source files and the documentation.  Now enter this
+directory:
+
+@example
+cd moon-buggy-@value{VERSION}
+@end example
+
+@noindent
+If you have built
 moon-buggy in this directory before, you can use the command @samp{make
 distclean} to remove any files, which were created during the last
 build.
