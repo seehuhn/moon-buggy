@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.29 2000/03/17 23:03:38 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.30 2000/03/19 18:47:19 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -43,7 +43,7 @@ extern  int  errno;
 #define quote(str) qx(str)
 
 
-/* The top ten list, as read by `read_data'.  */
+/* The highscore list, as read by `read_data'.  */
 struct score_entry {
   int  score, level;
   time_t  date;
@@ -145,16 +145,30 @@ randomize_entry (int n)
   highscore_changed = 1;
 }
 
+static time_t
+expire_date (int rank, time_t date)
+/* Calculate the expiration date for an entry, which is at rank RANK
+ * and which was entered at DATE.  */
+{
+  /* linear interpolation: rank 3 expires after 180 days, the last one
+   *                       after 14 days.  */
+  double  day = 24*60*60;
+  double  rate = (180-14)*day/(HIGHSCORE_SLOTS-4);
+
+  if (rank < 3)  return  date+2000*day;
+  return  date + 14*day + (HIGHSCORE_SLOTS-1-rank)*rate;
+}
+
 static void
 refill_old_entries (void)
-/* Replace old entries of `topen' with new random ones.  */
+/* Replace old entries of `highscore' with new random ones.  */
 {
-  time_t  deadline;
+  time_t  now;
   int  i;
 
-  deadline = time (NULL) - 30*24*60*60;
+  now = time (NULL);
   for (i=3; i<HIGHSCORE_SLOTS; ++i) {
-    if (highscore[i].date < deadline)  randomize_entry (i);
+    if (expire_date (i, highscore[i].date) < now)  randomize_entry (i);
   }
   qsort (highscore, HIGHSCORE_SLOTS, sizeof (struct score_entry),
 	 compare_entries);
@@ -205,7 +219,7 @@ read_version2_data (FILE *score_file)
 
 static int
 read_version3_data (FILE *score_file)
-/* Read the top ten list from SCORE_FILE into `highscore'.
+/* Read the highscore list from SCORE_FILE into `highscore'.
  * Return 1 on success and 0 on error.  */
 {
   int  err = 0;
@@ -240,7 +254,7 @@ read_version3_data (FILE *score_file)
 
 static int
 read_data (FILE *score_file)
-/* Read the top ten list from SCORE_FILE into `highscore'.
+/* Read the highscore list from SCORE_FILE into `highscore'.
  * Return 1 on success and 0 on error.  */
 {
   int  version;
@@ -281,7 +295,7 @@ read_data (FILE *score_file)
 
 static void
 write_data (FILE *score_file)
-/* Write out the current top ten list to stream SCORE_FILE.  */
+/* Write out the current highscore list to stream SCORE_FILE.  */
 {
   int  i;
   int  res;
@@ -464,6 +478,7 @@ update_score_file (const struct score_entry *entry)
 
   refill_old_entries ();
   if (entry)  merge_entry (entry);
+  refill_old_entries ();
 
   assert (out_fd != -1);
   set_persona (out_pers);
@@ -516,19 +531,25 @@ show_highscores (void)
 /* Print the highscore list to stdout.
  * Do not use curses.  */
 {
+  time_t  now;
   int  i;
 
   block_all ();
   update_score_file (NULL);
   unblock ();
 
-  puts ("rank   score lvl     date     name");
+  now = time (NULL);
+  puts ("rank   score lvl     date  expires  name");
   for (i=0; i<HIGHSCORE_SLOTS; ++i) {
     char  date [16];
+    char  expire [16];
+    double  dt;
     
     format_display_date (date, highscore[i].date);
-    printf ("%3d    %5u %-3d  %s  %." quote(MAX_NAME_CHARS) "s\n",
-	    i+1, highscore[i].score, highscore[i].level, date,
+    dt = difftime (expire_date (i, highscore[i].date), now);
+    format_relative_time (expire, dt);
+    printf ("%3d    %5u %-3d  %s %s  %." quote(MAX_NAME_CHARS) "s\n",
+	    i+1, highscore[i].score, highscore[i].level, date, expire,
 	    highscore[i].name);
   }
 }
@@ -537,9 +558,12 @@ static int  highscore_valid, last_score;
 
 static void
 print_scores (int my_score)
-/* Print the top ten table to the screen.  */
+/* Print the highscore table to the screen.  */
 {
+  time_t  now;
   int  i, line, current, top, bottom, my_rank;
+
+  now = time (NULL);
 
   for (i=1; i<HIGHSCORE_SLOTS; ++i) {
     if (highscore[i].score < my_score)  break;
@@ -555,11 +579,13 @@ print_scores (int my_score)
     bottom = 10-current;
   }
   
-  mvwaddstr (moon, 1, 5, "rank   score lvl     date     name");
+  mvwaddstr (moon, 1, 5, "rank   score lvl     date  expires  name");
   line = 3;
   my_rank = -1;
   for (i=0; i<HIGHSCORE_SLOTS; ++i) {
     char  date [16];
+    char  expire [16];
+    double  dt;
 
     if ((i==current-top && i>2)
 	|| i==current+bottom+1) {
@@ -573,9 +599,11 @@ print_scores (int my_score)
       if (highscore[i].score == my_score)  my_rank = i+1;
     }
     format_display_date (date, highscore[i].date);
+    dt = difftime (expire_date (i, highscore[i].date), now);
+    format_relative_time (expire, dt);
     mvwprintw (moon, line++, 5,
-	       "%3d    %5u %-3d  %s  %." quote(MAX_NAME_CHARS) "s\n",
-	       i+1, highscore[i].score, highscore[i].level, date,
+	       "%3d    %5u %-3d  %s %s  %." quote(MAX_NAME_CHARS) "s\n",
+	       i+1, highscore[i].score, highscore[i].level, date, expire,
 	       highscore[i].name);
     if (highscore[i].new)  wstandend (moon);
   }
