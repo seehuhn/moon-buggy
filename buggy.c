@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: buggy.c,v 1.13 1999/05/22 13:43:58 voss Exp $";
+static const  char  rcsid[] = "$Id: buggy.c,v 1.14 1999/05/22 14:43:25 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -37,13 +37,24 @@ static scenario sz_jump = {
   { car_NORMAL, 5, -1, 1 }
 };
 
+static  scenario  sz_crash = {
+  { car_BROKEN, 5, -1, 0 }
+};
+
 static  struct scene *state;
 
 
 void
 initialise_buggy (void)
+/* Reset the buggy to its initial state.  */
 {
+  int  y;
+
   state = sz_empty;
+  for (y=5; y<9; ++y)  mvwaddstr (moon, LINES-y, car_x, "       ");
+  car_x = car_base;
+  car_y = state->y;
+  wnoutrefresh (moon);
 }
 
 void
@@ -60,6 +71,10 @@ print_buggy (void)
   car_y = y;
   mvwaddstr (moon, LINES-y-1, car_x, image[n][0]);
   mvwaddstr (moon, LINES-y, car_x, image[n][1]);
+  if (n == car_BROKEN) {
+    if (ground2[car_x+1] == ' ')  mvwaddch (moon, LINES-4, car_x+1, 'o');
+    if (ground2[car_x+5] == ' ')  mvwaddch (moon, LINES-4, car_x+5, 'o');
+  }
   wnoutrefresh (moon);
 }
 
@@ -68,7 +83,7 @@ jump_handler (game_time t, void *client_data)
 {
   state = client_data;
   print_buggy ();
-  if (crash_check ())  quit_main_loop ();
+  if (crash_check ())  crash_detected = 1;
   if (state->dt >= -0.5) {
     add_event (t+state->dt, jump_handler, state+1);
   }
@@ -78,7 +93,7 @@ void
 jump (double t)
 {
   assert (state->has_ground);
-  remove_event (jump_handler);	/* only on jump at a time */
+  remove_event (jump_handler);	/* only one jump at a time */
   add_event (t, jump_handler, sz_jump);
 }
 
@@ -93,30 +108,13 @@ crash_check (void)
 /* Return true, if the car crashed.  */
 {
   if (! state->has_ground)  return 0;
-  if (ground2[car_x+1] == ' ') {
-    mvwaddstr (moon, LINES-car_y-1, car_x, "       ");
-    mvwaddstr (moon, LINES-car_y, car_x, "       ");
-    mvwaddstr (moon, LINES-8, car_x, "       ");
-    mvwaddstr (moon, LINES-7, car_x, " m     ");
-    mvwaddstr (moon, LINES-6, car_x, " Om    ");
-    mvwaddstr (moon, LINES-5, car_x, "(;-(*) ");
-    mvwaddch (moon, LINES-4, car_x+1, 'o');
-    wnoutrefresh (moon);
+  if (ground2[car_x+1] == ' ' || ground2[car_x+5] == ' ') {
+    remove_event (jump_handler);
+    state = sz_crash;
+    print_buggy ();
     return 1;
-  }
-  if (ground2[car_x+5] == ' ') {
-    mvwaddstr (moon, LINES-car_y-1, car_x, "       ");
-    mvwaddstr (moon, LINES-car_y, car_x, "       ");
-    mvwaddstr (moon, LINES-8, car_x, "       ");
-    mvwaddstr (moon, LINES-7, car_x, "       ");
-    mvwaddstr (moon, LINES-6, car_x, "    0  ");
-    mvwaddstr (moon, LINES-5, car_x, "(*;_(m.");
-    mvwaddch  (moon, LINES-4, car_x+5,    'o');
-    wnoutrefresh (moon);
-    return 1;
-  }
-  if (bonus) {
-    score_bonus (1<<bonus);
+  } else if (bonus) {
+    adjust_score (1<<bonus);
     bonus = 0;
   }
 
@@ -126,4 +124,15 @@ crash_check (void)
 #endif
   
   return  0;
+}
+
+void
+shift_buggy (int dx)
+/* Horizontally shift the buggy by the amount DX.
+ * Positive values of dx indicate a shift to the right.  */
+{
+  mvwaddstr (moon, LINES-car_y-1, car_x, "       ");
+  mvwaddstr (moon, LINES-car_y, car_x, "       ");
+  car_x += dx;
+  print_buggy ();
 }
