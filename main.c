@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.2 1998/12/18 23:17:57 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.3 1998/12/18 23:21:28 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -62,7 +62,11 @@ main_loop (void)
     case ev_KEY:
       switch (wgetch (moon)) {
       case ' ':
-	if (can_jump())  jump (t);
+	if (can_jump()) {
+	  jump (t);
+	  ++score;
+	  print_score ();
+	}
 	break;
       case KEY_BREAK:
       case KEY_CLOSE:
