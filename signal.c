@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: signal.c,v 1.17 2000/05/07 11:24:22 voss Exp $";
+static const  char  rcsid[] = "$Id: signal.c,v 1.18 2000/10/28 18:03:10 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -51,11 +51,13 @@ install_signal (int signum, RETSIGTYPE (*handler) ())
 /* Emulate the `signal' function via `sigaction'.  */
 {
   struct sigaction  action;
+  int  ret;
 
   action.sa_handler = handler;
   sigemptyset (&action.sa_mask);
   action.sa_flags = 0;
-  sigaction (signum, &action, NULL);
+  ret = sigaction (signum, &action, NULL);
+  assert (ret == 0);
 }
 
 static RETSIGTYPE
