@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.38 2000/06/16 10:51:42 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.39 2000/10/29 19:18:38 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -521,7 +521,7 @@ show_highscores (void)
     format_display_date (date, highscore[i].date);
     dt = difftime (expire_date (i, highscore[i].date), now);
     format_relative_time (expire, dt);
-    printf ("%3d    %5u %-3d  %s %s  %." quote(MAX_NAME_CHARS) "s\n",
+    printf ("%3d %8u %-3d  %s %s  %." quote(MAX_NAME_CHARS) "s\n",
 	    i+1, highscore[i].score, highscore[i].level, date, expire,
 	    highscore[i].name);
   }
@@ -594,7 +594,7 @@ print_scores (void)
     format_relative_time (expire, dt);
     if (highscore[i].new)  wstandout (moon);
     mvwprintw (moon, line++, 5,
-	       "%3d    %5u %-3d  %s %s  %." quote(MAX_NAME_CHARS) "s\n",
+	       "%3d %8u %-3d  %s %s  %." quote(MAX_NAME_CHARS) "s\n",
 	       i+1, highscore[i].score, highscore[i].level, date, expire,
 	       highscore[i].name);
     if (highscore[i].new)  wstandend (moon);
