@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: pager.c,v 1.3 1998/12/30 19:37:45 voss Exp $";
+static const  char  rcsid[] = "$Id: pager.c,v 1.4 1999/01/01 18:01:33 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -48,7 +48,7 @@ setup_screen (void)
   wclear (status);
   
   wclear (message);
-  waddstr (message, "`q' to return, page up/down and arrow keys to navigate");
+  waddstr (message, "`q' to return, ` ' page down, `b' page up");
   wnoutrefresh (message);
 }
 
@@ -87,7 +87,7 @@ pager_mode (int what)
       case KEY_BREAK:
       case KEY_CANCEL:
       case KEY_EXIT:
-      case '\e':
+      case 27:			/* ESC */
       case 'q':
 	done = 1;
 	break;
