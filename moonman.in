@@ -1,6 +1,6 @@
 .\" moonman.in - template for the "moon-buggy.6" manual page
 .\" Copyright 1999  Jochen Voss
-.\" $Id: moonman.in,v 1.5 1999/07/23 10:45:39 voss Exp $
+.\" $Id: moonman.in,v 1.6 1999/08/30 20:55:36 voss Rel $
 .de Op
 .BR -\\$1 @C@ ", " --\\$2
 ..
@@ -8,7 +8,7 @@
 .SH NAME
 moon-buggy \- drive some car across the moon
 .SH SYNOPSIS
-moon-buggy [-hnV] @C@[--help] [--no-title] [--version]
+moon-buggy [-hnsV] @C@[--help] [--no-title] [--show-scores] [--version]
 .SH DESCRIPTION
 .B Moon-buggy
 is a simple character graphics game, where you drive some kind of car
@@ -22,6 +22,9 @@ shows a short usage message.
 .TP
 .Op n no-title
 skips the title screen.
+.TP
+.Op s show-scores
+shows the current highscore list and exits.
 .TP
 .Op V version
 prints the program's version to standard output and exits.
