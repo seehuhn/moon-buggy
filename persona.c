@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: persona.c,v 1.6 1999/03/08 20:24:20 voss Exp $";
+static const  char  rcsid[] = "$Id: persona.c,v 1.7 1999/03/10 17:23:46 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -44,7 +44,7 @@ initialise_persona (void)
 
   /* check for the POSIX saved id feature.  */
 #ifdef _POSIX_SAVED_IDS
-  saved_ids_flag = _POSIX_SAVED_IDS;
+  saved_ids_flag = 1;
 #else  /* not defined(_POSIX_SAVED_IDS) */
   saved_ids_flag = sysconf (_SC_SAVED_IDS);
 #endif /* not define(_POSIX_SAVED_IDS) */
