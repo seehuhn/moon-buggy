@@ -1,13 +1,10 @@
 BUGS:
 · Signal handlers dürfen `doupdate' nicht aufrufen.
-· Use sed instead of awk for "instcmds"
-· From: towa@mathematik
-    Schlecht finde ich an dem Programm, dass
-    wenn der default-name zu lang ist, nur noch sehr wenig 
-    Platz für den richtigen Namen ist - in meinem Fall war nur
-    noch Platz für einen Buchstaben. 
 
 IMPROVEMENTS:
+· Den `fd_set' Teil von "configure.in" verbessern.  Zumindest
+sollte der cache verwendet werden.
+· Teste, of "lag.c" eine Daseinsberechtigung hat
 · Portabilität bekümmern
 · Steigenden Schwierigkeitsgrad einführen
 · Remove score files from different version on installation
@@ -20,4 +17,5 @@ IMPROVEMENTS:
 · Score file locking: recover from failure (use an alternative method)
 · Use a timeout when waiting for a file lock
 · Internationalisieren
+· Peter: Graphik verbessern, insbesondere abgestürzte Autos
 · Lars: Ufos und Laser einführen
