@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss
  *
- * $Id: moon-buggy.h,v 1.16 2000/06/16 10:54:46 voss Exp $ */
+ * $Id: moon-buggy.h,v 1.17 2000/11/01 13:13:18 voss Exp $ */
 
 #ifndef FILE_MOON_BUGGY_H_SEEN
 #define FILE_MOON_BUGGY_H_SEEN
@@ -31,8 +31,10 @@ extern int  car_base;
 
 extern  void  print_message (const char *str);
 extern  void  print_hint (const char *str);
-extern  void  allocate_windows (void);
+extern  void  prepare_screen (void);
 extern  void  prepare_for_exit (void);
+extern  void  allocate_windows (void);
+extern  void  clear_windows (void);
 
 /* from "queue.c" */
 typedef  double  game_time;
@@ -145,7 +147,9 @@ extern  int  handle_signals (void);
 enum mb_key {
   mbk_copyright = 1, mbk_down = 2, mbk_end = 4, mbk_fire = 8, mbk_first = 16,
   mbk_jump = 32, mbk_last = 64, mbk_pagedown = 128, mbk_pageup = 256,
-  mbk_start = 512, mbk_up = 1024, mbk_warranty = 2048, mbk_scores = 4096
+  mbk_start = 512, mbk_up = 1024, mbk_warranty = 2048, mbk_scores = 4096,
+  
+  mbk_redraw = 8192		/* specially handled in `mode_keypress' */
 };
 struct binding {
   int  meanings;
@@ -173,11 +177,16 @@ struct mode {
 extern  struct mode *new_mode (void);
 extern  void  mode_add_key (struct mode *m,
 			    int meanings, const char *desc, int res);
+extern  void  mode_complete (struct mode *m);
 extern  void  mode_change (const struct mode *m, int seed);
 extern  void  mode_update (void);
 extern  void  mode_redraw (void);
 extern  int  mode_keypress (game_time t, int meaning);
 extern  void  mode_signal (int signum);
+
+/* from "mesg.c" */
+extern  void  mesg_off (void);
+extern  void  mesg_restore (void);
 
 /* from "cursor.c" */
 extern  void  hide_cursor (void);
