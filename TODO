@@ -15,7 +15,6 @@ nicht.  Sollte moon-buggy darauf vorbereitet sein?
 
 IMPROVEMENTS:
 · Ist `addchstr' sinnvoll (wg. Geschwindigkeit)
-· setgid ist evtl. besser als setuid.
 · Was ist mit der Loadanzeige?
 · Könnte man die Events einen Tick (oder 0.1 Sekunden) zu früh
 ausführen und nur das `doupdate' verzögern?  Wie ist das dann mit
