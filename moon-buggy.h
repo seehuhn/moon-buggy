@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss
  *
- * $Id: moon-buggy.h,v 1.12 2000/04/08 13:16:28 voss Exp $ */
+ * $Id: moon-buggy.h,v 1.13 2000/04/15 19:50:13 voss Rel $ */
 
 #ifndef FILE_MOON_BUGGY_H_SEEN
 #define FILE_MOON_BUGGY_H_SEEN
@@ -41,7 +41,7 @@ typedef  void (*callback_fn) (game_time, void *);
 extern  game_time  current_time (void);
 
 extern  void  clock_reset (void);
-extern  void  clock_thaw (double dt);
+extern  void  clock_thaw (void);
 extern  void  clear_queue (void);
 extern  void  add_event (game_time t, callback_fn callback, void *client_data);
 extern  void  remove_event (callback_fn callback);
@@ -140,7 +140,7 @@ extern  void  set_persona (enum persona  pers);
 extern  void  block_all (void);
 extern  void  unblock (void);
 extern  void  initialise_signals (void);
-extern  void  handle_signals (void);
+extern  int  handle_signals (void);
 
 /* from "keyboard.c" */
 enum mb_key {
