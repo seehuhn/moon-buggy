@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 # Copyright 1999  Jochen Voss
-# $Id: Makefile.am,v 1.42 1999/08/30 20:59:04 voss Exp $
+# $Id: Makefile.am,v 1.43 1999/08/30 22:02:52 voss Exp $
 
 EXTRA_DIST = moonman.in maintman.in instcmds car.img \
 	text2c.sed merge.sed img.sed ANNOUNCE moon-buggy.lsm \
@@ -64,7 +64,7 @@ uninstall-local:
 
 dist-hook:
 	mkdir $(distdir)/debian
-	cp -p $(srcdir)/debian/* $(distdir)/debian
+	if [ -d $(srcdir)/debian ]; then cp -p $(srcdir)/debian/* $(distdir)/debian/; fi
 
 if short_getopt
 mbsep = \\\\\"
