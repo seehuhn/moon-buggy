@@ -2,7 +2,7 @@
 # instcmds - extract shell commands from the Makefile
 # Copyright 1999  Jochen Voﬂ
 
-version="0.2"
+version="0.3"
 
 usage()
 {
