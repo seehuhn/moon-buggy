@@ -2,17 +2,19 @@
 	Announcement for Moon-buggy version 0.4
 	=======================================
 
+I'm proud to announce the release of Moon-buggy, version 0.4.
+
 Moon-buggy is a simple character graphics game, where you drive some
 kind of car across the moon's surface.  Unfortunately there are
 dangerous craters there.  Fortunately your car can jump over them!
 
-Version 0.4 of Moon-buggy is out!  As the version number indicates, the
-program is not yet finished.  Nevertheless the code, which is already
-there, seems stable and the game is playable, now.
+As the program's version number indicates, the program is not yet
+finished.  Nevertheless the code, which is already there, seems stable
+and the game is playable, now.
 
 The program is supposed to compile and run on any POSIX compliant
-system which has the curses library installed.  But at the moment it is
+system which provides the curses library.  But at the moment it is
 only tested on GNU/Linux systems.
 
-You may get moon-buggy from "sunsite.unc.edu".  It is in the file
-"/pub/Linux/games/arcade/mbuggy-0.4.tar.gz".
+You may get moon-buggy via ftp from "sunsite.unc.edu".  It is in the
+file "/pub/Linux/games/arcade/mbuggy-0.4.tar.gz".
