@@ -20,7 +20,7 @@ Für Distributionen:
 	make
 	make distcheck
 
-· Versionsnummer in "configure.in" erhöhen
+· Versionsnummer in "configure.ac" erhöhen
 
-· Mail an "Felix Kronlage <fkr@grummel.net>" wegen OpenBSD
-und Christian
+· Mail an Christian
+und (für stable) an "Felix Kronlage <fkr@grummel.net>" wegen OpenBSD
