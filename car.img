@@ -1,6 +1,6 @@
 # car.img - images to animate the buggy
 # this is input for "img.sed"
-# $Id: car.img,v 1.2 1999/05/22 11:54:46 voss Exp $
+# $Id: car.img,v 1.3 1999/05/22 14:43:39 voss Exp $
 
 NORMAL:
 |   Omm |
@@ -21,3 +21,7 @@ UP2:
 LAND:
 |   omm |
 |(o)_(o)|
+
+BROKEN:
+|   __  |
+|cnOMMnb|
