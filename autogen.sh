@@ -1,7 +1,8 @@
 #! /bin/sh
 # autogen.sh - recreate automatically generated files
-# $Id: autogen.sh,v 1.3 1999/05/30 19:54:39 voss Exp $
+# $Id: autogen.sh,v 1.4 1999/06/02 07:07:16 voss Exp $
 aclocal
 autoconf
 autoheader
 automake -a
+touch uninst.pre.in
