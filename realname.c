@@ -2,9 +2,9 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: realname.c,v 1.5 1999/01/02 12:08:08 voss Rel $";
+static const  char  rcsid[] = "$Id: realname.c,v 1.6 1999/01/30 17:12:47 voss Rel $";
 
-#define _POSIX_SOURCE
+#define _POSIX_SOURCE 1
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -15,6 +15,7 @@ static const  char  rcsid[] = "$Id: realname.c,v 1.5 1999/01/02 12:08:08 voss Re
 #include <unistd.h>
 #include <sys/types.h>
 #include <pwd.h>
+#include <assert.h>
 
 #include "moon.h"
 
@@ -42,7 +43,19 @@ get_real_user_name (char *buffer, size_t size)
     waddstr (message, "please enter your name: ");
   } else {
     char  tmpl [100];
-    sprintf (tmpl, "please enter your name (default: \"%%.%ds\"): ", size);
+    int  def_size;
+
+    def_size = COLS - size - strlen("please enter your name (default: \""
+				  "\"): ");
+    if (def_size >= (int)xstrnlen(buffer, size)) {
+      sprintf (tmpl, "please enter your name (default: \"%%.%ds\"): ", size);
+    } else {
+      def_size -= 2;
+      if (def_size < 6)  def_size = 6;
+      assert (size >= 8);
+      sprintf (tmpl, "please enter your name (default: \"%%.%ds..\"): ",
+	       def_size);
+    }
     wprintw (message, tmpl, buffer);
   }
 
