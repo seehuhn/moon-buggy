@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.18 1999/05/23 14:20:25 voss Exp $";
+static const  char  rcsid[] = "$Id: game.c,v 1.19 1999/05/23 21:02:51 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -79,9 +79,10 @@ spend_life ()
   print_buggy ();
 
   start_scrolling (1);
+  requeue_meteors (1);
   add_event (TICK(75), score_handler, NULL);
 
-  main_loop (0.5, life_key_handler);
+  main_loop (1, life_key_handler);
 
   extinguish_laser ();
 }
@@ -127,9 +128,10 @@ game_mode (void)
   lives = 3;
   level_start ();
   do {
-    for (i=car_base-4; i<car_base+8; ++i) {
+    for (i=car_x-5; i<car_x+7; ++i) {
       ground2[i] = '#';
     }
+    meteor_car_hit (car_x-20, car_x+7);
     spend_life ();
     --lives;
 
@@ -137,8 +139,8 @@ game_mode (void)
 
     add_event (2, quit_main_loop_h, NULL);
     main_loop (2, game_key_handler);
-    remove_meteors ();
   } while (lives > 0);
+  remove_meteors ();
 
   wattron (moon, A_BLINK);
   mvwaddstr (moon, LINES-11, car_base-1, "GAME OVER");
