@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.11 1999/04/25 17:09:11 voss Exp $";
+static const  char  rcsid[] = "$Id: game.c,v 1.12 1999/05/08 12:41:38 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -91,6 +91,8 @@ spend_life (void)
   add_event (TICK(75), score_handler, NULL);
 
   main_loop (1, life_key_handler);
+
+  extinguish_laser ();
 }
 
 static void
