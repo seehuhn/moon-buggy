@@ -1,5 +1,5 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: moon-buggy.texi,v 1.5 1999/09/14 15:35:03 voss Exp $
+@c $Id: moon-buggy.texi,v 1.6 1999/09/28 17:30:15 voss Rel $
 @c %**start of header
 @setfilename moon-buggy.info
 @settitle Moon-Buggy Usage and Maintenance
@@ -41,6 +41,8 @@ translation approved by the Free Software Foundation.
 @setchapternewpage off
 @titlepage
 @title Moon-Buggy Usage and Maintenance
+@subtitle @value{UPDATED}
+@subtitle Edition @value{EDITION}
 @sp 8
 @center @image{title,,}
 @author by Jochen Vo@ss{}
@@ -74,8 +76,8 @@ Moon-buggy is a simple character graphics game, where you drive some
 kind of car across the moon's surface.  Unfortunately there are
 dangerous craters there.  Fortunately your car can jump over them!
 
-This edition of the manual applies to version @value{VERSION} of the
-program.
+This edition (last updated @value{UPDATED}) of the manual applies to
+version @value{VERSION} of the program.
 @end ifinfo
 
 @menu
@@ -185,7 +187,7 @@ quits the game prematurely.  But you still keep your score and may enter
 the top ten list.
 @end table
 
-Moon-buggy can handle a wide range of screen sizes.  But it runs best,
+Moon-buggy can handle a wide range of screen sizes.  But it runs best
 if the screen has at least 80 columns.  If you run it on a screen with
 significantly less columns it may look strange and could be hard to
 play.
@@ -209,7 +211,8 @@ program (but not for the user's text editor).  Here is a list of
 possible policies:
 
 @enumerate
-@item The preferred solution is to make moon-buggy a setgid program.  This
+@item
+The preferred solution is to make moon-buggy a setgid program.  This
 means the following: you choose a group ID, which cannot be used by
 ordinary users, and allow only members of this group to write the score
 file.  Many systems have a group @samp{games} for this purpose (Check
@@ -221,17 +224,21 @@ is able to access the score file.
 You can use @code{configure}'s @samp{--with-setgid} option
 (@pxref{Installation}) to properly set up access permissions for this model.
 
-@item You could make moon-buggy a setuid program, but for security reasons this is not
-recommended.  See the file @file{SECURITY} from the bsd-games
-distribution (@pxref{References}) for details.
+@item
+You could make moon-buggy a setuid program but for security reasons this
+is not recommended.  The file @file{SECURITY} from the bsd-games
+distribution (@pxref{References}) has some informations about this
+topic.
 
-@item Another solution is to make the score file world writable. 
-But then you have to trust your players: every player may open the score
-file with his favourite text editor and change it freely.  So this is
-not recommended, too.
+@item
+Another solution is to make the score file world writable.  But then you
+have to trust your players: every player may open the score file with
+his favourite text editor and change it freely.  So this is not
+recommended, too.
 
-@item Finally you could do nothing.  Then every account gets its local
-score file.
+@item
+Finally you could do nothing.  Then every account gets its local score
+file.
 @end enumerate
 
 
@@ -267,7 +274,8 @@ prefix other than @file{/usr/local} by giving @samp{configure} the
 
 @item
 You can choose the score file's location via @code{configure}'s
-@samp{--sharedstatedir} option.  On Linux you should use
+@samp{--sharedstatedir=@var{dir}} option.  The score file then will be
+@file{@var{dir}/moonbuggy/mbscore}.  On GNU/Linux systems you should use
 
 @example
 --sharedstatedir=/var/games
@@ -324,6 +332,6 @@ server and its mirrors.  The original site is
 @url{ftp://prep.ai.mit.edu/pub/gnu/ncurses/ncurses-4.2.tar.gz}.
 
 Hints about @strong{security concerns} may be found in the file
-@file{SECURITY} from the bsd-games package.  One location to find it is
-@url{ftp://sunsite.unc.edu/pub/linux/games/bsd-games-2.7.tar.gz}.
+@file{SECURITY} from the bsd-games package.  One location where to find
+it is @url{ftp://sunsite.unc.edu/pub/linux/games/bsd-games-2.7.tar.gz}.
 @bye
