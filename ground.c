@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: ground.c,v 1.2 2000/06/16 10:52:21 voss Exp $";
+static const  char  rcsid[] = "$Id: ground.c,v 1.3 2000/11/01 19:48:06 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -47,7 +47,6 @@ print_ground (void)
 {
   mvwaddnstr (moon, LINES-4, 0, ground2, ground_width);
   mvwaddnstr (moon, LINES-3, 0, ground1, ground_width);
-  mvwprintw (moon, LINES-3, 3, " %d ", getpid ());
   wnoutrefresh (moon);
 }
 
