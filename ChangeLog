@@ -1,3 +1,14 @@
+1999-09-14  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: Added 1999-09-14
+
+	* configure.in: Changed the version string to "0.4.0.94".
+	Use AC_EGREP_HEADER instead of AC_HEADER_EGREP.
+
+	* game.c (game_mode): make the use of A_BLINK conditional.
+
+	* moon-buggy.texi: Fixed an overfull hbox.
+
 1999-09-07  Jochen Voss  <voss@tatonka.pfalz.de>
 
 	* ChangeLog: Added 1999-09-07
