@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss
  *
- * $Id: moon-buggy.h,v 1.19 2000/11/13 21:00:27 voss Exp $ */
+ * $Id: moon-buggy.h,v 1.20 2000/11/16 17:59:30 voss Rel $ */
 
 #ifndef FILE_MOON_BUGGY_H_SEEN
 #define FILE_MOON_BUGGY_H_SEEN
@@ -90,11 +90,11 @@ extern  void  start_scrolling (double t);
 extern  int  car_x, car_y;
 extern  void  initialise_buggy (void);
 extern  void  print_buggy (void);
+extern  void  shift_buggy (int dx);
 extern  void  jump (game_time t);
 extern  int  can_jump (void);
 extern  int  crash_check (void);
-extern  void  shift_buggy (int dx);
-extern  int  car_meteor_hit (game_time t, int x);
+extern  int  car_meteor_hit (int x);
 
 /* from "laser.c" */
 extern  void  fire_laser (double t);
@@ -103,7 +103,8 @@ extern  int  laser_hit (int x);
 extern  void  resize_laser (void);
 
 /* from "meteor.c" */
-extern  void  place_meteor (double t);
+extern  void  scroll_meteors (void);
+extern  void  place_meteor (void);
 extern  void  remove_meteors (void);
 extern  int  meteor_laser_hit (int x0, int x1);
 extern  int  meteor_car_hit (int x0, int x1);
