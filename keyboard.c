@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: keyboard.c,v 1.10 2000/04/08 13:14:14 voss Exp $";
+static const  char  rcsid[] = "$Id: keyboard.c,v 1.11 2000/04/09 13:02:43 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -74,51 +74,50 @@ install_keys (void)
 
   for (i=0; i<HASH_SIZE; ++i)  hash_table [i] = NULL;
 
-  add_key ('c', mbk_copyright, 150);
+  add_key ('c', mbk_copyright, 100);
 
-  add_key (14, mbk_down, 150);	/* \C-n */
+  add_key (14, mbk_down, 80);	/* \C-n */
 #ifdef KEY_DOWN
-  add_key (KEY_DOWN, mbk_down, 200);
+  add_key (KEY_DOWN, mbk_down, 100);
 #endif
 
-  add_key ('q', mbk_end, 150);
+  add_key ('q', mbk_end, 100);
   add_key ('n', mbk_end, 90);
   add_key (27, mbk_end, 80);
 
   add_key ('a', mbk_fire, 100);
-  add_key ('l', mbk_fire, 100);
+  add_key ('l', mbk_fire, 50);
 
-  add_key ('<', mbk_first, 100);
+  add_key ('<', mbk_first, 90);
 #ifdef KEY_HOME
-  add_key (KEY_HOME, mbk_first, 200);
+  add_key (KEY_HOME, mbk_first, 100);
 #endif
 
-  add_key (' ', mbk_jump, 200);
+  add_key (' ', mbk_jump, 100);
+  add_key ('j', mbk_jump, 50);
   
-  add_key ('>', mbk_last, 100);
+  add_key ('>', mbk_last, 90);
 #ifdef KEY_END
-  add_key (KEY_END, mbk_last, 200);
+  add_key (KEY_END, mbk_last, 100);
 #endif
 
-  add_key (' ', mbk_pagedown, 200);
+  add_key (' ', mbk_pagedown, 90);
 #ifdef KEY_NPAGE
-  add_key (KEY_NPAGE, mbk_pagedown, 200);
+  add_key (KEY_NPAGE, mbk_pagedown, 100);
 #endif
 
-  add_key ('b', mbk_pageup, 100);
+  add_key ('b', mbk_pageup, 90);
 #ifdef KEY_PPAGE
-  add_key (KEY_PPAGE, mbk_pageup, 200);
+  add_key (KEY_PPAGE, mbk_pageup, 100);
 #endif
 
   add_key ('y', mbk_start, 100);
   add_key (' ', mbk_start, 90);
-#ifdef KEY_ENTER
-  add_key (KEY_ENTER, mbk_start, 100);
-#endif
+  add_key (10, mbk_start, 80);	/* RET */
 
-  add_key (16, mbk_up, 150);	/* \C-p */
+  add_key (16, mbk_up, 80);	/* \C-p */
 #ifdef KEY_UP
-  add_key (KEY_UP, mbk_up, 200);
+  add_key (KEY_UP, mbk_up, 100);
 #endif
 
   add_key ('w', mbk_warranty, 100);
@@ -141,6 +140,18 @@ read_key (void)
 #endif
   entry_p = locate (key_code);
   return  *entry_p ? (*entry_p)->meaning : 0;
+}
+
+static int
+function_key (int key)
+{
+  return  key>255 || key == ' ' || key == 10;
+}
+
+static int
+control_key (int key)
+{
+  return  key >= 1 && key <= 26;
 }
 
 char *
@@ -223,7 +234,7 @@ key_name (int key)
     sprintf (buffer, "%c", key);
     return  buffer;
   }
-  if (key >= 1 && key <= 26) {
+  if (control_key (key)) {
     sprintf (buffer, "C-%c", key+'a'-1);
     return  buffer;
   }
@@ -233,12 +244,20 @@ key_name (int key)
 #define MAX_KEYS 16
 struct key_name {
   char name [8];
-  int  priority;
+  int  priority, base_priority;
 } data [MAX_KEYS];
 struct key_info {
+  int  fn, ctrl, norm;
   int  k;
   struct key_name  data [MAX_KEYS];
 };
+
+static void
+set_display_priorities (struct key_name *data, int k)
+{
+  int i;
+  for (i=0; i<k; ++i)  data[i].priority = data[i].base_priority;
+}
 
 static int
 compare_keys (const void *a, const void *b)
@@ -246,9 +265,77 @@ compare_keys (const void *a, const void *b)
   const struct key_name *aa = a;
   const struct key_name *bb = b;
 
-  if (aa->priority < bb->priority)  return -1;
-  if (aa->priority > bb->priority)  return +1;
-  return  0;
+  if (aa->priority < bb->priority)  return +1;
+  if (aa->priority > bb->priority)  return -1;
+  if (strlen (aa->name) < strlen (bb->name))  return -1;
+  if (strlen (aa->name) > strlen (bb->name))  return +1;
+  return  strcmp (aa->name, bb->name);
+}
+
+static int
+choose_keys (int *n, const struct binding *b, struct key_info *keys,
+	     int max_len)
+/* Choose the keys to explain, based on available display space.
+ * Input are *N key bindings in the array B and the corresponding key
+ * names in KEYS.  The resulting explanation must fit within MAX_LEN
+ * characters.
+ *
+ * This function may decrease *N and clear the priority values of
+ * some keys in order to exclude keys from the explanation.  */
+{
+  int  finished;
+  int  *first;
+  int  i, k, len;
+  
+  /* Is there enough space to explain all functions?  */
+  len = max_len;
+  for (i=0; i<*n && len>3; ++i) {
+    int  x;
+    if (i>0)  --len;		/* " " */
+    x = 2 + strlen(b[i].desc);	/* "x:desc" */
+    if (len >= x) {
+      len -= x;
+    } else {
+      *n=i;
+      break;
+    }
+  }
+
+  /* How much space do we have left? */
+  len = max_len;
+  first = xmalloc (*n * sizeof(int));
+  for (i=0; i<*n; ++i) {
+    first[i] = 1;
+    if (i>0)  --len;		/* " " */
+    len -= 1 + strlen(b[i].desc); /* ":desc" */
+  }
+  finished = 0;
+  for (k=0; ! finished; ++k) {
+    finished = 1;
+    for (i=0; i<*n; ++i) {
+      if (k < keys[i].k
+	  && (strlen (keys[i].data[k].name) < len
+	      || (first[i] && strlen (keys[i].data[k].name)<=len))) {
+	len -= strlen (keys[i].data[k].name);
+	if (first[i]) {
+	  first[i] = 0;
+	} else {
+	  --len;	/* "," */
+	}
+	finished = 0;
+      } else {
+	keys[i].data[k].base_priority = 0;
+      }
+    }
+  }
+  free (first);
+
+  for (i=0; i<*n; ++i) {
+    set_display_priorities (keys[i].data, keys[i].k);
+    qsort (keys[i].data, keys[i].k, sizeof (struct key_name), compare_keys);
+  }
+
+  return  len;
 }
 
 void
@@ -257,86 +344,71 @@ describe_keys (int n, const struct binding *b)
   struct key_info *keys;
   char* buffer;
   int  len, max_len;
-  int  i, j, k, max_k;
+  int  i, j, k;
 
-  max_k = 0;
   keys = xmalloc (n*sizeof(struct key_info));
   for (i=0; i<n; ++i) {
+    keys[i].fn = 0;
+    keys[i].ctrl = 0;
+    keys[i].norm = 0;
     keys[i].k = 0;
-    for (j=0; j<HASH_SIZE; ++j) {
-      struct hash_entry *ent = hash_table[j];
-      
-      while (ent) {
+  }
+  for (j=0; j<HASH_SIZE; ++j) {
+    struct hash_entry *ent = hash_table[j];
+    
+    while (ent) {
+      for (i=0; i<n; ++i) {
 	if (ent->meaning & b[i].meanings) {
 	  char *name = key_name (ent->key_code);
 
 	  if (name) {
 	    k = keys[i].k++;
-	    if (k+1 > max_k)  max_k = k+1;
 	    strncpy (keys[i].data[k].name, name, 7);
 	    keys[i].data[k].name[7] = 0;
+	    keys[i].data[k].base_priority = ent->priority;
 	    keys[i].data[k].priority = ent->priority;
+	    if (function_key (ent->key_code)) {
+	      if (keys[i].fn == 0)  keys[i].data[k].priority += 1050;
+	      ++keys[i].fn;
+	    } else if (control_key (ent->key_code)) {
+	      if (keys[i].ctrl == 0)  keys[i].data[k].priority += 1000;
+	      ++keys[i].ctrl;
+	    } else {
+	      keys[i].data[k].priority += 1100;
+	      ++keys[i].norm;
+	    }
 	  }
+	  break;
 	}
-	ent = ent->next;
       }
+      ent = ent->next;
     }
   }
-
   for (i=0; i<n; ++i) {
     qsort (keys[i].data, keys[i].k, sizeof (struct key_name), compare_keys);
   }
 
   max_len = COLS;
-  buffer = xmalloc (max_len+1);	/* one byte for the trailing `\0' */
-
-  /* Is there enough space to explain all functions?  */
-  len = max_len;
-  for (i=0; i<n && len>3; ++i) {
-    int  x;
-    if (i>0)  --len;		/* " " */
-    x = 2 + strlen(b[i].desc);	/* "x:desc" */
-    if (len >= x) {
-      len -= x;
-    } else {
-      n=i;
-      break;
-    }
-  }
-
-  /* How much space do we have left? */
-  len = max_len;
-  for (i=0; i<n; ++i) {
-    if (i>0)  --len;		/* " " */
-    len -= 1 + strlen(b[i].desc); /* ":desc" */
-  }
-  for (k=0; k<max_k; ++k) {
-    for (i=0; i<n; ++i) {
-      if (k < keys[i].k
-	  && (strlen (keys[i].data[k].name) < len
-	      || (k==0 && strlen (keys[i].data[k].name)<=len))) {
-	keys[i].data[k].priority = 1;
-	len -= strlen (keys[i].data[k].name);
-	if (k>0)  --len;	/* "," */
-      } else {
-	keys[i].data[k].priority = 0;
-      }
-    }
-  }
+  len = choose_keys (&n, b, keys, max_len);
+  buffer = xmalloc (max_len+1);
   
   buffer[0] = '\0';
   for (i=0; i<n; ++i) {
-    for (k=0; k<max_k; ++k) {
+    int  first = 1;
+    for (k=0; k<keys[i].k; ++k) {
       if (keys[i].data[k].priority) {
-	if (k>0) {
+	if (! first) {
 	  strcat (buffer, ",");
-	} else if (i>0) {
-	  if (len > 0) {
-	    --len;
-	    strcat (buffer, "  ");
-	  } else {
-	    strcat (buffer, " ");
+	} else {
+	  if (i>0) {
+	    if (len > 0) {
+	      --len;
+	      strcat (buffer, "  ");
+	    } else {
+	      strcat (buffer, " ");
+	    }
 	  }
+	  first = 0;
 	}
 	strcat (buffer, keys[i].data[k].name);
       }
