@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.7 1998/12/26 14:08:37 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.8 1998/12/27 14:09:53 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -259,6 +259,8 @@ main (int argc, char **argv)
   int  version_flag = 0;
   int  error_flag = 0;
   
+  initialize_persona ();
+  set_user_persona ();
   my_name = xstrdup (basename (argv[0]));
 
   while (! error_flag) {
