@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.3 1998/12/18 23:21:28 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.4 1998/12/20 00:45:35 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -11,12 +11,14 @@ static const  char  rcsid[] = "$Id: main.c,v 1.3 1998/12/18 23:21:28 voss Exp $"
 #if STDC_HEADERS
 # include <string.h>
 #endif
+#include <unistd.h>		/* TODO: remove */
 
 #include "moon.h"
 
 
 const char *my_name;
-unsigned long  score;
+unsigned long  score, bonus;
+static int  lives;
 
 
 static void
@@ -29,33 +31,50 @@ print_time (double t)
   tt /= 100;
   sec = tt%60;
   min = tt/60;
-  mvwprintw (status, 1, COLS-17, "time: %2d:%02d:%02d", min, sec, frac);
+  mvwprintw (status, 0, COLS-17, "time: %2d:%02d.%02d", min, sec, frac);
   wnoutrefresh (status);
 }
 
 static void
 print_score ()
 {
-  mvwprintw (status, 0, COLS-17, "score: %lu", score);
+  mvwprintw (status, 0, 0, "score: %lu", score);
   wnoutrefresh (status);
 }
 
 static void
-main_loop (void)
+print_lives ()
+{
+  mvwprintw (status, 0, 20, "lives: %d", lives);
+  wnoutrefresh (status);
+}
+
+static void
+print_ground ()
+{
+  mvwaddchnstr (moon, LINES-4, 0, ground2, COLS);
+  wnoutrefresh (moon);
+}
+
+static void
+main_loop (double wait)
 {
   double  base, t;
   int  done = 0;
 
+  doupdate ();
+  
   base = vclock ();
-  add_event (base, ev_SCROLL);
-  add_event (base+5, ev_SCORE);
+  add_event (base+3, ev_STATUS);
+  add_event (base+wait, ev_SCROLL);
+  add_event (base+wait+5, ev_SCORE);
 
   do {
     switch (get_event (&t)) {
     case ev_SCROLL:
       scroll_ground ();
-      mvwaddchnstr (moon, LINES-4, 0, ground2, COLS);
-      wnoutrefresh (moon);
+      print_ground ();
+      if (ground2[score_base] == ' ')  ++bonus;
       if (crash_check ())  done = 1;
       add_event (t+0.08, ev_SCROLL);
       break;
@@ -73,8 +92,14 @@ main_loop (void)
       case '\e':
       case 'q':
 	done = 1;
+	lives = 1;
 	break;
       }
+      break;
+    case ev_STATUS:
+      wmove (status, 1, 0);
+      wclrtoeol (status);
+      wnoutrefresh (status);
       break;
     case ev_BUGGY:
       print_buggy ();
@@ -90,42 +115,111 @@ main_loop (void)
   } while (! done);
 }
 
+static void
+do_one_game ()
+{
+  int  i;
+  
+  wclear (moon);
+  wmove (status, 0, 0);
+  wclrtoeol (status);
+  
+  for (i=0; i<COLS; ++i) {
+    ground1[i] = '#';
+    ground2[i] = '#';
+  }
+  mvwaddchnstr (moon, LINES-3, 0, ground1, COLS);
+  car_base = (COLS > 80 ? 80 : COLS) - 12;
+  score_base = car_base + 7;
+
+  score = 0;
+  lives = 3;
+  do {
+    bonus = 0;
+    print_ground ();
+    print_score ();
+    print_lives ();
+    print_buggy ();
+
+    clear_queue ();
+    main_loop (1);
+    --lives;
+    if (lives > 0) {
+      sleep (1);
+      for (i=car_base-4; i<car_base+8; ++i) {
+	ground2[i] = 'X';
+      }
+    }
+  } while (lives > 0);
+
+  wattron (moon, A_BLINK);
+  mvwaddstr (moon, LINES-11, car_base-1, "GAME OVER");
+  wattroff (moon, A_BLINK);
+
+  print_lives ();
+  write_hiscore ();
+}
+
+void
+prepare_for_exit (void)
+{
+  wmove (status, 1, 0);
+  wclrtoeol (status);
+  wnoutrefresh (moon);
+  wnoutrefresh (status);
+  doupdate ();
+  
+  delwin (moon);
+  delwin (status);
+  endwin ();
+}
+
 int
 main (int argc, char **argv)
 {
-  int  i;
+  int  done = 0;
   
   my_name = xstrdup (basename (argv[0]));
   
   initscr ();
   cbreak ();
   noecho ();
-
-  queuelag = new_lagmeter ();
   
   status = newwin (2, 0, LINES-2, 0);
+  keypad (status, TRUE);
   moon = newwin (LINES-2, 0, 0, 0);
   keypad (moon, TRUE);
-  
+
+  queuelag = new_lagmeter ();
   ground1 = xmalloc (COLS*sizeof(chtype));
   ground2 = xmalloc (COLS*sizeof(chtype));
-  for (i=0; i<COLS; ++i) {
-    ground1[i] = '#';
-    ground2[i] = '#';
-  }
-  car_base = (COLS > 80 ? 80 : COLS) - 12;
 
-  mvwaddchnstr (moon, LINES-3, 0, ground1, COLS);
-  print_buggy ();
+  mvwaddstr (status, 1, 0, "good luck");
 
-  score = 0;
-  print_score ();
+  do {
+    int  c;
+    do_one_game ();
+  ask:
+    mvwaddstr (status, 1, 0, "play again (y/n)?");
+    c = wgetch (status);
+    switch (c) {
+    case 'y':
+    case 'Y':
+      break;
+    case 'n':
+    case 'N':
+    case 'q':
+    case 'Q':
+      done = 1;
+      break;
+    default:
+      beep ();
+      goto ask;
+    }
+  } while (! done);
+
+  mvwaddstr (moon, LINES-11, car_base-1, "GAME OVER");
   
-  main_loop ();
-  
-  delwin (moon);
-  delwin (status);
-  endwin ();
-
+  prepare_for_exit ();
   return  0;
 }
