@@ -1,6 +1,6 @@
 .\" manpage.in - template for the "moon-buggy.6" manual page
 .\" Copyright 1999, 2000  Jochen Voss
-.\" $Id: manpage.in,v 1.6 2000/05/07 11:35:15 voss Exp $
+.\" $Id: manpage.in,v 1.7 2000/11/01 13:13:35 voss Exp $
 .de Op
 .BR -\\$1 @C@ ", " --\\$2
 ..
@@ -19,6 +19,11 @@ The program understands the following command line options.
 .TP
 .Op h help
 shows a short usage message.
+.TP
+.Op m mesg
+disable write access to your terminal by other users,
+so your chef can't disturb your game play with the help
+of "write" or "finger".
 .TP
 .Op n no-title
 skips the title screen.
