@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.41 2000/11/01 19:44:13 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.42 2001/05/24 07:19:13 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -128,19 +128,16 @@ merge_entry (const struct score_entry *entry)
 
 static void
 randomize_entry (int n)
-/* Fill slot N of `highscore' with a random entry.
- * Set `highscore_changed' to 1 if the table is changed.   */
+/* Fill slot N of `highscore' with a random entry.   */
 {
   static const char *names [13] = {
     "Dwalin", "Balin", "Kili", "Fili", "Dori", "Nori", "Ori",
     "Oin", "Gloin", "Bifur", "Bofur", "Bombur", "Thorin"
   };
-  time_t  yesterday;
 
-  yesterday = time (NULL) - 24*60*60;
   highscore[n].score = 10*(HIGHSCORE_SLOTS-n);
   highscore[n].level = 1;
-  highscore[n].date = yesterday;
+  highscore[n].date = time (NULL);
   strcpy (highscore[n].name, names[uniform_rnd(13)]);
   highscore[n].new = 0;
 
@@ -149,7 +146,7 @@ randomize_entry (int n)
 
 static time_t
 expire_date (int rank, time_t date)
-/* Calculate the expiration date for an entry, which is at rank RANK
+/* Calculate the expiration date for an entry, which is at position RANK
  * and which was entered at DATE.  */
 {
   /* linear interpolation: rank 3 expires after 180 days, the last one
@@ -157,7 +154,7 @@ expire_date (int rank, time_t date)
   double  day = 24*60*60;
   double  rate = (180-14)*day/(HIGHSCORE_SLOTS-4);
 
-  if (rank < 3)  return  date+2000*day;
+  if (rank < 3)  return  time(NULL)+2000*day;
   return  date + 14*day + (HIGHSCORE_SLOTS-1-rank)*rate;
 }
 
