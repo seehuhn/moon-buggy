@@ -1,8 +1,8 @@
 #! /bin/sh
 # autogen.sh - recreate automatically generated files
-# $Id: autogen.sh,v 1.1 1999/05/08 12:45:57 voss Exp $
+# $Id: autogen.sh,v 1.2 1999/05/08 13:03:06 voss Rel $
 aclocal
 autoconf
 autoheader
 automake -a
-ln -s /home/voss/src/library/darray.h .
+ln -sf /home/voss/src/library/darray.h .
