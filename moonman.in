@@ -1,6 +1,6 @@
 .\" moonman.in - template for the "moon-buggy.6" manual page
 .\" Copyright 1999  Jochen Voss
-.\" $Id: moonman.in,v 1.4 1999/06/25 23:14:05 voss Rel $
+.\" $Id: moonman.in,v 1.5 1999/07/23 10:45:39 voss Exp $
 .de Op
 .BR -\\$1 @C@ ", " --\\$2
 ..
@@ -15,7 +15,7 @@ is a simple character graphics game, where you drive some kind of car
 across the moon's surface.  Unfortunately there are dangerous craters
 there.  Fortunately your car can jump over them!
 .SH OPTIONS
-The program understands the following cammand line options.
+The program understands the following command line options.
 .TP
 .Op h help
 shows a short usage message.
