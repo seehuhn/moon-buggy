@@ -1,10 +1,10 @@
 .\" moonman.in - template for the "moon-buggy.6" manual page
-.\" Copyright 1999  Jochen Voss
-.\" $Id: moonman.in,v 1.8 2000/04/26 20:43:35 voss Rel $
+.\" Copyright 1999, 2000  Jochen Voss
+.\" $Id: moonman.in,v 1.9 2000/05/07 11:12:32 voss Exp $
 .de Op
 .BR -\\$1 @C@ ", " --\\$2
 ..
-.TH moon-buggy 6 "May 24 1999" "@MBNAME@ @MBVERS@"
+.TH moon-buggy 6 "May 1 2000" "@MBNAME@ @MBVERS@"
 .SH NAME
 moon-buggy \- drive some car across the moon
 .SH SYNOPSIS
