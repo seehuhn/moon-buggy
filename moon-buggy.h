@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: moon-buggy.h,v 1.5 2000/01/03 14:21:58 voss Exp $ */
+ * $Id: moon-buggy.h,v 1.6 2000/03/14 19:53:34 voss Exp $ */
 
 #ifndef FILE_MOON_BUGGY_H_SEEN
 #define FILE_MOON_BUGGY_H_SEEN
@@ -11,9 +11,13 @@
  * You may try to decrease this, if the animation flickers too much. */
 #define  MB_SPEED  1.0
 
-#include <curses.h>
 #include <stdlib.h>		/* we use `size_t' */
 #include <time.h>		/* we use `time_t' */
+
+#ifndef CURSES_HEADER
+#define CURSES_HEADER <curses.h>
+#endif
+#include CURSES_HEADER
 
 #define TICK(x) ((x)*0.08/(MB_SPEED))
 #define BASELINE (LINES-5)
@@ -170,13 +174,5 @@ extern  char *xstrndup (const char *str, size_t size);
 
 /* from "hpath.c" */
 extern  const char *score_dir;
-
-/* for configure's AC_REPLACE_FUNCS calls */
-#ifndef HAVE_MVWADDNSTR
-extern  int  mvwaddnstr (WINDOW *win, int y, int x, const char *str, int n);
-#endif
-#ifndef HAVE_WGETNSTR
-extern  int  wgetnstr (WINDOW *win, char *str, int n);
-#endif
 
 #endif /* FILE_MOON_BUGGY_H_SEEN */
