@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: signal.c,v 1.18 2000/10/28 18:03:10 voss Exp $";
+static const  char  rcsid[] = "$Id: signal.c,v 1.19 2000/11/01 13:17:55 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -133,9 +133,7 @@ cont_handler (int signum)
   install_signal (SIGTSTP, tstp_handler);
 
   refresh ();
-  cbreak ();
-  noecho ();
-  hide_cursor ();
+  prepare_screen ();
   mode_redraw ();
   mode_signal (signum);
   clock_thaw ();
