@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.37 2000/05/07 11:18:07 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.38 2000/06/16 10:51:42 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -527,16 +527,30 @@ show_highscores (void)
   }
 }
 
-static int  highscore_valid, last_score;
-static  int  gap;
+static  int  highscore_valid, last_score, last_level;
+static  int  gap;		/* number of omitted entries after pos 3 */
 static  int  max_line;
 
 static void
-center_new (void)
+fix_gap (void)
+/* Cast `gap' to valid value.  */
 {
   int  limit = HIGHSCORE_SLOTS-(max_line-3);
+  if (gap > limit)  gap = limit;
+  if (gap < 2)  gap = 0;
+}
+
+static void
+center_new (void)
+/* Prepare `gap' in order to view values around `last_score'.  */
+{
+  int  limit;
   int  i, pos;
-  
+
+  max_line = LINES-11;
+  if (max_line > 25)  max_line = 25;
+  limit = HIGHSCORE_SLOTS-(max_line-3);
+
   for (i=1; i<HIGHSCORE_SLOTS; ++i) {
     if (highscore[i].score < last_score)  break;
   }
@@ -544,9 +558,7 @@ center_new (void)
 
   pos = 7+(max_line-6)/2;
   gap = 1 + (i+4) - pos;
-
-  if (gap < 2)  gap = 0;
-  if (gap > limit)  gap = limit;
+  fix_gap ();
 }
 
 static void
@@ -595,19 +607,43 @@ print_scores (void)
 }
 
 void
-score_set (int score)
+score_set (int score, int level)
 {
   last_score = score;
+  last_level = level;
 }
 
 static void
-highscore_enter (int level)
+enter_name_h (game_time t, void *client_data)
 {
-  if (level == 0)  last_score = 0;
+  struct score_entry  entry;
+  int  res;
+    
+  entry.score = last_score;
+  entry.level = last_level;
+  entry.date = time (NULL);
+ retry:
+  entry.name[0] = '\0';
+  res = get_real_user_name (entry.name, MAX_NAME_CHARS);
+  if (res == ERR) {
+    mode_redraw ();
+    goto retry;
+  }
+  entry.new = 1;
+  
+  print_message ("writing score file ...");
+  doupdate ();
+  block_all ();
+  update_score_file (&entry);
+  unblock ();
+  mode_redraw ();
+}
+
+static void
+highscore_enter (int seed)
+{
   print_ground ();
   print_buggy ();
-  max_line = LINES-11;
-  if (max_line > 25)  max_line = 25;
   
   print_message ("loading score file ...");
   doupdate ();
@@ -616,53 +652,21 @@ highscore_enter (int level)
   highscore_valid = 1;
   unblock ();
   center_new ();
-  print_scores ();
 
   if (last_score > highscore[HIGHSCORE_SLOTS-1].score) {
-    struct score_entry  entry;
-    int  res;
-    
-    entry.score = last_score;
-    entry.level = level;
-    entry.date = time (NULL);
-  retry:
-    entry.name[0] = '\0';
-    res = get_real_user_name (entry.name, MAX_NAME_CHARS);
-    if (res == ERR) {
-      mode_redraw ();
-      goto retry;
-    }
-    entry.new = 1;
-  
-    print_message ("writing score file ...");
-    doupdate ();
-    block_all ();
-    update_score_file (&entry);
-    unblock ();
-    center_new ();
-    print_scores ();
+    add_event (0.0, enter_name_h, NULL);
   }
-  mode_keys ();
-  if (level > 0)  print_game_over (1);
 }
 
 static void
 highscore_leave (void)
 {
   print_game_over (0);
-}
-
-static void
-fix_gap (void)
-/* Cast `gap' to valid value.  */
-{
-  int  limit = HIGHSCORE_SLOTS-(max_line-3);
-  if (gap > limit)  gap = limit;
-  if (gap < 2)  gap = 0;
+  last_score = last_level = 0;
 }
 
 void
-resize_highscore (void)
+highscore_redraw (void)
 {
   resize_meteors ();
   resize_ground (0);
@@ -675,6 +679,7 @@ resize_highscore (void)
   adjust_score (0);
   print_lives ();
   print_buggy ();
+  if (last_level > 0)  print_game_over (1);
   if (highscore_valid)  print_scores ();
 }
 
@@ -724,7 +729,7 @@ setup_highscore_mode (void)
   highscore_mode = new_mode ();
   highscore_mode->enter = highscore_enter;
   highscore_mode->leave = highscore_leave;
-  highscore_mode->redraw = resize_highscore;
+  highscore_mode->redraw = highscore_redraw;
   highscore_mode->keypress = key_handler;
   mode_add_key (highscore_mode, mbk_start, "new game", 1);
   mode_add_key (highscore_mode, mbk_end, "quit", 2);

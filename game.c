@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.36 2000/06/01 19:06:05 voss Exp $";
+static const  char  rcsid[] = "$Id: game.c,v 1.37 2000/06/16 10:52:46 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -45,12 +45,6 @@ print_lives (void)
  * game mode
  */
 
-static void
-setup_screen (void)
-{
-  resize_ground (1);
-}
-
 void
 print_game_over (int blink)
 {
@@ -75,7 +69,6 @@ game_enter (int seed)
     lives = 3;
     werase (status);
     wnoutrefresh (status);
-    setup_screen ();
   }
 
   resize_ground (1);
@@ -83,12 +76,7 @@ game_enter (int seed)
 
   crash_detected = 0;
   stakes = 0;
-  print_ground ();
-  print_lives ();
-
   initialise_buggy ();
-  print_buggy ();
-
   start_scrolling (1);
 }
 
@@ -102,7 +90,7 @@ game_leave (void)
 }
 
 static void
-resize_game (void)
+game_redraw (void)
 {
   resize_meteors ();
   resize_laser ();
@@ -147,6 +135,8 @@ signal_handler (int signum)
   }
 }
 
+static  int  lives_flag;
+
 void
 leave_pause_mode (game_time t, void *client_data)
 /* This function is a possible callback argument to `add_event'.
@@ -156,38 +146,40 @@ leave_pause_mode (game_time t, void *client_data)
   if (lives > 0) {
     mode_change (game_mode, 1);
   } else {
-    score_set (score);
-    mode_change (highscore_mode, level+1);
+    score_set (score, level+1);
+    mode_change (highscore_mode, 0);
   }
 }
 
 static void
 print_lives_h (game_time t, void *client_data)
-/* This function is a possible callback argument to `add_event'.
+/* This function is a callback argument to `add_event'.
  * It updates the number of lives display.  */
 {
   print_lives ();
+  lives_flag = 1;
 }
 
 static void
 pause_enter (int seed)
 {
   clock_reset ();
-  add_event (1.5, print_lives_h, NULL);
+  lives_flag = 0;
+  add_event (1.2, print_lives_h, NULL);
   add_event (2.0, leave_pause_mode, NULL);
-  print_ground ();
-  adjust_score (0);
   print_buggy ();
   if (lives <= 0)  print_game_over (1);
 }
 
 static void
-pause_resize (void)
+pause_redraw (void)
 {
   resize_ground (0);
+  
   print_ground ();
+  print_buggy ();
   adjust_score (0);
-  print_lives ();
+  if (lives_flag)  print_lives ();
 }
 
 static void
@@ -212,7 +204,7 @@ setup_game_mode (void)
   game_mode = new_mode ();
   game_mode->enter = game_enter;
   game_mode->leave = game_leave;
-  game_mode->redraw = resize_game;
+  game_mode->redraw = game_redraw;
   game_mode->keypress = key_handler;
   game_mode->signal = signal_handler;
   mode_add_key (game_mode, mbk_jump, "jump", 1);
@@ -221,7 +213,7 @@ setup_game_mode (void)
 
   pause_mode = new_mode ();
   pause_mode->enter = pause_enter;
-  pause_mode->redraw = pause_resize;
+  pause_mode->redraw = pause_redraw;
   pause_mode->keypress = pause_key_handler;
   mode_add_key (pause_mode, mbk_start, "continue", 1);
   mode_add_key (pause_mode, mbk_end, "abort game", 3);
