@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.5 1999/03/02 18:31:36 voss Exp $";
+static const  char  rcsid[] = "$Id: game.c,v 1.6 1999/03/08 20:32:54 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -13,7 +13,6 @@ static const  char  rcsid[] = "$Id: game.c,v 1.5 1999/03/02 18:31:36 voss Exp $"
 
 long  score, bonus;
 static  int  lives;
-static  struct circle_buffer *load_meter = NULL;
 
 
 static void
@@ -30,19 +29,10 @@ print_lives (void)
   wnoutrefresh (status);
 }
 
-static double
-limited (double min, double x, double max)
-/* Return the point of [MIN; MAX], which is nearest to X.  */
-{
-  if (x < min)  return min;
-  if (x > max)  return max;
-  return  x;
-}
-
 static void
 spend_life (void)
 {
-  double  base, t, sleep_delta;
+  double  t;
   int  done = 0;
 
   bonus = 0;
@@ -57,12 +47,10 @@ spend_life (void)
   
   doupdate ();
   
-  base = vclock ();
-  add_event (base+1, ev_SCROLL);
-  sleep_meter = 0;
-  sleep_delta = 1;
-  add_event (base+3, ev_MESSAGE);
-  add_event (base+TICK(75), ev_SCORE);
+  add_event (1, ev_SCROLL);
+  add_event (3, ev_MESSAGE);
+  add_event (TICK(75), ev_SCORE);
+  clock_adjust_delay (1);
 
   do {
     switch (get_event (&t)) {
@@ -71,16 +59,7 @@ spend_life (void)
       print_ground ();
       if (ground2[score_base] == ' ')  ++bonus;
       if (crash_check ())  done = 1;
-      add_value (load_meter,
-		 limited (0, (sleep_delta-sleep_meter)/sleep_delta, 1));
-#if MB_DEBUG
-      mvwprintw (status, 0, 0, "load: %d%%  ",
-		 (int)(100.0*get_mean (load_meter)+.5));
-      wnoutrefresh (status);
-#endif
       add_event (t+TICK(1), ev_SCROLL);
-      sleep_meter = 0;
-      sleep_delta = TICK(1);
       break;
     case ev_KEY:
       switch (xgetch (moon)) {
@@ -134,8 +113,6 @@ game_mode (void)
 
   game_state = PLAYING;
   setup_screen ();
-
-  if (load_meter == NULL)  load_meter = new_circle_buffer ();
   
   score = 0;
   lives = 3;
@@ -152,7 +129,9 @@ game_mode (void)
     doupdate ();
     
     clear_queue ();
-    add_event (vclock()+2.0, ev_TIMEOUT);
+    add_event (0, ev_TIMEOUT);
+    clock_adjust_delay (2);
+    
     do {
       switch (get_event (NULL)) {
       case ev_TIMEOUT:
