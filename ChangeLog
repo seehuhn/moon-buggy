@@ -1,3 +1,22 @@
+1999-09-28  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: Added 1999-09-15 and 1999-09-28
+
+	* moon-buggy.lsm: Changes for the 0.4.1 release
+
+	* ANNOUNCE: Updates for the new 0.4.1 release.
+
+	* configure.in: Changed the version string to "0.4.1".
+
+	* TODO: new item
+
+	* moon-buggy.texi: Identify the edition on the titlepage.
+	Minor fixes.
+
+1999-09-15  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: Added 1999-09-14
+
 1999-09-14  Jochen Voss  <voss@tatonka.pfalz.de>
 
 	* ChangeLog: Added 1999-09-14
