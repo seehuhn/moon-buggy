@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.14 1999/03/02 18:31:24 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.15 1999/03/08 20:26:29 voss Exp $";
 
 #define _POSIX_SOURCE 1
 
@@ -160,8 +160,6 @@ the file named COPYING or press `c' at Moon-Buggy's title screen.");
   noecho ();
 
   allocate_windows ();
-
-  queuelag = new_circle_buffer ();
 
   if (title_flag) {
     res = title_mode ();
