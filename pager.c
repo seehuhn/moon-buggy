@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: pager.c,v 1.6 1999/01/09 14:06:48 voss Rel $";
+static const  char  rcsid[] = "$Id: pager.c,v 1.7 1999/01/30 16:56:51 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -15,7 +15,7 @@ static const  char  rcsid[] = "$Id: pager.c,v 1.6 1999/01/09 14:06:48 voss Rel $
 
 
 static unsigned  lines_used, current_line = 0;
-static volatile  int  lines = 25;
+static volatile  int  mb_lines = 25;
 
 
 static void
@@ -23,7 +23,7 @@ print_page (unsigned current_line)
 {
   int  i;
 
-  for (i=0; i<lines-3; ++i) {
+  for (i=0; i<mb_lines-3; ++i) {
     if (current_line + i < lines_used) {
       mvwaddstr (moon, i, 2, copying_lines[current_line+i]);
     } else {
@@ -41,7 +41,7 @@ print_page (unsigned current_line)
 static void
 setup_screen (void)
 {
-  lines = LINES;
+  mb_lines = LINES;
   wclear (moon);
   print_page (current_line);
 
@@ -102,7 +102,7 @@ pager_mode (int what)
 	break;
       case KEY_NPAGE:
       case ' ':
-	current_line += lines-3;
+	current_line += mb_lines-3;
 	if (current_line >= lines_used) {
 	  current_line = lines_used-1;
 	  if (current_line < 0)  current_line = 0;
@@ -111,8 +111,8 @@ pager_mode (int what)
 	break;
       case KEY_PPAGE:
       case 'b':
-	if (current_line > lines-3) {
-	  current_line -= lines-3;
+	if (current_line > mb_lines-3) {
+	  current_line -= mb_lines-3;
 	} else {
 	  current_line = 0;
 	}
