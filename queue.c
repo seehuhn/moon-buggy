@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.11 1999/04/07 15:26:36 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.12 1999/04/23 22:17:03 voss Exp $";
 
 #define _POSIX_SOURCE 1
 
@@ -31,11 +31,36 @@ extern  int  errno;
 /* The queue of events */
 struct event {
   struct event *next;
-  game_time  t;			/* the time, when the event will happen */
-  int  reached;			/* true, iff we know this time to be past */
-  enum event_type  type;	/* the event's type */
+  game_time  t;			/* time, when the event should happen */
+  callback_fn  callback;	/* function to call */
+  void *client_data;		/* argument to pass */
 };
 static  struct event *queue;
+
+/**********************************************************************
+ * recursive queues
+ */
+
+#define MAX_QUEUE_RECURSION 1
+
+static  struct event *queue_buffer [MAX_QUEUE_RECURSION];
+static  int  queue_recursion_depth = -1;
+
+void
+save_queue (void)
+{
+  assert (queue_recursion_depth >= 0);
+  assert (queue_recursion_depth < MAX_QUEUE_RECURSION);
+  queue_buffer [queue_recursion_depth] = queue;
+  queue = NULL;
+}
+
+void
+restore_queue (void)
+{
+  assert (queue_recursion_depth >= 0);
+  queue = queue_buffer[queue_recursion_depth];
+}
 
 /**********************************************************************
  * convert between game time and real time
@@ -101,15 +126,6 @@ key_ready (void)
   return  my_select (&ancient_time);
 }
 
-static void
-wait_for_key (void)
-/* Wait for the next key press.
- * The key is not removed from the input buffer and must be read by a
- * function like `xgetch'.  */
-{
-  my_select (NULL);
-}
-
 static int
 wait_until (real_time *t)
 /* Wait for time *T or the next key press, whichever comes first.
@@ -172,14 +188,12 @@ clear_queue (void)
 }
 
 void
-add_event (game_time t, enum event_type type)
-/* Add a new event to the queue.
- * The event happens at time T and is of type TYPE.  */
+add_event (game_time t, callback_fn callback, void *client_data)
+/* Add a new event for time T to the queue.
+ * The event calls function CALLBACK with argument CLIENT_DATA.  */
 {
   struct event **evp;
   struct event *ev;
-
-  assert (type != ev_KEY);
   
   evp = &queue;
   while (*evp && (*evp)->t <= t)  evp = &((*evp)->next);
@@ -187,69 +201,100 @@ add_event (game_time t, enum event_type type)
   ev = xmalloc (sizeof (struct event));
   ev->next = *evp;
   ev->t = t;
-  ev->reached = 0;
-  ev->type = type;
+  ev->callback = callback;
+  ev->client_data = client_data;
 
   *evp = ev;
 }
 
-enum event_type
-get_event (game_time *t_return)
-/* Wait until the next event happens and return it.
- * The specified event time is stored in *T_RETURN and the return
- * value is the event's type.  */
+void
+remove_event (callback_fn callback)
+/* Remove all events from the queue, which would call CALLBACK.  */
 {
-  struct event *ev;
-  enum event_type  res;
-  int  retval;
-  
-  if (! (queue && queue->reached)) {
-    double  t;
-    
-    if (queue) {
-      t = to_real (queue->t);
-      retval = wait_until (&t);
+  struct event **evp;
 
-      ev = queue;
-      while (ev && ev->t <= to_game (t)) {
-	ev->reached = 1;
-	ev = ev->next;
-      }
+  evp = &queue;
+  while (*evp) {
+    struct event *ev = *evp;
+    if (ev->callback == callback) {
+      *evp = (*evp)->next;
+      free (ev);
     } else {
-      wait_for_key ();
-      t = vclock ();
-      retval = 1;
-    }
-
-    if (retval>0) {		/* key pressed */
-      if (t_return)  *t_return = to_game (t);
-      return  ev_KEY;
+      evp = &((*evp)->next);
     }
   }
+}
+
+/**********************************************************************
+ * the main loop
+ */
 
-  /* deliver the event */
-  ev = queue;
-  queue = queue->next;
-  if (t_return)  *t_return = ev->t;
-  res = ev->type;
-  free (ev);
-  
-  return  res;
+static  int  exit_flag;
+
+void
+quit_main_loop (void)
+{
+  assert (queue_recursion_depth >= 0);
+  exit_flag = 1;
 }
 
 int
-remove_event (enum event_type type, game_time *t_return)
+main_loop (double dt, void (*key_handler)(game_time))
 {
-  struct event **evp;
-  struct event *ev;
+  int  res;
+
+  ++queue_recursion_depth;
   
-  evp = &queue;
-  while (*evp && (*evp)->type != type)  evp = &((*evp)->next);
-  if (! *evp)  return 0;
-  
-  ev = *evp;
-  *evp = (*evp)->next;
-  *t_return = ev->t;
-  free (ev);
-  return  1;
+  clock_adjust_delay (dt);
+  doupdate ();
+
+  exit_flag = 0;
+  while (queue && ! exit_flag) {
+    int  retval;
+    double  t;
+    
+    t = to_real (queue->t);
+    retval = wait_until (&t);
+
+    if (retval>0 && key_handler)  key_handler (to_game (t));
+    
+    while (queue && queue->t <= to_game (vclock ())) {
+      struct event *ev = queue;
+      queue = queue->next;
+
+      ev->callback (ev->t, ev->client_data);
+      free (ev);
+    }
+    doupdate ();
+  }
+  res = (queue != NULL);
+  clear_queue ();
+
+  --queue_recursion_depth;
+  exit_flag = 0;
+
+  return  res;
+}
+
+/**********************************************************************
+ * some handlers for the main loop above
+ */
+
+void
+quit_main_loop_h (game_time t, void *client_data)
+/* This function is a possible callback argument to `add_event'.
+ * It causes the main loop to terminate.
+ * The arguments T and CLIENT_DATA is ignored.  */
+{
+  quit_main_loop ();
+}
+
+void
+clear_message_h (game_time t, void *client_data)
+/* This function is a possible callback argument to `add_event'.
+ * It causes the screen message area to be cleared.
+ * The arguments T and CLIENT_DATA is ignored.  */
+{
+  werase (message);
+  wnoutrefresh (message);
 }
