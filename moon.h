@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.
  *
- * $Id: moon.h,v 1.5 1998/12/23 09:32:23 voss Exp $ */
+ * $Id: moon.h,v 1.6 1998/12/26 14:05:06 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -31,6 +31,7 @@ extern  void  fatal (const char *format, ...);
 
 /* from "queue.c" */
 enum event_type { ev_KEY, ev_STATUS, ev_SCROLL, ev_BUGGY, ev_SCORE };
+extern  void  clock_adjust_delay (double dt);
 extern  void  clear_queue (void);
 extern  void  add_event (double t, enum event_type type);
 extern  enum event_type  get_event (double *t);
