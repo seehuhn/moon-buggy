@@ -1,8 +1,8 @@
 /* main.c - moon-buggy main file
  *
- * Copyright (C) 1998  Jochen Voss.  */
+ * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.11 1999/01/01 18:04:27 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.12 1999/01/02 12:28:28 voss Rel $";
 
 #define _POSIX_SOURCE
 
@@ -33,6 +33,7 @@ enum game_state  game_state = INIT;
 
 void
 print_message (const char *str)
+/* Display STR in the message line.  */
 {
   wclear (message);
   waddstr (message, str);
@@ -41,6 +42,7 @@ print_message (const char *str)
 
 static void
 allocate_windows (void)
+/* Create the curses windows.  */
 {
   moon = newwin (LINES-2, 0, 0, 0);
   keypad (moon, TRUE);
@@ -57,6 +59,7 @@ allocate_windows (void)
 
 void
 prepare_for_exit (void)
+/* Prepare the screen to exit from the program.  */
 {
   wclear (message);
   wnoutrefresh (moon);
@@ -75,18 +78,21 @@ static  sigset_t  winch_set, full_set, old_sigset;
 
 void
 block_winch (void)
+/* Block the WINCH signal until `unblock' is called.  */
 {
   sigprocmask (SIG_BLOCK, &winch_set, &old_sigset);
 }
 
 void
 block_all (void)
+/* Block all signals until `unblock' is called.  */
 {
   sigprocmask (SIG_BLOCK, &full_set, &old_sigset);
 }
 
 void
 unblock (void)
+/* Undo the effect of `block_winch' or `block_all'.  */
 {
   sigprocmask (SIG_SETMASK, &old_sigset, NULL);
 }
@@ -275,7 +281,7 @@ the file named COPYING or press `c' at Moon-Buggy's title screen.");
   }
 
   if (! res) {
-    print_message ("good luck");
+    print_message ("good luck (or use SPACE to jump)");
     while (game_mode ())
       ;
     mvwaddstr (moon, LINES-11, car_base-1, "GAME OVER");
