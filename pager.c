@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: pager.c,v 1.17 2000/04/09 13:02:00 voss Rel $";
+static const  char  rcsid[] = "$Id: pager.c,v 1.18 2000/06/16 10:50:58 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -43,7 +43,7 @@ print_page (unsigned current_line)
 }
 
 static void
-setup_screen (void)
+pager_redraw (void)
 {
   mb_lines = LINES;
   print_page (current_line);
@@ -113,7 +113,6 @@ pager_enter (int what)
   default:
     break;
   }
-  setup_screen ();
 }
 
 static void
@@ -129,7 +128,7 @@ setup_pager_mode (void)
   pager_mode = new_mode ();
   pager_mode->enter = pager_enter;
   pager_mode->leave = pager_leave;
-  pager_mode->redraw = setup_screen;
+  pager_mode->redraw = pager_redraw;
   pager_mode->keypress = key_handler;
   mode_add_key (pager_mode, mbk_end, "quit", 1);
   mode_add_key (pager_mode, mbk_up, "up", 2);
