@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: error.c,v 1.2 1998/12/20 00:46:54 voss Exp $";
+static const  char  rcsid[] = "$Id: error.c,v 1.3 1998/12/23 10:08:55 voss Exp $";
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,19 +30,4 @@ fatal (const char *format, ...)
   va_end (ap);
 
   exit (EXIT_FAILURE);
-}
-
-void
-warning (const char *format, ...)
-/* Emit a warning message.  The arguments have the same meaning, as in
- * the function `printf'. */
-{
-  va_list  ap;
-
-  va_start (ap, format);
-  fflush (NULL);
-  fputs ("Warning: ", stderr);
-  vfprintf (stderr, format, ap);
-  fputc ('\n', stderr);
-  va_end (ap);
 }
