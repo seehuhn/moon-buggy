@@ -9,9 +9,8 @@ anfänglichen Hinmalen des Laserstrahls getroffen werden, so stoppt der
 Strahl nicht beim ersten Stein.
 
 IMPROVEMENTS:
-· Nach einem Crash fahre alles außer dem Auto noch etwas weiter.
-· Die Pause nach dem kaputtgehen, sollte sich mit den meisten Tasten
-beenden lassen!  Vera wird nur durch einige spezielle Tasten verwirrt!
+· Die Pause nach dem kaputtgehen sollte sich mit den meisten Tasten
+beenden lassen!  Vera wird nur durch einige, spezielle Tasten verwirrt!
 · Könnte man die Events 0.1 Sekunden zu früh ausführen und nur das
 `doupdate' verzögern?  Wie ist das dann mit Tastendrücken während der
 letzen zehntel Sekunde?  Bringt das überhaupt eine signifikante
