@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.1 1998/12/19 20:33:54 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.2 1998/12/20 00:46:06 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -12,6 +12,9 @@ static const  char  rcsid[] = "$Id: highscore.c,v 1.1 1998/12/19 20:33:54 voss E
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
 #include <errno.h>
 
 #include "moon.h"
@@ -33,10 +36,54 @@ struct score_entry {
 static  struct score_entry  hiscores [HIGHSCORE_SLOTS];
 static  char *score_file_name;
 
-static void
+static FILE *
 find_table (void)
 {
-  score_file_name = SCORE_FILE;
+  FILE *score_file;
+  uid_t me;
+  struct passwd *my_passwd;
+
+  score_file_name = xmalloc (strlen(score_dir) + 1 + strlen(SCORE_FILE) + 1);
+  strcpy (score_file_name, score_dir);
+  strcat (score_file_name, "/");
+  strcat (score_file_name, SCORE_FILE);
+  score_file = fopen (score_file_name, "r+");
+  if (score_file)  return score_file;
+  free (score_file_name);
+
+  me = getuid ();
+  my_passwd = getpwuid (me);
+  if (my_passwd && my_passwd->pw_dir) {
+    score_file_name = xmalloc (strlen(my_passwd->pw_dir) + 2
+			       + strlen(SCORE_FILE) + 1);
+    strcpy (score_file_name, my_passwd->pw_dir);
+    strcat (score_file_name, "/.");
+    strcat (score_file_name, SCORE_FILE);
+  } else {
+    score_file_name = xmalloc (1 + strlen(SCORE_FILE) + 1);
+    strcpy (score_file_name, ".");
+    strcat (score_file_name, SCORE_FILE);
+  }
+  score_file = fopen (score_file_name, "r");
+  if (score_file)  return score_file;
+
+  if (! score_file) {
+    char *tmpl_file_name;
+
+    tmpl_file_name = xmalloc (strlen(score_dir) + 1 + strlen(SCORE_FILE)
+			      + 5 + 1);
+    strcpy (tmpl_file_name, score_dir);
+    strcat (tmpl_file_name, "/");
+    strcat (tmpl_file_name, SCORE_FILE);
+    strcat (tmpl_file_name, ".tmpl");
+    score_file = fopen (tmpl_file_name, "r");
+    free (tmpl_file_name);
+    if (score_file)  return score_file;
+    
+    fatal ("cannot read score file \"%s\": %s",
+	   SCORE_FILE, strerror (errno));
+  }
+  return  score_file;
 }
 
 static void
@@ -46,11 +93,7 @@ read_table (void)
   int  version, i;
   int  res;
   
-  score_file = fopen (score_file_name, "r");
-  if (! score_file) {
-    fatal ("cannot read score file \"%s\": %s",
-	   score_file_name, strerror (errno));
-  }
+  score_file = find_table ();
 
   res = fscanf (score_file, "moon-buggy hiscore file (version %d)\n", &version);
   if (res != 1)  fatal ("score file corrupted");
@@ -120,7 +163,7 @@ print_scores ()
   mvwaddstr (moon, 1, PLAYER_MAX_LEN-4, "name     date     score");
   for (i=0; i<HIGHSCORE_SLOTS; ++i) {
     if (hiscores[i].new)  wstandout (moon);
-    mvwprintw (moon, 3+i, 0, "%" quote(PLAYER_MAX_LEN) "s%c %4d-%02d-%02d  %lu",
+    mvwprintw (moon, 3+i, 0, "%" quote(PLAYER_MAX_LEN) "s%c %4d-%02d-%02d  %-12lu",
 	       hiscores[i].player, hiscores[i].new ? '*' : ' ',
 	       hiscores[i].year, hiscores[i].month, hiscores[i].day,
 	       hiscores[i].score);
@@ -149,7 +192,6 @@ write_hiscore (void)
   struct score_entry *new_entry;
   int  i;
   
-  find_table ();
   read_table ();
   
   new_entry = hiscores+(HIGHSCORE_SLOTS-1);
