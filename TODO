@@ -2,8 +2,6 @@ BUG FIXES:
 · Auf jupiter+neptun+io geht make distclean nicht.
 · Man pages auf HPUX
 · Make install auf den HPs
-· Auf HPUX ist NSIG nicht definiert.  (Bei uns auch nicht, falls man
-die Definition von _SVID_SOURCE entfernt!)  Was tut man da?
 · Auf HPUX: Schüsse werden invers dargestellt, die Highscoreliste blinkend.
 · Auf hpux wird der Cursor nicht abgeschaltet.
 Man sollte ihn evtl. auf eine günstige Position stellen.
@@ -34,10 +32,10 @@ kann.  Erklärung der Tastaturbelegung.
 · Wie kann man verhindern, daß sich schwächere Spieler langweilen,
 weil sie nicht in die Highscoreliste kommen?
 · Prüfsumme für das Scorefile.
-· Könnte man die Events 0.1 Sekunden zu früh ausführen und nur das
-`doupdate' verzögern?  Wie ist das dann mit Tastendrücken während der
-letzen zehntel Sekunde?  Bringt das überhaupt eine signifikante
-Verbesserung?
+· Könnte man die Events einen Tick (oder 0.1 Sekunden) zu früh
+ausführen und nur das `doupdate' verzögern?  Wie ist das dann mit
+Tastendrücken während der letzen zehntel Sekunde?  Bringt das
+überhaupt eine signifikante Verbesserung?
 · Wäre eine asynchrone Behandlung von Tastendrücken sinnvoll?  (siehe
 "Interrupt Input" in der glibc-Anleitung)
 · Den `fd_set' Teil von "configure.in" verbessern.  Zumindest
@@ -48,8 +46,7 @@ sollte der cache verwendet werden.
 · Use a timeout when waiting for a file lock
 · Was soll mit dem (im Moment leeren) uninst.post Zeugs geschehen?
 · Internationalisieren
-· Peter: Graphik verbessern, insbesondere abgestürzte Autos
-· Lars: Ufos einführen
+· Ufos einführen
 
 ; Local Variables:
 ; mode: auto-fill
