@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.38 2000/11/01 13:16:23 voss Exp $";
+static const  char  rcsid[] = "$Id: game.c,v 1.39 2000/11/13 21:01:00 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -14,11 +14,11 @@ static const  char  rcsid[] = "$Id: game.c,v 1.38 2000/11/01 13:16:23 voss Exp $
 
 
 struct mode *game_mode;
-struct mode *pause_mode;
+struct mode *crash_mode;
 
 
 int  crash_detected;		/* a crash is in progress */
-static  int  level;		/* the current level (pause_mode only) */
+static  int  level;		/* the current level (crash_mode only) */
 static  int  lives;		/* cars left (including the current one) */
 static  int  score;		/* points we already got */
 int  stakes;			/* points to get, when we reach the ground */
@@ -115,7 +115,7 @@ key_handler (game_time t, int val)
   case 3:
     lives = 1;
     print_message ("aborted at user's request");
-    mode_change (pause_mode, 0);
+    mode_change (crash_mode, 0);
     break;
   }
 }
@@ -138,9 +138,9 @@ signal_handler (int signum)
 static  int  lives_flag;
 
 void
-leave_pause_mode (game_time t, void *client_data)
+leave_crash_mode (game_time t, void *client_data)
 /* This function is a possible callback argument to `add_event'.
- * It causes the main loop to terminate.
+ * It switch control back to either game_mode or highscore_mode.
  * The arguments T and CLIENT_DATA are ignored.  */
 {
   if (lives > 0) {
@@ -161,18 +161,18 @@ print_lives_h (game_time t, void *client_data)
 }
 
 static void
-pause_enter (int seed)
+crash_enter (int seed)
 {
   clock_reset ();
   lives_flag = 0;
   add_event (1.2, print_lives_h, NULL);
-  add_event (2.0, leave_pause_mode, NULL);
+  add_event (2.0, leave_crash_mode, NULL);
   print_buggy ();
   if (lives <= 0)  print_game_over (1);
 }
 
 static void
-pause_redraw (void)
+crash_redraw (void)
 {
   resize_ground (0);
   
@@ -183,17 +183,17 @@ pause_redraw (void)
 }
 
 static void
-pause_key_handler (game_time t, int val)
+crash_key_handler (game_time t, int val)
 {
   if (t < 0.5)  return;
   
   switch (val) {
   case 1:
-    leave_pause_mode (0, NULL);
+    leave_crash_mode (0, NULL);
     break;
   case 3:
     lives = 0;
-    leave_pause_mode (0, NULL);
+    leave_crash_mode (0, NULL);
     break;
   }
 }
@@ -212,11 +212,11 @@ setup_game_mode (void)
   mode_add_key (game_mode, mbk_end, "abort game", 3);
   mode_complete (game_mode);
 
-  pause_mode = new_mode ();
-  pause_mode->enter = pause_enter;
-  pause_mode->redraw = pause_redraw;
-  pause_mode->keypress = pause_key_handler;
-  mode_add_key (pause_mode, mbk_start, "continue", 1);
-  mode_add_key (pause_mode, mbk_end, "abort game", 3);
-  mode_complete (pause_mode);
+  crash_mode = new_mode ();
+  crash_mode->enter = crash_enter;
+  crash_mode->redraw = crash_redraw;
+  crash_mode->keypress = crash_key_handler;
+  mode_add_key (crash_mode, mbk_start, "continue", 1);
+  mode_add_key (crash_mode, mbk_end, "abort game", 3);
+  mode_complete (crash_mode);
 }
