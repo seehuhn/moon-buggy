@@ -2,11 +2,12 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: realname.c,v 1.10 1999/05/26 21:02:39 voss Exp $";
+static const  char  rcsid[] = "$Id: realname.c,v 1.11 1999/06/13 18:37:27 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#define _XOPEN_SOURCE_EXTENDED 1
 
 #include <stdlib.h>
 #include <string.h>
@@ -14,6 +15,10 @@ static const  char  rcsid[] = "$Id: realname.c,v 1.10 1999/05/26 21:02:39 voss E
 #include <unistd.h>
 #include <pwd.h>
 #include <assert.h>
+
+#if defined(__hp9000s800)
+#include <stdarg.h>
+#endif
 
 #include "mbuggy.h"
 
