@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: moon-buggy.h,v 1.8 2000/03/31 11:18:58 voss Exp $ */
+ * $Id: moon-buggy.h,v 1.9 2000/04/01 07:55:40 voss Exp $ */
 
 #ifndef FILE_MOON_BUGGY_H_SEEN
 #define FILE_MOON_BUGGY_H_SEEN
@@ -146,7 +146,7 @@ extern  void  handle_signals (void);
 enum mb_key {
   mbk_copyright = 1, mbk_down = 2, mbk_end = 4, mbk_fire = 8, mbk_first = 16,
   mbk_jump = 32, mbk_last = 64, mbk_pagedown = 128, mbk_pageup = 256,
-  mbk_start = 512, mbk_up = 1024, mbk_warranty = 2048
+  mbk_start = 512, mbk_up = 1024, mbk_warranty = 2048, mbk_scores = 4096
 };
 struct binding {
   int  meanings;
