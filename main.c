@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.22 1999/05/25 15:35:11 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.23 1999/05/26 21:06:03 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -24,6 +24,7 @@ extern int  optind;
 
 
 const char *my_name;
+static  int  curses_initialised;
 WINDOW *moon, *status, *message;
 enum game_state  game_state = INIT;
 
@@ -60,6 +61,7 @@ void
 prepare_for_exit (void)
 /* Prepare the screen to exit from the program.  */
 {
+  if (! curses_initialised)  return;
   werase (message);
   wnoutrefresh (moon);
   wnoutrefresh (status);
@@ -119,7 +121,7 @@ main (int argc, char **argv)
     default:
       error_flag = 1;
     }
- }
+  }
 
   if (argc != optind) {
     fputs ("too many arguments\n", stderr);
@@ -156,11 +158,13 @@ the file named COPYING or press `c' at Moon-Buggy's title screen.");
   initialise_signals ();
   init_rnd ();
   
+  block_all ();
   initscr ();
   cbreak ();
   noecho ();
-
   allocate_windows ();
+  curses_initialised = 1;
+  unblock ();
 
   if (title_flag) {
     res = title_mode ();
