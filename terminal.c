@@ -1,8 +1,8 @@
-/* mesg.c - restrict write access to the terminal
+/* terminal.c - restrict write access to the terminal
  *
  * Copyright (C) 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: mesg.c,v 1.1 2000/11/01 13:10:54 voss Exp $";
+static const  char  rcsid[] = "$Id: terminal.c,v 1.1 2000/11/13 20:14:20 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
