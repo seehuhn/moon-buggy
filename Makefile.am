@@ -1,10 +1,10 @@
 ## Process this file with automake to produce Makefile.in
 # Copyright 1999  Jochen Voﬂ
-# $Id: Makefile.am,v 1.32 1999/06/13 18:42:35 voss Exp $
+# $Id: Makefile.am,v 1.33 1999/06/25 21:31:35 voss Exp $
 
 EXTRA_DIST = moonman.in maintman.in instcmds car.img \
 	text2c.sed merge.sed img.sed \
-	mbuggy.spec moon-buggy.gif moon-buggy.png title.eps
+	mbuggy.spec mbuggy.lsm moon-buggy.gif moon-buggy.png title.eps
 DISTCLEANFILES = moon-buggy.6 maint-buggy maint-buggy.6 uninst.pre
 
 bin_PROGRAMS = moon-buggy
@@ -36,10 +36,10 @@ buggy.h: car.img img.sed
 
 install-exec-hook:
 	if test "x@GAMEUSER@" != "x"; then \
-	  chown "@GAMEUSER@" "$(DESTDIR)/$(bindir)/moon-buggy" \
-	    && chmod u+s "$(DESTDIR)/$(bindir)/moon-buggy" ; \
+	  chown "@GAMEUSER@" "$(DESTDIR)$(bindir)/moon-buggy" \
+	    && chmod u+s "$(DESTDIR)$(bindir)/moon-buggy" ; \
 	fi
-	chmod go-x "$(DESTDIR)/$(bindir)/maint-buggy"
+	chmod go-x "$(DESTDIR)$(bindir)/maint-buggy"
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(scoredir)
@@ -47,12 +47,12 @@ install-data-local:
 install-data-hook:
 	@$(POST_INSTALL)
 	if test "x@GAMEUSER@" != "x"; then \
-	  chown "@GAMEUSER@" "$(DESTDIR)/$(scoredir)" \
-	    && { test ! -f "$(DESTDIR)/$(scoredir)/mbscore" \
-		 || chown "@GAMEUSER@" "$(DESTDIR)/$(scoredir)/mbscore" ; } \
-	    && { test ! -f "$(DESTDIR)/$(scoredir)/mbscore" \
-		 || chmod go-w "$(DESTDIR)/$(scoredir)/mbscore" ; } \
-	    && chmod go-w "$(DESTDIR)/$(scoredir)" ; \
+	  chown "@GAMEUSER@" "$(DESTDIR)$(scoredir)" \
+	    && { test ! -f "$(DESTDIR)$(scoredir)/mbscore" \
+		 || chown "@GAMEUSER@" "$(DESTDIR)$(scoredir)/mbscore" ; } \
+	    && { test ! -f "$(DESTDIR)$(scoredir)/mbscore" \
+		 || chmod go-w "$(DESTDIR)$(scoredir)/mbscore" ; } \
+	    && chmod go-w "$(DESTDIR)$(scoredir)" ; \
 	fi
 
 uninstall-local:
