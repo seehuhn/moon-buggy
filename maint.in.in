@@ -1,0 +1,72 @@
+#! /bin/sh
+# maint-buggy - maintain the moon-buggy installation
+#:notice
+# @configure_input@
+# $Id: maint.in.in,v 1.1 1999/01/01 19:22:20 voss Exp $
+
+prefix="@prefix@"
+exec_prefix="@exec_prefix@"
+bindir="@bindir@"
+scoredir="@sharedstatedir@/moon-buggy"
+infodir="@infodir@"
+mandir="@mandir@"
+man6dir="$mandir/man6"
+
+usage()
+{
+  cat <<EOF
+Usage: maint-buggy [options]
+
+Maintain the moon-buggy installation.
+
+The options are
+  --help            show this message
+  --uninstall       Remove the moon-buggy installation from the system
+  --version         show the moon-buggy version
+
+Please report bugs to <voss@mathematik.uni-kl.de>.
+EOF
+
+  exit $1
+}
+
+while test $# -gt 0; do
+  case "$1" in
+  -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+  *) optarg= ;;
+  esac
+
+  case "$1" in
+    --version)
+      cat <<EOF
+maint-buggy (moon-buggy) @VERSION@
+Copyright (C) 1998 Jochen Voß
+Moon-Buggy come with NO WARRANTY, to the extent permitted by law.
+You may redistribute copies of Moon-Buggy under the terms of the GNU
+General Public License.  For more information about these matters, see
+the file named COPYING or press \`c' at Moon-Buggy's title screen.
+EOF
+      exit 0
+      ;;
+    --help)
+      usage 0
+      ;;
+    --uninstall)
+      set -x
+      # the next line is a hack
+      cd $infodir
+#:pre-uninstall
+      rm -f "$bindir/moon-buggy"
+      rm -f "$infodir/mbuggy.info"
+      rm -f "$man6dir/moon-buggy.6"
+      rm -f "$scoredir/mbscore"
+      rmdir "$scoredir"
+      rm -f "$bindir/maint-buggy"
+#:post-uninstall
+      ;;
+    *)
+      usage 1
+      ;;
+  esac
+  shift
+done
