@@ -1,5 +1,5 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: mbuggy.texi,v 1.5 1998/12/23 09:34:23 voss Exp $
+@c $Id: mbuggy.texi,v 1.6 1998/12/26 12:14:00 voss Exp $
 @c %**start of header
 @setfilename mbuggy.info
 @settitle Moon-Buggy Usage and Maintainance
@@ -77,6 +77,7 @@ version @value{VERSION} of the program.
 * Introduction::                Introduction
 * Invocation::                  Invocation
 * Installation::                Installation and setup
+* References::                  References
 @end menu
 
 @node Introduction, Invocation, Top, Top
@@ -89,7 +90,7 @@ dangerous craters there.  Fortunately your car can jump!
 Moon-buggy is free software.  Read the file COPYING of the source code
 distribution for details.
 
-Please mail suggestions and bug reports to
+Please mail any suggestions and bug reports to
 @email{voss@@mathematik.uni-kl.de}.  Your message should include the
 moon-buggy version number, as obtained by the command @samp{moon-buggy -V}.
 
@@ -97,11 +98,15 @@ moon-buggy version number, as obtained by the command @samp{moon-buggy -V}.
 @node Invocation, Installation, Introduction, Top
 @chapter Invocation
 
-Just start it.  Use the @key{space} bar to jump.
+Just start it.  Use the @key{SPC} bar to jump.
 
 
-@node Installation,  , Invocation, Top
+@node Installation, References, Invocation, Top
 @chapter Installation
+
+Moon-buggy requires the curses library as a prerequisite.  If curses is
+not installed on your system, you may obtain the ncurses package
+(@pxref{References}).
 
 When you unpack the moon-buggy distribution, you get one directory, which
 holds all the source files and the documentation.  If you have built
@@ -122,11 +127,20 @@ You can choose the score file location via configure's
 @samp{--sharedstatedir} option.  On Linux you should use
 
 @example
---sharedstatedir=/var/lib/games
+--sharedstatedir=/var/games
 @end example
 
 @noindent
-to comply with the Linux file system standard.
+to comply with the Filesystem Hierarchy Standard (@pxref{References}).
 
-@contents
+
+@node References,  , Installation, Top
+@chapter References
+
+Version 2.0 of the @strong{Filesystem Hierarchy Standard} (FHS 2.0) may
+be found on the internet at
+@url{ftp://sunsite.unc.edu/pub/linux/docs/fhs/fhs-2.0.tar.gz}.
+
+The @strong{ncurses} package is at
+@url{ftp://prep.ai.mit.edu/pub/gnu/ncurses-4.2.tar.gz}.
 @bye
