@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.3 1998/12/23 10:07:37 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.4 1998/12/23 15:09:42 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -17,6 +17,7 @@ static const  char  rcsid[] = "$Id: highscore.c,v 1.3 1998/12/23 10:07:37 voss E
 #include <sys/stat.h>
 #include <pwd.h>
 #include <fcntl.h>
+#include <time.h>
 #include <errno.h>
 
 #include "moon.h"
@@ -42,6 +43,23 @@ static  struct score_entry  hiscores [HIGHSCORE_SLOTS];
 /* The name of the score file to write.  */
 static  char *score_file_name;
 
+
+static void
+get_current_date (int *day_p, int *month_p, int *year_p)
+{
+  time_t curtime;
+  struct tm *loctime;
+  
+  /* Get the current time. */
+  curtime = time (NULL);
+  
+  /* Convert it to local time representation. */
+  loctime = localtime (&curtime);
+
+  *day_p = loctime->tm_mday;
+  *month_p = loctime->tm_mon + 1;
+  *year_p = loctime->tm_year + 1900;
+}
 
 static char *
 compose_filename (const char *dir, const char *name)
@@ -218,13 +236,15 @@ static void
 generate_table (void)
 /* Generate an empty highscore table.  */
 {
+  int  day, month, year;
   int  i;
 
+  get_current_date (&day, &month, &year);
   for (i=0; i<HIGHSCORE_SLOTS; ++i) {
     hiscores[i].score = 100-i*10;
-    hiscores[i].day = 1;
-    hiscores[i].month = 4;
-    hiscores[i].year = 1998;
+    hiscores[i].day = day;
+    hiscores[i].month = month;
+    hiscores[i].year = year;
     strcpy (hiscores[i].player, names[d_rnd(13)]);
     hiscores[i].new = 0;
   }
@@ -329,12 +349,18 @@ write_hiscore (void)
   
   new_entry = hiscores+(HIGHSCORE_SLOTS-1);
   if (score > new_entry->score) {
+    int  day, month, year;
+
     get_real_user_name (real_name, PLAYER_MAX_LEN);
     strncpy (new_entry->player, real_name, PLAYER_MAX_LEN);
     for (i=0; i<PLAYER_MAX_LEN; ++i) {
       if (new_entry->player[i] == '|')  new_entry->player[i] = ';';
     }
+    get_current_date (&day, &month, &year);
     new_entry->score = score;
+    new_entry->day = day;
+    new_entry->month = month;
+    new_entry->year = year;
     new_entry->new = 1;
     qsort (hiscores, HIGHSCORE_SLOTS, sizeof (struct score_entry),
 	   compare_entries);
