@@ -1,6 +1,4 @@
 CHECKLIST:
-· Auf der Hyperion wird "uninst.pre.in" neu gebaut, da "Makefile.in"
-zu neu ist.  Wie konnte das passieren?
 · ChangeLog
 · Copyright
 · make
