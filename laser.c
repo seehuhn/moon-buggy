@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: laser.c,v 1.6 1999/05/23 21:02:23 voss Rel $";
+static const  char  rcsid[] = "$Id: laser.c,v 1.7 1999/05/26 22:00:24 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -107,6 +107,7 @@ fire_laser (double t)
   b->y = car_y;
   DA_ADD (beam_table, struct beam *, b);
   add_event (t+TICK(0.25), beam_handler, b);
+  adjust_score (-1);
 }
 
 void
