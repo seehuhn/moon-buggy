@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: keyboard.c,v 1.5 1999/07/21 10:41:36 voss Exp $";
+static const  char  rcsid[] = "$Id: keyboard.c,v 1.6 1999/08/30 20:58:14 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -55,18 +55,6 @@ add_key (int key_code, enum mb_key meaning)
     (*entry_p)->meaning = 0;
   }
   (*entry_p)->meaning |= meaning;
-}
-
-static void
-remove_key (int key_code, enum mb_key meaning)
-{
-  struct hash_entry **entry_p = locate (key_code);
-  (*entry_p)->meaning &= ~(int)meaning;
-  if ((*entry_p)->meaning == 0) {
-    struct hash_entry *old = *entry_p;
-    *entry_p = (*entry_p)->next;
-    free (old);
-  }
 }
 
 void
