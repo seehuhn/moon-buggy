@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: mbuggy.h,v 1.10 1999/05/30 19:53:10 voss Exp $ */
+ * $Id: mbuggy.h,v 1.11 1999/06/03 12:22:49 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -101,6 +101,7 @@ extern  int  stakes;
 extern  void  adjust_score (int val);
 extern  int  game_mode (void);
 extern  void  resize_game (void);
+extern  void  quit_game (void);
 
 /* from "level.c" */
 extern  void  level_start (int initial);
