@@ -1,5 +1,5 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: mbuggy.texi,v 1.1 1998/12/19 20:34:58 voss Exp $
+@c $Id: mbuggy.texi,v 1.2 1998/12/20 00:48:11 voss Exp $
 @c %**start of header
 @setfilename mbuggy.info
 @settitle Moon-Buggy Usage and Maintainance
@@ -8,7 +8,7 @@
 
 @dircategory Games
 @direntry
-* moon-buggy: (mbuggy).   Moon-Buggy Usage and Maintainance
+* moon-buggy: (mbuggy). Moon-Buggy Usage and Maintainance
 @end direntry
 
 @ifinfo
@@ -113,6 +113,13 @@ configure
 make
 make install
 @end example
+
+You can choose the score file location via configure's
+@samp{--sharedstatedir} option.  On Linux you should use
+@example
+--sharedstatedir=/var/lib/games
+@end example
+to comply with the Linux file system standard.
 
 @contents
 @bye
