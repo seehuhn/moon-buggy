@@ -2,7 +2,9 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.10 1998/12/30 19:39:08 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.11 1999/01/01 18:04:27 voss Exp $";
+
+#define _POSIX_SOURCE
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -214,7 +216,14 @@ main (int argc, char **argv)
   }
   
   if (version_flag) {
-    puts (PACKAGE ", version " VERSION);
+    puts ("Moon-Buggy " VERSION);
+    puts ("Copyright (C) 1998 Jochen Voﬂ");
+    puts ("\
+Moon-Buggy comes with NO WARRANTY, to the extent permitted by law.");
+    puts ("\
+You may redistribute copies of Moon-Buggy under the terms of the GNU\n\
+General Public License.  For more information about these matters, see\n\
+the file named COPYING or press `c' at Moon-Buggy's title screen.");
     if (! error_flag)  exit (0);
   }
   if (error_flag || help_flag) {
@@ -224,11 +233,12 @@ main (int argc, char **argv)
 #define OPT(short,long) "  " short "  "
 #endif
     FILE *out = error_flag ? stderr : stdout;
-    fprintf (out, "usage:  %s [options]\n\n", my_name);
+    fprintf (out, "usage: %s [options]\n\n", my_name);
     fputs ("The options are\n", out);
     fputs (OPT("-h","--help    ") "show this message and exit\n", out);
     fputs (OPT("-n","--no-title") "omit the title screen\n", out);
-    fputs (OPT("-V","--version ") "show the version number and exit\n", out);
+    fputs (OPT("-V","--version ") "show the version number and exit\n\n", out);
+    fputs ("Please report bugs to <voss@mathematik.uni-kl.de>.\n", out);
     exit (error_flag);
   }
 
@@ -240,11 +250,15 @@ main (int argc, char **argv)
     signal (SIGTERM, SIG_IGN);
   signal (SIGCONT, cont_handler);
   signal (SIGTSTP, tstp_handler);
+#ifdef SIGWINCH
   signal (SIGWINCH, winch_handler);
+#endif
 
   sigemptyset (&winch_set);
-  sigfillset (&full_set);
+#ifdef SIGWINCH
   sigaddset (&winch_set, SIGWINCH);
+#endif
+  sigfillset (&full_set);
   
   initscr ();
   cbreak ();
