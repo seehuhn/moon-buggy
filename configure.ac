@@ -1,9 +1,9 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.3 $)
+AC_REVISION($Revision: 1.4 $)
 
-AC_INIT(moon-buggy, 0.5.53, voss@mathematik.uni-kl.de)
+AC_INIT(moon-buggy, 0.5.54, voss@mathematik.uni-kl.de)
 AC_CONFIG_SRCDIR([moon-buggy.h])
-AM_INIT_AUTOMAKE(moon-buggy, 0.5.53)
+AM_INIT_AUTOMAKE(moon-buggy, 0.5.54)
 AM_CONFIG_HEADER(config.h)
 
 AC_CANONICAL_HOST
@@ -19,7 +19,7 @@ AC_ARG_WITH(setgid,
 [  --with-setgid=NAME      setgid usage: install moon-buggy as group NAME],
 [case "${withval}" in
   no)  GAMEGROUP="" ;;
-  yes)  AC_MSG_ERROR(missing argument for --with-setgid) ;;
+  yes) AC_MSG_ERROR([missing argument for --with-setgid]) ;;
   *)   GAMEGROUP="$withval" ;;
 esac])
 AC_SUBST(GAMEGROUP)
