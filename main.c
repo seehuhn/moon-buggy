@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.35 2000/04/01 07:54:13 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.36 2000/04/08 13:00:21 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -87,14 +87,13 @@ prepare_for_exit (void)
 /* Prepare the screen to exit from the program.  */
 {
   if (! curses_initialised)  return;
-  wnoutrefresh (moon);
-  wnoutrefresh (status);
-  wnoutrefresh (message);
   show_cursor ();
+  wrefresh (moon);
+  wrefresh (message);
+  werase (status);
   wmove (status, 0, 0);
-  doupdate ();
+  wrefresh (status);
   endwin ();
-  putchar ('\n');
   fflush (NULL);
 }
 
@@ -233,6 +232,7 @@ the file named COPYING or press `c' at Moon-Buggy's title screen.");
     mode_start (game_mode, 0);
   }
   main_loop ();
+  mode_leave ();
   
   prepare_for_exit ();
   return  0;
