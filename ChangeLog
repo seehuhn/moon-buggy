@@ -1,5 +1,9 @@
 1998-12-20  Jochen Voss  <voss@tatonka.pfalz.de>
 
+	* mbuggy.texi: Bug fix.
+
+	* ChangeLog: Added the remaining news for version 0.2
+
 	* mbuggy.texi, README: Mention my email address for bug reports.
 
 	* main.c: Call `initialize_buggy'.
@@ -44,7 +48,7 @@
 
 1998-12-19  Jochen Voss  <voss@tatonka.pfalz.de>
 
-	* mbscore.tmpl: initial revision
+	* mbscore.tmpl, mbuggy.texi, realname.c, highscore.c: initial revision
 
 1998-12-18  Jochen Voss  <voss@tatonka.pfalz.de>
 
