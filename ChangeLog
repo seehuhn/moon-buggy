@@ -1,3 +1,131 @@
+2000-04-12  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: added 2000-03-20 to 2000-04-12
+	
+	* configure.in: Change the version string to "0.4.91".
+
+	* keyboard.c (add_key): check for NCURSES_VERSION_MAJOR
+
+	* mode.c (mode_redraw): bug fixes
+
+2000-04-09  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ANNOUNCE: Updated the announcement for version 0.5.
+
+	* keyboard.c (choose_keys): new function
+	(describe_keys): bug fixes and improvements.
+
+	* pager.c: minor fixes
+
+	* NEWS: Explain new features for version 0.5
+
+2000-04-08  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* moon-buggy.h, queue.c:
+	removed the obsolete function `quit_main_loop_h'
+
+	* Makefile.am, configure.in, game.c, highscore.c, keyboard.c, main.c, moon-buggy.h, moon-buggy.texi, pager.c, queue.c, realname.c, signal.c, title.c:
+	fixed the copyright notices
+
+	* TODO: Several items resolved.
+
+	* moon-buggy.texi: Renamed "top-ten" to "highscore".
+	Added moon-buggy's location at sunsite to the list of references.
+
+	* Makefile.am: Removed "moon-buggy.spec".
+
+	* moon-buggy.h:
+	Added declarations for the new functions `print_game_over' and
+	`mode_leave'.
+
+	* game.c (print_game_over): new function
+	cosmetic fixes
+
+	* keyboard.c: bug fixes
+
+	* main.c (prepare_for_exit): cleaned up
+
+	* mode.c (mode_leave): new function
+
+	* realname.c (get_real_user_name): remove leading white space
+
+	* highscore.c: History file removed.
+
+	* highscore.c: Fixed the game over message
+
+	* moon-buggy.spec: removed obsolete file
+
+	* mvwaddnstr.c, wgetnstr.c: removed unused files
+
+2000-04-01  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* moon-buggy.h: Added mbk_scores to enum mb_key.
+
+	* TODO: Updates
+
+	* highscore.c: highscore list is scrollable, now.
+
+	* game.c: display fixes
+
+	* keyboard.c: Add a binding for mbk_scores
+
+	* main.c: Initialize the car
+
+	* mode.c: Clear the moon window before entering a new mode.
+
+	* pager.c: Removed unnecessary code
+
+	* title.c: Add a new key to enter highscore mode.
+
+2000-03-31  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* TODO: updates
+
+	* Makefile.am: Added the new files "mode.c" and "cursor.c".
+
+	* cursor.c, mode.c: initial revision
+
+	* moon-buggy.h: Declarations for the new event driven model.
+	Added declarations for the new files "mode.c" and "cursor.c".
+
+	* buggy.c (jump, car_meteor_hit): calling syntax changed.
+
+	* game.c, highscore.c: Use the new event driven model.
+
+	* keyboard.c (describe_keys): new function
+
+	* main.c: Use the new event driven model.
+	(print_hint): new function
+	Enable LC_CTYPE
+
+	* moon.c, pager.c: Use the new event driven model.
+
+	* queue.c: Implement the new event driven model.
+
+	* realname.c: Check for failure/intterupts.
+	Use show_cursor/hide_cursor.
+
+	* signal.c, title.c: Use the new event driven model.
+
+2000-03-29  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* game.c (game_mode): use `clear_hint_h'.
+
+	* level.c: Use `print_hint_h'.
+
+	* queue.c: Renamed old `print_message_h' and `clear_message_h' to new
+	`print_hint_h' and `clear_hint_h'.
+
+	Doc fixes.
+
+	* configure.in:
+	Check for the "locale.h" header and for the `setlocale' function.
+
+2000-03-20  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* configure.in: Changed the version string to "0.4.53".
+	Minor bug fix for bsd-support.
+
 2000-03-19  Jochen Voss  <voss@tatonka.pfalz.de>
 
 	* ChangeLog: added 2000-03-14 to 2000-03-19
