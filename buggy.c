@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: buggy.c,v 1.7 1999/03/02 18:31:45 voss Exp $";
+static const  char  rcsid[] = "$Id: buggy.c,v 1.8 1999/04/21 19:19:38 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -49,15 +49,19 @@ initialise_buggy (void)
   cstate = car_NORMAL;
 }
 
-int
-print_buggy (void)
+void
+animate_buggy (void)
 {
-  int  crash = 0;
-  
   if (state->t >= -0.5) {
     cstate = state->state;
     ++state;
   }
+}
+
+int
+print_buggy (void)
+{
+  int  crash = 0;
   
   switch (cstate) {
   case car_NORMAL:

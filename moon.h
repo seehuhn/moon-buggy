@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: moon.h,v 1.14 1999/03/08 20:33:55 voss Exp $ */
+ * $Id: moon.h,v 1.15 1999/04/21 19:19:26 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -69,7 +69,7 @@ extern  void  resize_game (void);
 extern  void  score_bonus (int x);
 
 /* from "moon.c" */
-extern  char *ground1, *ground2;
+extern  char *ground1, *ground2, *ground3;
 extern  int  d_rnd (int limit);
 extern  void  resize_ground (int clear_it);
 extern  void  print_ground (void);
@@ -78,6 +78,7 @@ extern  void  scroll_ground (void);
 /* from "buggy.c" */
 extern  int  car_base, score_base;
 extern  void  initialise_buggy (void);
+extern  void  animate_buggy (void);
 extern  int  print_buggy (void);
 extern  void  jump (double t);
 extern  int  can_jump (void);

@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.7 1999/04/07 15:27:07 voss Exp $";
+static const  char  rcsid[] = "$Id: game.c,v 1.8 1999/04/21 19:19:34 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -57,6 +57,7 @@ spend_life (void)
     case ev_SCROLL:
       scroll_ground ();
       print_ground ();
+      print_buggy ();
       if (ground2[score_base] == ' ')  ++bonus;
       if (crash_check ())  done = 1;
       add_event (t+TICK(1), ev_SCROLL);
@@ -85,6 +86,7 @@ spend_life (void)
       wnoutrefresh (message);
       break;
     case ev_BUGGY:
+      animate_buggy ();
       if (print_buggy ())  done = 1;
       break;
     case ev_SCORE:

@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: moon.c,v 1.7 1999/03/08 20:25:28 voss Exp $";
+static const  char  rcsid[] = "$Id: moon.c,v 1.8 1999/04/21 19:19:30 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -23,7 +23,7 @@ static const  char  rcsid[] = "$Id: moon.c,v 1.7 1999/03/08 20:25:28 voss Exp $"
 #include "moon.h"
 
 
-char *ground1, *ground2;
+char *ground1, *ground2, *ground3;
 static int  ground_width;
 
 static  int  hole = 2;
@@ -39,10 +39,12 @@ resize_ground (int clear_it)
   if (ground_width != cols) {
     ground1 = xrealloc (ground1, cols);
     ground2 = xrealloc (ground2, cols);
+    ground3 = xrealloc (ground3, cols);
   }
   for (i=(clear_it ? 0 : ground_width); i<cols; ++i) {
     ground1[i] = '#';
     ground2[i] = '#';
+    ground3[i] = ' ';
   }
   ground_width = cols;
   car_base = (cols > 80 ? 80 : cols) - 12;
@@ -60,6 +62,7 @@ d_rnd (int limit)
 void
 print_ground (void)
 {
+  mvwaddnstr (moon, LINES-5, 0, ground3, ground_width);
   mvwaddnstr (moon, LINES-4, 0, ground2, ground_width);
   mvwaddnstr (moon, LINES-3, 0, ground1, ground_width);
   wnoutrefresh (moon);
@@ -83,4 +86,7 @@ scroll_ground (void)
   
   memmove (ground2+1, ground2, ground_width-1);
   ground2[0] = nextchar;
+
+  memmove (ground3+1, ground3, ground_width-1);
+  ground3[0] = d_rnd(30) ? ' ' : 'o';
 }
