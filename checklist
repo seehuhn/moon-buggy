@@ -1,6 +1,7 @@
 Für Distributionen:
 · "test-score-modes" ausprobieren
 · Copyright-Daten
+· getpid()-Zeugs aus "ground.c" entfernen
 · "README" aktualisieren.  Experimentell entfernen.
 · "ANNOUNCE" aktualisieren.  Keine tabs überlassen.
 · Datum in der manual page aktualisieren
