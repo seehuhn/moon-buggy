@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.25 1999/06/13 19:18:12 voss Rel $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.26 1999/07/17 13:02:06 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -12,6 +12,7 @@ static const  char  rcsid[] = "$Id: queue.c,v 1.25 1999/06/13 19:18:12 voss Rel 
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <sys/types.h>
 #if HAVE_SYS_SELECT_H
 #include <sys/select.h>
@@ -177,6 +178,23 @@ wait_until (real_time *t)
   
   return  res;
 }
+
+static void
+drain_input (void)
+/* Discard all data from the input queue.  */
+{
+  char  buffer [16];
+  int  oldflags;
+
+  oldflags = fcntl (0, F_GETFL, 0);
+  if (oldflags < 0) {
+    fatal ("Cannot get file status flags (%s)", strerror (errno));
+  }
+  fcntl (0, F_SETFL, oldflags|O_NONBLOCK);
+  while (read (0, buffer, 16) == 16)
+    ;
+  fcntl (0, F_SETFL, oldflags);
+}
 
 void
 clock_adjust_delay (double dt)
@@ -207,10 +225,7 @@ clear_queue (void)
     ev = old->next;
     free (old);
   }
-  while (key_ready ()) {	/* eat up input */
-    char  c;
-    read (0, &c, 1);
-  }
+  drain_input ();
 }
 
 void
@@ -325,7 +340,13 @@ main_loop (double dt, void (*key_handler)(game_time))
     t = to_real (queue->t);
     retval = wait_until (&t);
 
-    if (retval>0 && key_handler)  key_handler (to_game (t));
+    if (retval>0) {
+      if (key_handler) {
+	key_handler (to_game (t));
+      } else {
+	drain_input ();
+      }
+    }
     
     while (queue && queue->t <= to_game (vclock ())) {
       struct event *ev = queue;
