@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.19 1999/06/06 13:20:44 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.20 1999/06/06 19:29:30 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -98,7 +98,7 @@ do_open (const char *name, int flags, int lock, int must_succeed)
 struct score_entry {
   int  score, level;
   int  day, month, year;
-  char  name [NAME_MAX_LEN+1];
+  char  name [NAME_MAX_LEN];
   int  new;
 };
 static  struct score_entry  topten [TOPTEN_SLOTS];
@@ -124,7 +124,7 @@ compose_filename (const char *dir, const char *name)
 static char *
 local_score_file_name (void)
 /* Return the local score file's name.
- * The is reponsible for freeing the returned string via `free'.  */
+ * The caller is reponsible for freeing the returned string via `free'.  */
 {
   uid_t  me = getuid ();
   struct passwd *my_passwd = getpwuid (me);
@@ -145,6 +145,23 @@ global_score_file_name (void)
 }
 
 
+struct dwarf_idx {
+  int  idx;
+  int  key;
+};
+
+static int
+compare_dwarfs (const void *a, const void *b)
+/* Compare two dwarfs.
+ * This is a comparison function for the use with `qsort'.  */
+{
+  const  struct dwarf_idx *aa = a;
+  const  struct dwarf_idx *bb = b;
+  if (aa->key > bb->key)  return -1;
+  if (aa->key < bb->key)  return +1;
+  return  0;
+}
+
 static void
 generate_data (void)
 /* Generate an empty top-ten table and write it into `topten'.  */
@@ -153,17 +170,23 @@ generate_data (void)
     "Dwalin", "Balin", "Kili", "Fili", "Dori", "Nori", "Ori",
     "Oin", "Gloin", "Bifur", "Bofur", "Bombur", "Thorin"
   };
+  struct dwarf_idx  idx [13];
   int  day, month, year;
   int  i;
 
   get_date (&day, &month, &year);
+  for (i=0; i<13; ++i) {
+    idx[i].idx = i;
+    idx[i].key = uniform_rnd(32768);
+  }
+  qsort (idx, 13, sizeof(struct dwarf_idx), compare_dwarfs);
   for (i=0; i<TOPTEN_SLOTS; ++i) {
     topten[i].score = 100*(TOPTEN_SLOTS-i);
     topten[i].level = 1;
     topten[i].day = day;
     topten[i].month = month;
     topten[i].year = year;
-    strcpy (topten[i].name, names[uniform_rnd(13)]);
+    strcpy (topten[i].name, names[idx[i].idx]);
     topten[i].new = 0;
   }
 }
