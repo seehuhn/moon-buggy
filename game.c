@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.32 2000/04/01 07:54:53 voss Exp $";
+static const  char  rcsid[] = "$Id: game.c,v 1.33 2000/04/08 13:01:34 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -51,6 +51,19 @@ setup_screen (void)
   resize_ground (1);
 }
 
+void
+print_game_over (int blink)
+{
+#ifdef A_BLINK
+  if (blink)  wattron (moon, A_BLINK);
+#endif
+  mvwaddstr (moon, LINES-11, car_base-1, "GAME OVER");
+#ifdef A_BLINK
+  if (blink)  wattroff (moon, A_BLINK);
+#endif
+  wnoutrefresh (moon);
+}
+
 static void
 game_enter (int seed)
 {
@@ -60,6 +73,8 @@ game_enter (int seed)
     level = 0;
     score = 0;
     lives = 3;
+    werase (status);
+    wnoutrefresh (status);
     setup_screen ();
   }
 
@@ -124,6 +139,7 @@ signal_handler (int signum)
   case SIGTSTP:
     if (lives > 1)  lives = 1;
     if (! crash_detected)  crash_detected = 1;
+    print_message ("GAME OVER (suspended)");
     break;
   case SIGCONT:
     print_message ("GAME OVER (suspended)");
@@ -163,15 +179,7 @@ pause_enter (int seed)
   adjust_score (0);
   print_lives ();
   print_buggy ();
-  if (lives <= 10) {
-#ifdef A_BLINK
-    wattron (moon, A_BLINK);
-#endif
-    mvwaddstr (moon, LINES-11, car_base-1, "GAME OVER");
-#ifdef A_BLINK
-    wattroff (moon, A_BLINK);
-#endif
-  }
+  if (lives <= 0)  print_game_over (1);
 }
 
 static void
