@@ -4,10 +4,12 @@ resolved before version 1.0.
 
 BUG FIXES:
 · Einzeln hinzugekommene Zwerge haben falsches Datum
+· Auf der Hyperion geht das Fenstergrößenverändern nicht gut!
 · Fenstergrößenveränderungen beim Nameneingeben funktionieren mit
 ncurses-5 nicht gut.
-· Titelbild bei zu flachen Fenstern könnte Auto statt Titel darstellen.
 · Levels für Zwerge
+· Die Taste `j' sollte SPC immer und nicht nur meistens ersetzen
+können.
 · Auf nereid: Schüsse werden invers dargestellt, die Highscoreliste
 blinkend.  Auf io/jupiter ist alles noch schlimmer!
 · Auf hpux wird der Cursor nicht abgeschaltet.
@@ -16,14 +18,18 @@ Man sollte ihn evtl. auf eine günstige Position stellen.
 `parse_date' ist das schwierig.
 
 IMPROVEMENTS:
+· `resize_ground' wird meist nicht zum "resizen" verwendet.
+Umbenennen?
+· Verwende COPYING.DOC
+· Icon-Zeugs für Debian
 · Read the new revision of the FHS
+· Neue Funktion `warning', z.B. für die "Score file corrupted" Meldung
 · Compile-time option für Pausentaste
 · words of wisdom/advice
 · Loch in level 6.  Level 9 für Klaus.
 · Den `fd_set' Teil von "configure.in" verbessern.  Zumindest
 sollte der cache verwendet werden.
 · `has_key' Ersatz für andere curses-Versionen einführen
-· Sollte jeder Hint nur höchstens alle 2 Minuten erscheinen?
 · Groß- und Kleinschreibung für Tasten ignorieren.
 · Ist `addchstr' sinnvoll (wg. Geschwindigkeit)
 · Könnte man die Events einen Tick (oder 0.1 Sekunden) zu früh
@@ -40,6 +46,8 @@ Tastendrücken während der letzen zehntel Sekunde?  Bringt das
 · Portabilität bekümmern
 · Ufos einführen
 · Internationalisieren
+· "reload" Taste für die Highscoreliste
+· Man sollte die Tastenbelegungen ändern können
 
 ; Local Variables:
 ; mode: auto-fill
