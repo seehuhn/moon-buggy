@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: buggy.c,v 1.1 1998/12/18 23:14:29 voss Exp $";
+static const  char  rcsid[] = "$Id: buggy.c,v 1.2 1998/12/20 00:47:19 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -14,7 +14,7 @@ static const  char  rcsid[] = "$Id: buggy.c,v 1.1 1998/12/18 23:14:29 voss Exp $
 #include "moon.h"
 
 
-int  car_base;
+int  car_base, score_base;
 
 
 enum car_state { car_NORMAL, car_START, car_UP1, car_UP2, car_LAND };
@@ -131,5 +131,10 @@ crash_check (void)
     wnoutrefresh (moon);
     return 1;
   }
+  if (bonus) {
+    score += 1<<bonus;
+    bonus = 0;
+  }
+  
   return  0;
 }
