@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.12 1999/05/08 12:41:38 voss Exp $";
+static const  char  rcsid[] = "$Id: game.c,v 1.13 1999/05/15 16:50:29 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -33,6 +33,7 @@ static void
 scroll_handler (game_time t, void *client_data)
 {
   scroll_ground ();
+  if (d_rnd(20) == 0)  place_meteor (t);
   print_ground ();
   print_buggy ();
   if (ground2[car_x + 7] == ' ')  ++bonus;
@@ -147,6 +148,7 @@ game_mode (void)
 
     add_event (2, quit_main_loop_h, NULL);
     main_loop (2, game_key_handler);
+    remove_meteors ();
   } while (lives > 0);
 
   wattron (moon, A_BLINK);
