@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: mbuggy.h,v 1.6 1999/05/23 14:24:19 voss Exp $ */
+ * $Id: mbuggy.h,v 1.7 1999/05/23 21:07:22 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -87,6 +87,7 @@ extern  void  jump (double t);
 extern  int  can_jump (void);
 extern  int  crash_check (void);
 extern  void  shift_buggy (int dx);
+extern  int  car_meteor_hit (double t, int x);
 
 /* from "laser.c" */
 extern  void  fire_laser (double t);
@@ -95,8 +96,10 @@ extern  int  laser_hit (int x);
 
 /* from "meteor.c" */
 extern  void  place_meteor (double t);
+extern  void  requeue_meteors (double t);
 extern  void  remove_meteors (void);
-extern  int  meteor_hit (int x0, int x1);
+extern  int  meteor_laser_hit (int x0, int x1);
+extern  int  meteor_car_hit (int x0, int x1);
 
 /* from "highscore.c" */
 extern  int  highscore_mode (long score);
