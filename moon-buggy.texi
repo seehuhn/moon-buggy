@@ -1,5 +1,5 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: moon-buggy.texi,v 1.9 2000/04/08 13:14:14 voss Exp $
+@c $Id: moon-buggy.texi,v 1.10 2000/04/16 10:41:19 voss Exp $
 @c %**start of header
 @setfilename moon-buggy.info
 @settitle Moon-Buggy Usage and Maintenance
@@ -98,12 +98,8 @@ Moon-buggy is a simple character graphics game, where you drive some
 kind of car across the moon's surface.  Unfortunately there are
 dangerous craters there.  Fortunately your car can jump over them!
 
-The game is not yet finished.  So be prepared to encounter bugs (and
-please report them).  But it works to some extent, it has a highscore
-list, and it may be fun.  Just try it!
-
-New versions of Moon-buggy may be found on the sunsite ftp server
-(@pxref{References}).
+New versions of Moon-buggy may be found on the sunsite ftp server or on
+the moon-buggy download page (@pxref{References}).
 
 Moon-Buggy comes with no warranty, to the extent permitted by law.  You
 may redistribute copies of Moon-Buggy under the terms of the GNU General
@@ -175,14 +171,16 @@ prints moon-buggy's version string to standard output and exits.
 @node Playing the Game, Shared Score Files, Maint-buggy Invocation, Top
 @chapter Playing the Game
 
-Just start it and follow the instructions.  The car is controlled by a
-couple of keys.  These are the following.
+The game is controlled by a couple of keys, which are described near the
+bottom of the screen.  Most important are the following keys.
 
 @table @key
 @item SPC
+@itemx j
 makes your car jump.  The length of a jump is fixed and you can only
 start a new jump while the wheels have contact to the ground.
 @item a
+@itemx l
 fires the mining laser.  The laser is used to remove stones, which may
 block your way.
 @item q
@@ -359,6 +357,9 @@ outdated.  If you find this to happen, please report it as a bug.
 The latest version of @strong{Moon-buggy} may be found on the sunsite
 archive in the directory
 @url{ftp://sunsite.unc.edu/pub/linux/games/arcade/}.
+
+I provide a @strong{moon-buggy download page}, which is located at
+@url{http://www.mathematik.uni-kl.de/~wwwstoch/voss/moon-buggy.html}.
 
 Version 2.0 of the @strong{Filesystem Hierarchy Standard} (FHS 2.0) may
 be found on the internet at
