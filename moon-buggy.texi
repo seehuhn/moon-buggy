@@ -1,5 +1,5 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: moon-buggy.texi,v 1.4 1999/08/30 21:00:47 voss Exp $
+@c $Id: moon-buggy.texi,v 1.5 1999/09/14 15:35:03 voss Exp $
 @c %**start of header
 @setfilename moon-buggy.info
 @settitle Moon-Buggy Usage and Maintenance
@@ -319,7 +319,8 @@ Version 2.0 of the @strong{Filesystem Hierarchy Standard} (FHS 2.0) may
 be found on the internet at
 @url{ftp://sunsite.unc.edu/pub/linux/docs/fhs/fhs-2.0.tar.gz}.
 
-The @strong{ncurses} package is at
+The @strong{ncurses} package can be found on the GNU project's ftp
+server and its mirrors.  The original site is
 @url{ftp://prep.ai.mit.edu/pub/gnu/ncurses/ncurses-4.2.tar.gz}.
 
 Hints about @strong{security concerns} may be found in the file
