@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.24 1999/08/30 20:57:10 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.25 1999/09/02 18:37:52 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -197,9 +197,10 @@ generate_data (void)
 }
 
 
-static void
+static int
 read_data (FILE *score_file)
-/* Read the top ten list from SCORE_FILE into `topten'.  */
+/* Read the top ten list from SCORE_FILE into `topten'.
+ * Return 1 on success and 0 on error.  */
 {
   int  version, i;
   int  err = 0;
@@ -240,17 +241,12 @@ read_data (FILE *score_file)
     err = 1;
   }
 
-  if (err) {
-    beep ();
-    xsleep (3);
-    fatal ("Invalid score file");    
-  }
+  return  ! err;
 }
 
 static void
-write_data (FILE *score_file, int trunc)
-/* Write out the current top ten list to stream SCORE_FILE.
- * If TRUNC is true, try to truncate the file.  */
+write_data (FILE *score_file)
+/* Write out the current top ten list to stream SCORE_FILE.  */
 {
   int  i;
   int  res;
@@ -268,18 +264,18 @@ write_data (FILE *score_file, int trunc)
   }
 
 #if HAVE_FTRUNCATE
-    if (trunc) {
-      int  fd = fileno (score_file);
-      long int  pos = ftell (score_file);
-      if (pos != -1) {
+  {
+    int  fd = fileno (score_file);
+    long int  pos = ftell (score_file);
+    if (pos != -1) {
 #if HAVE_FCLEAN
-	fclean (score_file);
+      fclean (score_file);
 #else
-	fflush (score_file);
+      fflush (score_file);
 #endif
-	ftruncate (fd, pos);
-      }
+      ftruncate (fd, pos);
     }
+  }
 #endif
 }
 
@@ -320,7 +316,7 @@ load_table (void)
   int  in_fd, out_fd;
   enum  persona  in_pers, out_pers;
   FILE *f;
-  int  res;
+  int  res, step;
 
   global_name = global_score_file_name ();
   local_name = local_score_file_name ();
@@ -328,25 +324,35 @@ load_table (void)
   out_fd = -1;
 
   do {
-    /* step 1: try read/write access to global score file */
+    /* step 1: try read/write access to global score file
+     *         on success: in_fd == global, out_fd == -1 */
+    step = 1;
     set_persona (pers_GAME);
     in_pers = pers_GAME;
     in_fd = do_open (global_name, O_RDWR, 2, 0);
     if (in_fd != -1)  break;
-  
-    /* step 2: try write access to global score file */
+
+    /* step 2: try write access to global score file
+     *         on success: in_fd == -1, out_fd == global */
+  retry_global:
+    step = 2;
     out_pers = pers_GAME;
     out_fd = do_open (global_name, O_WRONLY|O_CREAT, 2, 0);
     if (out_fd != -1)  break;
 
-    /* step 3: try read/write access to local score file */
+    /* step 3: try read/write access to local score file
+     *         on success: in_fd == local, out_fd == -1 */
+    step = 3;
     set_persona (pers_USER);
     in_pers = pers_USER;
     in_fd = do_open (local_name, O_RDWR, 2, 0);
     if (in_fd != -1)  break;
   
     /* step 4: try write access to local score file and
-     *	     read access to global score file */
+     *	           read access to global score file
+     *         on success: in_fd == global or -1, out_fd == local */
+  retry_local:
+    step = 4;
     out_pers = pers_USER;
     out_fd = do_open (local_name, O_WRONLY|O_CREAT, 2, 1);
     set_persona (pers_GAME);
@@ -355,12 +361,29 @@ load_table (void)
   } while (0);
 
   if (in_fd != -1) {
+    int  read_success;
+
     assert (in_fd != out_fd);
     set_persona (in_pers);
     f = fdopen (in_fd, "r");
-    read_data (f);
+    read_success = read_data (f);
     res = fclose (f);
-    if (res == EOF)  fatal ("Score file read error (%s)", strerror (errno));
+    if (read_success) {
+      if (res == EOF)  fatal ("Score file read error (%s)", strerror (errno));
+    } else {
+      if (out_fd != -1)  close (out_fd);
+      switch (step) {
+      case 1:
+	in_fd = out_fd = -1;
+	goto  retry_global;
+      case 3:
+	in_fd = out_fd = -1;
+	goto  retry_local;
+      default:
+	generate_data ();
+	break;
+      }
+    }
   } else {
     generate_data ();
   }
@@ -368,7 +391,7 @@ load_table (void)
   if (out_fd != -1) {
     set_persona (out_pers);
     f = fdopen (out_fd, "w");
-    write_data (f, 0);
+    write_data (f);
     res = fclose (f);
     if (res == EOF)  fatal ("Score file write error (%s)", strerror (errno));
   }
@@ -386,31 +409,41 @@ modify_table (const struct score_entry *entry)
   int  in_fd, out_fd;
   enum  persona  in_pers, out_pers;
   FILE *f;
-  int  res, changed;
+  int  res, step, changed;
 
   global_name = global_score_file_name ();
   local_name = local_score_file_name ();
 
   do {
-    /* step 1: try read/write access to global score file */
+    /* step 1: try read/write access to global score file
+     *         on success: in_fd == global, out_fd == global */
+    step = 1;
     set_persona (pers_GAME);
     in_pers = out_pers = pers_GAME;
     in_fd = out_fd = do_open (global_name, O_RDWR, 2, 0);
     if (in_fd != -1)  break;
   
-    /* step 2: try write access to global score file */
+    /* step 2: try write access to global score file
+     *         on success: in_fd == -1, out_fd == global */
+  retry_global:
+    step = 2;
     out_pers = pers_GAME;
     out_fd = do_open (global_name, O_WRONLY|O_CREAT, 2, 0);
     if (out_fd != -1)  break;
 
-    /* step 3: try read/write access to local score file */
+    /* step 3: try read/write access to local score file
+     *         on success: in_fd == local, out_fd == local */
+    step = 3;
     set_persona (pers_USER);
     in_pers = out_pers = pers_USER;
     in_fd = out_fd = do_open (local_name, O_RDWR, 2, 0);
     if (in_fd != -1)  break;
   
     /* step 4: try write access to local score file and
-     *	     read access to global score file */
+     *	           read access to global score file
+     *         on success: in_fd == global or -1, out_fd == local */
+  retry_local:
+    step = 4;
     out_pers = pers_USER;
     out_fd = do_open (local_name, O_WRONLY|O_CREAT, 2, 1);
     set_persona (pers_GAME);
@@ -419,15 +452,33 @@ modify_table (const struct score_entry *entry)
   } while (0);
 
   if (in_fd != -1) {
+    int  read_success;
+
     set_persona (in_pers);
     f = fdopen (in_fd, in_fd==out_fd ? "r+" : "r");
-    read_data (f);
-    if (in_fd != out_fd) {
-      res = fclose (f);
-      if (res == EOF)  fatal ("Score file read error (%s)", strerror (errno));
+    read_success = read_data (f);
+    if (read_success) {
+      if (in_fd != out_fd) {
+	res = fclose (f);
+	if (res == EOF)  fatal ("Score file read error (%s)", strerror (errno));
+      } else {
+	res = fseek (f, 0, SEEK_SET);
+	if (res != 0)  fatal ("Score file seek error (%s)", strerror (errno));
+      }
     } else {
-      res = fseek (f, 0, SEEK_SET);
-      if (res != 0)  fatal ("Score file seek error (%s)", strerror (errno));
+      fclose (f);
+      if (out_fd != -1 && in_fd != out_fd)  close (out_fd);
+      switch (step) {
+      case 1:
+	in_fd = out_fd = -1;
+	goto  retry_global;
+      case 3:
+	in_fd = out_fd = -1;
+	goto  retry_local;
+      default:
+	generate_data ();
+	break;
+      }
     }
   } else {
     generate_data ();
@@ -439,7 +490,7 @@ modify_table (const struct score_entry *entry)
   set_persona (out_pers);
   if (changed) {
     if (in_fd != out_fd)  f = fdopen (out_fd, "w");
-    write_data (f, 0);
+    write_data (f);
   }
   res = fclose (f);
   if (res == EOF)  fatal ("Score file write error (%s)", strerror (errno));
