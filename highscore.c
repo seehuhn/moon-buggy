@@ -2,8 +2,10 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.6 1998/12/30 19:59:59 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.7 1999/01/01 18:05:02 voss Exp $";
 
+#define _XOPEN_SOURCE
+#define _XOPEN_SOURCE_EXTENDED
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -18,7 +20,11 @@ static const  char  rcsid[] = "$Id: highscore.c,v 1.6 1998/12/30 19:59:59 voss E
 #include <pwd.h>
 #include <fcntl.h>
 #include <time.h>
+#if HAVE_ERRNO_H
 #include <errno.h>
+#else
+extern  int  errno;
+#endif
 
 #include "moon.h"
 
@@ -416,7 +422,7 @@ highscore_mode (void)
       break;
     case KEY_BREAK:
     case KEY_CLOSE:
-    case '\e':
+    case 27:			/* ESC */
     case 'n':
     case 'q':
       again = 0;
