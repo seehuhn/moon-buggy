@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: buggy.c,v 1.16 1999/05/23 14:20:55 voss Exp $";
+static const  char  rcsid[] = "$Id: buggy.c,v 1.17 1999/05/23 21:05:34 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -39,6 +39,16 @@ static scenario sz_jump = {
 
 static  scenario  sz_crash = {
   { car_BROKEN, 5, -1, 0 }
+};
+
+static  scenario  sz_ram = {
+  { car_RAM1, 5, TICK(1), 0 },
+  { car_RAM2, 5, TICK(0.5), 0 },
+  { car_RAM3, 5, -1, 0 }
+};
+
+static  scenario  sz_sit = {
+  { car_SIT, 5, -1, 0 }
 };
 
 static  struct scene *state;
@@ -82,8 +92,14 @@ static void
 jump_handler (game_time t, void *client_data)
 {
   state = client_data;
+  if (car_y > 5 && state->y == 5) {
+    if (meteor_car_hit (car_x, car_x+7)) {
+      state = sz_sit;
+      crash_detected = 1;
+    }
+  }
   print_buggy ();
-  if (crash_check ())  crash_detected = 1;
+  if (state->n == car_RAM2 || crash_check ())  crash_detected = 1;
   if (state->dt >= -0.5) {
     add_event (t+state->dt, jump_handler, state+1);
   }
@@ -130,4 +146,19 @@ shift_buggy (int dx)
   mvwaddstr (moon, LINES-car_y, car_x, "       ");
   car_x += dx;
   print_buggy ();
+}
+
+int
+car_meteor_hit (double t, int x)
+/* Return true, if the car is down a occupies position X.
+ * Then the car crashes immediately.  */
+{
+  if (car_y == 5 && x >= car_x && x < car_x+7) {
+    remove_event (jump_handler);
+    add_event (t, jump_handler, sz_ram);
+    print_buggy ();
+    return 1;
+  }
+
+  return  0;
 }
