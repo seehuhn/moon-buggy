@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: persona.c,v 1.12 1999/05/26 21:04:13 voss Exp $";
+static const  char  rcsid[] = "$Id: persona.c,v 1.13 1999/05/30 19:46:49 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -10,6 +10,7 @@ static const  char  rcsid[] = "$Id: persona.c,v 1.12 1999/05/26 21:04:13 voss Ex
 #define _XOPEN_SOURCE_EXTENDED 1
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
 
@@ -24,11 +25,11 @@ static const  char  rcsid[] = "$Id: persona.c,v 1.12 1999/05/26 21:04:13 voss Ex
 static  enum { m_NONE, m_SAVED, m_EXCH }  method = m_NONE;
 
 /* the current effective user id */
-static  enum { pers_GAME, pers_USER }  persona = pers_GAME;
+static  enum persona  current = pers_GAME;
 
 /* The real and effective ids */
-static  uid_t  user_user_id, game_user_id;
-static  gid_t  user_group_id, game_group_id;
+static  uid_t  user_uid, game_uid;
+static  gid_t  user_gid, game_gid;
 
 
 void
@@ -36,15 +37,14 @@ initialise_persona (void)
 {
   long int  saved_ids_flag;
 
-  persona = pers_GAME;
+  current = pers_GAME;
   method = m_NONE;
   
-  user_user_id = getuid ();
-  game_user_id = geteuid ();
-  user_group_id = getgid ();
-  game_group_id = getegid ();
-  if (user_user_id == game_user_id
-      && user_group_id == game_group_id)  return;
+  user_uid = getuid ();
+  game_uid = geteuid ();
+  user_gid = getgid ();
+  game_gid = getegid ();
+  if (user_uid == game_uid && user_gid == game_gid)  return;
 
   /* check for the POSIX saved id feature.  */
 #ifdef _POSIX_SAVED_IDS
@@ -62,68 +62,60 @@ initialise_persona (void)
 #else
   fputs ("WARNING: suid usage not supported on this system!\n", stderr);
   sleep (3);
-  setuid (user_user_id);
-  setgid (user_group_id);
+  setuid (user_uid);
+  setgid (user_gid);
   method = m_NONE;
 #endif
 }
 
+
+static char *name[] = { "game", "user" };
+
 void
-set_game_persona (void)
+set_persona (enum persona  pers)
+/* Switch to process persona (effective user id) PERS.  */
 {
   int  res;
-  
-  if (persona == pers_GAME)  return;
+  uid_t  old_uid, new_uid;
+  gid_t  old_gid, new_gid;
+
+  if (current == pers)  return;
+  switch (pers) {
+  case pers_GAME:
+    old_uid = user_uid;
+    new_uid = game_uid;
+    old_gid = user_gid;
+    new_gid = game_gid;
+    break;
+  case pers_USER:
+    old_uid = game_uid;
+    new_uid = user_uid;
+    old_gid = game_gid;
+    new_gid = user_gid;
+    break;
+  default:
+    abort ();			/* should not happen */
+  }
 
   switch (method) {
   case m_NONE:
     break;
   case m_SAVED:
-    res = setuid (game_user_id);
-    if (res < 0)  fatal ("cannot set uid to games");
-    res = setgid (game_group_id);
-    if (res < 0)  fatal ("cannot set gid to games");
+    res = setuid (new_uid);
+    if (res < 0)  fatal ("cannot set uid to %s", name[pers]);
+    res = setgid (new_gid);
+    if (res < 0)  fatal ("cannot set gid to %s", name[pers]);
     break;
   case m_EXCH:
 #ifdef HAVE_SETREUID
-    res = setreuid (user_user_id, game_user_id);
-    if (res < 0)  fatal ("cannot switch real/effective uid to games");
-    res = setregid (user_group_id, game_group_id);
-    if (res < 0)  fatal ("cannot switch real/effective gid to games");
+    res = setreuid (old_uid, new_uid);
+    if (res < 0)  fatal ("cannot switch real/effective uid to %s", name[pers]);
+    res = setregid (old_gid, new_gid);
+    if (res < 0)  fatal ("cannot switch real/effective gid to %s", name[pers]);
 #else
-    fatal ("cannot switch ids"); /* should not occur */
+    abort ();			/* should not happen */
 #endif
     break;
   }
-  persona = pers_GAME;
-}
-
-void
-set_user_persona (void)
-{
-  int  res;
-  
-  if (persona == pers_USER)  return;
-
-  switch (method) {
-  case m_NONE:
-    break;
-  case m_SAVED:
-    res = setuid (user_user_id);
-    if (res < 0)  fatal ("cannot set uid to user");
-    res = setgid (user_group_id);
-    if (res < 0)  fatal ("cannot set gid to user");
-    break;
-  case m_EXCH:
-#ifdef HAVE_SETREUID
-    res = setreuid (game_user_id, user_user_id);
-    if (res < 0)  fatal ("cannot switch real/effective uid to user");
-    res = setregid (game_group_id, user_group_id);
-    if (res < 0)  fatal ("cannot switch real/effective gid to user");
-#else
-    fatal ("cannot switch ids"); /* should not occur */
-#endif
-    break;
-  }
-  persona = pers_USER;
+  current = pers;
 }
