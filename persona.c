@@ -2,13 +2,14 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: persona.c,v 1.1 1998/12/27 14:08:39 voss Exp $";
+static const  char  rcsid[] = "$Id: persona.c,v 1.2 1998/12/31 00:53:14 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
+#include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
 
@@ -47,7 +48,14 @@ initialize_persona (void)
     return;
   }
 
+#ifdef HAVE_SETREUID
   method = m_EXCH;
+#else
+  fputs ("WARNING: suid usage not supported on this system!\n", stderr);
+  sleep (3);
+  setuid (user_user_id);
+  method = m_NONE;
+#endif
 }
 
 void
@@ -62,7 +70,11 @@ set_game_persona (void)
     setuid (game_user_id);
     break;
   case m_EXCH:
+#ifdef HAVE_SETREUID
     setreuid (game_user_id, user_user_id);
+#else
+    fatal ("cannot switch user id"); /* should not occur */
+#endif
     break;
   }
   persona = pers_GAME;
@@ -80,7 +92,11 @@ set_user_persona (void)
     setuid (user_user_id);
     break;
   case m_EXCH:
+#ifdef HAVE_SETREUID
     setreuid (user_user_id, game_user_id);
+#else
+    fatal ("cannot switch user id"); /* should not occur */
+#endif
     break;
   }
   persona = pers_USER;
