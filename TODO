@@ -1,10 +1,17 @@
 BUGS:
+· Manchmal geht man gerade noch kaputt, weil man zu früh gelandet ist,
+aber das Auto geht nicht kaputt.
+· Der Po vom Auto landet zu leicht im Loch.  Evtl. könnt man später
+auf Mißgeschicke testen?  Oder mehr vom Auto darf beim Landen in der
+Luft hängen?
 · What happens if two new score files are created at the same time?
 · Wenn man das Spiel nicht installiert, aber sich ein scorefile teilen
 moechte, muss man das "moon-buggy/"-Verzeichnis selbst anlegen.  Das
 sollte geaendert oder erklärt werden.
 
 IMPROVEMENTS:
+· Sollten nicht viele Dinge aus "game.c" nach "moon.c" verschoben
+werden?  Ein Beispiel ist `scroll_handler'.
 · Nach einem Crash fahre alles außer dem Auto noch etwas weiter.
 · Die Pause nach dem kaputtgehen, sollte sich mit den meisten Tasten
 beenden lassen!  Vera wird nur durch einige spezielle Tasten verwirrt!
@@ -13,8 +20,10 @@ beenden lassen!  Vera wird nur durch einige spezielle Tasten verwirrt!
 sollte der cache verwendet werden.
 · Portabilität bekümmern
 · Steigenden Schwierigkeitsgrad einführen
+· "--with-suid" sollte den aktuellen Benutzer als default verwenden
 · Remove score files from different versions on installation
 · Irgendwo kurz "curses" erklären
+· entferne MB_DEBUG
 
 · rpm Zeugs: "Autoreq: false" ausprobieren, "BuildRoot" wieder einführen
 · rpm Zeugs: "mbuggy.spec" aus "mbuggy.spec.in" erzeugen
