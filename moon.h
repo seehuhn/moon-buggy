@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: moon.h,v 1.20 1999/05/15 16:52:03 voss Exp $ */
+ * $Id: moon.h,v 1.21 1999/05/19 21:14:31 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -75,10 +75,9 @@ extern  void  score_bonus (int x);
 
 /* from "moon.c" */
 extern  char *ground1, *ground2;
-extern  int  d_rnd (int limit);
 extern  void  resize_ground (int clear_it);
 extern  void  print_ground (void);
-extern  void  scroll_ground (void);
+extern  void  start_scrolling (double t);
 
 /* from "buggy.c" */
 extern  int  car_x, car_y;
@@ -142,6 +141,10 @@ extern  void  handle_signals (void);
 
 /* from "xgetch.c" */
 extern  int  xgetch (WINDOW *win);
+
+/* from "random.c" */
+extern  void  init_rnd (void);
+extern  int  uniform_rnd (int limit);
 
 /* from "error.c" */
 #ifdef __GNUC__
