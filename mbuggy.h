@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: mbuggy.h,v 1.7 1999/05/23 21:07:22 voss Exp $ */
+ * $Id: mbuggy.h,v 1.8 1999/05/24 19:24:18 voss Rel $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -62,18 +62,20 @@ extern  void  pager_mode (int);
 extern  void  resize_pager (void);
 
 /* from "game.c" */
-extern  long  bonus;
 extern  int  crash_detected;
+extern  long  stakes;
 
-extern  void  adjust_score (int adjust);
+extern  void  adjust_score (int val);
 extern  int  game_mode (void);
 extern  void  resize_game (void);
 
-/* from "control.c" */
-extern  void  level_start ();
-extern  int  level_tick (double t);
+/* from "level.c" */
+extern  void  level_start (int initial);
+extern  void  level_tick (double t);
+extern  int  current_level (void);
 
 /* from "moon.c" */
+extern  int *bonus;
 extern  char *ground1, *ground2;
 extern  void  resize_ground (int clear_it);
 extern  void  print_ground (void);
@@ -96,7 +98,6 @@ extern  int  laser_hit (int x);
 
 /* from "meteor.c" */
 extern  void  place_meteor (double t);
-extern  void  requeue_meteors (double t);
 extern  void  remove_meteors (void);
 extern  int  meteor_laser_hit (int x0, int x1);
 extern  int  meteor_car_hit (int x0, int x1);
@@ -126,7 +127,8 @@ extern  void  quit_main_loop (void);
 extern  int  main_loop (double dt, void (*key_handler)(game_time));
 
 extern  void  quit_main_loop_h (game_time, void *);
-extern  void  clear_message_h (game_time t, void *client_data);
+extern  void  print_message_h (game_time t, void *client_data);
+extern  void  clear_message_h (game_time, void *);
 
 /* from "vclock.c" */
 extern  double  vclock (void);
