@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.33 2000/04/08 13:16:28 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.34 2000/04/15 19:44:53 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -92,7 +92,7 @@ my_select (struct timeval *timeout)
   FD_ZERO (&rfds);
   FD_SET (0, &rfds);
 
-  handle_signals ();
+  if (handle_signals ())  return -1;
   res = select (FD_SETSIZE, &rfds, NULL, NULL, timeout);
   if (res < 0) {
     if (errno == EINTR) {
@@ -131,10 +131,10 @@ wait_for_key (void)
 }
 
 static int
-wait_until (real_time *t)
+wait_until (game_time t, real_time *t_return)
 /* Wait for time *T or the next key press, whichever comes first.
  * Return a positive value, if a key was pressed, and 0 else.
- * Set *T to the return time.  */
+ * Set *T_RETURN to the return time.  */
 {
   double  start;
   int  res;
@@ -144,9 +144,9 @@ wait_until (real_time *t)
     struct timeval  tv;
     
     start = vclock ();
-    dt = *t - start;
+    dt = to_real(t) - start;
     if (dt <= 0) {
-      *t = start;
+      *t_return = start;
       return  key_ready ();
     }
     
@@ -155,7 +155,7 @@ wait_until (real_time *t)
     tv.tv_usec = usec + 0.5;
     res = my_select (&tv);
   } while (res < 0);
-  *t = vclock ();
+  *t_return = vclock ();
 
   return  res;
 }
@@ -194,32 +194,28 @@ dummy_h (game_time t, void *client_data)
 
 void
 clock_freeze (void)
-/* Add a do-nothing event to the queue's head.
+/* Prepare to freeze the game's clock.
  * This function should be called before the game is resumed.
- * Afterwards you should use `clock_thaw (0)' to restart the
+ * Afterwards you should use `clock_thaw ()' to restart the
  * game in the current state.  If the next event is less then 0.5
  * seconds in the future, we add some gap to allow for 0.5 seconds
  * pause after the restart.  */
 {
   game_time  t;
 
-  if (! queue)  return;
+  remove_event (dummy_h);
   t = current_time ();
-  if (t >= queue->t - 0.5)  t = queue->t - 0.5;
+  if (queue && t >= queue->t - 0.5)  t = queue->t - 0.5;
   add_event (t, dummy_h, NULL);
 }
 
 void
-clock_thaw (double dt)
-/* Adjust the clock to make the next event occur after DT steps of time.
+clock_thaw (void)
+/* Adjust the clock to make the next event occur immediately.
  * The queue must contain at least one element.  */
 {
-  double  now;
-  
-  if (! queue)  return;
-  
-  now = vclock ();
-  time_base = now + dt - queue->t;
+  assert (queue);
+  time_base = vclock () - queue->t;
 }
 
 void
@@ -318,8 +314,7 @@ main_loop (void)
     mode_update ();
     
     if (queue) {
-      t = to_real (queue->t);
-      retval = wait_until (&t);
+      retval = wait_until (queue->t, &t);
     } else {
       wait_for_key ();
       t = vclock ();
