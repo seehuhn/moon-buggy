@@ -1,5 +1,5 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: mbuggy.texi,v 1.3 1998/12/20 13:20:43 voss Exp $
+@c $Id: mbuggy.texi,v 1.4 1998/12/20 13:53:37 voss Exp $
 @c %**start of header
 @setfilename mbuggy.info
 @settitle Moon-Buggy Usage and Maintainance
@@ -89,7 +89,8 @@ dangerous craters there.  Fortunately your car can jump!
 Moon-buggy is free software.  Read the file COPYING of the source code
 distribution for details.
 
-Please mail suggestions and bug reports to <voss@mathematik.uni-kl.de>.
+Please mail suggestions and bug reports to
+@email{voss@@mathematik.uni-kl.de}.
 
 
 @node Invocation, Installation, Introduction, Top
