@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: persona.c,v 1.13 1999/05/30 19:46:49 voss Exp $";
+static const  char  rcsid[] = "$Id: persona.c,v 1.14 1999/06/13 18:37:58 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -60,7 +60,7 @@ initialise_persona (void)
 #ifdef HAVE_SETREUID
   method = m_EXCH;
 #else
-  fputs ("WARNING: suid usage not supported on this system!\n", stderr);
+  fputs ("WARNING: setuid usage not supported on this system!\n", stderr);
   sleep (3);
   setuid (user_uid);
   setgid (user_gid);
@@ -102,16 +102,16 @@ set_persona (enum persona  pers)
     break;
   case m_SAVED:
     res = setuid (new_uid);
-    if (res < 0)  fatal ("cannot set uid to %s", name[pers]);
+    if (res < 0)  fatal ("Cannot set uid to %s", name[pers]);
     res = setgid (new_gid);
-    if (res < 0)  fatal ("cannot set gid to %s", name[pers]);
+    if (res < 0)  fatal ("Cannot set gid to %s", name[pers]);
     break;
   case m_EXCH:
 #ifdef HAVE_SETREUID
     res = setreuid (old_uid, new_uid);
-    if (res < 0)  fatal ("cannot switch real/effective uid to %s", name[pers]);
+    if (res < 0)  fatal ("Cannot switch real/effective uid to %s", name[pers]);
     res = setregid (old_gid, new_gid);
-    if (res < 0)  fatal ("cannot switch real/effective gid to %s", name[pers]);
+    if (res < 0)  fatal ("Cannot switch real/effective gid to %s", name[pers]);
 #else
     abort ();			/* should not happen */
 #endif
