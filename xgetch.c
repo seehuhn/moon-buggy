@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: xgetch.c,v 1.5 1999/06/03 13:18:21 voss Exp $";
+static const  char  rcsid[] = "$Id: xgetch.c,v 1.6 1999/06/05 13:08:16 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -19,20 +19,14 @@ extern  int  errno;
 
 int
 xgetch (WINDOW *win)
-/* Like curses' `wgetch', but handle errors and interraupts.
- * The function returns `ERR', if an interrupt occured.  */
+/* Like curses' `wgetch', but never returns `ERR'.  */
 {
   int  c;
+  
+  do {
+    c = wgetch (win);
+  } while (c == ERR && errno == EINTR);
+  if (c == ERR)  fatal ("cannot read keyboard input");
 
-  handle_signals ();
-  c = wgetch (win);
-  if (c == ERR) {
-    if (errno == EINTR) {
-      handle_signals ();
-      /* Take care: WIN may be invalid, now.  */
-    } else {
-      fatal ("Cannot read keyboard input");
-    }
-  }
   return  c;
 }
