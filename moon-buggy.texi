@@ -1,5 +1,5 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: moon-buggy.texi,v 1.7 2000/03/17 23:05:10 voss Rel $
+@c $Id: moon-buggy.texi,v 1.8 2000/04/08 13:03:57 voss Exp $
 @c %**start of header
 @setfilename moon-buggy.info
 @settitle Moon-Buggy Usage and Maintenance
@@ -85,7 +85,7 @@ version @value{VERSION} of the program.
 * Moon-buggy Invocation::       Moon-buggy Invocation
 * Maint-buggy Invocation::      Maint-buggy Invocation
 * Playing the Game::            Keyboard commands
-* Shared Score Files::          Competition via the top-ten table
+* Shared Score Files::          Competition via the highscore table
 * Installation::                Installation and setup
 * References::                  References
 @end menu
@@ -99,8 +99,11 @@ kind of car across the moon's surface.  Unfortunately there are
 dangerous craters there.  Fortunately your car can jump over them!
 
 The game is not yet finished.  So be prepared to encounter bugs (and
-please report them).  But it works to some extent, it has a top-ten
+please report them).  But it works to some extent, it has a highscore
 list, and it may be fun.  Just try it!
+
+New versions of Moon-buggy may be found on the sunsite ftp server
+(@pxref{References}).
 
 Moon-Buggy comes with no warranty, to the extent permitted by law.  You
 may redistribute copies of Moon-Buggy under the terms of the GNU General
@@ -184,7 +187,7 @@ fires the mining laser.  The laser is used to remove stones, which may
 block your way.
 @item q
 quits the game prematurely.  But you still keep your score and may enter
-the top ten list.
+the highscore list.
 @end table
 
 Moon-buggy can handle a wide range of screen sizes.  But it runs best
@@ -350,8 +353,12 @@ the @samp{maint-buggy} script to cleanly remove the package
 @chapter References
 
 This chapter gives some references to resources mentioned in this
-manual.  As the internet changes incessantly, the addresses may be
+manual.  As the internet changes incessantly, the addresses below may be
 outdated.  If you find this to happen, please report it as a bug.
+
+The latest version of @strong{Moon-buggy} may be found on the sunsite
+archive in the directory
+@url{ftp://sunsite.unc.edu/pub/linux/games/arcade/}.
 
 Version 2.0 of the @strong{Filesystem Hierarchy Standard} (FHS 2.0) may
 be found on the internet at
