@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.25 1999/09/02 18:37:52 voss Rel $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.26 2000/01/03 14:15:30 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -93,7 +93,7 @@ do_open (const char *name, int flags, int lock, int must_succeed)
 
 #define SCORE_FILE "mbscore"
 #define NAME_MAX_LEN 40
-#define TOPTEN_SLOTS 10
+#define TOPTEN_SLOTS 100
 
 #define qx(str) #str
 #define quote(str) qx(str)
@@ -102,11 +102,12 @@ do_open (const char *name, int flags, int lock, int must_succeed)
 /* The top ten list, as read by `read_data'.  */
 struct score_entry {
   int  score, level;
-  int  day, month, year;
+  time_t  date;
   char  name [NAME_MAX_LEN];
   int  new;
 };
 static  struct score_entry  topten [TOPTEN_SLOTS];
+static  int  topten_changed;
 
 
 static char *
@@ -150,73 +151,89 @@ global_score_file_name (void)
 }
 
 
-struct dwarf_idx {
-  int  idx;
-  int  key;
-};
-
 static int
-compare_dwarfs (const void *a, const void *b)
-/* Compare two dwarfs.
+compare_entries (const void *a, const void *b)
+/* Compare two score values.
  * This is a comparison function for the use with `qsort'.  */
 {
-  const  struct dwarf_idx *aa = a;
-  const  struct dwarf_idx *bb = b;
-  if (aa->key > bb->key)  return -1;
-  if (aa->key < bb->key)  return +1;
+  const  struct score_entry *aa = a;
+  const  struct score_entry *bb = b;
+  if (aa->score > bb->score)  return -1;
+  if (aa->score < bb->score)  return +1;
   return  0;
+}
+
+static void
+merge_entry (const struct score_entry *entry)
+/* Merge ENTRY into the highscore table `topten'.
+ * Set `topten_changed' to 1 if the table is changed.  */
+{
+  struct score_entry *last;
+
+  last = topten+(TOPTEN_SLOTS-1);
+  
+  if (entry->score > last->score) {
+    memcpy (last, entry, sizeof (struct score_entry));
+    qsort (topten, TOPTEN_SLOTS, sizeof (struct score_entry),
+	   compare_entries);
+    topten_changed = 1;
+  }
+}
+
+static void
+randomize_entry (int n)
+/* Fill slot N of `topten' with a random entry.
+ * Set `topten_changed' to 1 if the table is changed.   */
+{
+  static const char *names [13] = {
+    "Dwalin", "Balin", "Kili", "Fili", "Dori", "Nori", "Ori",
+    "Oin", "Gloin", "Bifur", "Bofur", "Bombur", "Thorin"
+  };
+  time_t  yesterday;
+
+  yesterday = time (NULL) - 24*60*60;
+  topten[n].score = 10*(TOPTEN_SLOTS-n);
+  topten[n].level = 1;
+  topten[n].date = yesterday;
+  strcpy (topten[n].name, names[uniform_rnd(13)]);
+  topten[n].new = 0;
+
+  topten_changed = 1;
+}
+
+static void
+refill_old_entries (void)
+/* Replace old entries of `topen' with new random ones.  */
+{
+  time_t  deadline;
+  int  i;
+
+  deadline = time (NULL) - 30*24*60*60;
+  for (i=3; i<TOPTEN_SLOTS; ++i) {
+    if (topten[i].date < deadline)  randomize_entry (i);
+  }
+  qsort (topten, TOPTEN_SLOTS, sizeof (struct score_entry),
+	 compare_entries);
 }
 
 static void
 generate_data (void)
 /* Generate an empty top-ten table and write it into `topten'.  */
 {
-  static const char *names [13] = {
-    "Dwalin", "Balin", "Kili", "Fili", "Dori", "Nori", "Ori",
-    "Oin", "Gloin", "Bifur", "Bofur", "Bombur", "Thorin"
-  };
-  struct dwarf_idx  idx [13];
-  int  day, month, year;
   int  i;
 
-  get_date (&day, &month, &year);
-  for (i=0; i<13; ++i) {
-    idx[i].idx = i;
-    idx[i].key = uniform_rnd(32768);
-  }
-  qsort (idx, 13, sizeof(struct dwarf_idx), compare_dwarfs);
-  for (i=0; i<TOPTEN_SLOTS; ++i) {
-    topten[i].score = 100*(TOPTEN_SLOTS-i);
-    topten[i].level = 1;
-    topten[i].day = day;
-    topten[i].month = month;
-    topten[i].year = year;
-    strcpy (topten[i].name, names[idx[i].idx]);
-    topten[i].new = 0;
-  }
+  for (i=0; i<TOPTEN_SLOTS; ++i)  randomize_entry (i);
 }
 
 
 static int
-read_data (FILE *score_file)
-/* Read the top ten list from SCORE_FILE into `topten'.
- * Return 1 on success and 0 on error.  */
+read_version2_data (FILE *score_file)
 {
-  int  version, i;
   int  err = 0;
-  int  res;
-  
-  res = fscanf (score_file, "moon-buggy hiscore file (version %d)\n",
-		&version);
-  if (res != 1) {
-    print_message ("Score file corrupted");
-    err = 1;
-  } else if (version != 2) {
-    print_message ("Wrong score file version");
-    err = 1;
-  }
+  int  i, res;
 
-  for (i=0; i<TOPTEN_SLOTS && ! err; ++i) {
+  generate_data ();
+  for (i=0; i<10 && ! err; ++i) {
     int  score, level;
     int  day, month, year;
     char  name [NAME_MAX_LEN+1];
@@ -229,12 +246,85 @@ read_data (FILE *score_file)
     }
     topten[i].score = score;
     topten[i].level = level;
-    topten[i].day = day;
-    topten[i].month = month;
-    topten[i].year = year;
+    topten[i].date = convert_old_date (day, month, year);
     topten[i].name[0] = '\0';
     topten[i].new = 0;
     strncat (topten[i].name, name, NAME_MAX_LEN);
+  }
+  qsort (topten, TOPTEN_SLOTS, sizeof (struct score_entry),
+	 compare_entries);
+  refill_old_entries ();
+
+  return  err;
+}
+
+static int
+read_version3_data (FILE *score_file)
+/* Read the top ten list from SCORE_FILE into `topten'.
+ * Return 1 on success and 0 on error.  */
+{
+  int  err = 0;
+  int  i, res;
+
+  for (i=0; i<TOPTEN_SLOTS && ! err; ++i) {
+    int  score, level;
+    char  date [MAX_DATE_CHARS];
+    char  name [NAME_MAX_LEN+1];
+    res = fscanf (score_file,
+		  "|%d|%d|%" quote(MAX_DATE_CHARS) "[^|]"
+		  "|%" quote(NAME_MAX_LEN) "[^|]|\n",
+		  &score, &level, date, name);
+    if (res != 4) {
+      print_message ("Score file corrupted");
+      err = 1;
+    }
+    topten[i].score = score;
+    topten[i].level = level;
+    topten[i].date = parse_date (date);
+    topten[i].name[0] = '\0';
+    topten[i].new = 0;
+    strncat (topten[i].name, name, NAME_MAX_LEN);
+  }
+  if (ferror (score_file)) {
+    print_message ("Error while reading score file");
+    err = 1;
+  }
+
+  return  err;
+}
+
+static int
+read_data (FILE *score_file)
+/* Read the top ten list from SCORE_FILE into `topten'.
+ * Return 1 on success and 0 on error.  */
+{
+  int  version;
+  int  err = 0;
+  int  res;
+  
+  res = fscanf (score_file, "moon-buggy hiscore file (version %d)\n",
+		&version);
+  if (res != 1) {
+    print_message ("Score file corrupted");
+    return  0;
+  }
+  topten_changed = 0;
+
+  switch (version) {
+  case 2:
+    err = read_version2_data (score_file);
+    break;
+  case 3:
+    err = read_version3_data (score_file);
+    break;
+  default:
+    {
+      char buffer [80];
+      sprintf (buffer, "Invalid score file version %d", version);
+      print_message (buffer);
+    }
+    err = 1;
+    break;
   }
   if (ferror (score_file)) {
     print_message ("Error while reading score file");
@@ -251,15 +341,16 @@ write_data (FILE *score_file)
   int  i;
   int  res;
 
-  res = fprintf (score_file, "moon-buggy hiscore file (version 2)\n");
+  res = fprintf (score_file, "moon-buggy hiscore file (version 3)\n");
   if (res < 0)  fatal ("Score file write error (%s)", strerror (errno));
 
   for (i=0; i<TOPTEN_SLOTS; ++i) {
+    char  date [MAX_DATE_CHARS];
+
+    format_date (date, topten[i].date);
     res = fprintf (score_file,
-		   "|%d|%d|%d|%d|%d|%." quote(NAME_MAX_LEN) "s|\n",
-		   topten[i].score, topten[i].level,
-		   topten[i].day, topten[i].month, topten[i].year,
-		   topten[i].name);
+		   "|%d|%d|%s|%." quote(NAME_MAX_LEN) "s|\n",
+		   topten[i].score, topten[i].level, date, topten[i].name);
     if (res < 0)  fatal ("Score file write error (%s)", strerror (errno));
   }
 
@@ -277,130 +368,9 @@ write_data (FILE *score_file)
     }
   }
 #endif
-}
-
-static int
-compare_entries (const void *a, const void *b)
-/* Compare two score values.
- * This is a comparison function for the use with `qsort'.  */
-{
-  const  struct score_entry *aa = a;
-  const  struct score_entry *bb = b;
-  if (aa->score > bb->score)  return -1;
-  if (aa->score < bb->score)  return +1;
-  return  0;
-}
-
-static int
-merge_entry (const struct score_entry *entry)
-{
-  struct score_entry *last;
-
-  last = topten+(TOPTEN_SLOTS-1);
-  
-  if (entry->score > last->score) {
-    memcpy (last, entry, sizeof (struct score_entry));
-    qsort (topten, TOPTEN_SLOTS, sizeof (struct score_entry),
-	   compare_entries);
-    return  1;
-  } else {
-    return  0;
-  }
+  topten_changed = 0;
 }
 
-static void
-load_table (void)
-/* Load the top-ten list into the variable `topten'.  */
-{
-  char *local_name, *global_name;
-  int  in_fd, out_fd;
-  enum  persona  in_pers, out_pers;
-  FILE *f;
-  int  res, step;
-
-  global_name = global_score_file_name ();
-  local_name = local_score_file_name ();
-  out_pers = pers_USER;
-  out_fd = -1;
-
-  do {
-    /* step 1: try read/write access to global score file
-     *         on success: in_fd == global, out_fd == -1 */
-    step = 1;
-    set_persona (pers_GAME);
-    in_pers = pers_GAME;
-    in_fd = do_open (global_name, O_RDWR, 2, 0);
-    if (in_fd != -1)  break;
-
-    /* step 2: try write access to global score file
-     *         on success: in_fd == -1, out_fd == global */
-  retry_global:
-    step = 2;
-    out_pers = pers_GAME;
-    out_fd = do_open (global_name, O_WRONLY|O_CREAT, 2, 0);
-    if (out_fd != -1)  break;
-
-    /* step 3: try read/write access to local score file
-     *         on success: in_fd == local, out_fd == -1 */
-    step = 3;
-    set_persona (pers_USER);
-    in_pers = pers_USER;
-    in_fd = do_open (local_name, O_RDWR, 2, 0);
-    if (in_fd != -1)  break;
-  
-    /* step 4: try write access to local score file and
-     *	           read access to global score file
-     *         on success: in_fd == global or -1, out_fd == local */
-  retry_local:
-    step = 4;
-    out_pers = pers_USER;
-    out_fd = do_open (local_name, O_WRONLY|O_CREAT, 2, 1);
-    set_persona (pers_GAME);
-    in_pers = pers_GAME;
-    in_fd = do_open (global_name, O_RDONLY, 1, 0);
-  } while (0);
-
-  if (in_fd != -1) {
-    int  read_success;
-
-    assert (in_fd != out_fd);
-    set_persona (in_pers);
-    f = fdopen (in_fd, "r");
-    read_success = read_data (f);
-    res = fclose (f);
-    if (read_success) {
-      if (res == EOF)  fatal ("Score file read error (%s)", strerror (errno));
-    } else {
-      if (out_fd != -1)  close (out_fd);
-      switch (step) {
-      case 1:
-	in_fd = out_fd = -1;
-	goto  retry_global;
-      case 3:
-	in_fd = out_fd = -1;
-	goto  retry_local;
-      default:
-	generate_data ();
-	break;
-      }
-    }
-  } else {
-    generate_data ();
-  }
-
-  if (out_fd != -1) {
-    set_persona (out_pers);
-    f = fdopen (out_fd, "w");
-    write_data (f);
-    res = fclose (f);
-    if (res == EOF)  fatal ("Score file write error (%s)", strerror (errno));
-  }
-  
-  set_persona (pers_USER);
-  free (local_name);
-  free (global_name);
-}
-
 static void
 modify_table (const struct score_entry *entry)
 /* Modify the top-ten list, to contain the data from *ENTRY.  */
@@ -409,7 +379,7 @@ modify_table (const struct score_entry *entry)
   int  in_fd, out_fd;
   enum  persona  in_pers, out_pers;
   FILE *f;
-  int  res, step, changed;
+  int  res, step;
 
   global_name = global_score_file_name ();
   local_name = local_score_file_name ();
@@ -460,13 +430,14 @@ modify_table (const struct score_entry *entry)
     if (read_success) {
       if (in_fd != out_fd) {
 	res = fclose (f);
-	if (res == EOF)  fatal ("Score file read error (%s)", strerror (errno));
+	goto read_failed;
       } else {
 	res = fseek (f, 0, SEEK_SET);
 	if (res != 0)  fatal ("Score file seek error (%s)", strerror (errno));
       }
     } else {
       fclose (f);
+    read_failed:
       if (out_fd != -1 && in_fd != out_fd)  close (out_fd);
       switch (step) {
       case 1:
@@ -484,11 +455,12 @@ modify_table (const struct score_entry *entry)
     generate_data ();
   }
 
-  changed = merge_entry (entry);
+  refill_old_entries ();
+  if (entry)  merge_entry (entry);
 
   assert (out_fd != -1);
   set_persona (out_pers);
-  if (changed) {
+  if (topten_changed) {
     if (in_fd != out_fd)  f = fdopen (out_fd, "w");
     write_data (f);
   }
@@ -506,7 +478,7 @@ create_highscores (void)
  * This must be called on installation, to make setgid-usage work.  */
 {
   block_all ();
-  load_table ();
+  modify_table (NULL);
   unblock ();
 }
 
@@ -518,14 +490,16 @@ show_highscores (void)
   int  i;
 
   block_all ();
-  load_table ();
+  modify_table (NULL);
   unblock ();
 
-  printf ("%" quote(NAME_MAX_LEN) "s     date     level score\n\n", "name");
+  puts ("rank   score lvl     date     name");
   for (i=0; i<TOPTEN_SLOTS; ++i) {
-    printf ("%" quote(NAME_MAX_LEN) "s  %4d-%02d-%02d  %3d   %-12u\n",
-	    topten[i].name, topten[i].year, topten[i].month, topten[i].day,
-	    topten[i].level, topten[i].score);
+    char  date [16];
+    
+    format_display_date (date, topten[i].date);
+    printf ("%3d    %5u %-3d  %s  %." quote(NAME_MAX_LEN) "s\n",
+	    i+1, topten[i].score, topten[i].level, date, topten[i].name);
   }
 }
 
@@ -535,20 +509,48 @@ static void
 print_scores (int my_score)
 /* Print the top ten table to the screen.  */
 {
-  int  i;
+  int  i, line, current, top, bottom, my_rank;
 
-  mvwaddstr (moon, 1, NAME_MAX_LEN-4, "name     date     level score");
+  for (i=1; i<TOPTEN_SLOTS; ++i) {
+    if (topten[i].score < my_score)  break;
+  }
+  current = i-1;
+
+  top = bottom = 3;
+  if (current+bottom >= TOPTEN_SLOTS-2) {
+    top += current+bottom-(TOPTEN_SLOTS-1);
+    bottom = TOPTEN_SLOTS-1-current;
+  } else if (current < 8) {
+    top = current;
+    bottom = 10-current;
+  }
+  
+  mvwaddstr (moon, 1, 5, "rank   score lvl     date     name");
+  line = 3;
+  my_rank = -1;
   for (i=0; i<TOPTEN_SLOTS; ++i) {
-    if (topten[i].new)  wstandout (moon);
-    mvwprintw (moon, 3+i, 0,
-	       "%" quote(NAME_MAX_LEN) "s%c %4d-%02d-%02d  %3d   %-12u",
-	       topten[i].name, topten[i].new ? '*' : ' ',
-	       topten[i].year, topten[i].month, topten[i].day,
-	       topten[i].level, topten[i].score);
+    char  date [16];
+
+    if ((i==current-top && i>2)
+	|| i==current+bottom+1) {
+      mvwprintw (moon, line++, 7, "...");
+      wclrtoeol (moon);
+    }
+    if ((i<current-top && i>2) || (i>current+bottom))  continue;
+    
+    if (topten[i].new) {
+      wstandout (moon);
+      if (topten[i].score == my_score)  my_rank = i+1;
+    }
+    format_display_date (date, topten[i].date);
+    mvwprintw (moon, line++, 5,
+	       "%3d    %5u %-3d  %s  %." quote(NAME_MAX_LEN) "s\n",
+	       i+1, topten[i].score, topten[i].level, date, topten[i].name);
     if (topten[i].new)  wstandend (moon);
   }
-  mvwprintw (moon, 3+TOPTEN_SLOTS+1, NAME_MAX_LEN+2, "your score: %d",
-	     my_score);
+  ++line;
+  mvwprintw (moon, line++, 17, "your score: %d", my_score);
+  if (my_rank > 0) mvwprintw (moon, line++, 17, "your rank: %d", my_rank);
   wrefresh (moon);
 }
 
@@ -578,7 +580,7 @@ highscore_mode (int score, int level)
   print_message ("loading score file ...");
   doupdate ();
   block_all ();
-  load_table ();
+  modify_table (NULL);
   topten_valid = 1;
   last_score = score;
   unblock ();
@@ -588,7 +590,7 @@ highscore_mode (int score, int level)
     struct score_entry  entry;
     entry.score = score;
     entry.level = level;
-    get_date (&entry.day, &entry.month, &entry.year);
+    entry.date = time (NULL);
     entry.name[0] = '\0';
     get_real_user_name (entry.name, NAME_MAX_LEN);
     entry.new = 1;
