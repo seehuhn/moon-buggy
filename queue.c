@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.21 1999/06/03 13:19:51 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.22 1999/06/05 13:31:20 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -181,7 +181,7 @@ clock_adjust_delay (double dt)
 {
   double  now;
   
-  assert (queue);
+  if (! queue)  return;
   
   now = vclock ();
   time_base = now + dt - queue->t;
@@ -259,6 +259,31 @@ remove_client_data (void *client_data)
       evp = &((*evp)->next);
     }
   }
+}
+
+static void
+dummy_h (game_time t, void *client_data)
+/* This function is a possible callback argument to `add_event'.
+ * It does nothing.  */
+{
+  return;
+}
+
+void
+fix_game_time (void)
+/* Add a do-nothing event to the queue's head.
+ * This function should be called before the game is resumed.
+ * Afterwards you should use `clock_adjust_delay (0)' to restart the
+ * game in the current state.  If the next event is less then 0.5
+ * seconds in the future, we add some gap to allow for 0.5 seconds
+ * pause after the restart.  */
+{
+  game_time  t;
+
+  if (! queue)  return;
+  t = to_game (vclock ());
+  if (t >= queue->t - 0.5)  t = queue->t - 0.5;
+  add_event (t, dummy_h, NULL);
 }
 
 /**********************************************************************
