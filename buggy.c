@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: buggy.c,v 1.15 1999/05/22 17:13:22 voss Exp $";
+static const  char  rcsid[] = "$Id: buggy.c,v 1.16 1999/05/23 14:20:55 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -117,11 +117,6 @@ crash_check (void)
     adjust_score (1<<bonus);
     bonus = 0;
   }
-
-#if MB_DEBUG
-  ground2[car_x+1] = 'O';
-  ground2[car_x+5] = 'O';
-#endif
   
   return  0;
 }
