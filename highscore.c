@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.13 1999/05/22 13:43:58 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.14 1999/05/22 14:35:34 voss Rel $";
 
 #define _XOPEN_SOURCE 1
 #define _XOPEN_SOURCE_EXTENDED 1
@@ -49,6 +49,8 @@ static  int  highscore_valid = 0;
 
 /* The name of the score file to write.  */
 static  char *score_file_name;
+
+static long  my_score;
 
 
 static void
@@ -301,7 +303,7 @@ print_scores (void)
     if (hiscores[i].new)  wstandend (moon);
   }
   mvwprintw (moon, 3+HIGHSCORE_SLOTS+1, PLAYER_MAX_LEN+2, "your score: %d",
-	     score);
+	     my_score);
   wrefresh (moon);
 }
 
@@ -363,7 +365,7 @@ write_scores (void)
   }
   
   new_entry = hiscores+(HIGHSCORE_SLOTS-1);
-  if (score > new_entry->score) {
+  if (my_score > new_entry->score) {
     int  day, month, year;
 
     get_real_user_name (real_name, PLAYER_MAX_LEN);
@@ -372,7 +374,7 @@ write_scores (void)
       if (new_entry->player[i] == '|')  new_entry->player[i] = ';';
     }
     get_current_date (&day, &month, &year);
-    new_entry->score = score;
+    new_entry->score = my_score;
     new_entry->day = day;
     new_entry->month = month;
     new_entry->year = year;
@@ -408,11 +410,12 @@ write_scores (void)
 }
 
 int
-highscore_mode (void)
+highscore_mode (long score)
 {
   int  done = 0;
   int  again = 1;
-  
+
+  my_score = score;
   game_state = HIGHSCORE;
   
   block_all ();
