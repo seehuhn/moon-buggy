@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 # Copyright 1999  Jochen Voß
-# $Id: Makefile.am,v 1.34 1999/06/25 22:20:30 voss Exp $
+# $Id: Makefile.am,v 1.35 1999/06/25 23:11:22 voss Exp $
 
 EXTRA_DIST = moonman.in maintman.in instcmds car.img \
 	text2c.sed merge.sed img.sed \
@@ -35,11 +35,13 @@ buggy.h: car.img img.sed
 	cd $(srcdir) && sed -n -f img.sed $(srcdir)/car.img >$@
 
 install-exec-hook:
+	@$(POST_INSTALL)
 	if test "x@GAMEUSER@" != "x"; then \
 	  chown "@GAMEUSER@" "$(DESTDIR)$(bindir)/moon-buggy" \
 	    && chmod u+s "$(DESTDIR)$(bindir)/moon-buggy" ; \
 	fi
 	chmod go-x "$(DESTDIR)$(bindir)/maint-buggy"
+	@$(NORMAL_INSTALL)
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(scoredir)
