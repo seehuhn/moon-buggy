@@ -1,4 +1,32 @@
+1998-12-27  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* .cvsignore: Added the temporary TeX files.
+
+	* moon-buggy-0.2-1.spec: initital revision
+
+	* TODO: Fixed
+
+	* Makefile.am:
+	Include the rpm spec file and the icon files into the distribution.
+	Add "person.c".
+
+	* mbicon.gif, mbicon.png: initital revision
+
+	* README: Minor fix.
+
+	* highscore.c: Properly handle the permissions from suid usage.
+
+	* main.c (main): voluntarily give up the rights from the suid bit.
+
+	* moon.h: Added declarations for the new file "persona.c".
+
+	* persona.c: initial revision
+
 1998-12-26  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* mbuggy.texi: White space fixes
+
+	* ChangeLog: Added entries from 1998-12-22 to 1998-12-26.
 
 	* TODO: Einige Punkte erledigt.
 	Dafür einen neuen hinzugefügt.
