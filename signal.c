@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: signal.c,v 1.7 1999/06/03 12:21:35 voss Exp $";
+static const  char  rcsid[] = "$Id: signal.c,v 1.8 1999/06/03 13:19:07 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -119,36 +119,8 @@ tstp_handler (int signum)
 }
 
 static void
-cont_handler (int signum)
+do_resize ()
 {
-  my_signal (SIGTSTP, tstp_handler, 0);
-  if (game_state == PLAYING) {
-    print_message ("GAME OVER (suspended)");
-  }
-
-  cbreak ();
-  noecho ();
-  leaveok (moon, TRUE);
-  leaveok (status, TRUE);
-  leaveok (message, TRUE);
-
-  wnoutrefresh (moon);
-  wnoutrefresh (status);
-  wnoutrefresh (message);
-  doupdate ();
-  if (game_state == PLAYING)  clock_adjust_delay (0.5);
-}
-
-static void
-winch_handler (int signum)
-{
-  delwin (moon);
-  delwin (status);
-  delwin (message);
-  endwin ();
-  refresh ();
-  allocate_windows ();
-  
   switch (game_state) {
   case TITLE:
     resize_title ();
@@ -165,6 +137,36 @@ winch_handler (int signum)
   default:
     break;
   }
+}
+
+static void
+cont_handler (int signum)
+{
+  my_signal (SIGTSTP, tstp_handler, 0);
+  if (game_state == PLAYING) {
+    print_message ("GAME OVER (suspended)");
+  }
+
+  refresh ();
+  cbreak ();
+  noecho ();
+  leaveok (moon, TRUE);
+  leaveok (status, TRUE);
+  leaveok (message, TRUE);
+  do_resize ();
+  if (game_state == PLAYING)  clock_adjust_delay (0.5);
+}
+
+static void
+winch_handler (int signum)
+{
+  delwin (moon);
+  delwin (status);
+  delwin (message);
+  endwin ();
+  refresh ();
+  allocate_windows ();
+  do_resize ();
 }
 
 /************************************************************
