@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: moon.h,v 1.12 1999/01/30 17:14:15 voss Rel $ */
+ * $Id: moon.h,v 1.13 1999/03/02 18:30:45 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -50,10 +50,8 @@ enum game_state { INIT, TITLE, PAGER, PLAYING, HIGHSCORE };
 extern  enum game_state  game_state;
 
 extern  void  print_message (const char *str);
+extern  void  allocate_windows (void);
 extern  void  prepare_for_exit (void);
-extern  void  block_winch (void);
-extern  void  block_all (void);
-extern  void  unblock (void);
 
 /* from "title.c" */
 extern  int  title_mode (void);
@@ -79,7 +77,7 @@ extern  void  scroll_ground (void);
 
 /* from "buggy.c" */
 extern  int  car_base, score_base;
-extern  void  initialize_buggy (void);
+extern  void  initialise_buggy (void);
 extern  int  print_buggy (void);
 extern  void  jump (double t);
 extern  int  can_jump (void);
@@ -114,9 +112,16 @@ extern  double  get_mean (const struct circle_buffer *lm);
 extern  double  vclock (void);
 
 /* from "persona.c" */
-extern  void  initialize_persona (void);
+extern  void  initialise_persona (void);
 extern  void  set_game_persona (void);
 extern  void  set_user_persona (void);
+
+/* from "signal.c" */
+extern  void  block_winch (void);
+extern  void  block_all (void);
+extern  void  unblock (void);
+extern  void  initialise_signals (void);
+extern  void  handle_signals (void);
 
 /* from "xgetch.c" */
 extern  int  xgetch (WINDOW *win);
