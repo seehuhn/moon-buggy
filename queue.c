@@ -2,7 +2,9 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.5 1998/12/30 19:37:23 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.6 1999/01/01 17:58:49 voss Exp $";
+
+#define _POSIX_SOURCE
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -13,7 +15,11 @@ static const  char  rcsid[] = "$Id: queue.c,v 1.5 1998/12/30 19:37:23 voss Exp $
 #include <sys/types.h>
 #include <sys/time.h>
 #include <math.h>
+#if HAVE_ERRNO_H
 #include <errno.h>
+#else
+extern  int  errno;
+#endif
 #include <assert.h>
 
 #include "moon.h"
