@@ -2,10 +2,10 @@ Summary: drive a strange car across the moon
 Name: moon-buggy
 Copyright: GPL
 Group: Games
-Version: 0.3
+Version: 0.3.1
 Release: 1
 Packager: Jochen Voﬂ <voss@mathematik.uni-kl.de>
-Source: moon-buggy-0.3.tar.gz
+Source: moon-buggy-0.3.1.tar.gz
 Icon: moon-buggy.gif
 %description
 moon-buggy is a simple, curses-based game, where you drive some kind
@@ -17,7 +17,7 @@ on, and jump over the craters.
 %setup
 
 %build
-CFLAGS="$RPM_OPT_FLAGS" LDFLAGS=-s configure --sharedstatedir=/var/games --with-suid=games
+CFLAGS="$RPM_OPT_FLAGS" LDFLAGS=-s ./configure --sharedstatedir=/var/games --with-suid=games
 make
 
 %install
@@ -26,18 +26,19 @@ rm -f /var/games/moon-buggy/mbscore
 
 %post
 if /bin/sh -c 'install-info --version | sed 1q | fgrep -s -v -i debian' >/dev/null 2>&1; then \
-  for file in mbuggy.info; do \
+  list='mbuggy.info'; \
+  for file in $list; do \
     echo " install-info --info-dir=/usr/local/info /usr/local/info/$file";\
     install-info --info-dir=/usr/local/info /usr/local/info/$file || :;\
   done; \
 else : ; fi
 if test "xgames" != "x"; then \
-  chown "games" "//var/games/moon-buggy" \
-    && { test ! -e "//var/games/moon-buggy/mbscore" \
-         || chown "games" "//var/games/moon-buggy/mbscore" ; } \
-    && { test ! -e "//var/games/moon-buggy/mbscore" \
-         || chmod go-w "//var/games/moon-buggy/mbscore" ; } \
-    && chmod go-w "//var/games/moon-buggy" ; \
+  chown "games" "/var/games/moon-buggy" \
+    && { test ! -e "/var/games/moon-buggy/mbscore" \
+         || chown "games" "/var/games/moon-buggy/mbscore" ; } \
+    && { test ! -e "/var/games/moon-buggy/mbscore" \
+         || chmod go-w "/var/games/moon-buggy/mbscore" ; } \
+    && chmod go-w "/var/games/moon-buggy" ; \
 fi
 
 %preun
@@ -45,7 +46,8 @@ cd /usr/local/info; \
 if /bin/sh -c 'install-info --version | sed 1q | fgrep -s -v -i debian' >/dev/null 2>&1; then \
   ii=yes; \
 else ii=; fi; \
-for file in mbuggy.info; do \
+list='mbuggy.info'; \
+for file in $list; do \
   test -z "i" \
     || install-info --info-dir=/usr/local/info --remove $file; \
 done
