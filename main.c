@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.8 1998/12/27 14:09:53 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.9 1998/12/28 20:15:53 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -28,6 +28,7 @@ const char *my_name;
 
 long  score, bonus;
 static int  lives;
+static  struct circle_buffer *load_meter;
 
 static void
 print_score ()
@@ -46,7 +47,7 @@ print_lives ()
 static void
 print_ground ()
 {
-  mvwaddchnstr (moon, LINES-4, 0, ground2, COLS);
+  mvwaddnstr (moon, LINES-4, 0, ground2, COLS);
   wnoutrefresh (moon);
 }
 
@@ -73,10 +74,19 @@ prepare_for_exit (void)
  * game control
  */
 
+static double
+limited (double min, double x, double max)
+/* Return the point of [MIN; MAX], which is nearest to X.  */
+{
+  if (x < min)  return min;
+  if (x > max)  return max;
+  return  x;
+}
+
 static void
 spend_life (void)
 {
-  double  base, t;
+  double  base, t, sleep_delta;
   int  done = 0;
 
   bonus = 0;
@@ -93,6 +103,8 @@ spend_life (void)
   
   base = vclock ();
   add_event (base+1, ev_SCROLL);
+  sleep_meter = 0;
+  sleep_delta = 1;
   add_event (base+3, ev_STATUS);
   add_event (base+6, ev_SCORE);
 
@@ -103,7 +115,16 @@ spend_life (void)
       print_ground ();
       if (ground2[score_base] == ' ')  ++bonus;
       if (crash_check ())  done = 1;
+      add_value (load_meter,
+		 limited (0, (sleep_delta-sleep_meter)/sleep_delta, 1));
+#if 1
+      mvwprintw (status, 1, car_base-7, "load: %d%%  ",
+		 (int)(100.0*get_mean (load_meter)+.5));
+      wnoutrefresh (status);
+#endif
       add_event (t+0.08, ev_SCROLL);
+      sleep_meter = 0;
+      sleep_delta = 0.08;
       break;
     case ev_KEY:
       switch (wgetch (moon)) {
@@ -154,7 +175,7 @@ play_game ()
     ground1[i] = '#';
     ground2[i] = '#';
   }
-  mvwaddchnstr (moon, LINES-3, 0, ground1, COLS);
+  mvwaddnstr (moon, LINES-3, 0, ground1, COLS);
   car_base = (COLS > 80 ? 80 : COLS) - 12;
   score_base = car_base + 7;
 
@@ -166,7 +187,7 @@ play_game ()
     if (lives > 0) {
       sleep (1);
       for (i=car_base-4; i<car_base+8; ++i) {
-	ground2[i] = 'X';
+	ground2[i] = '#';
       }
     }
   } while (lives > 0);
@@ -327,9 +348,10 @@ main (int argc, char **argv)
   keypad (moon, TRUE);
   leaveok (moon, TRUE);
 
-  queuelag = new_lagmeter ();
-  ground1 = xmalloc (COLS*sizeof(chtype));
-  ground2 = xmalloc (COLS*sizeof(chtype));
+  queuelag = new_circle_buffer ();
+  load_meter = new_circle_buffer ();
+  ground1 = xmalloc (COLS);
+  ground2 = xmalloc (COLS);
 
   print_message ("good luck");
   main_loop ();
