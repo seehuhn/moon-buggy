@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: mbuggy.h,v 1.13 1999/06/06 13:19:33 voss Exp $ */
+ * $Id: mbuggy.h,v 1.14 1999/06/06 19:30:45 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -14,63 +14,8 @@
 #include <curses.h>
 #include <stdlib.h>		/* we use `size_t' */
 
-#define BASELINE (LINES-5)
-
-/* If key symbols are not defined move them out of the way.
- * Avoid duplicate case labels.  */
-#ifndef KEY_BEG
-#define KEY_BEG -1
-#endif
-#ifndef KEY_CANCEL
-#define KEY_CANCEL -2
-#endif
-#ifndef KEY_CLOSE
-#define KEY_CLOSE -3
-#endif
-#ifndef KEY_END
-#define KEY_END -4
-#endif
-#ifndef KEY_EXIT
-#define KEY_EXIT -5
-#endif
-#ifndef KEY_UNDO
-#define KEY_UNDO -6
-#endif
-#ifndef KEY_BREAK
-#define KEY_BREAK -7
-#endif
-#ifndef KEY_CLEAR
-#define KEY_CLEAR -8
-#endif
-#ifndef KEY_ENTER
-#define KEY_ENTER -9
-#endif
-#ifndef KEY_UP
-#define KEY_UP -10
-#endif
-#ifndef KEY_DOWN
-#define KEY_DOWN -11
-#endif
-#ifndef KEY_LEFT
-#define KEY_LEFT -12
-#endif
-#ifndef KEY_NPAGE
-#define KEY_NPAGE -13
-#endif
-#ifndef KEY_PPAGE
-#define KEY_PPAGE -14
-#endif
-#ifndef KEY_A1
-#define KEY_A1 -15
-#endif
-#ifndef KEY_C1
-#define KEY_C1 -16
-#endif
-#ifndef KEY_HOME
-#define KEY_HOME -17
-#endif
-
 #define TICK(x) ((x)*0.08/(MB_SPEED))
+#define BASELINE (LINES-5)
 
 /* from "main.c" */
 extern  const char *my_name;
@@ -195,7 +140,7 @@ extern  int  read_key (void);
 
 /* from "random.c" */
 extern  void  init_rnd (void);
-extern  int  uniform_rnd (int limit);
+extern  int  uniform_rnd (unsigned limit);
 
 /* from "error.c" */
 #ifdef __GNUC__
