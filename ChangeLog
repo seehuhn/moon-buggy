@@ -1,3 +1,46 @@
+1999-01-30  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: added 1999-01-21 to 1999-01-30
+
+	* TODO: geändert
+
+	* Makefile.am: Do not define AWK for class to "instcmds".
+
+	* configure.in: Changed the version string to "0.3.2".
+	Remove AC_PROG_AWK and the check for `basename'.
+	Check for the definition of `fd_set'.
+
+	* acconfig.h: Add HAVE_SYS_SELECT_H and NO_FD_SET.
+
+	* instcmds: Changed the version to "0.2".
+	Use sed instead of awk.
+
+	* moon.h: Added a declaration for `xstrnlen' from "xstrdup.c".
+	Removed the `basename' declaration.
+
+	* main.c: Fixed the _POSIX_SOURCE definition
+	(main): avoid `basename'
+
+	* realname.c: Fixed the _POSIX_SOURCE definition
+	(get_real_user_name): take care of people with very long names
+
+	* highscore.c: fix the _XOPEN_SOURCE definitions
+
+	* game.c (game_mode): take care of people, which hold SPC too long.
+
+	* pager.c: Renamed old `lines' to new `mb_lines'.
+
+	* queue.c: Fixed the _POSIX_SOURCE define
+	Try to include <sys/select.h>
+
+	* xgetch.c: Fixed the _POSIX_SOURCE define
+
+	* xstrdup.c (xstrnlen): changed to global scope
+
+1999-01-21  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* Makefile.am (DISTCLEANFILES): final bug fix: add maint-buggy
+
 1999-01-18  Jochen Voss  <voss@tatonka.pfalz.de>
 
 	* ChangeLog: added 1999-01-07 to 1999-01-18
