@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.9 1999/03/02 18:29:58 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.10 1999/03/08 20:31:44 voss Exp $";
 
 #define _POSIX_SOURCE 1
 
@@ -27,23 +27,18 @@ extern  int  errno;
 
 #include "moon.h"
 
+
 /* The queue of events */
 struct event {
   struct event *next;
-  double  t;
-  int  reached;
-  enum event_type  type;
+  game_time  t;			/* the time, when the event will happen */
+  int  reached;			/* true, iff we know this time to be past */
+  enum event_type  type;	/* the event's type */
 };
-static  struct event *queue = NULL;
+static  struct event *queue;
 
-/* All event times are relative to `time_base'.  */
-double  time_base = 0;
-
-/* This measures the lag introduced by the select call.  */
-struct circle_buffer *queuelag;
-
-/* The sum of sleeping times */
-double  sleep_meter = 0;
+/* The type `game_time' is relative to `time_base'.  */
+static  double  time_base;
 
 
 int
@@ -68,7 +63,6 @@ my_select (fd_set *read_fds, double target_time)
       
       dt = target_time - vclock ();
       if (dt < 0)  dt = 0;
-      sleep_meter += dt;
       usec = 1e6 * modf (dt, &sec) + 0.5;
       tv.tv_sec = sec + 0.5;
       tv.tv_usec = usec + 0.5;
@@ -121,34 +115,31 @@ wait_until (double t)
 
 void
 clock_adjust_delay (double dt)
-/* Make the next event occur after DT time steps.  */
+/* Make the next event occur after DT steps of time.
+ * The queue must contain at least one element.
+ * This function MUST be called before the first `get_event' call.  */
 {
-  double  t, new_time_base;
-
-  if (! queue)  return;
-  
-  t = vclock ();
-  new_time_base = t + dt - queue->t;
-  if (new_time_base > time_base)  time_base = new_time_base;
+  assert (queue);
+  time_base = vclock () + dt - queue->t;
 }
 
 void
 clear_queue (void)
 /* Remove all events from the queue.  */
 {
-  struct event *ev = queue;
+  struct event *ev;
+
+  ev = queue, queue = NULL;
   while (ev) {
     struct event *old = ev;
     ev = old->next;
     free (old);
   }
-  queue = NULL;
-
   while (key_ready ())  xgetch (moon);
 }
 
 void
-add_event (double t, enum event_type type)
+add_event (game_time t, enum event_type type)
 /* Add a new event to the queue.
  * The event happens at time T and is of type TYPE.  */
 {
@@ -156,8 +147,6 @@ add_event (double t, enum event_type type)
   struct event *ev;
 
   assert (type != ev_KEY);
-
-  t -= time_base;
   
   evp = &queue;
   while (*evp && (*evp)->t <= t)  evp = &((*evp)->next);
@@ -172,7 +161,7 @@ add_event (double t, enum event_type type)
 }
 
 enum event_type
-get_event (double *t_return)
+get_event (game_time *t_return)
 /* Wait until the next event happens and return it.
  * In *T_RETURN the specified event time is stored and the event's
  * type is returned.  */
@@ -185,18 +174,13 @@ get_event (double *t_return)
     double  t;
     
     if (queue) {
-      double  s, correct;
+      double  s;
       
-      correct = get_mean (queuelag);
-      s = time_base + queue->t - correct;
+      s = time_base + queue->t;
       retval = wait_until (s);
       t = vclock ();
-      if (retval == 0) {
-	if (t-s > 0.4) {
-	  clock_adjust_delay (0.4);
-	} else {
-	  add_value (queuelag, t - s);
-	}
+      if (retval == 0 && t-s > 0.4) {
+	clock_adjust_delay (0.4);
       }
     
       ev = queue;
@@ -209,8 +193,8 @@ get_event (double *t_return)
       t = vclock ();
     }
 
-    if (retval>0) {
-      if (t_return)  *t_return = t;
+    if (retval>0) {		/* key pressed */
+      if (t_return)  *t_return = t - time_base;
       return  ev_KEY;
     }
   }
@@ -218,14 +202,14 @@ get_event (double *t_return)
   /* deliver the event */
   ev = queue;
   queue = queue->next;
-  if (t_return)  *t_return = time_base + ev->t;
+  if (t_return)  *t_return = ev->t;
   res = ev->type;
   free (ev);
   return  res;
 }
 
 int
-remove_event (enum event_type type, double *t)
+remove_event (enum event_type type, game_time *t_return)
 {
   struct event **evp;
   struct event *ev;
@@ -236,8 +220,7 @@ remove_event (enum event_type type, double *t)
   
   ev = *evp;
   *evp = (*evp)->next;
-  *t = time_base + ev->t;
+  *t_return = ev->t;
   free (ev);
-
   return  1;
 }
