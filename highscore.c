@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.8 1999/01/02 12:30:34 voss Rel $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.9 1999/01/07 15:53:12 voss Exp $";
 
 #define _XOPEN_SOURCE
 #define _XOPEN_SOURCE_EXTENDED
@@ -254,7 +254,7 @@ generate_table (void)
 
   get_current_date (&day, &month, &year);
   for (i=0; i<HIGHSCORE_SLOTS; ++i) {
-    hiscores[i].score = 100-i*10;
+    hiscores[i].score = 200*(HIGHSCORE_SLOTS-i);
     hiscores[i].day = day;
     hiscores[i].month = month;
     hiscores[i].year = year;
