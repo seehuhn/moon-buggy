@@ -6,13 +6,13 @@ moechte, muss man das "moon-buggy/"-Verzeichnis selbst anlegen.  Das
 sollte geaendert oder erklärt werden.
 
 IMPROVEMENTS:
+· queue.c: messe nach, welcher Anteil der Zeit verschlafen wird
 · Sollte ich `poll' verwenden
 · Den `fd_set' Teil von "configure.in" verbessern.  Zumindest
 sollte der cache verwendet werden.
-· Teste, of "lag.c" eine Daseinsberechtigung hat
 · Portabilität bekümmern
 · Steigenden Schwierigkeitsgrad einführen
-· Remove score files from different version on installation
+· Remove score files from different versions on installation
 · Irgendwo kurz "curses" erklären
 
 · rpm Zeugs: "Autoreq: false" ausprobieren, "BuildRoot" wieder einführen
@@ -24,3 +24,9 @@ sollte der cache verwendet werden.
 · Internationalisieren
 · Peter: Graphik verbessern, insbesondere abgestürzte Autos
 · Lars: Ufos und Laser einführen
+
+; Local Variables:
+; mode: auto-fill
+; paragraph-start: "[ 	]*$\\|^\f\\|·\\[A-Z]+:$"
+; paragraph-separate: "[ 	]*$\\|^\f"
+; End:
