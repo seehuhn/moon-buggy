@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: buggy.c,v 1.17 1999/05/23 21:05:34 voss Exp $";
+static const  char  rcsid[] = "$Id: buggy.c,v 1.18 1999/05/24 19:19:48 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -129,9 +129,6 @@ crash_check (void)
     state = sz_crash;
     print_buggy ();
     return 1;
-  } else if (bonus) {
-    adjust_score (1<<bonus);
-    bonus = 0;
   }
   
   return  0;
