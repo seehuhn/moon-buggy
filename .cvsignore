@@ -8,6 +8,10 @@ config.h.in
 config.log
 config.status
 configure
+copying.h
+maint.in
+maint-buggy
+maint-buggy.6
 mbuggy.info
 mbuggy.log
 mbuggy.dvi
@@ -25,4 +29,6 @@ stamp-h
 stamp-h.in
 stamp-vti
 texinfo.tex
+uninst.pre
+uninst.post
 version.texi
