@@ -1,5 +1,10 @@
+version 0.3.2:
+  minor bug fixes
+  increased portability
+
 version 0.3.1:
-  minor bug fixes.
+  minor bug fixes
+  changed to use autoconf version 2.13, automake version 1.4
 
 version 0.3:
   Numerous bug fixes and improvements.
