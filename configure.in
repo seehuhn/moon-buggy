@@ -3,8 +3,17 @@ AC_INIT(moon.h)
 AM_INIT_AUTOMAKE(moon-buggy, 0.2)
 AM_CONFIG_HEADER(config.h)
 
+AC_ARG_WITH(suid,
+[  --with-suid=NAME        suid usage: run moon-buggy as user NAME],
+[case "${withval}" in
+  no)  GAMEUSER="" ;;
+  *)   GAMEUSER="$withval" ;;
+esac])
+AC_SUBST(GAMEUSER)
+
 dnl Checks for programs.
 AC_PROG_CC
+AC_PROG_AWK
 
 dnl Checks for libraries.
 AC_CHECK_LIB(curses,initscr,CURSLIB=-lcurses)
@@ -21,7 +30,7 @@ fi
 
 dnl Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS(getopt.h)
+AC_CHECK_HEADERS(getopt.h errno.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -30,9 +39,9 @@ AC_TYPE_UID_T
 
 dnl Checks for library functions.
 AC_TYPE_SIGNAL
-AC_REPLACE_FUNCS(basename mvwaddnstr)
-AC_CHECK_FUNCS(memmove ftruncate getopt_long)
+AC_REPLACE_FUNCS(basename mvwaddnstr wgetnstr)
+AC_CHECK_FUNCS(memmove ftruncate getopt_long setreuid)
 
 AM_CONDITIONAL(short_getopt, test "x$ac_cv_func_getopt_long" != xyes)
 
-AC_OUTPUT(Makefile)
+AC_OUTPUT(Makefile maint.in)
