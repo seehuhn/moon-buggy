@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.1 1998/12/17 20:00:25 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.2 1998/12/18 23:17:57 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -10,54 +10,14 @@ static const  char  rcsid[] = "$Id: main.c,v 1.1 1998/12/17 20:00:25 voss Exp $"
 
 #if STDC_HEADERS
 # include <string.h>
-# include <stdlib.h>
-#else
-# ifndef HAVE_MEMCPY
-#  define memmove(d, s, n) bcopy ((s), (d), (n))
-# endif
 #endif
-#include <curses.h>
 
 #include "moon.h"
 
 
 const char *my_name;
+unsigned long  score;
 
-WINDOW *score, *moon;
-static  chtype *ground1, *ground2, *ground3;
-
-
-static int
-d_rnd (int anz)
-/* Returns a random integer `x' with `0 <= x < anz'.  */
-{
-  return  (int)((double)anz*rand()/(RAND_MAX+1.0));
-}
-
-static void
-scroll_ground (void)
-{
-  memmove (ground1+1, ground1, (COLS-1)*sizeof(chtype));
-  memmove (ground2+1, ground2, (COLS-1)*sizeof(chtype));
-  memmove (ground3+1, ground3, (COLS-1)*sizeof(chtype));
-  ground1[0] = d_rnd(30) ? ' ' : '*';
-  ground2[0] = d_rnd(10) ? '#' : ' ';
-  ground3[0] = '#';
-}
-
-static void
-print_car (int speed, int jump)
-{
-  if (jump) {
-    mvwaddstr (moon, LINES-7, COLS-12-speed, "    Omm  ");
-    mvwaddstr (moon, LINES-6, COLS-12-speed, " (0)-(0) ");
-    mvwaddstr (moon, LINES-5, COLS-12-speed, "         ");
-  } else {
-    mvwaddstr (moon, LINES-7, COLS-12-speed, "         ");
-    mvwaddstr (moon, LINES-6, COLS-12-speed, "    Omm  ");
-    mvwaddstr (moon, LINES-5, COLS-12-speed, " (0)-(0) ");
-  }
-}
 
 static void
 print_time (double t)
@@ -69,29 +29,61 @@ print_time (double t)
   tt /= 100;
   sec = tt%60;
   min = tt/60;
-  mvwprintw (score, 1, 0, "%5d:%02d:%02d", min, sec, frac);
-  wnoutrefresh (score);
+  mvwprintw (status, 1, COLS-17, "time: %2d:%02d:%02d", min, sec, frac);
+  wnoutrefresh (status);
 }
 
 static void
-test_output (void)
+print_score ()
 {
-  double  base1, base2, t;
+  mvwprintw (status, 0, COLS-17, "score: %lu", score);
+  wnoutrefresh (status);
+}
 
-  base1 = base2 = vclock ();
+static void
+main_loop (void)
+{
+  double  base, t;
+  int  done = 0;
+
+  base = vclock ();
+  add_event (base, ev_SCROLL);
+  add_event (base+5, ev_SCORE);
+
   do {
-    t = vclock ();
-    if (t > base2+0.05) {
+    switch (get_event (&t)) {
+    case ev_SCROLL:
       scroll_ground ();
-      base2 += 0.05;
-      mvwaddchnstr (moon, LINES-5, 0, ground1, COLS);
       mvwaddchnstr (moon, LINES-4, 0, ground2, COLS);
       wnoutrefresh (moon);
+      if (crash_check ())  done = 1;
+      add_event (t+0.08, ev_SCROLL);
+      break;
+    case ev_KEY:
+      switch (wgetch (moon)) {
+      case ' ':
+	if (can_jump())  jump (t);
+	break;
+      case KEY_BREAK:
+      case KEY_CLOSE:
+      case '\e':
+      case 'q':
+	done = 1;
+	break;
+      }
+      break;
+    case ev_BUGGY:
+      print_buggy ();
+      break;
+    case ev_SCORE:
+      ++score;
+      print_score ();
+      add_event (t+1, ev_SCORE);
+      break;
     }
-    if (ground1[COLS-13] != ' ')  print_car (0, 1);
-    print_time (t-base1);
+    print_time (t-base);
     doupdate ();
-  } while (t < base1+50);
+  } while (! done);
 }
 
 int
@@ -105,23 +97,30 @@ main (int argc, char **argv)
   cbreak ();
   noecho ();
 
-  score = newwin (2, 0, LINES-2, 0);
+  queuelag = new_lagmeter ();
+  
+  status = newwin (2, 0, LINES-2, 0);
   moon = newwin (LINES-2, 0, 0, 0);
+  keypad (moon, TRUE);
+  
   ground1 = xmalloc (COLS*sizeof(chtype));
   ground2 = xmalloc (COLS*sizeof(chtype));
-  ground3 = xmalloc (COLS*sizeof(chtype));
   for (i=0; i<COLS; ++i) {
-    ground1[i] = ' ';
+    ground1[i] = '#';
     ground2[i] = '#';
-    ground3[i] = '#';
   }
-  mvwaddchnstr (moon, LINES-3, 0, ground3, COLS);
-  print_car (0, 0);
+  car_base = (COLS > 80 ? 80 : COLS) - 12;
 
-  test_output ();
+  mvwaddchnstr (moon, LINES-3, 0, ground1, COLS);
+  print_buggy ();
+
+  score = 0;
+  print_score ();
+  
+  main_loop ();
   
   delwin (moon);
-  delwin (score);
+  delwin (status);
   endwin ();
 
   return  0;
