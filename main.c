@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.43 2001/05/24 07:18:28 voss Rel $";
+static const  char  rcsid[] = "$Id: main.c,v 1.44 2002/07/13 21:50:07 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -139,7 +139,7 @@ main (int argc, char **argv)
     { NULL, 0, NULL, 0}
   };
 #endif
-#define RND_SHORT_OPTIONS "chmnsV"
+#define MB_SHORT_OPTIONS "chmnsV"
   int  help_flag = 0;
   int  highscore_flag = 0;
   int  title_flag = 1;
@@ -161,9 +161,9 @@ main (int argc, char **argv)
     int  c;
 #ifdef HAVE_GETOPT_LONG
     int  ind;
-    c = getopt_long (argc, argv, RND_SHORT_OPTIONS, long_options, &ind);
+    c = getopt_long (argc, argv, MB_SHORT_OPTIONS, long_options, &ind);
 #else
-    c = getopt (argc, argv, RND_SHORT_OPTIONS);
+    c = getopt (argc, argv, MB_SHORT_OPTIONS);
 #endif
     if (c == -1)  break;
     switch (c) {
