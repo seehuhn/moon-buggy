@@ -33,26 +33,28 @@ are some points of interest:
 
    * You can choose the score file's location via `configure''s
      `--sharedstatedir' option.  On Linux you should use
+
           --sharedstatedir=/var/games
+
      to comply with the Filesystem Hierarchy Standard.
 
    * Moon-buggy supports shared score files.  As explained in
-     moon-buggy's manual, you may want to make moon-buggy a setuid
-     program.  This can be done with the `--with-setuid' option.  If
+     moon-buggy's manual, you may want to make moon-buggy a setgid
+     program.  This can be done with the `--with-setgid' option.  If
      you use
-          --with-setuid=games
-     then the user `games' owns the `moon-buggy' executable and the
-     setuid bit is set.
+
+          --with-setgid=games
+
+     then the installation process arranges everything for setgid usage.
 
      CAUTION: this introduces potential security risks.  I tried to
-     minimise these, but nevertheless do *not* choose the user `root'
-     instead of `games'.  And remember: moon-buggy comes with no
-     warranty.
+     minimise these, but nevertheless be careful with this.  And
+     remember: moon-buggy comes with no warranty.
 
 
    Example: On GNU/Linux systems you probably can use the following
 commands.  For the last one you may need root user permissions.
 
-     ./configure --sharedstatedir=/var/games --with-setuid=games
+     ./configure --sharedstatedir=/var/games --with-setgid=games
      make
      make install
