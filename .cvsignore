@@ -8,6 +8,9 @@ config.h.in
 config.log
 config.status
 configure
+mbuggy.info
 moon-buggy
 stamp-h
 stamp-h.in
+stamp-vti
+version.texi
