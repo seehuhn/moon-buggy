@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: level.c,v 1.5 1999/05/27 16:09:28 voss Exp $";
+static const  char  rcsid[] = "$Id: level.c,v 1.6 1999/05/27 16:43:52 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -61,16 +61,21 @@ level0 (double t)
     if (ticks < 345) {
       data.l0.gap = 14.5 - ticks*4.0/345 + uniform_rnd (4.5 + ticks*4.0/345);
     } else {
-      if (data.l0.state) {
-	data.l0.gap = 10;
-      } else {
+      switch (data.l0.state) {
+      case 0:
 	data.l0.gap = 13;
-      }
-      if (data.l0.state > 2) {
+	break;
+      case 1:
+	data.l0.gap = 10;
+	break;
+      case 2:
+	data.l0.gap = 11;
+	break;
+      default:
 	++level;
-      } else {
-	++data.l0.state;
+	break;
       }
+      ++data.l0.state;
     }
   }
 
