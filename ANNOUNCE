@@ -1,8 +1,8 @@
 
-	Announcement for Moon-buggy version 0.4
-	=======================================
+	Announcement for Moon-buggy version 0.4.1
+	=========================================
 
-I'm proud to announce the release of Moon-buggy, version 0.4.
+I'm proud to announce the release of Moon-buggy, version 0.4.1.
 
 Moon-buggy is a simple character graphics game, where you drive some
 kind of car across the moon's surface.  Unfortunately there are
@@ -16,5 +16,13 @@ The program is supposed to compile and run on any POSIX compliant
 system which provides the curses library.  But at the moment it is
 only tested on GNU/Linux systems.
 
+
+NEWS:
+
+Version 0.4.1 contains some bug fixes and minor improvements over
+version 0.4.  Most prominently it supports setgid usage to enable
+shared score files.
+
+
 You may get moon-buggy via ftp from "sunsite.unc.edu".  It is in the
-file "/pub/Linux/games/arcade/mbuggy-0.4.tar.gz".
+file "/pub/Linux/games/arcade/moon-buggy-0.4.1.tar.gz".
