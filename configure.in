@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.20 $)
+AC_REVISION($Revision: 1.21 $)
 AC_INIT(mbuggy.h)
-AM_INIT_AUTOMAKE(moon-buggy, 0.3.94)
+AM_INIT_AUTOMAKE(moon-buggy, 0.3.95)
 AM_CONFIG_HEADER(config.h)
 
 dnl Some systems want this as we use curses.
