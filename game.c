@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.24 1999/06/05 13:36:12 voss Exp $";
+static const  char  rcsid[] = "$Id: game.c,v 1.25 1999/06/06 13:21:12 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -37,21 +37,17 @@ print_lives (void)
 static void
 life_key_handler (game_time t)
 {
-  switch (xgetch (moon)) {
-  case ' ':
+  int  meaning = read_key ();
+  if (meaning & mbk_jump) {
     if (! crash_detected && can_jump())  jump (t);
-    break;
-  case KEY_BREAK:
-  case KEY_CLOSE:
-  case 27:			/* ESC */
-  case 'q':
+  } else if (meaning & mbk_fire) {
+    if (! crash_detected)  fire_laser (t);
+  } else if (meaning & mbk_end) {
     quit_main_loop ();
     lives = 1;
     print_message ("aborted at user's request");
-    break;
-  case 'a':
-    if (! crash_detected)  fire_laser (t);
-    break;
+  } else {
+    beep ();
   }
 }
 
@@ -85,22 +81,14 @@ setup_screen (void)
 static void
 game_key_handler (game_time t)
 {
-  switch (xgetch (moon)) {
-  case KEY_BREAK:
-  case KEY_CANCEL:
-  case KEY_EXIT:
-  case 'q':
+  int  meaning = read_key ();
+  if (meaning & mbk_end) {
     quit_main_loop ();
     lives = 0;
-    break;
-  case 'y':
-  case KEY_BEG:
-  case KEY_ENTER:
+  } else if (meaning & mbk_start) {
     quit_main_loop ();
-    break;
-  default:
+  } else {
     beep ();
-    break;
   }
 }
 
