@@ -31,5 +31,5 @@ stamp-h.in
 stamp-vti
 texinfo.tex
 uninst.pre
-uninst.post
+uninst.pre.in
 version.texi
