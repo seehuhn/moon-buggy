@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.4 1998/12/20 00:45:35 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.5 1998/12/20 13:16:25 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -62,6 +62,9 @@ main_loop (double wait)
   double  base, t;
   int  done = 0;
 
+  initialize_buggy ();
+  print_buggy ();
+  
   doupdate ();
   
   base = vclock ();
@@ -139,7 +142,6 @@ do_one_game ()
     print_ground ();
     print_score ();
     print_lives ();
-    print_buggy ();
 
     clear_queue ();
     main_loop (1);
