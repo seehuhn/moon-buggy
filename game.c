@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.15 1999/05/22 13:43:58 voss Exp $";
+static const  char  rcsid[] = "$Id: game.c,v 1.16 1999/05/22 14:40:23 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -11,13 +11,17 @@ static const  char  rcsid[] = "$Id: game.c,v 1.15 1999/05/22 13:43:58 voss Exp $
 #include "mbuggy.h"
 
 
-long  score, bonus;
+long  bonus;
+int  crash_detected;
 static  int  lives;
+static  long  score;
 
 
-static void
-print_score (void)
+void
+adjust_score (int adjust)
 {
+  if (crash_detected)  return;
+  score += adjust;
   mvwprintw (status, 0, car_base-7, "score: %-8ld", score);
   wnoutrefresh (status);
 }
@@ -32,8 +36,8 @@ print_lives (void)
 static void
 score_handler (game_time t, void *client_data)
 {
-  ++score;
-  print_score ();
+  if (crash_detected)  return;
+  adjust_score (1);
   add_event (t+TICK(12.5), score_handler, NULL);
 }
 
@@ -42,10 +46,9 @@ life_key_handler (game_time t)
 {
   switch (xgetch (moon)) {
   case ' ':
-    if (can_jump()) {
+    if (! crash_detected && can_jump()) {
       jump (t);
-      ++score;
-      print_score ();
+      adjust_score (+1);
     }
     break;
   case KEY_BREAK:
@@ -57,7 +60,7 @@ life_key_handler (game_time t)
     print_message ("aborted at user's request");
     break;
   case 'a':
-    fire_laser (t);
+    if (! crash_detected)  fire_laser (t);
     break;
   }
 }
@@ -65,9 +68,9 @@ life_key_handler (game_time t)
 static void
 spend_life (void)
 {
+  crash_detected = 0;
   bonus = 0;
   print_ground ();
-  print_score ();
   print_lives ();
 
   clear_queue ();
@@ -117,8 +120,6 @@ int
 game_mode (void)
 {
   int  i;
-
-  car_x = car_base;
   
   game_state = PLAYING;
   setup_screen ();
@@ -143,7 +144,7 @@ game_mode (void)
   mvwaddstr (moon, LINES-11, car_base-1, "GAME OVER");
   wattroff (moon, A_BLINK);
 
-  return  highscore_mode ();
+  return  highscore_mode (score);
 }
 
 void
@@ -153,14 +154,7 @@ resize_game (void)
   werase (status);
   resize_ground (0);
   print_ground ();
-  print_score ();
+  adjust_score (0);
   print_lives ();
   print_buggy ();
-}
-
-void
-score_bonus (int x)
-{
-  score += x;
-  print_score ();
 }
