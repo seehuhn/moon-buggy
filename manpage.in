@@ -1,4 +1,4 @@
-.\" $Id: manpage.in,v 1.1 1998/12/22 00:38:05 voss Exp $
+.\" $Id: manpage.in,v 1.2 1998/12/23 09:42:02 voss Exp $
 .\"
 .de Op
 .BR \-\\$1 @C@ ", " \-\-\\$2
@@ -23,11 +23,13 @@ shows a short but helpful message.
 prints the program's version to standard output and exits.
 .SH FILES
 .TP
-.I "@MBSCORE@/mbscore.tmpl"
-the score file template
-.TP
 .I "@MBSCORE@/mbscore"
 the global score file
+.TP
+.I "$HOME/.mbscore"
+the local score file.  This is used, if
+.B moon\-buggy
+has no write access to the global score file.
 .SH AUTHOR
 The program
 .B moon\-buggy
