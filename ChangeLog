@@ -1,4 +1,47 @@
+1999-01-18  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: added 1999-01-07 to 1999-01-18
+
+	* NEWS: new news
+
+	* mbuggy.spec: Changed the version number
+	minor fixes
+
+	* README: minor fix
+
+	* TODO: Differentiate between bug fixes and enhancements.
+
+	* configure.in: Use `AC_REVISION'.
+
+	* mbuggy.texi, xstrdup.c: minor fix
+
+1999-01-09  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* TODO: Two new entries
+	reordered
+
+	* configure.in: Check for the mythical `fclean' function.
+
+	* pager.c (pager_mode): minor fix
+
+	* title.c (setup_screen): minor bug fix
+
+	* highscore.c:
+	Write out newly created score files, even if the player is not in.
+	Use `fflush' before `ftruncate'.
+
+	* Makefile.am (uninstall-local): remove the score file
+
+1999-01-07  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* highscore.c (generate_table):
+	generate more challenging score values.
+
+	* configure.in: Changed the version string to "0.3.1".
+
 1999-01-02  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* mbuggy.texi: Last bug fix!
 
 	* ChangeLog: added 1998-12-28 to 1999-01-02
 
