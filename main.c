@@ -2,22 +2,30 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.5 1998/12/20 13:16:25 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.6 1998/12/23 09:45:41 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
+#include <stdio.h>
 #if STDC_HEADERS
 # include <string.h>
 #endif
-#include <unistd.h>		/* TODO: remove */
+#ifdef HAVE_GETOPT_H
+#include <getopt.h>
+#else
+#include <unistd.h>
+extern char *optarg;
+extern int optind, opterr, optopt;
+#endif
+#include <signal.h>
 
 #include "moon.h"
 
 
 const char *my_name;
-unsigned long  score, bonus;
+long  score, bonus;
 static int  lives;
 
 
@@ -38,7 +46,7 @@ print_time (double t)
 static void
 print_score ()
 {
-  mvwprintw (status, 0, 0, "score: %lu", score);
+  mvwprintw (status, 0, 40, "score: %-10ld", score);
   wnoutrefresh (status);
 }
 
@@ -57,10 +65,39 @@ print_ground ()
 }
 
 static void
-main_loop (double wait)
+print_message (const char *str)
+{
+  mvwaddstr (status, 1, 0, str);
+  wclrtoeol (status);
+}
+
+void
+prepare_for_exit (void)
+{
+  wmove (status, 1, 0);
+  wclrtoeol (status);
+  wnoutrefresh (moon);
+  wnoutrefresh (status);
+  doupdate ();
+  endwin ();
+}
+
+/**********************************************************************
+ * game control
+ */
+
+static void
+spend_life (void)
 {
   double  base, t;
   int  done = 0;
+
+  bonus = 0;
+  print_ground ();
+  print_score ();
+  print_lives ();
+
+  clear_queue ();
 
   initialize_buggy ();
   print_buggy ();
@@ -68,9 +105,9 @@ main_loop (double wait)
   doupdate ();
   
   base = vclock ();
+  add_event (base+1, ev_SCROLL);
   add_event (base+3, ev_STATUS);
-  add_event (base+wait, ev_SCROLL);
-  add_event (base+wait+5, ev_SCORE);
+  add_event (base+6, ev_SCORE);
 
   do {
     switch (get_event (&t)) {
@@ -119,7 +156,7 @@ main_loop (double wait)
 }
 
 static void
-do_one_game ()
+play_game ()
 {
   int  i;
   
@@ -138,13 +175,7 @@ do_one_game ()
   score = 0;
   lives = 3;
   do {
-    bonus = 0;
-    print_ground ();
-    print_score ();
-    print_lives ();
-
-    clear_queue ();
-    main_loop (1);
+    spend_life ();
     --lives;
     if (lives > 0) {
       sleep (1);
@@ -162,47 +193,16 @@ do_one_game ()
   write_hiscore ();
 }
 
-void
-prepare_for_exit (void)
-{
-  wmove (status, 1, 0);
-  wclrtoeol (status);
-  wnoutrefresh (moon);
-  wnoutrefresh (status);
-  doupdate ();
-  
-  delwin (moon);
-  delwin (status);
-  endwin ();
-}
-
-int
-main (int argc, char **argv)
+static void
+main_loop (void)
 {
   int  done = 0;
   
-  my_name = xstrdup (basename (argv[0]));
-  
-  initscr ();
-  cbreak ();
-  noecho ();
-  
-  status = newwin (2, 0, LINES-2, 0);
-  keypad (status, TRUE);
-  moon = newwin (LINES-2, 0, 0, 0);
-  keypad (moon, TRUE);
-
-  queuelag = new_lagmeter ();
-  ground1 = xmalloc (COLS*sizeof(chtype));
-  ground2 = xmalloc (COLS*sizeof(chtype));
-
-  mvwaddstr (status, 1, 0, "good luck");
-
   do {
     int  c;
-    do_one_game ();
+    play_game ();
   ask:
-    mvwaddstr (status, 1, 0, "play again (y/n)?");
+    print_message ("play again (y/n)?");
     c = wgetch (status);
     switch (c) {
     case 'y':
@@ -219,7 +219,127 @@ main (int argc, char **argv)
       goto ask;
     }
   } while (! done);
+}
 
+static volatile  sig_atomic_t  termination_in_progress = 0;
+     
+static RETSIGTYPE
+termination_handler (int signum)
+{
+  signal (signum, SIG_DFL);
+  if (termination_in_progress)  raise (signum);
+  termination_in_progress = 1;
+  prepare_for_exit ();
+  fprintf (stderr, "GAME ABORTED (signal %d)\n", signum);
+  raise (signum);
+}
+
+static RETSIGTYPE
+tstp_handler (int signum)
+{
+  signal (SIGTSTP, SIG_DFL);
+  score -= 10;
+  print_score ();
+  prepare_for_exit ();
+  fputs ("suspended (penalty: 10 points)\n", stderr);
+  raise (SIGTSTP);
+}
+    
+static RETSIGTYPE
+cont_handler (int signum)
+{
+  signal (SIGCONT, cont_handler);
+  signal (SIGTSTP, tstp_handler);
+  print_message ("suspended (penalty: 10 points)");
+  wrefresh (moon);
+  wrefresh (status);
+}
+ 
+int
+main (int argc, char **argv)
+{
+#ifdef HAVE_GETOPT_LONG
+  struct option  long_options [] = {
+    { "help", no_argument, 0, 'h'},
+    { "version", no_argument, 0, 'V'},
+    { NULL, 0, NULL, 0}
+  };
+#endif
+#define RND_SHORT_OPTIONS "hV"
+  int  help_flag = 0;
+  int  version_flag = 0;
+  int  error_flag = 0;
+  
+  my_name = xstrdup (basename (argv[0]));
+
+  while (! error_flag) {
+    int  c;
+#ifdef HAVE_GETOPT_LONG
+    int  ind;
+    c = getopt_long (argc, argv, RND_SHORT_OPTIONS, long_options, &ind);
+#else
+    c = getopt (argc, argv, RND_SHORT_OPTIONS);
+#endif
+    if (c == -1)  break;
+    switch (c) {
+    case 'h':
+      help_flag = 1;
+      break;
+    case 'V':
+      version_flag = 1;
+      break;
+    default:
+      error_flag = 1;
+    }
+ }
+
+  if (argc != optind) {
+    fputs ("too many arguments\n", stderr);
+    error_flag = 1;
+  }
+  
+  if (version_flag) {
+    puts (PACKAGE ", version " VERSION);
+    if (! error_flag)  exit (0);
+  }
+  if (error_flag || help_flag) {
+#ifdef HAVE_GETOPT_LONG
+#define OPT(short,long) "  " short ", " long "    "
+#else
+#define OPT(short,long) "  " short "  "
+#endif
+    FILE *out = error_flag ? stderr : stdout;
+    fprintf (out, "usage:  %s [options]\n\n", my_name);
+    fputs ("The options are\n", out);
+    fputs (OPT("-h","--help    ") "show this message and exit\n", out);
+    fputs (OPT("-V","--version ") "show the version number and exit\n", out);
+    exit (error_flag);
+  }
+
+  if (signal (SIGINT, termination_handler) == SIG_IGN)
+    signal (SIGINT, SIG_IGN);
+  if (signal (SIGHUP, termination_handler) == SIG_IGN)
+    signal (SIGHUP, SIG_IGN);
+  if (signal (SIGTERM, termination_handler) == SIG_IGN)
+    signal (SIGTERM, SIG_IGN);
+  signal (SIGCONT, cont_handler);
+  signal (SIGTSTP, tstp_handler);
+ 
+  initscr ();
+  cbreak ();
+  noecho ();
+  
+  status = newwin (2, 0, LINES-2, 0);
+  keypad (status, TRUE);
+  moon = newwin (LINES-2, 0, 0, 0);
+  keypad (moon, TRUE);
+
+  queuelag = new_lagmeter ();
+  ground1 = xmalloc (COLS*sizeof(chtype));
+  ground2 = xmalloc (COLS*sizeof(chtype));
+
+  print_message ("good luck");
+  main_loop ();
   mvwaddstr (moon, LINES-11, car_base-1, "GAME OVER");
   
   prepare_for_exit ();
