@@ -3,7 +3,7 @@
 #:notice
 # @configure_input@
 # Copyright 1999  Jochen Voss
-# $Id: maint.in.in,v 1.6 1999/07/21 10:52:51 voss Rel $
+# $Id: maint.in.in,v 1.7 2000/04/26 20:24:29 voss Rel $
 
 prefix="@prefix@"
 exec_prefix="@exec_prefix@"
