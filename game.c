@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.20 1999/05/24 19:19:30 voss Rel $";
+static const  char  rcsid[] = "$Id: game.c,v 1.21 1999/05/30 19:51:20 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -12,8 +12,8 @@ static const  char  rcsid[] = "$Id: game.c,v 1.20 1999/05/24 19:19:30 voss Rel $
 
 
 int  crash_detected;		/* a crash is in progress */
-long  stakes;			/* points to get, we we reach the ground */
-static  long  score;		/* points we already got */
+int  stakes;			/* points to get, when we reach the ground */
+static  int  score;		/* points we already got */
 static  int  lives;		/* cars left (including the current one) */
 
 
@@ -23,7 +23,7 @@ adjust_score (int val)
 {
   if (crash_detected)  return;
   score += val;
-  mvwprintw (status, 0, car_base-7, "score: %-8ld", score);
+  mvwprintw (status, 0, car_base-7, "score: %-8d", score);
   wnoutrefresh (status);
 }
 
@@ -133,7 +133,7 @@ game_mode (void)
   mvwaddstr (moon, LINES-11, car_base-1, "GAME OVER");
   wattroff (moon, A_BLINK);
 
-  return  highscore_mode (score);
+  return  highscore_mode (score, level+1);
 }
 
 void
