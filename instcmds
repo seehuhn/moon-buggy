@@ -1,6 +1,6 @@
 #! /bin/sh
 # instcmds - extract shell commands from the Makefile
-# Copyright 1999  Jochen Voﬂ
+# Copyright 1999  Jochen Voss
 
 version="0.3"
 
@@ -40,7 +40,7 @@ while test $# -gt 0; do
     --version)
       cat <<EOF
 Instcmds $version
-Copyright (C) 1999 Jochen Voﬂ
+Copyright (C) 1999 Jochen Voss
 Instcmds comes with NO WARRANTY, to the extent permitted by law.
 EOF
       exit 0

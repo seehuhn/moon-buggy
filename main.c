@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.28 1999/06/17 14:44:35 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.29 1999/06/25 23:14:05 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -129,7 +129,7 @@ main (int argc, char **argv)
   
   if (version_flag) {
     puts ("Moon-Buggy " VERSION);
-    puts ("Copyright 1998,99 Jochen Voﬂ");
+    puts ("Copyright 1998,99 Jochen Voss");
     puts ("\
 Moon-Buggy comes with NO WARRANTY, to the extent permitted by law.");
     puts ("\

@@ -2,8 +2,8 @@
 # maint-buggy - maintain the moon-buggy installation
 #:notice
 # @configure_input@
-# Copyright 1999  Jochen Voﬂ
-# $Id: maint.in.in,v 1.4 1999/06/02 07:32:50 voss Exp $
+# Copyright 1999  Jochen Voss
+# $Id: maint.in.in,v 1.5 1999/06/25 23:14:05 voss Rel $
 
 prefix="@prefix@"
 exec_prefix="@exec_prefix@"
@@ -41,7 +41,7 @@ while test $# -gt 0; do
     --version)
       cat <<EOF
 maint-buggy (moon-buggy) @VERSION@
-Copyright (C) 1998 Jochen Voﬂ
+Copyright (C) 1998 Jochen Voss
 Moon-Buggy come with NO WARRANTY, to the extent permitted by law.
 You may redistribute copies of Moon-Buggy under the terms of the GNU
 General Public License.  For more information about these matters, see

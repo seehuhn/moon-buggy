@@ -1,6 +1,6 @@
 # img.sed - used by "Makefile.am" to create "buggy.h"
-# Copyright 1999  Jochen Voﬂ
-# $Id: img.sed,v 1.2 1999/05/22 11:54:55 voss Rel $
+# Copyright 1999  Jochen Voss
+# $Id: img.sed,v 1.3 1999/06/25 23:14:04 voss Rel $
 
 # initialisation
 1 {

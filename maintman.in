@@ -1,6 +1,6 @@
 .\" maintman.in - template for the "maint-buggy.6" manual page
-.\" Copyright 1999  Jochen Voﬂ
-.\" $Id: maintman.in,v 1.3 1999/03/03 14:59:31 voss Rel $
+.\" Copyright 1999  Jochen Voss
+.\" $Id: maintman.in,v 1.4 1999/06/25 23:14:05 voss Rel $
 .\"
 .TH maint-buggy 6 "Jan 1 1999" "@MBNAME@ @MBVERS@"
 .SH NAME

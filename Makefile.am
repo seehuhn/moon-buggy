@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
-# Copyright 1999  Jochen Voﬂ
-# $Id: Makefile.am,v 1.35 1999/06/25 23:11:22 voss Exp $
+# Copyright 1999  Jochen Voss
+# $Id: Makefile.am,v 1.36 1999/06/25 23:14:04 voss Rel $
 
 EXTRA_DIST = moonman.in maintman.in instcmds car.img \
 	text2c.sed merge.sed img.sed \

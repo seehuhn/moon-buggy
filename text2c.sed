@@ -1,6 +1,6 @@
 # text2c.sed - used by "Makefile.am" to create "copying.h"
-# Copyright 1999  Jochen Voﬂ
-# $Id: text2c.sed,v 1.3 1999/01/02 12:05:51 voss Rel $
+# Copyright 1999  Jochen Voss
+# $Id: text2c.sed,v 1.4 1999/06/25 23:14:05 voss Rel $
 s/\\/\\\\/g
 s/"/\\"/g
 s///g
