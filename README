@@ -3,7 +3,7 @@ moon-buggy - drive a strange car across the moon
 moon-buggy is a simple, curses-based game, where you drive some kind
 of car across the surface of the moon.  Unfortunately there are
 dangerous craters there.  Fortunately your car can jump!  So just go
-on, and jump over the craters (using the SPACE key).
+on, and jump over the craters (using the space key).
 
 Generic installation instructions are in the file INSTALL.  You can
 choose the score file location via configure's `--sharedstatedir'
