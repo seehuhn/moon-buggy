@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.37 2000/06/16 10:52:46 voss Exp $";
+static const  char  rcsid[] = "$Id: game.c,v 1.38 2000/11/01 13:16:23 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -210,6 +210,7 @@ setup_game_mode (void)
   mode_add_key (game_mode, mbk_jump, "jump", 1);
   mode_add_key (game_mode, mbk_fire, "fire", 2);
   mode_add_key (game_mode, mbk_end, "abort game", 3);
+  mode_complete (game_mode);
 
   pause_mode = new_mode ();
   pause_mode->enter = pause_enter;
@@ -217,4 +218,5 @@ setup_game_mode (void)
   pause_mode->keypress = pause_key_handler;
   mode_add_key (pause_mode, mbk_start, "continue", 1);
   mode_add_key (pause_mode, mbk_end, "abort game", 3);
+  mode_complete (pause_mode);
 }

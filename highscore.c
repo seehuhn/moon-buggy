@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.39 2000/10/29 19:18:38 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.40 2000/11/01 13:16:30 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -737,4 +737,5 @@ setup_highscore_mode (void)
   mode_add_key (highscore_mode, mbk_down, "down", 4);
   mode_add_key (highscore_mode, mbk_pageup, "pg up", 5);
   mode_add_key (highscore_mode, mbk_pagedown, "pg down", 6);
+  mode_complete (highscore_mode);
 }

@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: title.c,v 1.21 2000/06/16 10:50:47 voss Exp $";
+static const  char  rcsid[] = "$Id: title.c,v 1.22 2000/11/01 13:16:51 voss Rel $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -103,4 +103,5 @@ setup_title_mode (void)
   mode_add_key (title_mode, mbk_copyright, "show copyright", 3);
   mode_add_key (title_mode, mbk_warranty, "show warranty", 4);
   mode_add_key (title_mode, mbk_scores, "show scores", 5);
+  mode_complete (title_mode);
 }

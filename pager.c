@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: pager.c,v 1.18 2000/06/16 10:50:58 voss Exp $";
+static const  char  rcsid[] = "$Id: pager.c,v 1.19 2000/11/01 13:16:44 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -137,4 +137,5 @@ setup_pager_mode (void)
   mode_add_key (pager_mode, mbk_pagedown, "pg down", 5);
   mode_add_key (pager_mode, mbk_first, "home", 6);
   mode_add_key (pager_mode, mbk_last, "end", 7);
+  mode_complete (pager_mode);
 }
