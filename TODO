@@ -3,19 +3,32 @@ acceptable for the moment, because (almost) all items should be
 resolved before version 1.0.
 
 BUG FIXES:
-· Fenstergrößenveränderungen während man den Namen eingibt, sind nicht
-gut.
+· Zu kleine Fenstergrößen geben Katastophen bei der Tastenerklärung
+· Namen nur aus Leerzeichen als leer werten
+· Die Anleitung sollte auf sunsite verweisen
 · Copyrighthinweis in der Anleitung freundlicher formulieren
+· "history" file wieder entfernen
+
 · Auf nereid: Schüsse werden invers dargestellt, die Highscoreliste
 blinkend.  Auf io/jupiter ist alles noch schlimmer!
 · Auf hpux wird der Cursor nicht abgeschaltet.
 Man sollte ihn evtl. auf eine günstige Position stellen.
 · Speichere die Zeit in der Highscoreliste als GMT.  Wegen `mktime' in
 `parse_date' ist das schwierig.
-· Die Anleitung sollte auf sunsite verweisen
 
 IMPROVEMENTS:
+· Man sollte im Programm die vollständige Highscoreliste ansehen
+können.
+· Hilfetext für den Pager, den man von der Titelseite aus aufrufen
+kann.  Erklärung der Tastaturbelegung.
 · words of wisdom/advice
+· Loch in level 6?
+· Levels für Zwerge
+· Den `fd_set' Teil von "configure.in" verbessern.  Zumindest
+sollte der cache verwendet werden.
+
+· `has_key' Ersatz für andere curses-Versionen einführen
+· Sollte jeder Hint nur höchstens alle 2 Minuten erscheinen?
 · Ist `addchstr' sinnvoll (wg. Geschwindigkeit)
 · Könnte man die Events einen Tick (oder 0.1 Sekunden) zu früh
 ausführen und nur das `doupdate' verzögern?  Wie ist das dann mit
@@ -24,14 +37,8 @@ Tastendrücken während der letzen zehntel Sekunde?  Bringt das
 · Wäre eine asynchrone Behandlung von Tastendrücken sinnvoll?  (siehe
 "Interrupt Input" in der glibc-Anleitung)
 · wgetnstr-Ersatz verbessern
-· Den `fd_set' Teil von "configure.in" verbessern.  Zumindest
-sollte der cache verwendet werden.
 · rpm Zeugs: "Autoreq: false" ausprobieren
 · rpm Zeugs: "moon-buggy.spec" aus "moon-buggy.spec.in" erzeugen
-· Hilfetext für den Pager, den man von der Titelseite aus aufrufen
-kann.  Erklärung der Tastaturbelegung.
-· Sollte der schwierige Teil der Level am Anfang (statt Ende) sein,
-damit der Spieler nicht deprimiert wird.  Insbesondere bei Level 2.
 · Prüfsumme für das Scorefile.
 · Score file locking: recover from failure, i.e. use an alternative method.
 (What happens if two new score files are created at the same time?)
@@ -40,7 +47,6 @@ damit der Spieler nicht deprimiert wird.  Insbesondere bei Level 2.
 · Portabilität bekümmern
 · Ufos einführen
 · Internationalisieren
-· Level-Hinweise über das Auto schreiben
 
 ; Local Variables:
 ; mode: auto-fill
