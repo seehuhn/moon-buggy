@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: pager.c,v 1.16 2000/04/08 13:14:14 voss Exp $";
+static const  char  rcsid[] = "$Id: pager.c,v 1.17 2000/04/09 13:02:00 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -18,8 +18,8 @@ static const  char  rcsid[] = "$Id: pager.c,v 1.16 2000/04/08 13:14:14 voss Exp 
 struct mode *pager_mode;
 
 
-static int  lines_used, current_line;
-static volatile  int  mb_lines = 25;
+static  int  lines_used, current_line;
+static  int  mb_lines = 25;
 
 
 static void
@@ -92,7 +92,7 @@ key_handler (game_time t, int val)
   }
 }
 
-void
+static void
 pager_enter (int what)
 {
   int  i;
@@ -116,11 +116,19 @@ pager_enter (int what)
   setup_screen ();
 }
 
+static void
+pager_leave (void)
+{
+  werase (status);
+  wnoutrefresh (status);
+}
+
 void
 setup_pager_mode (void)
 {
   pager_mode = new_mode ();
   pager_mode->enter = pager_enter;
+  pager_mode->leave = pager_leave;
   pager_mode->redraw = setup_screen;
   pager_mode->keypress = key_handler;
   mode_add_key (pager_mode, mbk_end, "quit", 1);
