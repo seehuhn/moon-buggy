@@ -1,8 +1,8 @@
 /* pager.c - display very long strings (with scrolling)
  *
- * Copyright 1999  Jochen Voss  */
+ * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: pager.c,v 1.15 2000/04/01 07:53:43 voss Exp $";
+static const  char  rcsid[] = "$Id: pager.c,v 1.16 2000/04/08 13:14:14 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

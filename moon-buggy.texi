@@ -1,5 +1,5 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: moon-buggy.texi,v 1.8 2000/04/08 13:03:57 voss Exp $
+@c $Id: moon-buggy.texi,v 1.9 2000/04/08 13:14:14 voss Exp $
 @c %**start of header
 @setfilename moon-buggy.info
 @settitle Moon-Buggy Usage and Maintenance
@@ -14,7 +14,7 @@
 @ifinfo
 This file documents moon-buggy, a simple character graphics game
 
-Copyright 1999 Jochen Vo@ss{}
+Copyright 1999, 2000 Jochen Vo@ss{}
 
 Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice are
@@ -49,7 +49,7 @@ translation approved by the Free Software Foundation.
 
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1999 Jochen Vo@ss{}
+Copyright @copyright{} 1999, 2000 Jochen Vo@ss{}
 
 Published by Jochen Vo@ss{}
 

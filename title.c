@@ -1,8 +1,8 @@
 /* title.c - print the title page
  *
- * Copyright 1999  Jochen Voss  */
+ * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: title.c,v 1.18 2000/04/01 07:53:29 voss Exp $";
+static const  char  rcsid[] = "$Id: title.c,v 1.19 2000/04/08 13:14:14 voss Rel $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -39,7 +39,7 @@ print_title (void)
   int  title_lines = sizeof (title) / sizeof (const char *);
 
   waddstr (moon, "  Moon-Buggy version "
-	   VERSION ", Copyright 1998,99 Jochen Voss\n");
+	   VERSION ", Copyright 2000 Jochen Voss\n");
   waddstr (moon, "  Moon-Buggy comes with ABSOLUTELY NO WARRANTY;"
 	   " for details type `w'.\n");
   waddstr (moon,

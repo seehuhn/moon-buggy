@@ -1,8 +1,8 @@
 /* main.c - moon-buggy main file
  *
- * Copyright 1999  Jochen Voss  */
+ * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.36 2000/04/08 13:00:21 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.37 2000/04/08 13:14:14 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

@@ -1,8 +1,8 @@
 /* realname.c - query the user's real name
  *
- * Copyright 1999  Jochen Voss  */
+ * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: realname.c,v 1.15 2000/04/08 12:58:16 voss Exp $";
+static const  char  rcsid[] = "$Id: realname.c,v 1.16 2000/04/08 13:14:14 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

@@ -1,8 +1,8 @@
 /* queue.c - a queue of events to happen
  *
- * Copyright 1999  Jochen Voss  */
+ * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.31 2000/03/31 11:14:41 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.32 2000/04/08 13:14:14 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

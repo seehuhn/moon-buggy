@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
-# Copyright 1999  Jochen Voss
-# $Id: Makefile.am,v 1.48 2000/04/08 13:02:35 voss Exp $
+# Copyright 1999, 2000  Jochen Voss
+# $Id: Makefile.am,v 1.49 2000/04/08 13:14:14 voss Rel $
 
 EXTRA_DIST = moonman.in maintman.in instcmds car.img \
 	text2c.sed merge.sed img.sed ANNOUNCE moon-buggy.lsm \
