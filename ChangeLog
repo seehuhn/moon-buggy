@@ -1,3 +1,24 @@
+2000-04-24  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: added 2000-04-24
+
+	* moon-buggy.lsm: fixes for version 0.5
+
+	* configure.in: Changed the version string to "0.5".
+
+	* checklist: Added note about copyright dates.
+
+	* TODO: Added new items
+
+	* README: Minor fixes.
+	Removed the "experimental version" warning.
+
+	* moon-buggy.texi: Minor fixes.
+
+	* main.c (allocate_windows): call `initscr' and `hide_cursor'.
+
+	* signal.c (winch_handler): reflect changes in `allocate_windows'.
+
 2000-04-16  Jochen Voss  <voss@tatonka.pfalz.de>
 
 	* ChangeLog: added 2000-04-13 to 2000-04-16
