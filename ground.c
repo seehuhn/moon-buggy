@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: ground.c,v 1.4 2000/11/13 21:00:37 voss Exp $";
+static const  char  rcsid[] = "$Id: ground.c,v 1.5 2000/11/16 17:57:59 voss Rel $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -60,18 +60,23 @@ print_level (void)
 static void
 scroll_handler (game_time t, void *client_data)
 {
-  memmove (bonus+1, bonus, (ground_width-1)*sizeof(int));
-  memmove (ground2+1, ground2, ground_width-1);
-  level_tick (t);
-  print_ground ();
-  print_level ();
+  if (crash_detected <= 2) {
+    scroll_meteors ();
 
-  stakes += bonus[car_x + 7];
+    memmove (bonus+1, bonus, (ground_width-1)*sizeof(int));
+    memmove (ground2+1, ground2, ground_width-1);
+    level_tick (t);
+    print_ground ();
+    print_level ();
+    
+    stakes += bonus[car_x + 7];
+    
+    if (crash_detected)  shift_buggy (1);
+  }
   
-  if (crash_detected)  shift_buggy (1);
   if (crash_detected || crash_check ()) {
     ++crash_detected;
-    if (crash_detected > 2)  mode_change (crash_mode, 1);
+    if (crash_detected > 35)  mode_change (crash_mode, 1);
   }
 
   if (can_jump () && stakes) {
