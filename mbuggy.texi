@@ -1,5 +1,5 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: mbuggy.texi,v 1.4 1998/12/20 13:53:37 voss Exp $
+@c $Id: mbuggy.texi,v 1.5 1998/12/23 09:34:23 voss Exp $
 @c %**start of header
 @setfilename mbuggy.info
 @settitle Moon-Buggy Usage and Maintainance
@@ -8,7 +8,7 @@
 
 @dircategory Games
 @direntry
-* moon-buggy: (mbuggy). Moon-Buggy Usage and Maintainance
+* moon-buggy: (mbuggy). Moon-Buggy Usage and Maintenance
 @end direntry
 
 @ifinfo
@@ -39,7 +39,7 @@ translation approved by the Free Software Foundation.
 @end ifinfo
 
 @titlepage
-@title Moon-Buggy Usage and Maintainance
+@title Moon-Buggy Usage and Maintenance
 @author by Jochen Vo@ss{}
 
 @page
@@ -67,7 +67,7 @@ approved by the Free Software Foundation.
 
 @ifinfo
 This document describes the usage and installation of Moon-Buggy.  It is
-a simple, curses-based game, where you drive some kinf of car across the
+a simple, curses-based game, where you drive some kind of car across the
 surface of the moon.  Unfortunately there are dangerous craters there.
 Fortunately your car can jump!  This edition of the manual applies to
 version @value{VERSION} of the program.
@@ -82,7 +82,7 @@ version @value{VERSION} of the program.
 @node Introduction, Invocation, Top, Top
 @chapter Introduction
 
-Moon-buggy is a simple, curses-based game, where you drive some kinf
+Moon-buggy is a simple, curses-based game, where you drive some kind
 of car across the surface of the moon.  Unfortunately there are
 dangerous craters there.  Fortunately your car can jump!
 
@@ -90,7 +90,8 @@ Moon-buggy is free software.  Read the file COPYING of the source code
 distribution for details.
 
 Please mail suggestions and bug reports to
-@email{voss@@mathematik.uni-kl.de}.
+@email{voss@@mathematik.uni-kl.de}.  Your message should include the
+moon-buggy version number, as obtained by the command @samp{moon-buggy -V}.
 
 
 @node Invocation, Installation, Introduction, Top
@@ -119,9 +120,12 @@ make install
 
 You can choose the score file location via configure's
 @samp{--sharedstatedir} option.  On Linux you should use
+
 @example
 --sharedstatedir=/var/lib/games
 @end example
+
+@noindent
 to comply with the Linux file system standard.
 
 @contents
