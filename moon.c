@@ -2,22 +2,15 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: moon.c,v 1.20 1999/05/24 19:13:28 voss Rel $";
+static const  char  rcsid[] = "$Id: moon.c,v 1.21 1999/05/30 19:47:01 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-
-#if STDC_HEADERS
-# include <string.h>
-# include <stdlib.h>
-#else
-# ifndef HAVE_MEMMOVE
-#  define memmove(d, s, n) bcopy ((s), (d), (n))
-# endif
-#endif
+#include <string.h>
+#include <stdlib.h>
 
 #include "mbuggy.h"
 

@@ -2,16 +2,14 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.23 1999/05/26 21:06:03 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.24 1999/05/30 19:47:19 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include <stdio.h>
-#if STDC_HEADERS
-# include <string.h>
-#endif
+#include <string.h>
 #ifdef HAVE_GETOPT_H
 #include <getopt.h>
 #else
@@ -93,7 +91,7 @@ main (int argc, char **argv)
   int  res;
   
   initialise_persona ();
-  set_user_persona ();
+  set_persona (pers_USER);
 
   /* `basename' seems to be non-standard.  So we avoid it.  */
   my_name = strrchr (argv[0], '/');

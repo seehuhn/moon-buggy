@@ -2,16 +2,14 @@
  *
  * Copyright 1998  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: xmalloc.c,v 1.5 1999/05/22 13:43:59 voss Rel $";
+static const  char  rcsid[] = "$Id: xmalloc.c,v 1.6 1999/05/30 19:45:12 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include <stdio.h>
-#if STDC_HEADERS
-# include <stdlib.h>
-#endif
+#include <stdlib.h>
 
 #include "mbuggy.h"
 
