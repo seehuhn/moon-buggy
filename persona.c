@@ -2,8 +2,10 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: persona.c,v 1.8 1999/03/12 18:08:46 voss Exp $";
+static const  char  rcsid[] = "$Id: persona.c,v 1.9 1999/05/08 12:33:37 voss Exp $";
 
+#define _XOPEN_SOURCE 1
+#define _XOPEN_SOURCE_EXTENDED 1
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
