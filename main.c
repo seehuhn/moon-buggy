@@ -2,9 +2,9 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.12 1999/01/02 12:28:28 voss Rel $";
+static const  char  rcsid[] = "$Id: main.c,v 1.13 1999/01/30 17:13:09 voss Rel $";
 
-#define _POSIX_SOURCE
+#define _POSIX_SOURCE 1
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -190,7 +190,10 @@ main (int argc, char **argv)
   
   initialize_persona ();
   set_user_persona ();
-  my_name = xstrdup (basename (argv[0]));
+
+  /* `basename' seems to be non-standard.  So we avoid it.  */
+  my_name = strrchr (argv[0], '/');
+  my_name = xstrdup (my_name ? my_name+1 : argv[0]);
 
   while (! error_flag) {
     int  c;
