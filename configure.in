@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.44 $)
+AC_REVISION($Revision: 1.45 $)
 
 AC_INIT(moon-buggy.h)
 AM_INIT_AUTOMAKE(moon-buggy, 0.5.50)
@@ -10,6 +10,7 @@ AC_CANONICAL_HOST
 dnl Some systems want _XOPEN_SOURCE to be defined as we use curses.
 case "$host_os" in
   *bsd*) ;;
+  sparc-sun-solaris2.4) ;;
   *) AC_DEFINE(_XOPEN_SOURCE, 1) ;;
 esac
 
