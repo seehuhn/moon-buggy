@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: random.c,v 1.2 1999/05/24 19:10:29 voss Rel $";
+static const  char  rcsid[] = "$Id: random.c,v 1.3 1999/06/06 19:28:25 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -21,7 +21,7 @@ init_rnd (void)
 }
 
 int
-uniform_rnd (int limit)
+uniform_rnd (unsigned limit)
 /* Returns a pseudo random integer `x' with `0 <= x < limit'.
  * The numbers a uniformly distributed.  */
 {
