@@ -1,6 +1,6 @@
-moon-buggy - drive a strage car across the moon
+moon-buggy - drive a strange car across the moon
 
-moon-buggy is a simple, curses-based game, where you drive some kinf
+moon-buggy is a simple, curses-based game, where you drive some kind
 of car across the surface of the moon.  Unfortunately there are
 dangerous craters there.  Fortunately your car can jump!  So just go
 on, and jump over the craters (using the SPACE key).
@@ -12,5 +12,6 @@ option.  On Linux systems you should use
 to comply with the Linux file system standard.
 
 
-Please mail suggestions and bug reports to the author
-<voss@mathematik.uni-kl.de>.
+Please mail any suggestions and bug reports to
+<voss@mathematik.uni-kl.de>.  Your message should include the
+moon-buggy version number, as obtained by the command `moon-buggy -V'.
