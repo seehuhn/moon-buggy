@@ -2,22 +2,30 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: signal.c,v 1.6 1999/05/26 21:01:49 voss Exp $";
+static const  char  rcsid[] = "$Id: signal.c,v 1.7 1999/06/03 12:21:35 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#define _SVID_SOURCE
 
 #include <stdio.h>
 #include <signal.h>
 #include <assert.h>
 
 #include "mbuggy.h"
+#include "darray.h"
 
 
-static  void (*handlers[NSIG]) (int);
-static volatile  sig_atomic_t  pending [NSIG];
+struct sig_info {
+  int  signum;
+  volatile  sig_atomic_t  pending;
+  void (*handler) (int);
+};
+static struct {
+  struct sig_info *data;
+  int  slots, used;
+} sig_info_table;
+
 static volatile  sig_atomic_t  signal_arrived;
 
 static  sigset_t  winch_set, full_set, old_sigset;
@@ -49,8 +57,14 @@ generic_handler (int signum)
 /* Interrupt handlers shouldn't do much.  So we just note that the
  * signal arrived.  */
 {
+  int  i;
+  
   signal_arrived = 1;
-  pending [signum] = 1;
+  for (i=0; i<sig_info_table.used; ++i) {
+    if (sig_info_table.data[i].signum == signum)  break;
+  }
+  assert (i<sig_info_table.used);
+  sig_info_table.data[i].pending = 1;
 
   if (signum == SIGINT || signum == SIGHUP || signum == SIGTERM) {
     /* Pressing `C-c' twice exits, even if the program hangs.  */
@@ -60,14 +74,22 @@ generic_handler (int signum)
 
 static void
 my_signal (int signum, void (*handler)(int), int ignore_test)
+/* Install HANDLER as a new signal handler for signal SIGNUM.  But if
+ * IGNORE_TEST is true and SIGNUM was ignored before, do nothing.  */
 {
+  struct sig_info *info;
   struct sigaction  action;
 
-  handlers[signum] = handler;
   if (ignore_test) {
     sigaction (signum, NULL, &action);
     if (action.sa_handler == SIG_IGN)  return;
   }
+
+  DA_ADD_EMPTY (sig_info_table, struct sig_info, info);
+  info->signum = signum;
+  info->pending = 0;
+  info->handler = handler;
+
   action.sa_handler = generic_handler;
   sigemptyset (&action.sa_mask);
   action.sa_flags = 0;
@@ -91,12 +113,8 @@ static void
 tstp_handler (int signum)
 {
   signal (SIGTSTP, SIG_DFL);
-  if (game_state == PLAYING) {
-    adjust_score (-10);
-  }
+  if (game_state == PLAYING)  quit_game ();
   prepare_for_exit ();
-  if (game_state == PLAYING)
-    fputs ("suspended (penalty: 10 points)\n", stderr);
   raise (SIGTSTP);
 }
 
@@ -104,7 +122,9 @@ static void
 cont_handler (int signum)
 {
   my_signal (SIGTSTP, tstp_handler, 0);
-  if (game_state == PLAYING)  print_message ("suspended (penalty: 10 points)");
+  if (game_state == PLAYING) {
+    print_message ("GAME OVER (suspended)");
+  }
 
   cbreak ();
   noecho ();
@@ -154,6 +174,7 @@ winch_handler (int signum)
 void
 initialise_signals (void)
 {
+  DA_INIT (sig_info_table, struct sig_info);
   my_signal (SIGINT, termination_handler, 1);
   my_signal (SIGHUP, termination_handler, 1);
   my_signal (SIGTERM, termination_handler, 1);
@@ -173,12 +194,15 @@ initialise_signals (void)
 void
 handle_signals (void)
 {
-  int  i;
-  
-  if (! signal_arrived)  return;
-  for (i=0; i<NSIG; ++i) {
-    if (pending[i])  handlers[i] (i);
-    pending[i] = 0;
+  while (signal_arrived) {
+    int  i;
+
+    signal_arrived = 0;
+    for (i=0; i<sig_info_table.used; ++i) {
+      if (sig_info_table.data[i].pending) {
+	sig_info_table.data[i].pending = 0;	
+	sig_info_table.data[i].handler (sig_info_table.data[i].signum);
+      }
+    }
   }
-  signal_arrived = 0;
 }
