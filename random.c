@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: random.c,v 1.1 1999/05/19 21:06:46 voss Exp $";
+static const  char  rcsid[] = "$Id: random.c,v 1.2 1999/05/24 19:10:29 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -10,6 +10,7 @@ static const  char  rcsid[] = "$Id: random.c,v 1.1 1999/05/19 21:06:46 voss Exp 
 
 #include <stdlib.h>
 #include <time.h>
+#include <assert.h>
 
 void
 init_rnd (void)
@@ -24,5 +25,6 @@ uniform_rnd (int limit)
 /* Returns a pseudo random integer `x' with `0 <= x < limit'.
  * The numbers a uniformly distributed.  */
 {
+  assert (limit > 1);
   return  (int)((double)limit*rand()/(RAND_MAX+1.0));
 }
