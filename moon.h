@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.
  *
- * $Id: moon.h,v 1.3 1998/12/20 00:47:43 voss Exp $ */
+ * $Id: moon.h,v 1.4 1998/12/20 13:16:10 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -45,6 +45,7 @@ extern  void  scroll_ground (void);
 
 /* from "buggy.c" */
 extern  int  car_base, score_base;
+extern  void  initialize_buggy (void);
 extern  void  print_buggy (void);
 extern  void  jump (double t);
 extern  int  can_jump (void);
