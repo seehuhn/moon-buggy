@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: title.c,v 1.12 1999/05/22 14:32:57 voss Rel $";
+static const  char  rcsid[] = "$Id: title.c,v 1.13 1999/06/06 13:17:43 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -78,43 +78,31 @@ setup_screen (void)
 }
 
 
-static  int  abort_flag = 0;
+static  int  abort_flag;
 
 static void
 key_handler (game_time t)
 {
-  switch (xgetch (moon)) {
-  case KEY_BREAK:
-  case KEY_CANCEL:
-  case KEY_UNDO:
-  case 'q':
+  int  meaning = read_key ();
+  if (meaning & mbk_end) {
     abort_flag = 1;
     quit_main_loop ();
-    break;
-  case KEY_BEG:
-  case KEY_CLEAR:
-  case KEY_ENTER:
-  case KEY_EXIT:
-  case 27:			/* ESC */
-  case ' ':
+  } else if (meaning & mbk_start) {
     quit_main_loop ();
-    break;
-  case 'c':
+  } else if (meaning & mbk_copyright) {
     save_queue ();
     pager_mode (0);
     restore_queue ();
     game_state = TITLE;
     setup_screen ();
-    break;
-  case 'w':
+  } else if (meaning & mbk_warranty) {
     save_queue ();
     pager_mode (1);
     restore_queue ();
     game_state = TITLE;
     setup_screen ();
-    break;
-  default:
-    break;
+  } else {
+    beep ();
   }
 }
 
@@ -125,6 +113,7 @@ title_mode (void)
   game_state = TITLE;
   setup_screen ();
 
+  abort_flag = 0;
   add_event (0, quit_main_loop_h, NULL);
   main_loop (3600, key_handler);
 

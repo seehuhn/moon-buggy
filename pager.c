@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: pager.c,v 1.10 1999/05/22 13:43:58 voss Rel $";
+static const  char  rcsid[] = "$Id: pager.c,v 1.11 1999/06/06 13:18:29 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -55,57 +55,38 @@ setup_screen (void)
 static void
 key_handler (game_time t)
 {
-  switch (xgetch (moon)) {
-  case KEY_BREAK:
-  case KEY_CANCEL:
-  case KEY_EXIT:
-  case KEY_LEFT:
-  case 27:			/* ESC */
-  case 'q':
+  int  meaning = read_key ();
+  if (meaning & mbk_end) {
     quit_main_loop ();
-    break;
-  case KEY_UP:
+  } else if (meaning & mbk_up) {
     if (current_line > 0)  --current_line;
     print_page (current_line);
-    break;
-  case KEY_DOWN:
+  } else if (meaning & mbk_down) {
     if (current_line < lines_used-1)  ++current_line;
     print_page (current_line);
-    break;
-  case KEY_NPAGE:
-  case ' ':
+  } else if (meaning & mbk_pagedown) {
     current_line += mb_lines-3;
     if (current_line >= lines_used) {
       current_line = lines_used-1;
       if (current_line < 0)  current_line = 0;
     }
     print_page (current_line);
-    break;
-  case KEY_PPAGE:
-  case 'b':
+  } else if (meaning & mbk_pageup) {
     if (current_line > mb_lines-3) {
       current_line -= mb_lines-3;
     } else {
       current_line = 0;
     }
     print_page (current_line);
-    break;
-  case KEY_A1:
-  case KEY_HOME:
-  case '<':
+  } else if (meaning & mbk_first) {
     current_line = 0;
     print_page (current_line);
-    break;
-  case KEY_C1:
-  case KEY_END:
-  case '>':
+  } else if (meaning & mbk_last) {
     current_line = lines_used-1;
     if (current_line < 0)  current_line = 0;
     print_page (current_line);
-    break;
-  default:
+  } else {
     beep ();
-    break;
   }
 }
 
