@@ -1,8 +1,8 @@
-/* lag.c - keep time lag statistics
+/* lag.c - circular buffer to keep time lag statistics
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: lag.c,v 1.1 1998/12/18 23:16:49 voss Exp $";
+static const  char  rcsid[] = "$Id: lag.c,v 1.2 1998/12/28 20:11:26 voss Rel $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -13,18 +13,18 @@ static const  char  rcsid[] = "$Id: lag.c,v 1.1 1998/12/18 23:16:49 voss Exp $";
 
 #define TIME_BUFFER_SIZE 10
 
-struct lagmeter {
+struct circle_buffer {
   double  data[TIME_BUFFER_SIZE];
   int  used, pos;
   double  sum;
 };
 
-struct lagmeter *
-new_lagmeter (void)
+struct circle_buffer *
+new_circle_buffer (void)
 {
-  struct lagmeter *res;
+  struct circle_buffer *res;
 
-  res = xmalloc (sizeof (struct lagmeter));
+  res = xmalloc (sizeof (struct circle_buffer));
   res->used = 0;
   res->pos = 0;
   res->sum = 0;
@@ -33,7 +33,7 @@ new_lagmeter (void)
 }
 
 void
-add_lag (struct lagmeter *lm, double x)
+add_value (struct circle_buffer *lm, double x)
 {
   if (x>0.5) {
     x = 0.5;
@@ -53,7 +53,7 @@ add_lag (struct lagmeter *lm, double x)
 }
 
 double
-get_lag (const struct lagmeter *lm)
+get_mean (const struct circle_buffer *lm)
 {
   if (lm->used == 0)  return 0;
   return  lm->sum / lm->used;
