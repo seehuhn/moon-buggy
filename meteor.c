@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: meteor.c,v 1.3 1999/05/23 14:23:37 voss Exp $";
+static const  char  rcsid[] = "$Id: meteor.c,v 1.4 1999/05/23 21:01:34 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -51,6 +51,9 @@ meteor_handler (game_time t, void *client_data)
 	  mvwaddch (moon, BASELINE, m->x, m_image[m->state]);
 	  add_event (t+TICK(1), meteor_handler, m);
 	}
+      } else if (car_hit (t, m->x)) {
+	DA_REMOVE_VALUE (meteor_table, struct meteor *, m);
+	free (m);
       } else {
 	mvwaddch (moon, BASELINE, m->x, m_image[m->state]);
 	add_event (t+TICK(1), meteor_handler, m);
@@ -81,6 +84,17 @@ place_meteor (double t)
 }
 
 void
+requeue_meteors (double t)
+/* Reenter the meteors into the queue, after a new life is started.  */
+{
+  int  j;
+
+  for (j=0; j<meteor_table.used; ++j) {
+    add_event (t, meteor_handler, meteor_table.data[j]);
+  }
+}
+
+void
 remove_meteors (void)
 /* Remove all meteors from the ground.
  * Free any resources used by the internal representation.  */
@@ -97,17 +111,18 @@ remove_meteors (void)
 }
 
 int
-meteor_hit (int x0, int x1)
+meteor_laser_hit (int x0, int x1)
 /* Check for meteors at positions >=x0 and <x1.
  * All these are hit by the laser.
  * Return true, if there are any hits.  */
 {
   int  j;
-  int  res = 0;
 
   for (j=0; j<meteor_table.used; ++j) {
     struct meteor *m = meteor_table.data[j];
     if (m->x >= x0 && m->x < x1) {
+      int  x = m->x;
+      
       m->state += 1;
       wnoutrefresh (moon);
       if (m->state > ms_SMALL) {
@@ -118,8 +133,31 @@ meteor_hit (int x0, int x1)
       } else {
 	mvwaddch (moon, BASELINE, m->x, m_image[m->state]);
       }
+      return  x;
+    }
+  }
+  return  0;
+}
+
+int
+meteor_car_hit (int x0, int x1)
+/* Check for meteors at positions >=x0 and <x1.
+ * All these are destroyed by the landing car.
+ * Return true, if there are any hits.  */
+{
+  int  j;
+  int  res = 0;
+
+  for (j=meteor_table.used-1; j>=0; --j) {
+    struct meteor *m = meteor_table.data[j];
+    if (m->x >= x0 && m->x < x1) {
+      mvwaddch (moon, BASELINE, m->x, ' ');
+      remove_client_data (m);
+      DA_REMOVE_VALUE (meteor_table, struct meteor *, m);
+      free (m);
       res = 1;
     }
   }
+  if (res)  wnoutrefresh (moon);
   return  res;
 }
