@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.16 1999/04/23 22:21:01 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.17 1999/04/25 17:06:04 voss Exp $";
 
 #define _POSIX_SOURCE 1
 
@@ -28,6 +28,8 @@ extern int  optind;
 const char *my_name;
 WINDOW *moon, *status, *message;
 enum game_state  game_state = INIT;
+
+int  car_base;
 
 
 void
