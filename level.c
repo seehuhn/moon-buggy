@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: level.c,v 1.9 2000/03/29 07:55:49 voss Rel $";
+static const  char  rcsid[] = "$Id: level.c,v 1.10 2000/11/16 17:56:56 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -191,7 +191,7 @@ static void
 level3 (double t)
 {
   if (data.l3.state < 0) {
-    place_meteor (t);
+    place_meteor ();
     data.l3.state = 0;
   }
   
@@ -216,7 +216,7 @@ level3 (double t)
   }
 
   --data.l3.gap;
-  if (data.l3.gap == data.l3.pos)  place_meteor (t);
+  if (data.l3.gap == data.l3.pos)  place_meteor ();
   if (data.l3.gap <= 0)  hole = 2;
 }
 
@@ -285,7 +285,7 @@ level4 (double t)
 static void
 level5 (double t)
 {
-  if (uniform_rnd (ticks % 20 < 8 ? 4 : 8) == 0)  place_meteor (t);
+  if (uniform_rnd (ticks % 20 < 8 ? 4 : 8) == 0)  place_meteor ();
   if (ticks >= 125)  ++level;
 }
 
@@ -334,7 +334,7 @@ level6 (double t)
   slip = (380-ticks)*3.0/374 + 1.5;
   if (data.l6.spare_time >= 3+slip) {
     if (uniform_rnd (data.l6.spare_time) > 2) {
-      place_meteor (t);
+      place_meteor ();
       data.l6.spare_time -= 3+slip;
     }
   }
@@ -381,7 +381,7 @@ level_fin (double t)
 
   if (data.l_fin.spare_time >= 5) {
     if (uniform_rnd (data.l_fin.spare_time) > 2) {
-      place_meteor (t);
+      place_meteor ();
       data.l_fin.spare_time -= 5;
     }
   }
