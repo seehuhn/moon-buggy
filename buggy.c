@@ -1,8 +1,8 @@
 /* buggy.c - implement the moon buggy
  *
- * Copyright (C) 1998  Jochen Voss.  */
+ * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: buggy.c,v 1.5 1998/12/30 20:00:29 voss Exp $";
+static const  char  rcsid[] = "$Id: buggy.c,v 1.6 1999/01/02 12:35:22 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -49,9 +49,11 @@ initialize_buggy (void)
   cstate = car_NORMAL;
 }
 
-void
+int
 print_buggy (void)
 {
+  int  crash = 0;
+  
   if (state->t >= -0.5) {
     cstate = state->state;
     ++state;
@@ -83,14 +85,18 @@ print_buggy (void)
     mvwaddstr (moon, LINES-5, car_base-speed, "         ");
     break;
   case car_LAND:
-    mvwaddstr (moon, LINES-8, car_base-speed, "         ");
-    mvwaddstr (moon, LINES-7, car_base-speed, "         ");
-    mvwaddstr (moon, LINES-6, car_base-speed, "    omm  ");
-    mvwaddstr (moon, LINES-5, car_base-speed, " (o)_(o) ");
+    crash = crash_check ();
+    if (! crash) {
+      mvwaddstr (moon, LINES-8, car_base-speed, "         ");
+      mvwaddstr (moon, LINES-7, car_base-speed, "         ");
+      mvwaddstr (moon, LINES-6, car_base-speed, "    omm  ");
+      mvwaddstr (moon, LINES-5, car_base-speed, " (o)_(o) ");
+    }
     break;
   }
 
   wnoutrefresh (moon);
+  return  crash;
 }
 
 void
@@ -119,22 +125,24 @@ can_jump (void)
 int
 crash_check (void)
 {
-  if (cstate == car_UP1 || cstate == car_UP2)  return 0;
-  if (ground2[car_base-speed+2] == ' ') {
-    mvwaddstr (moon, LINES-8, car_base-speed, "         ");
-    mvwaddstr (moon, LINES-7, car_base-speed, "  m      ");
-    mvwaddstr (moon, LINES-6, car_base-speed, "  Om     ");
-    mvwaddstr (moon, LINES-5, car_base-speed, " (;-(*)  ");
-    mvwaddch (moon, LINES-4, car_base-speed+2, 'o');
+  int  base = car_base - speed;
+  
+  if (cstate == car_START || cstate == car_UP1 || cstate == car_UP2)  return 0;
+  if (ground2[base+2] == ' ') {
+    mvwaddstr (moon, LINES-8, base, "         ");
+    mvwaddstr (moon, LINES-7, base, "  m      ");
+    mvwaddstr (moon, LINES-6, base, "  Om     ");
+    mvwaddstr (moon, LINES-5, base, " (;-(*)  ");
+    mvwaddch (moon, LINES-4, base+2,  'o');
     wnoutrefresh (moon);
     return 1;
   }
-  if (ground2[car_base-speed+6] == ' ') {
-    mvwaddstr (moon, LINES-8, car_base-speed, "         ");
-    mvwaddstr (moon, LINES-7, car_base-speed, "         ");
-    mvwaddstr (moon, LINES-6, car_base-speed, "     0   ");
-    mvwaddstr (moon, LINES-5, car_base-speed, " (*;_(m. ");
-    mvwaddch (moon, LINES-4, car_base-speed+6, 'o');
+  if (ground2[base+6] == ' ') {
+    mvwaddstr (moon, LINES-8, base, "         ");
+    mvwaddstr (moon, LINES-7, base, "         ");
+    mvwaddstr (moon, LINES-6, base, "     0   ");
+    mvwaddstr (moon, LINES-5, base, " (*;_(m. ");
+    mvwaddch (moon, LINES-4, base+6,      'o');
     wnoutrefresh (moon);
     return 1;
   }
@@ -142,6 +150,11 @@ crash_check (void)
     score_bonus (1<<bonus);
     bonus = 0;
   }
+
+#if MB_DEBUG
+  ground2[base+2] = 'O';
+  ground2[base+6] = 'O';
+#endif
   
   return  0;
 }
