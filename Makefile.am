@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 # Copyright 1999  Jochen Voß
-# $Id: Makefile.am,v 1.30 1999/06/06 13:21:48 voss Exp $
+# $Id: Makefile.am,v 1.31 1999/06/06 19:41:59 voss Exp $
 
 EXTRA_DIST = moonman.in maintman.in instcmds car.img \
 	text2c.sed merge.sed img.sed \
@@ -15,7 +15,7 @@ moon_buggy_SOURCES = mbuggy.h main.c title.c pager.c copying.h \
 moon_buggy_LDADD = @LIBOBJS@
 
 bin_SCRIPTS = maint-buggy
-$(srcdir)/uninst.pre.in: Makefile.in instcmds
+$(srcdir)/uninst.pre.in: Makefile.am instcmds
 	echo cd "@"infodir@ >$@ \
 	  && $(srcdir)/instcmds --uninstall --type=pre infodir="@"infodir@ >>$@
 maint-buggy: maint.in merge.sed uninst.pre
