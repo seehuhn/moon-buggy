@@ -10,3 +10,7 @@ choose the score file location via configure's `--sharedstatedir'
 option.  On Linux systems you should use
 	--sharedstatedir=/var/lib/games
 to comply with the Linux file system standard.
+
+
+Please mail suggestions and bug reports to the author
+<voss@mathematik.uni-kl.de>.
