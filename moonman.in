@@ -1,6 +1,6 @@
 .\" moonman.in - template for the "moon-buggy.6" manual page
 .\" Copyright 1999  Jochen Voss
-.\" $Id: moonman.in,v 1.6 1999/08/30 20:55:36 voss Rel $
+.\" $Id: moonman.in,v 1.7 2000/04/16 10:40:57 voss Rel $
 .de Op
 .BR -\\$1 @C@ ", " --\\$2
 ..
@@ -29,17 +29,17 @@ shows the current highscore list and exits.
 .Op V version
 prints the program's version to standard output and exits.
 .SH KEYS
-The moon-buggy is controlled by a couple of keys.  These have the
-following meaning.
-.IP <SPC>
+The moon-buggy is controlled by a couple of keys, which are described
+near the bottom of the screen.  Most important are the following keys.
+.IP "SPC, j"
 makes your car jump.  The length of a jump is fixed and you can only
 start a new jump, while the wheels have contact to the ground.
-.IP <a>
+.IP "a, l"
 fires the mining laser.  The laser is used to remove stones, which may
 block your way.
-.IP <q>
+.IP q
 quits the game prematurely.  But you still keep your score and may
-enter the top ten list.
+enter the highscore list.
 .IP 
 .SH FILES
 The following files on your system are related to moon-buggy.
