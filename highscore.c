@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.23 1999/07/21 12:02:48 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.24 1999/08/30 20:57:10 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -53,20 +53,16 @@ do_open (const char *name, int flags, int lock, int must_succeed)
 #endif
   }
   if (lock == 2) {
-#ifdef O_SHLOCK
+#ifdef O_EXLOCK
     flags |= O_EXLOCK;
 #else
     lock_done = 0;
 #endif
   }
   
-  mode = S_IRUSR|S_IRGRP|S_IROTH;
+  mode = S_IWUSR|S_IRUSR|S_IRGRP|S_IROTH;
+  if ( is_setgid () )  mode |= S_IWGRP;
   mask = umask (0);
-  if ( is_setgid() ) {
-    mode |= S_IWGRP;
-  } else {
-    mode |= S_IWUSR;
-  }
   do {
     fd = open (name, flags, mode);
   } while (fd == -1 && errno == EINTR);
@@ -453,6 +449,35 @@ modify_table (const struct score_entry *entry)
   free (global_name);
 }
 
+void
+create_highscores (void)
+/* Make sure, that a highscore list exists.
+ * This must be called on installation, to make setgid-usage work.  */
+{
+  block_all ();
+  load_table ();
+  unblock ();
+}
+
+void
+show_highscores (void)
+/* Print the highscore table to stdout.
+ * Do not use curses.  */
+{
+  int  i;
+
+  block_all ();
+  load_table ();
+  unblock ();
+
+  printf ("%" quote(NAME_MAX_LEN) "s     date     level score\n\n", "name");
+  for (i=0; i<TOPTEN_SLOTS; ++i) {
+    printf ("%" quote(NAME_MAX_LEN) "s  %4d-%02d-%02d  %3d   %-12u\n",
+	    topten[i].name, topten[i].year, topten[i].month, topten[i].day,
+	    topten[i].level, topten[i].score);
+  }
+}
+
 static int  topten_valid, last_score;
 
 static void
@@ -465,7 +490,7 @@ print_scores (int my_score)
   for (i=0; i<TOPTEN_SLOTS; ++i) {
     if (topten[i].new)  wstandout (moon);
     mvwprintw (moon, 3+i, 0,
-	       "%" quote(NAME_MAX_LEN) "s%c %4d-%02d-%02d  %3d   %-12lu",
+	       "%" quote(NAME_MAX_LEN) "s%c %4d-%02d-%02d  %3d   %-12u",
 	       topten[i].name, topten[i].new ? '*' : ' ',
 	       topten[i].year, topten[i].month, topten[i].day,
 	       topten[i].level, topten[i].score);
