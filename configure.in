@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.21 $)
+AC_REVISION($Revision: 1.22 $)
 AC_INIT(mbuggy.h)
 AM_INIT_AUTOMAKE(moon-buggy, 0.3.95)
 AM_CONFIG_HEADER(config.h)
@@ -7,10 +7,11 @@ AM_CONFIG_HEADER(config.h)
 dnl Some systems want this as we use curses.
 AC_DEFINE(_XOPEN_SOURCE, 1)
 
-AC_ARG_WITH(suid,
-[  --with-suid=NAME        suid usage: run moon-buggy as user NAME],
+AC_ARG_WITH(setuid,
+[  --with-setuid=NAME      setuid usage: run moon-buggy as user NAME],
 [case "${withval}" in
   no)  GAMEUSER="" ;;
+  yes)  AC_MSG_ERROR(missing argument for --with-setuid) ;;
   *)   GAMEUSER="$withval" ;;
 esac])
 AC_SUBST(GAMEUSER)
