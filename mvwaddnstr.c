@@ -1,8 +1,8 @@
 /* mvwaddnstr.c - replacement for the curses function mvwaddnstr
  *
- * Copyright (C) 1998  Jochen Voss.  */
+ * Copyright 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: mvwaddnstr.c,v 1.2 1999/05/25 15:34:54 voss Exp $";
+static const  char  rcsid[] = "$Id: mvwaddnstr.c,v 1.3 1999/06/17 14:42:46 voss Rel $";
 
 
 #ifdef HAVE_CONFIG_H

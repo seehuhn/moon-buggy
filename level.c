@@ -1,8 +1,8 @@
 /* level.c - challenge the user in a controlled way
  *
- * Copyright (C) 1999  Jochen Voss.  */
+ * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: level.c,v 1.6 1999/05/27 16:43:52 voss Exp $";
+static const  char  rcsid[] = "$Id: level.c,v 1.7 1999/06/17 14:44:53 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

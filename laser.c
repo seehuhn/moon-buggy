@@ -1,8 +1,8 @@
 /* laser.c - a mining laser device for the moon-buggy
  *
- * Copyright (C) 1999  Jochen Voss.  */
+ * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: laser.c,v 1.8 1999/06/05 13:34:35 voss Exp $";
+static const  char  rcsid[] = "$Id: laser.c,v 1.9 1999/06/17 14:45:11 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

@@ -1,8 +1,8 @@
 /* getdate.c - get the current date
  *
- * Copyright (C) 1999  Jochen Voss.  */
+ * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: getdate.c,v 1.1 1999/05/30 19:55:30 voss Exp $";
+static const  char  rcsid[] = "$Id: getdate.c,v 1.2 1999/06/17 14:45:31 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

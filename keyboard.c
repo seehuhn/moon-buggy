@@ -1,8 +1,8 @@
 /* keyboard.c - translate key codes to key meanings
  *
- * Copyright (C) 1999  Jochen Voss.  */
+ * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: keyboard.c,v 1.3 1999/06/13 18:40:04 voss Exp $";
+static const  char  rcsid[] = "$Id: keyboard.c,v 1.4 1999/06/17 14:45:23 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

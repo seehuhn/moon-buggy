@@ -1,8 +1,8 @@
 /* meteor.c - stones on the moon to shoot on
  *
- * Copyright (C) 1999  Jochen Voss.  */
+ * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: meteor.c,v 1.7 1999/06/05 13:33:06 voss Exp $";
+static const  char  rcsid[] = "$Id: meteor.c,v 1.8 1999/06/17 14:43:18 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
