@@ -8,8 +8,8 @@ on, and jump over the craters (using the SPACE key).
 Generic installation instructions are in the file INSTALL.  You can
 choose the score file location via configure's `--sharedstatedir'
 option.  On Linux systems you should use
-	--sharedstatedir=/var/lib/games
-to comply with the Linux file system standard.
+	--sharedstatedir=/var/games
+to comply with the Filesystem Hierarchy Standard FHS.
 
 
 Please mail any suggestions and bug reports to
