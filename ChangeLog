@@ -1,3 +1,106 @@
+1999-06-03  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: Added 1999-05-27 to 1999-06-03
+
+	* .cvsignore: Added "uninst.pre.in", removed "uninst.post".
+
+	* game.c (quit_game): bug fix.
+
+	* highscore.c (highscore_mode): don't beep on resize.
+
+	* moon.c (resize_ground): adjust `car_x'.
+
+	* queue.c (my_select): renamed old `retval' to `res'.
+
+	* signal.c (do_resize): new function
+	(cont_handler): handle resizes while we are suspended
+
+	* xgetch.c (xgetch): handle interrupts.
+
+	* TODO: Removed two items.
+
+	* game.c (quit_game): new function
+
+	* main.c (prepare_for_exit): minor fix.
+
+	* mbuggy.h:
+	Added a declaration for the new function `quit_game' from "game.c".
+
+	* queue.c (my_select): better interrupt handling
+
+	* signal.c: Use "daraay.h" to avoid the use of `NSIG'.
+	(handle_signals): bug fix.
+
+1999-06-02  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* TODO: One item reoved, three added.
+
+	* Makefile.am: Remvoed the uninst.post stuff
+	Create "uninst.pre.in" instead of "uninst.pre".
+
+	* maint.in.in: Moved the pre-uninstall-hack into Makefile.am.
+
+	* autogen.sh: touch uninst.pre.in
+
+	* configure.in: Change the version string to "0.3.93".
+	Create "uninst.pre".
+
+	* highscore.c: Include <sys/stat.h> again.
+
+	* instcmds: Changed the calling syntax.
+	Pass all remaining arguments to "make".
+	Small fixes.
+
+	* merge.sed: Removed the post-uninstall stuff.
+
+1999-05-31  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* NEWS: Added score files and levels.
+
+1999-05-30  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* TODO: Added some entries.
+
+	* getdate.c: initial revision
+
+	* Makefile.am: Mention the new file "getdate.c".
+
+	* autogen.sh: "darray.h" is a local file, again.
+
+	* configure.in: Removed AC_HEADER_STDC.
+	Do not check for `memmove'.
+
+	* mbuggy.h: Changed the type of variable `stakes' to `int'.
+	Fixed the prototype for `highscore_mode'.
+	Added declaration for "getdate.c".
+	Fixed the declarations for "persona.c".
+
+	* error.c: Doc fix.
+
+	* game.c: Changed the type of variables `score' and `stakes' to `int'.
+
+	* highscore.c: Mostly rewritten.
+	(highscore_mode): Added a second argument `level'.
+
+	* main.c, moon.c: Do not use `STDC_HEADERS'.
+
+	* persona.c: Renamed old variable `persona' to new `current'.
+	Write "uid" instead of "user_id" and "gid" instead of "group id".
+	Replaced old functions `set_game_persona' and `set_user_person' by new
+	function `set_persona'.
+
+	* xmalloc.c: Do not use `STDC_HEADERS'.
+
+	* darray.h: switched to a local version again
+
+1999-05-27  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* level.c (level0): made this level somewaht easier.
+
+	* configure.in: Changed the version string to "0.3.92".
+
+	* level.c (score_plateau): removed forgotten debugging aid
+
 1999-05-26  Jochen Voss  <voss@tatonka.pfalz.de>
 
 	* ChangeLog: Added 1999-05-23 to 1999-05-26
