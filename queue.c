@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.4 1998/12/28 20:13:14 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.5 1998/12/30 19:37:23 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -37,50 +37,50 @@ struct circle_buffer *queuelag;
 double  sleep_meter = 0;
 
 
-void
-clock_adjust_delay (double dt)
-/* Make the next event occur after DT time steps.  */
+static int
+key_ready (void)
+/* Return a positive value iff keyboard input is ready.  */
 {
-  double  t = vclock ();
-  double  new_time_base = t + dt - queue->t;
-  if (new_time_base > time_base)  time_base = new_time_base;
-}
+  fd_set  rfds;
+  int  retval;
 
-void
-clear_queue (void)
-/* Remove all events from the queue.  */
-{
-  struct event *ev = queue;
-  while (ev) {
-    struct event *old = ev;
-    ev = old->next;
-    free (old);
-  }
-  queue = NULL;
-}
-
-void
-add_event (double t, enum event_type type)
-/* Add a new event to the queue.
- * The event happens at time T and is of type TYPE.  */
-{
-  struct event **evp;
-  struct event *ev;
-
-  assert (type != ev_KEY);
-
-  t -= time_base;
+  /* Watch stdin (fd 0) to see when it has input. */
+  FD_ZERO (&rfds);
+  FD_SET (0, &rfds);
   
-  evp = &queue;
-  while (*evp && (*evp)->t <= t)  evp = &((*evp)->next);
+  do {
+    struct timeval  tv;
+    
+    tv.tv_sec = 0;
+    tv.tv_usec = 0;
+    retval = select (FD_SETSIZE, &rfds, NULL, NULL, &tv);
+  } while (retval<0 && errno == EINTR);
+  if (retval < 0) {
+    fatal ("Select failed: %s", strerror (errno));
+  }
+  
+  return  retval;
+}
 
-  ev = xmalloc (sizeof (struct event));
-  ev->next = *evp;
-  ev->t = t;
-  ev->reached = 0;
-  ev->type = type;
+static int
+wait_for_key (void)
+/* Wait for the next key press and return a positive value.  */
+{
+  fd_set  rfds;
+  int  retval;
 
-  *evp = ev;
+  /* Watch stdin (fd 0) to see when it has input. */
+  FD_ZERO (&rfds);
+  FD_SET (0, &rfds);
+  
+  do {
+    retval = select (FD_SETSIZE, &rfds, NULL, NULL, NULL);
+  } while (retval<0 && errno == EINTR);
+  if (retval < 0) {
+    fatal ("Select failed: %s", strerror (errno));
+  }
+  
+  return  retval;
 }
 
 static int
@@ -115,6 +115,54 @@ wait_until (double t)
   
   return  retval;
 }
+
+void
+clock_adjust_delay (double dt)
+/* Make the next event occur after DT time steps.  */
+{
+  double  t = vclock ();
+  double  new_time_base = t + dt - queue->t;
+  if (new_time_base > time_base)  time_base = new_time_base;
+}
+
+void
+clear_queue (void)
+/* Remove all events from the queue.  */
+{
+  struct event *ev = queue;
+  while (ev) {
+    struct event *old = ev;
+    ev = old->next;
+    free (old);
+  }
+  queue = NULL;
+
+  while (key_ready ())  wgetch (moon);
+}
+
+void
+add_event (double t, enum event_type type)
+/* Add a new event to the queue.
+ * The event happens at time T and is of type TYPE.  */
+{
+  struct event **evp;
+  struct event *ev;
+
+  assert (type != ev_KEY);
+
+  t -= time_base;
+  
+  evp = &queue;
+  while (*evp && (*evp)->t <= t)  evp = &((*evp)->next);
+
+  ev = xmalloc (sizeof (struct event));
+  ev->next = *evp;
+  ev->t = t;
+  ev->reached = 0;
+  ev->type = type;
+
+  *evp = ev;
+}
 
 enum event_type
 get_event (double *t_return)
@@ -125,30 +173,35 @@ get_event (double *t_return)
   struct event *ev;
   enum event_type  res;
   int  retval;
-
-  assert (queue);
   
-  if (! queue->reached) {
-    double  s, t, correct;
-
-    correct = get_mean (queuelag);
-    s = time_base + queue->t - correct;
-    retval = wait_until (s);
-    t = vclock ();
-    if (t-s > 0.4) {
-      clock_adjust_delay (0.4);
+  if (! (queue && queue->reached)) {
+    double  t;
+    
+    if (queue) {
+      double  s, correct;
+      
+      correct = get_mean (queuelag);
+      s = time_base + queue->t - correct;
+      retval = wait_until (s);
+      t = vclock ();
+      if (t-s > 0.4) {
+	clock_adjust_delay (0.4);
+      } else {
+	add_value (queuelag, t - s);
+      }
+    
+      ev = queue;
+      while (ev && time_base+ev->t <= t) {
+	ev->reached = 1;
+	ev = ev->next;
+      }
     } else {
-      add_value (queuelag, t - s);
-    }
-
-    ev = queue;
-    while (ev && time_base+ev->t <= t) {
-      ev->reached = 1;
-      ev = ev->next;
+      retval = wait_for_key ();
+      t = vclock ();
     }
 
     if (retval>0) {
-      *t_return = t;
+      if (t_return)  *t_return = t;
       return  ev_KEY;
     }
   }
@@ -156,7 +209,7 @@ get_event (double *t_return)
   /* deliver the event */
   ev = queue;
   queue = queue->next;
-  *t_return = time_base + ev->t;
+  if (t_return)  *t_return = time_base + ev->t;
   res = ev->type;
   free (ev);
   return  res;
