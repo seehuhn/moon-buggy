@@ -1,5 +1,5 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: moon-buggy.texi,v 1.10 2000/04/16 10:41:19 voss Exp $
+@c $Id: moon-buggy.texi,v 1.11 2000/04/24 18:43:08 voss Rel $
 @c %**start of header
 @setfilename moon-buggy.info
 @settitle Moon-Buggy Usage and Maintenance
@@ -98,9 +98,6 @@ Moon-buggy is a simple character graphics game, where you drive some
 kind of car across the moon's surface.  Unfortunately there are
 dangerous craters there.  Fortunately your car can jump over them!
 
-New versions of Moon-buggy may be found on the sunsite ftp server or on
-the moon-buggy download page (@pxref{References}).
-
 Moon-Buggy comes with no warranty, to the extent permitted by law.  You
 may redistribute copies of Moon-Buggy under the terms of the GNU General
 Public License.  For more information about these matters, read the file
@@ -110,6 +107,9 @@ moon-buggy's title screen.
 Please mail any suggestions and bug reports to
 @email{voss@@mathematik.uni-kl.de}.  Your message should include the
 moon-buggy version number, as obtained by the command @samp{moon-buggy -V}.
+
+New versions of Moon-buggy may be found on the sunsite ftp server or on
+the moon-buggy download page (@pxref{References}).
 
 
 @node  Moon-buggy Invocation, Maint-buggy Invocation, Introduction, Top
@@ -238,7 +238,7 @@ his favourite text editor and change it freely.  So this is not
 recommended, too.
 
 @item
-Finally you could do nothing.  Then every account gets its local score
+Finally you could do nothing.  Then every account uses its local score
 file.
 @end enumerate
 
@@ -248,23 +248,13 @@ file.
 
 Moon-buggy requires the curses library as a prerequisite.  If curses is
 not installed on your system, you may use the free ncurses package
-(@pxref{References}).
+(@pxref{References}).  The game does not work with BSD curses, thus on
+BSD systems you will need the ncurses package.
 
 When you unpack the moon-buggy distribution, you get one directory,
-which holds all the source files and the documentation.  Now enter this
-directory:
-
-@example
-cd moon-buggy-@value{VERSION}
-@end example
-
-@noindent
-If you have built moon-buggy in this directory before, you can use the
-command @samp{make distclean} to remove any files, which were created
-during the last build.
-
-Generic installation instructions are in the file @file{INSTALL}.
-There are some points of interest:
+which holds all the source files and the documentation.  Generic
+installation instructions are in the file @file{INSTALL}.  There are
+some points of interest:
 
 @itemize @bullet
 @item
@@ -334,7 +324,7 @@ if your curses library is called @file{ncurses.a} and is located in
 
 
 Example: On GNU/Linux systems you probably can use the following
-commands.  For the last one you may need root user permissions.
+commands.  For the last one you need root user permissions.
 
 @example
 ./configure --sharedstatedir=/var/games --with-setgid=games
@@ -350,8 +340,8 @@ the @samp{maint-buggy} script to cleanly remove the package
 @node References,  , Installation, Top
 @chapter References
 
-This chapter gives some references to resources mentioned in this
-manual.  As the internet changes incessantly, the addresses below may be
+This chapter gives some references to resources mentioned in the manual.
+As the internet changes incessantly, the addresses below may be
 outdated.  If you find this to happen, please report it as a bug.
 
 The latest version of @strong{Moon-buggy} may be found on the sunsite
