@@ -18,7 +18,7 @@
  *
  * Written by Jochen Voﬂ (voss@mathematik.uni-kl.de).  */
 
-static const  char  rcsid[] = "$Id: xmalloc.c,v 1.2 1998/12/22 22:37:45 voss Exp $";
+static const  char  rcsid[] = "$Id: xmalloc.c,v 1.3 1998/12/29 18:05:29 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -38,16 +38,22 @@ xmalloc (size_t size)
  * returns `NULL'.  */
 {
   void *ptr = malloc (size);
-  if (ptr == NULL)  fatal ("Out of memory");
+  if (ptr == NULL)  fatal ("Memory exhausted");
   return  ptr;
 }
 
 void *
 xrealloc (void *ptr, size_t size)
-/* Like `malloc', but check for shortage of memory.  `xrealloc' never
+/* Like `realloc', but check for shortage of memory.  `xrealloc' never
  * returns `NULL'.  */
 {
-  void *tmp = realloc (ptr, size);
-  if (tmp == NULL)  fatal ("Out of memory");
+  void *tmp;
+
+  if (ptr) {
+    tmp = realloc (ptr, size);
+  } else {
+    tmp = malloc (size);
+  }
+  if (tmp == NULL)  fatal ("Memory exhausted");
   return  tmp;
 }
