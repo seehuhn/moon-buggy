@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.30 2000/03/29 07:55:29 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.31 2000/03/31 11:14:41 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -46,31 +46,6 @@ struct event {
 static  struct event *queue;
 
 /**********************************************************************
- * recursive queues
- */
-
-#define MAX_QUEUE_RECURSION 1
-
-static  struct event *queue_buffer [MAX_QUEUE_RECURSION];
-static  int  queue_recursion_depth = -1;
-
-void
-save_queue (void)
-{
-  assert (queue_recursion_depth >= 0);
-  assert (queue_recursion_depth < MAX_QUEUE_RECURSION);
-  queue_buffer [queue_recursion_depth] = queue;
-  queue = NULL;
-}
-
-void
-restore_queue (void)
-{
-  assert (queue_recursion_depth >= 0);
-  queue = queue_buffer[queue_recursion_depth];
-}
-
-/**********************************************************************
  * convert between game time and real time
  */
 
@@ -89,6 +64,12 @@ static game_time
 to_game (real_time t)
 {
   return  t - time_base;
+}
+
+game_time
+current_time (void)
+{
+  return  to_game (vclock ());
 }
 
 /**********************************************************************
@@ -139,6 +120,16 @@ key_ready (void)
   return  res;
 }
 
+static void
+wait_for_key (void)
+{
+  int  res;
+
+  do {
+    res = my_select (NULL);
+  } while (res < 0);
+}
+
 static int
 wait_until (real_time *t)
 /* Wait for time *T or the next key press, whichever comes first.
@@ -187,10 +178,41 @@ drain_input (void)
 }
 
 void
-clock_adjust_delay (double dt)
+clock_reset (void)
+/* Adjust the clock to make 0 the current time.  */
+{
+  time_base = vclock ();
+}
+
+static void
+dummy_h (game_time t, void *client_data)
+/* This function is a possible callback argument to `add_event'.
+ * It does nothing.  */
+{
+  return;
+}
+
+void
+clock_freeze (void)
+/* Add a do-nothing event to the queue's head.
+ * This function should be called before the game is resumed.
+ * Afterwards you should use `clock_thaw (0)' to restart the
+ * game in the current state.  If the next event is less then 0.5
+ * seconds in the future, we add some gap to allow for 0.5 seconds
+ * pause after the restart.  */
+{
+  game_time  t;
+
+  if (! queue)  return;
+  t = current_time ();
+  if (t >= queue->t - 0.5)  t = queue->t - 0.5;
+  add_event (t, dummy_h, NULL);
+}
+
+void
+clock_thaw (double dt)
 /* Adjust the clock to make the next event occur after DT steps of time.
- * The queue must contain at least one element.
- * This function MUST be called before the first `get_event' call.  */
+ * The queue must contain at least one element.  */
 {
   double  now;
   
@@ -270,31 +292,6 @@ remove_client_data (void *client_data)
     }
   }
 }
-
-static void
-dummy_h (game_time t, void *client_data)
-/* This function is a possible callback argument to `add_event'.
- * It does nothing.  */
-{
-  return;
-}
-
-void
-fix_game_time (void)
-/* Add a do-nothing event to the queue's head.
- * This function should be called before the game is resumed.
- * Afterwards you should use `clock_adjust_delay (0)' to restart the
- * game in the current state.  If the next event is less then 0.5
- * seconds in the future, we add some gap to allow for 0.5 seconds
- * pause after the restart.  */
-{
-  game_time  t;
-
-  if (! queue)  return;
-  t = to_game (vclock ());
-  if (t >= queue->t - 0.5)  t = queue->t - 0.5;
-  add_event (t, dummy_h, NULL);
-}
 
 /**********************************************************************
  * the main loop
@@ -305,66 +302,47 @@ static  int  exit_flag;
 void
 quit_main_loop (void)
 {
-  assert (queue_recursion_depth >= 0);
   exit_flag = 1;
 }
 
-int
-main_loop (double dt, void (*key_handler)(game_time))
+void
+main_loop (void)
 {
-  int  res;
-
-  ++queue_recursion_depth;
-  
-  clock_adjust_delay (dt);
-  doupdate ();
-
+  clock_reset ();
   exit_flag = 0;
-  while (queue && ! exit_flag) {
+
+  while (! exit_flag) {
     int  retval;
     double  t;
-    
-    t = to_real (queue->t);
-    retval = wait_until (&t);
 
-    if (retval>0) {
-      if (key_handler) {
-	key_handler (to_game (t));
-      } else {
-	drain_input ();
-      }
-    }
+    mode_update ();
     
-    while (queue && queue->t <= to_game (vclock ())) {
+    if (queue) {
+      t = to_real (queue->t);
+      retval = wait_until (&t);
+    } else {
+      wait_for_key ();
+      t = vclock ();
+      retval = 1;
+    }
+
+    if (retval>0)  mode_keypress (to_game (t));
+    
+    while (queue && queue->t <= current_time ()) {
       struct event *ev = queue;
       queue = queue->next;
 
       ev->callback (ev->t, ev->client_data);
       free (ev);
     }
-    doupdate ();
   }
-  res = (queue != NULL);
-  clear_queue ();
-
-  --queue_recursion_depth;
-  exit_flag = 0;
-
-  return  res;
-}
-
-void
-xsleep (double dt)
-/* Sleep of DT seconds.  */
-{
-  add_event (0, quit_main_loop_h, NULL);
-  main_loop (dt, NULL);
 }
 
 /**********************************************************************
  * some handlers for the main loop above
  */
 
+/* TODO: remove */
 void
 quit_main_loop_h (game_time t, void *client_data)
 /* This function is a possible callback argument to `add_event'.
