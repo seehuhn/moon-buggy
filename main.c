@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.32 1999/09/02 18:38:11 voss Rel $";
+static const  char  rcsid[] = "$Id: main.c,v 1.33 2000/01/03 14:13:32 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -170,6 +170,8 @@ the file named COPYING or press `c' at Moon-Buggy's title screen.");
     exit (error_flag);
   }
 
+  init_rnd ();
+
   if (highscore_flag) {
     if (highscore_flag == 1) {
       show_highscores ();
@@ -180,7 +182,6 @@ the file named COPYING or press `c' at Moon-Buggy's title screen.");
   }
   
   initialise_signals ();
-  init_rnd ();
   
   initscr ();
   cbreak ();
