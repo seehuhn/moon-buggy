@@ -1,3 +1,38 @@
+1999-08-30  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* Makefile.am (dist-hook): minor fix
+
+	* TODO: Removed one entry.
+
+	* moon-buggy.texi: Explain the new "--show-scores" option.
+	Rewrote the chapter on "shared score files".
+	Refer to the file "SECURITY" from the bsd-games package.
+
+	* Makefile.am (install-data-hook): bug fixes for setgid usage
+
+	* keyboard.c: Removed the unused function `remove_key'.
+
+	* moon-buggy.h:
+	Added declarations for the new functions `create_highscores' and
+	`show_highscores' from "highscore.c".
+
+	* highscore.c (create_highscores, show_highscores): new functions.
+	(do_open, print_scores): bug fixes.
+
+	* moonman.in: Explain the new "--show-scores" option.
+
+	* main.c: Added new options "--create-scores" and "--show-scores".
+
+	* persona.c (is_setgid): bug fix.
+
+	* configure.in: Changed the version string to "0.4.0.91".
+
+	* Makefile.am: Include the "debian/" subdirectory into distribution.
+
+1999-07-23  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* moonman.in: Fixed a typo.
+
 1999-07-22  Jochen Voss  <voss@tatonka.pfalz.de>
 
 	* ChangeLog: Added 1999-07-02 to 1999-07-22
