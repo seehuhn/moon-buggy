@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: meteor.c,v 1.10 2000/11/16 17:56:36 voss Exp $";
+static const  char  rcsid[] = "$Id: meteor.c,v 1.11 2000/11/19 21:31:50 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -79,9 +79,6 @@ scroll_meteors (void)
       free (m);
     }
   }
-  
-  mvwprintw (moon, BASELINE-4, car_x, " %5d ", meteor_table.used);
-  wnoutrefresh (moon);
 }
 
 void
