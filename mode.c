@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: mode.c,v 1.7 2000/06/16 10:49:50 voss Exp $";
+static const  char  rcsid[] = "$Id: mode.c,v 1.8 2000/11/01 13:14:44 voss Rel $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -47,6 +47,13 @@ mode_add_key (struct mode *m, int meanings, const char *desc, int res)
   keys->meanings = meanings;
   keys->desc = desc;
   keys->res = res;
+}
+
+void
+mode_complete (struct mode *m)
+/* This must be called at the very end of each mode's initialisation.  */
+{
+  mode_add_key (m, mbk_redraw, "redraw", 0);
 }
 
 void
@@ -101,6 +108,11 @@ mode_keypress (game_time t, int meaning)
 {
   int  i;
 
+  if (meaning == mbk_redraw) {
+    clear_windows ();
+    mode_redraw ();
+    return  1;
+  }
   for (i=0; i<current->keys.used; ++i) {
     if (current->keys.data[i].meanings & meaning) {
       current->keypress (t, current->keys.data[i].res);
