@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.
  *
- * $Id: darray.h,v 1.4 1999/06/13 18:40:18 voss Rel $ */
+ * $Id$ */
 
 #ifndef FILE_DARRAY_H_SEEN
 #define FILE_DARRAY_H_SEEN
