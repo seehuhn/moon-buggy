@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.18 1999/06/03 13:20:36 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.19 1999/06/06 13:20:44 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -425,12 +425,27 @@ print_scores (int my_score)
   wrefresh (moon);
 }
 
+
+static  int  abort_flag;
+
+static void
+key_handler (game_time t)
+{
+  int  meaning = read_key ();
+  if (meaning & mbk_start) {
+    quit_main_loop ();
+  } else if (meaning & mbk_end) {
+    abort_flag = 1;
+    quit_main_loop ();
+  } else {
+    beep ();
+    doupdate ();
+  }
+}
+
 int
 highscore_mode (int score, int level)
 {
-  int  done = 0;
-  int  again = 1;
-
   game_state = HIGHSCORE;
   
   print_message ("loading score file ...");
@@ -459,33 +474,12 @@ highscore_mode (int score, int level)
     print_scores (score);
   }
 
-  do {
-    print_message ("play again (y/n)?");
-    doupdate ();
-    switch (xgetch (message)) {
-    case KEY_ENTER:
-    case 'y':
-    case ' ':
-      done = 1;
-      break;
-    case KEY_BREAK:
-    case KEY_CLOSE:
-    case 27:			/* ESC */
-    case 'n':
-    case 'q':
-      again = 0;
-      done = 1;
-      break;
-    case ERR:			/* Interrupt */
-      break;
-    default:
-      beep ();
-      doupdate ();
-      break;
-    }
-  } while (! done);
-
-  return  again;
+  print_message ("play again (y/n)?");
+  abort_flag = 0;
+  add_event (0, quit_main_loop_h, NULL);
+  main_loop (3600, key_handler);
+  
+  return  ! abort_flag;
 }
 
 void
