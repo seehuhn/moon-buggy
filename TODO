@@ -3,6 +3,9 @@ acceptable for the moment, because (almost) all items should be
 resolved before version 1.0.
 
 BUG FIXES:
+· Wichert Akkerman: If I play moon-buggy on a 709x356 terminal it
+segfaults after jumping over the first crater in the second level if
+you have just finished level 1.
 · Einzeln hinzugekommene Zwerge haben falsches Datum
 · Auf der Hyperion geht das Fenstergrößenverändern nicht gut!
 · Fenstergrößenveränderungen beim Nameneingeben funktionieren mit
