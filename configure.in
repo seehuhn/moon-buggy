@@ -1,12 +1,18 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.35 $)
+AC_REVISION($Revision: 1.36 $)
 
 AC_INIT(moon-buggy.h)
 AM_INIT_AUTOMAKE(moon-buggy, 0.4.52)
 AM_CONFIG_HEADER(config.h)
 
-dnl Some systems want this as we use curses.
-AC_DEFINE(_XOPEN_SOURCE, 1)
+AC_CANONICAL_HOST
+
+dnl Some systems want _XOPEN_SOURCE to be defined as we use curses.
+echo "[[$host_os]]"
+case "$host_os" in
+  *bsd) ;;
+  *) AC_DEFINE(_XOPEN_SOURCE, 1) ;;
+esac
 
 AC_ARG_WITH(setgid,
 [  --with-setgid=NAME      setgid usage: install moon-buggy as group NAME],

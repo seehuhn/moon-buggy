@@ -2,13 +2,16 @@
  *
  * Copyright 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: vclock.c,v 1.6 1999/07/21 10:38:11 voss Rel $";
+static const  char  rcsid[] = "$Id: vclock.c,v 1.7 2000/03/17 23:01:51 voss Rel $";
 
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+
+#ifdef _XOPEN_SOURCE
 #define _XOPEN_SOURCE_EXTENDED 1
+#endif
 
 #include <sys/time.h>
 

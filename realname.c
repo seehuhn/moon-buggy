@@ -2,12 +2,15 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: realname.c,v 1.12 1999/07/21 10:38:40 voss Rel $";
+static const  char  rcsid[] = "$Id: realname.c,v 1.13 2000/03/17 23:02:00 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+
+#ifdef _XOPEN_SOURCE
 #define _XOPEN_SOURCE_EXTENDED 1
+#endif
 
 #include <stdlib.h>
 #include <string.h>

@@ -2,13 +2,15 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.28 2000/01/13 18:14:01 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.29 2000/03/17 23:03:38 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
+#ifdef _XOPEN_SOURCE
 #define _XOPEN_SOURCE_EXTENDED 1
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -2,22 +2,25 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.28 2000/03/14 19:54:48 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.29 2000/03/17 23:02:08 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+
+#ifdef _XOPEN_SOURCE
 #define _XOPEN_SOURCE_EXTENDED 1
+#endif
 
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <fcntl.h>
+#include <sys/time.h>
 #include <sys/types.h>
 #if HAVE_SYS_SELECT_H
 #include <sys/select.h>
 #endif
-#include <sys/time.h>
+#include <unistd.h>
 #include <math.h>
 #if HAVE_ERRNO_H
 #include <errno.h>
