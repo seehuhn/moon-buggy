@@ -1,6 +1,6 @@
 .\" maintman.in - template for the "maint-buggy.6" manual page
 .\" Copyright 1999  Jochen Voﬂ
-.\" $Id: maintman.in,v 1.2 1999/01/02 12:23:09 voss Rel $
+.\" $Id: maintman.in,v 1.3 1999/03/03 14:59:31 voss Rel $
 .\"
 .TH maint-buggy 6 "Jan 1 1999" "@MBNAME@ @MBVERS@"
 .SH NAME
@@ -27,6 +27,11 @@ installation from the system.  As this includes the
 .B maint-buggy
 script itself, this step cannot easily be undone.  Use with
 caution!
+.IP
+Note: If you installed
+.B moon-buggy
+with the help of a package manager (like rpm) you probably
+should use the same program for deinstallation.
 .TP
 .B --version
 prints moon-buggy's version string to standard output and exits.
