@@ -1,4 +1,147 @@
-2000-04-24  Jochen Voss  <voss@tatonka.pfalz.de>
+2000-10-16  Jochen Voss  <voss@tatonka>
+
+	* ChangeLog: Added 2000-04-26 to 2000-10-16
+
+	* TODO: Mention the segmentation fault for large windows.
+
+	* ANNOUNCE: Changes for version 0.5.1.
+
+	* Makefile.am: minor fix
+
+	* README: Mention the "0.5.1" release.
+
+	* checklist: minor fixes.
+
+	* configure.in: Do not set _XOPEN_SOURCE for "sparc-sun-solaris2.4".
+
+	* keyboard.c (install_keys): Added some uppercase letters.
+
+	* moon-buggy.lsm: updates for version 0.5.1
+
+	* realname.c (get_real_user_name):
+	ignore everything after the first ',' in the
+	pw_gecos field.
+
+2000-09-03  Jochen Voss  <voss@tatonka>
+
+	* moon-buggy.xpm:
+	Changed the image format to fit the Debian menu system's needs.
+
+2000-06-16  Jochen Voss  <voss@tatonka>
+
+	* TODO: updates
+
+	* Makefile.am: Rename old "moon.c" to new "ground.c".
+
+	* moon-buggy.h: Rename old "moon.c" to new "ground.c".
+	Changed the calling syntax for `score_set'.
+	Removed the declarations for the obsolete functions `mode_start',
+	`mode_leave', and `mode_keys'.
+
+	* car.img (START): minor improvements
+
+	* game.c: Reflect the changes from "mode.c".
+	Minor fixes.
+
+	* ground.c: doc fix
+
+	* highscore.c: Reflect the changes from "mode.c".
+	Minor fixes.
+
+	* main.c, pager.c: Reflect the changes from "mode.c".
+
+	* title.c: Reflect the changes from "mode.c".
+	(print_title): bug fix.
+
+	* mode.c: Doc fixes.
+	Cleaned up the code.
+	Removed the obsolete function `mode_keys'.
+
+2000-06-01  Jochen Voss  <voss@tatonka>
+
+	* ground.c, moon.c: moved moon.c to ground.c
+
+	* game.c (pause_enter): bug fix.
+
+	* Makefile.am: rename old "moonman.in" to new "manpage.in".
+
+	* checklist: updates
+
+	* mode.c (mode_keypress): changed the calling syntax.
+
+	* moon-buggy.h: changed the `mode_keypress' calling syntax.
+
+	* queue.c (main_loop): use the new `mode_keypress' syntax.
+
+	* title.c (print_title): minor fix
+
+2000-05-23  Jochen Voss  <voss@tatonka>
+
+	* moon-buggy.h: Removed obsolete declaration.
+
+2000-05-07  Jochen Voss  <voss@tatonka>
+
+	* manpage.in, moonman.in: moved moonman.in to manpage.in
+
+	* test-score-modes: initial revision
+
+	* signal.c, queue.c: Merged the changes from the 0.5.1 release.
+
+	* maintman.in: removed the maint-buggy script
+
+	* highscore.c: Merged the changes from the 0.5.1 release.
+
+	* moonman.in: Fixed the copyright date and revision date.
+
+	* ChangeLog: added 2000-05-01 to 2000-05-07
+
+	* moon-buggy.lsm: fixes for version 0.5.1
+
+	* configure.in: Change the version string to "0.5.1".
+
+	* ANNOUNCE: Announce version 0.5.1
+
+	* maintman.in: Fixed the copyright date.
+
+2000-05-06  Jochen Voss  <voss@tatonka>
+
+	* highscore.c (update_score_file): bug fixes
+
+2000-05-05  Jochen Voss  <voss@tatonka>
+
+	* queue.c (clock_freeze): minor fix
+
+	* signal.c (winch_handler): minor fix
+
+	* highscore.c (update_score_file): bug fix, cleaned up
+
+2000-05-01  Jochen Voss  <voss@tatonka>
+
+	* moonman.in: Fixed the copyright date and revision date.
+
+	* main.c: Fixed the copyright date.
+
+	* configure.in: Changed the version string to "0.5.0.90".
+
+2000-04-26  Jochen Voss  <voss@tatonka>
+
+	* autogen.sh, checklist, .cvsignore, Makefile.am, moon-buggy.texi,
+	moonman.in: removed the maint-buggy script
+
+	* main.c: Fixed the copyright notice.
+
+	* README: Added the warning about unstable versions.
+
+	* configure.in: Changed the version string to "0.5.50".
+
+	* merge.sed: removed the maint-buggy script
+
+	* instcmds:
+	moved /home/voss/src/games/moon-buggy/instcmds to /home/voss/script/
+
+	* maint.in.in, maintman.in: removed the maint-buggy script
+
+2000-04-24  Jochen Voss  <voss@tatonka>
 
 	* ChangeLog: added 2000-04-24
 
