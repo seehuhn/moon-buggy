@@ -2,13 +2,13 @@
  *
  * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: meteor.c,v 1.8 1999/06/17 14:43:18 voss Rel $";
+static const  char  rcsid[] = "$Id: meteor.c,v 1.9 1999/07/21 10:40:59 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-#include "mbuggy.h"
+#include "moon-buggy.h"
 #include "darray.h"
 
 

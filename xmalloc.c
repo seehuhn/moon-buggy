@@ -2,7 +2,7 @@
  *
  * Copyright 1998  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: xmalloc.c,v 1.6 1999/05/30 19:45:12 voss Rel $";
+static const  char  rcsid[] = "$Id: xmalloc.c,v 1.7 1999/07/21 10:37:53 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -11,7 +11,7 @@ static const  char  rcsid[] = "$Id: xmalloc.c,v 1.6 1999/05/30 19:45:12 voss Rel
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "mbuggy.h"
+#include "moon-buggy.h"
 
 
 void *

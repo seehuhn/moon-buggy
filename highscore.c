@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.21 1999/06/17 15:19:04 voss Rel $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.22 1999/07/21 10:42:26 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -29,7 +29,7 @@ extern  int  errno;
 #include <stdarg.h>
 #endif
 
-#include "mbuggy.h"
+#include "moon-buggy.h"
 
 
 static int

@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: wgetnstr.c,v 1.5 1999/06/13 18:36:32 voss Rel $";
+static const  char  rcsid[] = "$Id: wgetnstr.c,v 1.6 1999/07/21 10:38:02 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -15,7 +15,7 @@ static const  char  rcsid[] = "$Id: wgetnstr.c,v 1.5 1999/06/13 18:36:32 voss Re
 extern  int  errno;
 #endif
 
-#include "mbuggy.h"
+#include "moon-buggy.h"
 
 
 int

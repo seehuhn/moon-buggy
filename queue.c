@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.26 1999/07/17 13:02:06 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.27 1999/07/21 10:40:02 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -30,7 +30,7 @@ extern  int  errno;
 #include <stdarg.h>
 #endif
 
-#include "mbuggy.h"
+#include "moon-buggy.h"
 
 
 /* The queue of events */

@@ -2,7 +2,7 @@
  *
  * Copyright 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: mvwaddnstr.c,v 1.3 1999/06/17 14:42:46 voss Rel $";
+static const  char  rcsid[] = "$Id: mvwaddnstr.c,v 1.4 1999/07/21 10:40:26 voss Rel $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -11,7 +11,7 @@ static const  char  rcsid[] = "$Id: mvwaddnstr.c,v 1.3 1999/06/17 14:42:46 voss 
 
 #include <string.h>
 
-#include "mbuggy.h"
+#include "moon-buggy.h"
 
 int
 mvwaddnstr (WINDOW *win, int y, int x, const char *str, int n)

@@ -2,14 +2,14 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: hpath.c,v 1.3 1999/05/22 13:43:58 voss Rel $";
+static const  char  rcsid[] = "$Id: hpath.c,v 1.4 1999/07/21 10:42:06 voss Rel $";
 
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-#include "mbuggy.h"
+#include "moon-buggy.h"
 
 
 const char *score_dir = SCORE_DIR;

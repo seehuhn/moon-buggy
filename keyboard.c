@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: keyboard.c,v 1.4 1999/06/17 14:45:23 voss Rel $";
+static const  char  rcsid[] = "$Id: keyboard.c,v 1.5 1999/07/21 10:41:36 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -15,7 +15,7 @@ static const  char  rcsid[] = "$Id: keyboard.c,v 1.4 1999/06/17 14:45:23 voss Re
 extern  int  errno;
 #endif
 
-#include "mbuggy.h"
+#include "moon-buggy.h"
 
 
 struct hash_entry {

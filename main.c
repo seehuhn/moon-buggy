@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.29 1999/06/25 23:14:05 voss Rel $";
+static const  char  rcsid[] = "$Id: main.c,v 1.30 1999/07/21 10:41:07 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -18,7 +18,7 @@ extern char *optarg;
 extern int  optind;
 #endif
 
-#include "mbuggy.h"
+#include "moon-buggy.h"
 
 
 const char *my_name;

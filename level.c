@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: level.c,v 1.7 1999/06/17 14:44:53 voss Rel $";
+static const  char  rcsid[] = "$Id: level.c,v 1.8 1999/07/21 10:41:15 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -10,7 +10,7 @@ static const  char  rcsid[] = "$Id: level.c,v 1.7 1999/06/17 14:44:53 voss Rel $
 
 #include <assert.h>
 
-#include "mbuggy.h"
+#include "moon-buggy.h"
 
 
 /* The length of the inter-level gap (measured in ticks)  */

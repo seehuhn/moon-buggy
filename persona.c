@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: persona.c,v 1.14 1999/06/13 18:37:58 voss Rel $";
+static const  char  rcsid[] = "$Id: persona.c,v 1.15 1999/07/21 10:40:10 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -18,7 +18,7 @@ static const  char  rcsid[] = "$Id: persona.c,v 1.14 1999/06/13 18:37:58 voss Re
 #include <stdarg.h>
 #endif
 
-#include "mbuggy.h"
+#include "moon-buggy.h"
 
 
 /* which method of uid handling is used?  */

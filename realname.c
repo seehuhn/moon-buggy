@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: realname.c,v 1.11 1999/06/13 18:37:27 voss Rel $";
+static const  char  rcsid[] = "$Id: realname.c,v 1.12 1999/07/21 10:38:40 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -20,7 +20,7 @@ static const  char  rcsid[] = "$Id: realname.c,v 1.11 1999/06/13 18:37:27 voss R
 #include <stdarg.h>
 #endif
 
-#include "mbuggy.h"
+#include "moon-buggy.h"
 
 
 void
