@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.32 2000/04/08 13:14:14 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.33 2000/04/08 13:16:28 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -341,16 +341,6 @@ main_loop (void)
 /**********************************************************************
  * some handlers for the main loop above
  */
-
-/* TODO: remove */
-void
-quit_main_loop_h (game_time t, void *client_data)
-/* This function is a possible callback argument to `add_event'.
- * It causes the main loop to terminate.
- * The arguments T and CLIENT_DATA are ignored.  */
-{
-  quit_main_loop ();
-}
 
 void
 print_hint_h (game_time t, void *client_data)

@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss
  *
- * $Id: moon-buggy.h,v 1.11 2000/04/08 13:14:14 voss Exp $ */
+ * $Id: moon-buggy.h,v 1.12 2000/04/08 13:16:28 voss Exp $ */
 
 #ifndef FILE_MOON_BUGGY_H_SEEN
 #define FILE_MOON_BUGGY_H_SEEN
@@ -51,7 +51,6 @@ extern  void  quit_main_loop (void);
 extern  void  main_loop (void);
 extern  void  xsleep (double dt);
 
-extern  void  quit_main_loop_h (game_time, void *);
 extern  void  print_hint_h (game_time t, void *client_data);
 extern  void  clear_hint_h (game_time, void *);
 
