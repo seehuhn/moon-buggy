@@ -7,18 +7,20 @@ version="0.2"
 usage()
 {
   cat <<EOF
-Usage: instcmds [options] TYPE
+Usage: instcmds [options] ARGS
 
 Extract (un-)installation commands from the Makefile.
-This script may only be interesting to maintainers.
+This script may only be interesting to maintainers and
+requires GNU make.
 
 The options are
   --help            show this message
   --install         Show the install commands (default)
+  --type=TYPE       One of "pre", "normal" (default), and "post"
   --uninstall       Show the uninstall commands
   --version         show the version information
 
-TYPE should be one of "pre", "normal", and "post".
+The ARGS are passed directly to the make command.
 
 Please report bugs to <voss@mathematik.uni-kl.de>.
 EOF
@@ -26,10 +28,12 @@ EOF
   exit $1
 }
 
+type=normal
 while test $# -gt 0; do
   case "$1" in
   -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
-  *) optarg= ;;
+  -*) optarg= ;;
+  *) break ;;
   esac
 
   case "$1" in
@@ -37,7 +41,7 @@ while test $# -gt 0; do
       cat <<EOF
 Instcmds $version
 Copyright (C) 1999 Jochen Voß
-Instcmds come with NO WARRANTY, to the extent permitted by law.
+Instcmds comes with NO WARRANTY, to the extent permitted by law.
 EOF
       exit 0
       ;;
@@ -52,8 +56,8 @@ EOF
       un=un
       UN=UN
       ;;
-    pre|normal|post)
-      type="$1"
+    --type=*)
+      type=$optarg
       ;;
     *)
       usage 1
@@ -61,10 +65,6 @@ EOF
   esac
   shift
 done
-
-if [ "x$type" = "x" ]; then
-  usage 1
-fi
 
 unique=47272088
 pre_label=$unique-ignore
@@ -76,7 +76,7 @@ case "$type" in
   post)   post_label=$unique-fetch ;;
 esac
 
-make --no-print-directory -n ${un}install -o all \
+make "$@" --no-print-directory -n ${un}install -o all \
   PRE_${UN}INSTALL=$pre_label \
   NORMAL_${UN}INSTALL=$normal_label \
   POST_${UN}INSTALL=$post_label \
