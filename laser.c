@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: laser.c,v 1.5 1999/05/22 13:43:58 voss Exp $";
+static const  char  rcsid[] = "$Id: laser.c,v 1.6 1999/05/23 21:02:23 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -30,16 +30,18 @@ static void
 beam_handler (game_time t, void *client_data)
 {
   struct beam *b = client_data;
-  int  i;
+  int  i, x;
 
   switch (b->state) {
   case bs_START:
+    if (b->y == 5 && (x = meteor_laser_hit (b->left, b->right))) {
+      b->count = 0;
+      b->left = x;
+      if (b->left > car_x - 2)  b->left = car_x - 2;
+    }
     wmove (moon, LINES-b->y, b->left);
     for (i=0; i<b->right-b->left; ++i)  waddch (moon, '-');
     b->state = bs_RUN;
-    if (b->y == 5 && meteor_hit (b->left, b->right)) {
-      b->count = 0;
-    }
     add_event (t+TICK(0.25), beam_handler, client_data);
     break;
   case bs_RUN:
@@ -48,7 +50,7 @@ beam_handler (game_time t, void *client_data)
       b->right -= 1;
       mvwaddch (moon, LINES-b->y, b->left, '-');
       mvwaddch (moon, LINES-b->y, b->right, ' ');
-      if (b->y == 5 && meteor_hit (b->left, b->right)) {
+      if (b->y == 5 && meteor_laser_hit (b->left, b->right)) {
 	b->count = 0;
       } else {
 	b->count -= 1;
@@ -61,6 +63,7 @@ beam_handler (game_time t, void *client_data)
       b->right = b->left+2;
       b->state = bs_CLOUD;
       b->count = 3;
+      if (b->right + b->count >= car_x)  b->count = car_x - b->right - 1;
       add_event (t+TICK(1), beam_handler, client_data);
     }
     break;
