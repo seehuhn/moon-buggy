@@ -1,0 +1,35 @@
+.\" $Id: manpage.in,v 1.1 1998/12/22 00:38:05 voss Exp $
+.\"
+.de Op
+.BR \-\\$1 @C@ ", " \-\-\\$2
+..
+.TH moon\-buggy 6 "Dec 22 1998" "@MBNAME@ @MBVERS@"
+.SH NAME
+moon-buggy \- drive some car across the moon
+.SH SYNOPSIS
+moon-buggy [\-hV] @C@[\-\-help] [\-\-version]
+.SH DESCRIPTION
+.B moon\-buggy
+is a simple, curses-based game, where you drive some kind of car
+across the moon's surface.  Unfortunately there are dangerous craters
+there.  Fortunately your car can jump!
+.SH OPTIONS
+The program understands the following options.
+.TP
+.Op h help
+shows a short but helpful message.
+.TP
+.Op V version
+prints the program's version to standard output and exits.
+.SH FILES
+.TP
+.I "@MBSCORE@/mbscore.tmpl"
+the score file template
+.TP
+.I "@MBSCORE@/mbscore"
+the global score file
+.SH AUTHOR
+The program
+.B moon\-buggy
+was implemented by Jochen Vo\(ss.
+(voss@mathematik.uni\-kl.de).
