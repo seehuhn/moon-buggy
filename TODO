@@ -8,7 +8,6 @@ BUG FIXES:
 Auf hyperion:
 /users/cip/sto/voss/test/bin/moon-buggy -c
 Fatal error: Cannot lock score file "/users/cip/sto/voss/test/com/moon-buggy/mbscore": Keine Sperren verfügbar
-· resize scheint den cursor einzuschalten
 · Auf der Hyperion geht das Fenstergrößenverändern nicht gut!
 · Fenstergrößenveränderungen beim Nameneingeben funktionieren mit
 ncurses-5 nicht gut.
