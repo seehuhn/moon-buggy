@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.17 1999/06/02 07:06:28 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.18 1999/06/03 13:20:36 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -476,9 +476,12 @@ highscore_mode (int score, int level)
       again = 0;
       done = 1;
       break;
+    case ERR:			/* Interrupt */
+      break;
     default:
       beep ();
       doupdate ();
+      break;
     }
   } while (! done);
 
