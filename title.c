@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: title.c,v 1.17 2000/03/31 11:13:25 voss Exp $";
+static const  char  rcsid[] = "$Id: title.c,v 1.18 2000/04/01 07:53:29 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -56,10 +56,7 @@ print_title (void)
     }
   }
 
-  if (5 + title_lines + 7 <= LINES) {
-    initialise_buggy ();
-    print_buggy ();
-  }
+  if (5 + title_lines + 7 <= LINES)  print_buggy ();
 
   wnoutrefresh (moon);
 }
@@ -67,9 +64,6 @@ print_title (void)
 static void
 setup_screen (void)
 {
-  werase (moon);
-  werase (status);
-  wnoutrefresh (status);
   resize_ground (1);
   print_title ();
   print_ground ();
@@ -97,6 +91,9 @@ key_handler (game_time t, int val)
   case 4:
     mode_change (pager_mode, 1);
     break;
+  case 5:
+    mode_change (highscore_mode, 0);
+    break;
   }
 }
 
@@ -111,4 +108,5 @@ setup_title_mode (void)
   mode_add_key (title_mode, mbk_end, "quit", 2);
   mode_add_key (title_mode, mbk_copyright, "show copyright", 3);
   mode_add_key (title_mode, mbk_warranty, "show warranty", 4);
+  mode_add_key (title_mode, mbk_scores, "show scores", 5);
 }
