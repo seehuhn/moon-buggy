@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: pager.c,v 1.5 1999/01/02 12:11:16 voss Rel $";
+static const  char  rcsid[] = "$Id: pager.c,v 1.6 1999/01/09 14:06:48 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -87,6 +87,7 @@ pager_mode (int what)
       case KEY_BREAK:
       case KEY_CANCEL:
       case KEY_EXIT:
+      case KEY_LEFT:
       case 27:			/* ESC */
       case 'q':
 	done = 1;
