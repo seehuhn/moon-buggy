@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.31 2000/03/31 11:17:01 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.32 2000/04/01 07:55:10 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -558,29 +558,35 @@ show_highscores (void)
 }
 
 static int  highscore_valid, last_score;
+static  int  gap;
+static  int  max_line;
+
+static void
+center_new (void)
+{
+  int  limit = HIGHSCORE_SLOTS-(max_line-3);
+  int  i, pos;
+  
+  for (i=1; i<HIGHSCORE_SLOTS; ++i) {
+    if (highscore[i].score < last_score)  break;
+  }
+  --i;
+
+  pos = 7+(max_line-6)/2;
+  gap = 1 + (i+4) - pos;
+
+  if (gap < 2)  gap = 0;
+  if (gap > limit)  gap = limit;
+}
 
 static void
 print_scores (void)
 /* Print the highscore table to the screen.  */
 {
   time_t  now;
-  int  i, line, current, top, bottom, my_rank;
+  int  i, line, my_rank;
 
   now = time (NULL);
-
-  for (i=1; i<HIGHSCORE_SLOTS; ++i) {
-    if (highscore[i].score < last_score)  break;
-  }
-  current = i-1;
-
-  top = bottom = 3;
-  if (current+bottom >= HIGHSCORE_SLOTS-2) {
-    top += current+bottom-(HIGHSCORE_SLOTS-1);
-    bottom = HIGHSCORE_SLOTS-1-current;
-  } else if (current < 8) {
-    top = current;
-    bottom = 10-current;
-  }
   
   mvwaddstr (moon, 1, 5, "rank   score lvl     date  expires  name");
   line = 3;
@@ -589,21 +595,22 @@ print_scores (void)
     char  date [16];
     char  expire [16];
     double  dt;
-
-    if ((i==current-top && i>2)
-	|| i==current+bottom+1) {
-      mvwprintw (moon, line++, 7, "...");
-      wclrtoeol (moon);
-    }
-    if ((i<current-top && i>2) || (i>current+bottom))  continue;
     
     if (highscore[i].new) {
-      wstandout (moon);
       if (highscore[i].score == last_score)  my_rank = i+1;
     }
+
+    if ((i==3 && gap>0)
+	|| (i<HIGHSCORE_SLOTS-1 && line==max_line)) {
+      mvwprintw (moon, line++, 5, "  ...");
+      wclrtoeol (moon);
+    }
+    if ((i>=3 && i<3+gap) || line>max_line)  continue;
+    
     format_display_date (date, highscore[i].date);
     dt = difftime (expire_date (i, highscore[i].date), now);
     format_relative_time (expire, dt);
+    if (highscore[i].new)  wstandout (moon);
     mvwprintw (moon, line++, 5,
 	       "%3d    %5u %-3d  %s %s  %." quote(MAX_NAME_CHARS) "s\n",
 	       i+1, highscore[i].score, highscore[i].level, date, expire,
@@ -611,7 +618,8 @@ print_scores (void)
     if (highscore[i].new)  wstandend (moon);
   }
   ++line;
-  mvwprintw (moon, line++, 17, "your score: %d", last_score);
+  if (last_score > 0)
+    mvwprintw (moon, line++, 17, "your score: %d", last_score);
   if (my_rank > 0) mvwprintw (moon, line++, 17, "your rank: %d", my_rank);
   wrefresh (moon);
 }
@@ -625,12 +633,19 @@ score_set (int score)
 static void
 highscore_enter (int level)
 {
+  if (level == 0)  last_score = 0;
+  print_ground ();
+  print_buggy ();
+  max_line = LINES-11;
+  if (max_line > 25)  max_line = 25;
+  
   print_message ("loading score file ...");
   doupdate ();
   block_all ();
   update_score_file (NULL);
   highscore_valid = 1;
   unblock ();
+  center_new ();
   print_scores ();
 
   /* TODO: remove */
@@ -659,6 +674,7 @@ highscore_enter (int level)
     block_all ();
     update_score_file (&entry);
     unblock ();
+    center_new ();
     print_scores ();
   }
   mode_keys ();
@@ -667,12 +683,11 @@ highscore_enter (int level)
 void
 resize_highscore (void)
 {
-  werase (moon);
-  werase (status);
-
   resize_meteors ();
   resize_ground (0);
-  
+
+  max_line = LINES-11;
+  if (max_line > 25)  max_line = 25;
   print_ground ();
   adjust_score (0);
   print_lives ();
@@ -690,6 +705,41 @@ key_handler (game_time t, int val)
   case 2:
     quit_main_loop ();
     break;
+  case 3:
+    if (highscore_valid) {
+      if (gap > 2) --gap; else gap = 0;
+      print_scores ();
+    }
+    break;
+  case 4:
+    if (highscore_valid) {
+      int  limit = HIGHSCORE_SLOTS-(max_line-3);
+      if (gap <= 0) {
+	gap = 2;
+      } else if (gap < limit) {
+	++gap;
+      } else {
+	gap = limit;
+      }
+      print_scores ();
+    }
+    break;
+  case 5:
+    if (highscore_valid) {
+      gap -= max_line-7;
+      if (gap < 1)  gap = 0;
+      print_scores ();
+    }
+    break;
+  case 6:
+    if (highscore_valid) {
+      int  limit = HIGHSCORE_SLOTS-(max_line-3);
+
+      gap += max_line-7;
+      if (gap > limit)  gap = limit;
+      print_scores ();
+    }
+    break;
   }
 }
 
@@ -702,4 +752,8 @@ setup_highscore_mode (void)
   highscore_mode->keypress = key_handler;
   mode_add_key (highscore_mode, mbk_start, "new game", 1);
   mode_add_key (highscore_mode, mbk_end, "quit", 2);
+  mode_add_key (highscore_mode, mbk_up, "up", 3);
+  mode_add_key (highscore_mode, mbk_down, "down", 4);
+  mode_add_key (highscore_mode, mbk_pageup, "pg up", 5);
+  mode_add_key (highscore_mode, mbk_pagedown, "pg down", 6);
 }
