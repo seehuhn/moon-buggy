@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: moon-buggy.h,v 1.9 2000/04/01 07:55:40 voss Exp $ */
+ * $Id: moon-buggy.h,v 1.10 2000/04/08 13:02:15 voss Exp $ */
 
 #ifndef FILE_MOON_BUGGY_H_SEEN
 #define FILE_MOON_BUGGY_H_SEEN
@@ -71,6 +71,7 @@ extern  int  stakes;
 
 extern  void  adjust_score (int val);
 extern  void  print_lives (void);
+extern  void  print_game_over (int blink);
 extern  void  setup_game_mode (void);
 
 /* from "level.c" */
@@ -178,6 +179,7 @@ extern  void  mode_add_key (struct mode *m,
 			    int meanings, const char *desc, int res);
 extern  void  mode_start (const struct mode *m, int seed);
 extern  void  mode_change (const struct mode *m, int seed);
+extern  void  mode_leave (void);
 extern  void  mode_redraw (void);
 extern  void  mode_keypress (game_time t);
 extern  void  mode_signal (int signum);
