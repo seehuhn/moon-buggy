@@ -1,2 +1,5 @@
+version 0.2:
+  It works somewhat and includes support for a global score file.
+
 version 0.1:
   A rudimentary version of the game is finished.
