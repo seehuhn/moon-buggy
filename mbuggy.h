@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: mbuggy.h,v 1.4 1999/05/22 17:14:33 voss Exp $ */
+ * $Id: mbuggy.h,v 1.5 1999/05/22 20:46:52 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -76,7 +76,7 @@ extern  void  resize_game (void);
 
 /* from "control.c" */
 extern  void  control_init (int);
-extern  int  control_tick (void);
+extern  int  control_tick (double t);
 
 /* from "moon.c" */
 extern  char *ground1, *ground2;
