@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.3 1998/12/26 12:13:00 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.4 1998/12/28 20:13:14 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -31,7 +31,10 @@ static  struct event *queue = NULL;
 double  time_base = 0;
 
 /* This measures the lag introduced by the select call.  */
-struct lagmeter *queuelag;
+struct circle_buffer *queuelag;
+
+/* The sum of sleeping times */
+double  sleep_meter = 0;
 
 
 void
@@ -98,6 +101,7 @@ wait_until (double t)
     
     dt = t - vclock ();
     if (dt < 0)  dt = 0;
+    sleep_meter += dt;
     
     usec = 1e6 * modf (dt, &sec) + 0.5;
     tv.tv_sec = sec + 0.5;
@@ -127,14 +131,14 @@ get_event (double *t_return)
   if (! queue->reached) {
     double  s, t, correct;
 
-    correct = get_lag (queuelag);
+    correct = get_mean (queuelag);
     s = time_base + queue->t - correct;
     retval = wait_until (s);
     t = vclock ();
     if (t-s > 0.4) {
       clock_adjust_delay (0.4);
     } else {
-      add_lag (queuelag, t - s);
+      add_value (queuelag, t - s);
     }
 
     ev = queue;
