@@ -1,8 +1,8 @@
-/* moon.h - global moon-buggy header file
+/* mbuggy.h - global moon-buggy header file
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: mbuggy.h,v 1.1 1999/05/22 13:33:08 voss Exp $ */
+ * $Id: mbuggy.h,v 1.2 1999/05/22 13:43:20 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
