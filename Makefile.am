@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 # Copyright 1999  Jochen Voß
-# $Id: Makefile.am,v 1.31 1999/06/06 19:41:59 voss Exp $
+# $Id: Makefile.am,v 1.32 1999/06/13 18:42:35 voss Exp $
 
 EXTRA_DIST = moonman.in maintman.in instcmds car.img \
 	text2c.sed merge.sed img.sed \
@@ -19,7 +19,7 @@ $(srcdir)/uninst.pre.in: Makefile.am instcmds
 	echo cd "@"infodir@ >$@ \
 	  && $(srcdir)/instcmds --uninstall --type=pre infodir="@"infodir@ >>$@
 maint-buggy: maint.in merge.sed uninst.pre
-	sed -f $(srcdir)/merge.sed $< >$@
+	sed -f $(srcdir)/merge.sed maint.in >$@
 
 info_TEXINFOS = mbuggy.texi
 man_MANS = moon-buggy.6 maint-buggy.6
@@ -30,9 +30,9 @@ hpath.o: hpath.c mbuggy.h Makefile
 
 BUILT_SOURCES = copying.h buggy.h
 copying.h: COPYING text2c.sed
-	cd $(srcdir) && sed -f text2c.sed $< >$@
+	cd $(srcdir) && sed -f text2c.sed $(srcdir)/COPYING >$@
 buggy.h: car.img img.sed
-	cd $(srcdir) && sed -n -f img.sed $< >$@
+	cd $(srcdir) && sed -n -f img.sed $(srcdir)/car.img >$@
 
 install-exec-hook:
 	if test "x@GAMEUSER@" != "x"; then \
@@ -63,13 +63,13 @@ if short_getopt
 mbsep = \\\\\"
 endif
 moon-buggy.6: moonman.in Makefile
-	echo ".\\\" $@ - automatically created from $<" >$@
+	echo ".\\\" $@ - automatically created from moonman.in" >$@
 	sed "s:@MBBINDIR@:$(bindir):g;\
 		s:@MBSCORE@:$(scoredir):g;\
 		s:@C@:$(mbsep):g;\
 		s:@MBNAME@:$(PACKAGE):g;\
-		s:@MBVERS@:$(VERSION):g" $< >>$@
+		s:@MBVERS@:$(VERSION):g" $(srcdir)/moonman.in >>$@
 maint-buggy.6: maintman.in Makefile
-	echo ".\\\" $@ - automatically created from $<" >$@
+	echo ".\\\" $@ - automatically created from maintman.in" >$@
 	sed "s:@MBNAME@:$(PACKAGE):g;\
-		s:@MBVERS@:$(VERSION):g" $< >>$@
+		s:@MBVERS@:$(VERSION):g" $(srcdir)/maintman.in >>$@
