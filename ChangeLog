@@ -1,3 +1,93 @@
+2001-08-26  Jochen Voss  <jvoss2@gmx.de>
+
+	* ChangeLog: add 2000-11-13 to 2001-08-26
+
+	* Makefile.am, highscore.c, signal.c: update the copyright date
+
+	* NEWS: mention autoconf 2.50
+
+	* checklist: Do not mention the "debian/" directory any more.
+
+	* TODO: One item done.
+
+	* acinclude.m4, configure.ac:
+	Move the documentation from the obsolete file "acconfig.h"
+	into the corresponing AC_DEFINE calls.
+
+	* acconfig.h: acconfig.h is superseeded by the new AC_DEFINE syntax
+
+	* signal.c (winch_handler): make the window resizing work again
+
+	* terminal.c: white space fix
+
+2001-05-24  Jochen Voss  <jvoss2@gmx.de>
+
+	* configure.ac, configure.in: moved configure.in to configure.ac
+
+	* Makefile.am (moon-buggy.6): fix the dependencies
+
+	* acinclude.m4, configure.in: Updates for autoconf version 2.50.
+
+	* TODO: updates
+
+	* highscore.c: minor fixes.
+
+	* main.c (main): minor improvement
+
+	* manpage.in, moon-buggy.texi: Fix a typo.
+
+2000-11-19  Jochen Voss  <jvoss2@gmx.de>
+
+	* configure.in: Changed the version string to "0.5.53".
+
+	* meteor.c: doc fix.
+
+	* meteor.c: Removed some debugging output.
+
+2000-11-16  Jochen Voss  <jvoss2@gmx.de>
+
+	* moon-buggy.h:
+	Add a prototype for the new function `scroll_meteors' from "meteor.c".
+	Change the calling syntax of `car_meteor_hit' and `place_meteor'.
+
+	* ground.c (scroll_handler): wait for the wheel to fly.
+
+	* game.c: minor fixes
+
+	* level.c: Use the new calling syntax for `place_meteor'.
+
+	* meteor.c: Removed the obsolete function `meteor_handler'.
+	New function `score_meteors'.
+
+	* buggy.c: New code to show a flying wheel.
+	Doc fixes.
+
+2000-11-13  Jochen Voss  <jvoss2@gmx.de>
+
+	* game.c: Renamed old `pause_mode' to new `crash_mode'.
+	(leave_crash_mode): doc fix
+
+	* ground.c, moon-buggy.h: Renamed old `pause_mode' to new `crash_mode'.
+
+	* Makefile.am: Renamed old "mesg.c" to new "terminal.c".
+
+	* configure.in: Check for the header file <termios.h>.
+
+	* main.c: Renamed the function `mesg_off' to `term_prepare'
+	and `mesg_restore' to `term_restore'.
+
+	* terminal.c: Renamed the function `mesg_off' to `term_prepare'
+	and `mesg_restore' to `term_restore'.
+	Add code, to disable START and STOP characters.
+
+	* moon-buggy.h: Renamed old "mesg.c" to new "terminal.c".
+	Renamed the function `mesg_off' to `term_prepare'
+	and `mesg_restore' to `term_restore'.
+
+	* mesg.c, terminal.c: moved mesg.c to terminal.c
+
+	* configure.in: Changed the version string to "0.5.52".
+
 2000-11-01  Jochen Voss  <voss@mathematik.uni-kl.de>
 
 	* ChangeLog: Added 2000-10-28 to 2000-11-01
