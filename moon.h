@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: moon.h,v 1.18 1999/04/25 17:11:26 voss Exp $ */
+ * $Id: moon.h,v 1.19 1999/05/08 12:40:58 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -88,6 +88,7 @@ extern  int  crash_check (void);
 
 /* from "laser.c" */
 extern  void  fire_laser (double t);
+extern  void  extinguish_laser (void);
 
 /* from "highscore.c" */
 extern  int  highscore_mode (void);
