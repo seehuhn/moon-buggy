@@ -1,8 +1,8 @@
 /* pager.c - display very long strings (with scrolling)
  *
- * Copyright (C) 1998  Jochen Voss.  */
+ * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: pager.c,v 1.4 1999/01/01 18:01:33 voss Exp $";
+static const  char  rcsid[] = "$Id: pager.c,v 1.5 1999/01/02 12:11:16 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -83,7 +83,7 @@ pager_mode (int what)
   do {
     switch (get_event (NULL)) {
     case ev_KEY:
-      switch (wgetch (moon)) {
+      switch (xgetch (moon)) {
       case KEY_BREAK:
       case KEY_CANCEL:
       case KEY_EXIT:
