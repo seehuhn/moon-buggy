@@ -7,6 +7,15 @@ dnl Checks for programs.
 AC_PROG_CC
 
 dnl Checks for libraries.
+AC_CHECK_LIB(curses,initscr,CURSLIB=-lcurses)
+if test "x$CURSLIB" = x; then
+unset ac_cv_lib_curses_initscr
+AC_CHECK_LIB(curses,initscr,CURSLIB="-lcurses -ltermcap",,-ltermcap)
+fi
+if test "x$CURSLIB" = x; then
+AC_CHECK_LIB(ncurses,initscr,CURSLIB=-lncurses)
+fi
+AC_SUBST(CURSLIB)
 
 dnl Checks for header files.
 AC_HEADER_STDC
