@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: title.c,v 1.11 1999/05/22 13:43:59 voss Exp $";
+static const  char  rcsid[] = "$Id: title.c,v 1.12 1999/05/22 14:32:57 voss Rel $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -66,7 +66,6 @@ setup_screen (void)
 {
   werase (moon);
   resize_ground (1);
-  car_x = car_base;
   print_title ();
   print_ground ();
 
