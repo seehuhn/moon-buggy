@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: persona.c,v 1.15 1999/07/21 10:40:10 voss Exp $";
+static const  char  rcsid[] = "$Id: persona.c,v 1.16 1999/07/21 12:42:36 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -60,12 +60,20 @@ initialise_persona (void)
 #ifdef HAVE_SETREUID
   method = m_EXCH;
 #else
-  fputs ("WARNING: setuid usage not supported on this system!\n", stderr);
+  fputs ("WARNING: setuid/setgid usage not supported on this system!\n",
+	 stderr);
   sleep (3);
   setuid (user_uid);
   setgid (user_gid);
   method = m_NONE;
 #endif
+}
+
+int
+is_setgid (void)
+/* Return true, iff the game is run setgid.  */
+{
+  return  user_gid != game_gid;
 }
 
 
