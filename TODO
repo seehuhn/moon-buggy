@@ -2,10 +2,11 @@
 · Mit Fenstergrößenveränderungen rechnen
 · Entferne das `sleep' und <unistd.h> aus "main.c".  Verwende
 stattdessen `select'.
-· Manual: suid erklären (und vorher sicher machen)
+· Manual: suid erklären
 · sigtstp_hander: leaveok und so gemäß der vorherigen Situation
 wiederherstellen.  Insbesondere während des Nameneingebens ist alles
 anders.
+· Titelbild, Hinweis auf den Autor
 ----
 · Score file locking: recover from failure (use an alternative method)
 · Internationalisieren
