@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: pager.c,v 1.2 1998/12/29 18:08:30 voss Exp $";
+static const  char  rcsid[] = "$Id: pager.c,v 1.3 1998/12/30 19:37:45 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -33,7 +33,7 @@ print_page (unsigned current_line)
   }
   wnoutrefresh (moon);
 
-  mvwprintw (status, 0, 0, "=== COPYING %3d%% ===",
+  mvwprintw (status, 0, 0, "=== COPYING %3d%% ===  ",
 	     lines_used==0 ? 100 :(int)(current_line*100.0/(lines_used-1)+.5));
   wnoutrefresh (status);
 }
@@ -43,11 +43,13 @@ setup_screen (void)
 {
   lines = LINES;
   wclear (moon);
-  wclear (status);
   print_page (current_line);
-  mvwaddstr (status, 1, 0,
-	     "`q' to return, page up/down and arrow keys to navigate");
-  wnoutrefresh (status);
+
+  wclear (status);
+  
+  wclear (message);
+  waddstr (message, "`q' to return, page up/down and arrow keys to navigate");
+  wnoutrefresh (message);
 }
 
 void

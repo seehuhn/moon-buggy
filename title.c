@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: title.c,v 1.2 1998/12/29 18:06:34 voss Exp $";
+static const  char  rcsid[] = "$Id: title.c,v 1.3 1998/12/30 19:35:10 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -50,25 +50,26 @@ print_title (void)
       mvwaddstr (moon, top+i, (COLS-49)/2, title[i]);
     }
   }
-  wnoutrefresh (moon);
 
   if (5 + title_lines + 7 <= LINES) {
     initialize_buggy ();
     print_buggy ();
   }
+
+  wnoutrefresh (moon);
 }
 
 static void
 setup_screen (void)
 {
   wclear (moon);
-  print_title ();
   resize_ground (1);
+  print_title ();
   print_ground ();
 
-  wclear (status);
-  mvwaddstr (status, 1, 0, "press `space' to start");
-  wnoutrefresh (status);
+  wclear (message);
+  waddstr (message, "press `space' to start");
+  wnoutrefresh (message);
 }
 
 int
