@@ -1,4 +1,4 @@
-.\" $Id: manpage.in,v 1.4 1999/01/01 19:03:50 voss Exp $
+.\" $Id: moonman.in,v 1.1 1999/01/01 19:04:44 voss Exp $
 .\"
 .de Op
 .BR -\\$1 @C@ ", " --\\$2
