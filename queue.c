@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.20 1999/06/03 12:22:09 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.21 1999/06/03 13:19:51 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -101,22 +101,22 @@ my_select (struct timeval *timeout)
  * `my_select' again.  */
 {
   fd_set  rfds;
-  int  retval;
+  int  res;
 
   /* Watch stdin (fd 0) to see when it has input. */
   FD_ZERO (&rfds);
   FD_SET (0, &rfds);
 
   handle_signals ();
-  retval = select (FD_SETSIZE, &rfds, NULL, NULL, timeout);
-  if (retval < 0) {
+  res = select (FD_SETSIZE, &rfds, NULL, NULL, timeout);
+  if (res < 0) {
     if (errno == EINTR) {
       handle_signals ();
     } else {
       fatal ("Select failed: %s", strerror (errno));
     }
   }
-  return  retval;
+  return  res;
 }
 
 static int
