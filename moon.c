@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: moon.c,v 1.6 1999/01/02 12:17:02 voss Rel $";
+static const  char  rcsid[] = "$Id: moon.c,v 1.7 1999/03/08 20:25:28 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -23,8 +23,8 @@ static const  char  rcsid[] = "$Id: moon.c,v 1.6 1999/01/02 12:17:02 voss Rel $"
 #include "moon.h"
 
 
-char *ground1 = NULL, *ground2 = NULL;
-static int  ground_width = 0;
+char *ground1, *ground2;
+static int  ground_width;
 
 static  int  hole = 2;
 

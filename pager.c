@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: pager.c,v 1.7 1999/01/30 16:56:51 voss Rel $";
+static const  char  rcsid[] = "$Id: pager.c,v 1.8 1999/03/08 20:25:15 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -14,7 +14,7 @@ static const  char  rcsid[] = "$Id: pager.c,v 1.7 1999/01/30 16:56:51 voss Rel $
 #include "copying.h"
 
 
-static unsigned  lines_used, current_line = 0;
+static unsigned  lines_used, current_line;
 static volatile  int  mb_lines = 25;
 
 
