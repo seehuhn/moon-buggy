@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.14 1999/05/16 09:35:14 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.15 1999/05/22 11:53:48 voss Exp $";
 
 #define _POSIX_SOURCE 1
 
@@ -90,7 +90,7 @@ to_game (real_time t)
 /* These are used to measure the system's load.  */
 static  double  time_slept, sleep_base;
 static  double  cpu_load = 0;
-#define ALPHA 1.0
+#define ALPHA 2.0
 
 static int
 my_select (struct timeval *timeout)
