@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: date.c,v 1.1 2000/01/03 14:42:06 voss Exp $";
+static const  char  rcsid[] = "$Id: date.c,v 1.2 2000/03/19 18:46:20 voss Rel $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -71,4 +71,26 @@ format_display_date (char *buffer, time_t date)
   loctime = localtime (&date);
   sprintf (buffer, "%4d-%02d-%02d",
 	   loctime->tm_year+1900, loctime->tm_mon+1, loctime->tm_mday);
+}
+
+void
+format_relative_time (char *buffer, double dt)
+/* Into the BUFFER format a textual representation of time period DT.
+ * Buffer must contain at least 5 characters.  The filled-in string
+ * is meant to be part of the displayed highscore list.  */
+{
+  double  hour = 60*60;
+  double  day = 24*hour;
+
+  if (dt <= 0) {
+    sprintf (buffer, "soon");
+  } else if (dt > 999*day) {
+    sprintf (buffer, " -- ");
+  } else if (dt >= day) {
+    sprintf (buffer, "%3dd", (int)(dt/day+0.5));
+  } else if (dt >= hour) {
+    sprintf (buffer, "%3dh", (int)(dt/hour+0.5));
+  } else {
+    sprintf (buffer, "%3dm", (int)(dt/60+0.5));
+  }
 }
