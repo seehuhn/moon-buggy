@@ -1,4 +1,5 @@
-  updates to use autoconf version 2.50
+  new animations donated by Piotr Grzybowski
+  use autoconf version 2.57 and automake version 1.7
   new "-m" option to simulate the effect of "mesg n"
   added a "redraw screen" key
   removed the maintbuggy script
