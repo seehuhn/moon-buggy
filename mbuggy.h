@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: mbuggy.h,v 1.9 1999/05/26 21:04:46 voss Exp $ */
+ * $Id: mbuggy.h,v 1.10 1999/05/30 19:53:10 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -96,7 +96,7 @@ extern  void  resize_pager (void);
 
 /* from "game.c" */
 extern  int  crash_detected;
-extern  long  stakes;
+extern  int  stakes;
 
 extern  void  adjust_score (int val);
 extern  int  game_mode (void);
@@ -136,7 +136,7 @@ extern  int  meteor_laser_hit (int x0, int x1);
 extern  int  meteor_car_hit (int x0, int x1);
 
 /* from "highscore.c" */
-extern  int  highscore_mode (long score);
+extern  int  highscore_mode (int score, int level);
 extern  void  resize_highscore (void);
 
 /* from "realname.c" */
@@ -166,10 +166,13 @@ extern  void  clear_message_h (game_time, void *);
 /* from "vclock.c" */
 extern  double  vclock (void);
 
+/* from "getdate.c" */
+extern  void  get_date (int *day_p, int *month_p, int *year_p);
+
 /* from "persona.c" */
+enum persona { pers_GAME, pers_USER };
 extern  void  initialise_persona (void);
-extern  void  set_game_persona (void);
-extern  void  set_user_persona (void);
+extern  void  set_persona (enum persona  pers);
 
 /* from "signal.c" */
 extern  void  block_winch (void);
