@@ -1,12 +1,11 @@
 · Copyright
-· Daten in der Highscoreliste
 · Mit Fenstergrößenveränderungen rechnen
-· Wenn mehr als 0.5 Sekunden Verzögerung auftreten, sollte das Spiel
-etwas Zeit "durchrutschen" lassen.
-· Entferne das `sleep' und <unistd.h> aus "main.c".  Verwende stattdessen `select'.
+· Entferne das `sleep' und <unistd.h> aus "main.c".  Verwende
+stattdessen `select'.
 · Manual: suid erklären (und vorher sicher machen)
-· Manual: auf ncurses und fsstnd verweisen
-· Uhr entfernen
+· sigtstp_hander: leaveok und so gemäß der vorherigen Situation
+wiederherstellen.  Insbesondere während des Nameneingebens ist alles
+anders.
 ----
 · Score file locking: recover from failure (use an alternative method)
 · Internationalisieren
