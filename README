@@ -1,11 +1,5 @@
 moon-buggy - drive some car across the moon
 
-WARNING:
-
-   This is an experimental version of moon-buggy.
-The last stable version is labeled 0.4.1 and may be found at
-ftp://sunsite.unc.edu/pub/Linux/games/arcade/moon-buggy-0.4.1.tar.gz
-
 
 INTRODUCTION:
 
@@ -25,6 +19,11 @@ moon-buggy version number, as obtained by the command `moon-buggy -V'.
 
 
 INSTALLATION:
+
+   Moon-buggy requires the curses library as a prerequisite.  If
+curses is not installed on your system, you may use the free ncurses
+package.  The game does not work with BSD curses, thus on BSD systems
+you will need the ncurses package.
 
    Generic installation instructions are in the file INSTALL.  There
 are some points of interest:
@@ -75,7 +74,7 @@ are some points of interest:
 
 
    Example: On GNU/Linux systems you probably can use the following
-commands.  For the last one you may need root user permissions.
+commands.  For the last one you need root user permissions.
 
      ./configure --sharedstatedir=/var/games --with-setgid=games
      make
