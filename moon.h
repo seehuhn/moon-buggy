@@ -1,8 +1,8 @@
 /* moon.h - global moon-buggy header file
  *
- * Copyright (C) 1998  Jochen Voss.
+ * Copyright 1999  Jochen Voss
  *
- * $Id: moon.h,v 1.10 1999/01/01 18:13:54 voss Exp $ */
+ * $Id: moon.h,v 1.11 1999/01/02 12:16:13 voss Rel $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -11,6 +11,10 @@
  * You may try to decrease this, if the moon's ground don't move
  * properly. */
 #define  MB_SPEED  1.0
+
+/* Set to 1 to see additional debugging information.
+ * Only used for the game's development.  */
+#define MB_DEBUG 0
 
 #include <curses.h>
 
@@ -75,7 +79,7 @@ extern  void  scroll_ground (void);
 /* from "buggy.c" */
 extern  int  car_base, score_base;
 extern  void  initialize_buggy (void);
-extern  void  print_buggy (void);
+extern  int  print_buggy (void);
 extern  void  jump (double t);
 extern  int  can_jump (void);
 extern  int  crash_check (void);
@@ -112,6 +116,9 @@ extern  double  vclock (void);
 extern  void  initialize_persona (void);
 extern  void  set_game_persona (void);
 extern  void  set_user_persona (void);
+
+/* from "xgetch.c" */
+extern  int  xgetch (WINDOW *win);
 
 /* from "error.c" */
 #ifdef __GNUC__
