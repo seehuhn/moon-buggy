@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: moon.h,v 1.15 1999/04/21 19:19:26 voss Exp $ */
+ * $Id: moon.h,v 1.16 1999/04/23 22:18:32 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -78,7 +78,6 @@ extern  void  scroll_ground (void);
 /* from "buggy.c" */
 extern  int  car_base, score_base;
 extern  void  initialise_buggy (void);
-extern  void  animate_buggy (void);
 extern  int  print_buggy (void);
 extern  void  jump (double t);
 extern  int  can_jump (void);
@@ -92,17 +91,23 @@ extern  void  resize_highscore (void);
 extern  void  get_real_user_name (char *buffer, size_t size);
 
 /* from "queue.c" */
-enum event_type { ev_KEY, ev_TIMEOUT, ev_MESSAGE, ev_SCROLL, ev_BUGGY, \
-		  ev_SCORE };
 typedef  double  game_time;
+typedef  void (*callback_fn) (game_time, void *);
+
 extern  double  sleep_meter;
-extern  struct circle_buffer *queuelag;
+
+extern  void  save_queue (void);
+extern  void  restore_queue (void);
 
 extern  void  clock_adjust_delay (double dt);
 extern  void  clear_queue (void);
-extern  void  add_event (game_time t, enum event_type type);
-extern  enum event_type  get_event (game_time *t_return);
-extern  int  remove_event (enum event_type type, game_time *t_return);
+extern  void  add_event (game_time t, callback_fn callback, void *client_data);
+extern  void  remove_event (callback_fn callback);
+extern  void  quit_main_loop (void);
+extern  int  main_loop (double dt, void (*key_handler)(game_time));
+
+extern  void  quit_main_loop_h (game_time, void *);
+extern  void  clear_message_h (game_time t, void *client_data);
 
 /* from "vclock.c" */
 extern  double  vclock (void);
