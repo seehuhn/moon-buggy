@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.24 1999/06/13 18:37:39 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.25 1999/06/13 19:18:12 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -347,6 +347,14 @@ main_loop (double dt, void (*key_handler)(game_time))
   exit_flag = 0;
 
   return  res;
+}
+
+void
+xsleep (double dt)
+/* Sleep of DT seconds.  */
+{
+  add_event (0, quit_main_loop_h, NULL);
+  main_loop (dt, NULL);
 }
 
 /**********************************************************************
