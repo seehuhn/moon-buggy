@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.10 1999/04/24 17:55:53 voss Exp $";
+static const  char  rcsid[] = "$Id: game.c,v 1.11 1999/04/25 17:09:11 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -35,7 +35,7 @@ scroll_handler (game_time t, void *client_data)
   scroll_ground ();
   print_ground ();
   print_buggy ();
-  if (ground2[score_base] == ' ')  ++bonus;
+  if (ground2[car_x + 7] == ' ')  ++bonus;
   if (crash_check ())  quit_main_loop ();
   add_event (t+TICK(1), scroll_handler, NULL);
 }
@@ -127,6 +127,8 @@ game_mode (void)
 {
   int  i;
 
+  car_x = car_base;
+  
   game_state = PLAYING;
   setup_screen ();
   
