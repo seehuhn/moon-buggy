@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: persona.c,v 1.16 1999/07/21 12:42:36 voss Exp $";
+static const  char  rcsid[] = "$Id: persona.c,v 1.17 1999/08/30 20:53:07 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -71,9 +71,10 @@ initialise_persona (void)
 
 int
 is_setgid (void)
-/* Return true, iff the game is run setgid.  */
+/* Return true, iff the game is run setgid and we currently use
+ * privileged access.  */
 {
-  return  user_gid != game_gid;
+  return  (user_gid != game_gid && current == pers_GAME);
 }
 
 
