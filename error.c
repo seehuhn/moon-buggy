@@ -2,7 +2,11 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: error.c,v 1.3 1998/12/23 10:08:55 voss Exp $";
+static const  char  rcsid[] = "$Id: error.c,v 1.4 1999/01/01 18:05:37 voss Exp $";
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
