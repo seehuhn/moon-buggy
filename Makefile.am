@@ -1,11 +1,11 @@
 ## Process this file with automake to produce Makefile.in
 # Copyright 1999  Jochen Voß
-# $Id: Makefile.am,v 1.27 1999/05/30 19:55:07 voss Exp $
+# $Id: Makefile.am,v 1.28 1999/06/02 07:35:36 voss Exp $
 
 EXTRA_DIST = moonman.in maintman.in instcmds car.img \
 	text2c.sed merge.sed img.sed \
 	mbuggy.spec moon-buggy.gif moon-buggy.png title.eps
-DISTCLEANFILES = moon-buggy.6 maint-buggy maint-buggy.6 uninst.pre uninst.post
+DISTCLEANFILES = moon-buggy.6 maint-buggy maint-buggy.6 uninst.pre
 
 bin_PROGRAMS = moon-buggy
 moon_buggy_SOURCES = mbuggy.h main.c title.c pager.c copying.h \
@@ -15,11 +15,11 @@ moon_buggy_SOURCES = mbuggy.h main.c title.c pager.c copying.h \
 moon_buggy_LDADD = @LIBOBJS@
 
 bin_SCRIPTS = maint-buggy
-uninst.pre: Makefile instcmds
-	$(srcdir)/instcmds --uninstall pre >uninst.pre
-uninst.post: Makefile instcmds
-	$(srcdir)/instcmds --uninstall post >uninst.post
-maint-buggy: maint.in merge.sed uninst.pre uninst.post
+uninst.pre.in: Makefile.in instcmds
+	cd $(srcdir) \
+	  && echo cd "@"infodir@ >$@ \
+	  && ./instcmds --uninstall --type=pre infodir="@"infodir@ >>$@
+maint-buggy: maint.in merge.sed uninst.pre
 	sed -f $(srcdir)/merge.sed $< >$@
 
 info_TEXINFOS = mbuggy.texi
