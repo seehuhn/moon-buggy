@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.17 1999/05/23 14:18:48 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.18 1999/05/24 19:11:14 voss Rel $";
 
 #define _POSIX_SOURCE 1
 
@@ -319,9 +319,20 @@ quit_main_loop_h (game_time t, void *client_data)
 }
 
 void
+print_message_h (game_time t, void *client_data)
+/* This function is a possible callback argument to `add_event'.
+ * It causes the message (const char *)CLIENT_DATA to be displayed
+ * for 6 seconds.  */
+{
+  print_message (client_data);
+  remove_event (clear_message_h);
+  add_event (t+6, clear_message_h, NULL);
+}
+
+void
 clear_message_h (game_time t, void *client_data)
 /* This function is a possible callback argument to `add_event'.
- * It causes the screen message area to be cleared.
+ * It causes the screen's message area to be cleared.
  * The arguments T and CLIENT_DATA is ignored.  */
 {
   werase (message);
