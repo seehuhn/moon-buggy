@@ -2,8 +2,7 @@ BUG FIXES:
 · Auf jupiter+neptun+io geht make distclean nicht.
 · Man pages auf HPUX
 · Make install auf den HPs
-· "instcmds" setzt GNU make vorraus.
-· Auf HPUX ist NSIG nicht definiert.  (Bei uns auch nicht, fall man
+· Auf HPUX ist NSIG nicht definiert.  (Bei uns auch nicht, falls man
 die Definition von _SVID_SOURCE entfernt!)  Was tut man da?
 · Auf HPUX: Schüsse werden invers dargestellt, die Highscoreliste blinkend.
 · Auf hpux wird der Cursor nicht abgeschaltet.
@@ -21,6 +20,7 @@ sollte erklärt werden.
 · Füge der Anleitung ein "shared score files" Kapitel hinzu.
 · highscore.c: Warum heißt es "get_real_user_name (entry.name,
 NAME_MAX_LEN)" aber "char  name [NAME_MAX_LEN+1];"?
+· Copyrightdaten richtigstellen!
 
 IMPROVEMENTS:
 · rpm Zeugs: "Autoreq: false" ausprobieren, "BuildRoot" wieder einführen
@@ -31,6 +31,8 @@ IMPROVEMENTS:
 kann.  Erklärung der Tastaturbelegung.
 · Neue "--show-highscores" Option.
 
+· Wie kann man verhindern, daß sich schwächere Spieler langweilen,
+weil sie nicht in die Highscoreliste kommen?
 · Prüfsumme für das Scorefile.
 · Könnte man die Events 0.1 Sekunden zu früh ausführen und nur das
 `doupdate' verzögern?  Wie ist das dann mit Tastendrücken während der
@@ -44,6 +46,7 @@ sollte der cache verwendet werden.
 · Score file locking: recover from failure, i.e. use an alternative method.
 (What happens if two new score files are created at the same time?)
 · Use a timeout when waiting for a file lock
+· Was soll mit dem (im Moment leeren) uninst.post Zeugs geschehen?
 · Internationalisieren
 · Peter: Graphik verbessern, insbesondere abgestürzte Autos
 · Lars: Ufos einführen
