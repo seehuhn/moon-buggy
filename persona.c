@@ -1,8 +1,8 @@
 /* persona.c - handle the persona of the process
  *
- * Copyright (C) 1998  Jochen Voss.  */
+ * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: persona.c,v 1.3 1999/01/01 19:18:42 voss Exp $";
+static const  char  rcsid[] = "$Id: persona.c,v 1.4 1999/01/02 12:10:32 voss Rel $";
 
 
 #ifdef HAVE_CONFIG_H
