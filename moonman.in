@@ -1,21 +1,21 @@
 .\" moonman.in - template for the "moon-buggy.6" manual page
 .\" Copyright 1999  Jochen Voﬂ
-.\" $Id: moonman.in,v 1.2 1999/01/02 12:14:59 voss Rel $
+.\" $Id: moonman.in,v 1.3 1999/05/24 19:25:33 voss Rel $
 .de Op
 .BR -\\$1 @C@ ", " --\\$2
 ..
-.TH moon-buggy 6 "Dec 31 1998" "@MBNAME@ @MBVERS@"
+.TH moon-buggy 6 "May 24 1999" "@MBNAME@ @MBVERS@"
 .SH NAME
 moon-buggy \- drive some car across the moon
 .SH SYNOPSIS
 moon-buggy [-hnV] @C@[--help] [--no-title] [--version]
 .SH DESCRIPTION
-.B moon-buggy
-is a simple, curses-based game, where you drive some kind of car
+.B Moon-buggy
+is a simple character graphics game, where you drive some kind of car
 across the moon's surface.  Unfortunately there are dangerous craters
-there.  Fortunately your car can jump!
+there.  Fortunately your car can jump over them!
 .SH OPTIONS
-The program understands the following options.
+The program understands the following cammand line options.
 .TP
 .Op h help
 shows a short usage message.
@@ -25,7 +25,29 @@ skips the title screen.
 .TP
 .Op V version
 prints the program's version to standard output and exits.
+.SH KEYS
+The moon-buggy is controlled by a couple of keys.  These have the
+following meaning.
+.IP <SPC>
+makes your car jump.  The length of a jump is fixed and you can only
+start a new jump, while the wheels have contact to the ground.
+.IP <a>
+fires the mining laser.  The laser is used to remove stones, which may
+block your way.
+.IP <q>
+quits the game prematurely.  But you still keep your score and may
+enter the top ten list.
+.IP 
 .SH FILES
+The following files on your system are related to moon-buggy.
+.TP
+.I "@MBBINDIR@/moon-buggy"
+the moon-buggy executable.
+.TP
+.I "@MBBINDIR@/maint-buggy"
+the moon-buggy maintenance script.  See
+.BR maint-buggy (6)
+for details.
 .TP
 .I "@MBSCORE@/mbscore"
 the global score file

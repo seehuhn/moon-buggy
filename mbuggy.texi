@@ -1,5 +1,5 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: mbuggy.texi,v 1.13 1999/03/08 20:26:01 voss Exp $
+@c $Id: mbuggy.texi,v 1.14 1999/05/24 19:25:46 voss Rel $
 @c %**start of header
 @setfilename mbuggy.info
 @settitle Moon-Buggy Usage and Maintenance
@@ -8,11 +8,11 @@
 
 @dircategory Games
 @direntry
-* moon-buggy: (mbuggy).         Moon-Buggy Usage and Maintenance
+* moon-buggy: (mbuggy).         Drive some car across the moon
 @end direntry
 
 @ifinfo
-This file documents moon-buggy, a simple, curses-based game
+This file documents moon-buggy, a simple character graphics game
 
 Copyright 1999 Jochen Vo@ss{}
 
@@ -70,11 +70,12 @@ approved by the Free Software Foundation.
 @node Top, Introduction, (dir), (dir)
 
 @ifinfo
-This document describes the usage and installation of Moon-Buggy.  It is
-a simple, curses-based game, where you drive some kind of car across the
-surface of the moon.  Unfortunately there are dangerous craters there.
-Fortunately your car can jump!  This edition of the manual applies to
-version @value{VERSION} of the program.
+Moon-buggy is a simple character graphics game, where you drive some
+kind of car across the moon's surface.  Unfortunately there are
+dangerous craters there.  Fortunately your car can jump over them!
+
+This edition of the manual applies to version @value{VERSION} of the
+program.
 @end ifinfo
 
 @menu
@@ -90,9 +91,9 @@ version @value{VERSION} of the program.
 @node Introduction, Moon-buggy Invocation, Top, Top
 @chapter Introduction
 
-Moon-buggy is a simple, curses-based game, where you drive some kind
-of car across the surface of the moon.  Unfortunately there are
-dangerous craters there.  Fortunately your car can jump!
+Moon-buggy is a simple character graphics game, where you drive some
+kind of car across the moon's surface.  Unfortunately there are
+dangerous craters there.  Fortunately your car can jump over them!
 
 The game is not yet finished.  So be prepared to encounter bugs (and
 please report them).  But it works to some extent, it has a top-ten
@@ -101,7 +102,7 @@ list, and it may be fun.  Just try it!
 Moon-Buggy comes with no warranty, to the extent permitted by law.  You
 may redistribute copies of Moon-Buggy under the terms of the GNU General
 Public License.  For more information about these matters, read the file
-@file{COPYING} of the source code distribution or press @kbd{c} at
+@file{COPYING} of the source code distribution or press @key{c} at
 moon-buggy's title screen.
 
 Please mail any suggestions and bug reports to
@@ -164,8 +165,20 @@ prints moon-buggy's version string to standard output and exits.
 @node Playing the Game, Installation, Maint-buggy Invocation, Top
 @chapter Playing the Game
 
-Just start it.  Follow the instructions and use the @key{SPC} bar to
-jump.
+Just start it and follow the instructions.  The car is controlled by a
+couple of keys.  These are the following.
+
+@table @key
+@item SPC
+makes your car jump.  The length of a jump is fixed and you can only
+start a new jump while the wheels have contact to the ground.
+@item a
+fires the mining laser.  The laser is used to remove stones, which may
+block your way.
+@item q
+quits the game prematurely.  But you still keep your score and may enter
+the top ten list.
+@end table
 
 Moon-buggy can handle a wide range of screen sizes.  But it runs best,
 if the screen has at least 80 columns.  If you run it on a screen with
@@ -265,6 +278,10 @@ system (@pxref{Maint-buggy Invocation}).
 
 @node References,  , Installation, Top
 @chapter References
+
+This chapter gives some references to resources mentioned in this
+manual.  As the internet changes incessantly, the addresses may be
+outdated.  If you find this to happen, please report it as a bug.
 
 Version 2.0 of the @strong{Filesystem Hierarchy Standard} (FHS 2.0) may
 be found on the internet at
