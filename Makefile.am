@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 # Copyright 1999  Jochen Voß
-# $Id: Makefile.am,v 1.28 1999/06/02 07:35:36 voss Exp $
+# $Id: Makefile.am,v 1.29 1999/06/05 13:39:10 voss Exp $
 
 EXTRA_DIST = moonman.in maintman.in instcmds car.img \
 	text2c.sed merge.sed img.sed \
@@ -15,10 +15,9 @@ moon_buggy_SOURCES = mbuggy.h main.c title.c pager.c copying.h \
 moon_buggy_LDADD = @LIBOBJS@
 
 bin_SCRIPTS = maint-buggy
-uninst.pre.in: Makefile.in instcmds
-	cd $(srcdir) \
-	  && echo cd "@"infodir@ >$@ \
-	  && ./instcmds --uninstall --type=pre infodir="@"infodir@ >>$@
+$(srcdir)/uninst.pre.in: Makefile.in instcmds
+	echo cd "@"infodir@ >$@ \
+	  && $(srcdir)/instcmds --uninstall --type=pre infodir="@"infodir@ >>$@
 maint-buggy: maint.in merge.sed uninst.pre
 	sed -f $(srcdir)/merge.sed $< >$@
 
@@ -49,9 +48,9 @@ install-data-hook:
 	@$(POST_INSTALL)
 	if test "x@GAMEUSER@" != "x"; then \
 	  chown "@GAMEUSER@" "$(DESTDIR)/$(scoredir)" \
-	    && { test ! -e "$(DESTDIR)/$(scoredir)/mbscore" \
+	    && { test ! -f "$(DESTDIR)/$(scoredir)/mbscore" \
 		 || chown "@GAMEUSER@" "$(DESTDIR)/$(scoredir)/mbscore" ; } \
-	    && { test ! -e "$(DESTDIR)/$(scoredir)/mbscore" \
+	    && { test ! -f "$(DESTDIR)/$(scoredir)/mbscore" \
 		 || chmod go-w "$(DESTDIR)/$(scoredir)/mbscore" ; } \
 	    && chmod go-w "$(DESTDIR)/$(scoredir)" ; \
 	fi
