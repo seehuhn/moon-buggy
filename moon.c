@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: moon.c,v 1.1 1998/12/18 23:16:15 voss Exp $";
+static const  char  rcsid[] = "$Id: moon.c,v 1.2 1998/12/23 09:33:01 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -28,11 +28,11 @@ chtype *ground1, *ground2, *ground1;
 static  int  hole = 2;
 
 
-static int
-d_rnd (int anz)
-/* Returns a random integer `x' with `0 <= x < anz'.  */
+int
+d_rnd (int limit)
+/* Returns a random integer `x' with `0 <= x < limit'.  */
 {
-  return  (int)((double)anz*rand()/(RAND_MAX+1.0));
+  return  (int)((double)limit*rand()/(RAND_MAX+1.0));
 }
 
 void
