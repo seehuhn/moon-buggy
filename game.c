@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.3 1999/01/02 12:33:04 voss Rel $";
+static const  char  rcsid[] = "$Id: game.c,v 1.4 1999/01/30 17:09:59 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -140,58 +140,52 @@ game_mode (void)
   score = 0;
   lives = 3;
   do {
+    int  done = 0;
+
     for (i=car_base-4; i<car_base+8; ++i) {
       ground2[i] = '#';
     }
     spend_life ();
     --lives;
-      
-    add_event (vclock()+.3, ev_TIMEOUT);
-    while (get_event (NULL) != ev_TIMEOUT)
-      ;
+
+    print_lives ();
+    doupdate ();
     
-    if (lives > 0) {
-      int  done = 0;
-      
-      clear_queue ();
-      add_event (vclock()+.7, ev_TIMEOUT);
-      do {
-	switch (get_event (NULL)) {
-	case ev_TIMEOUT:
+    clear_queue ();
+    add_event (vclock()+2.0, ev_TIMEOUT);
+    do {
+      switch (get_event (NULL)) {
+      case ev_TIMEOUT:
+	done = 1;
+	break;
+      case ev_KEY:
+	switch (xgetch (moon)) {
+	case KEY_BREAK:
+	case KEY_CANCEL:
+	case KEY_EXIT:
+	case 'q':
+	  done = 1;
+	  lives = 0;
+	  break;
+	case KEY_BEG:
+	case KEY_ENTER:
 	  done = 1;
 	  break;
-	case ev_KEY:
-	  switch (xgetch (moon)) {
-	  case KEY_BREAK:
-	  case KEY_CANCEL:
-	  case KEY_EXIT:
-	  case 'q':
-	    done = 1;
-	    lives = 0;
-	    break;
-	  case KEY_BEG:
-	  case KEY_ENTER:
-	  case ' ':
-	    done = 1;
-	    break;
-	  default:
-	    beep ();
-	    doupdate ();
-	    break;
-	  }
-	  break;
 	default:
+	  beep ();
+	  doupdate ();
 	  break;
 	}
-      } while (! done);
-    }
+	break;
+      default:
+	break;
+      }
+    } while (! done);
   } while (lives > 0);
 
   wattron (moon, A_BLINK);
   mvwaddstr (moon, LINES-11, car_base-1, "GAME OVER");
   wattroff (moon, A_BLINK);
-
-  print_lives ();
 
   return  highscore_mode ();
 }
