@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 # Copyright 1999  Jochen Voß
-# $Id: Makefile.am,v 1.14 1999/01/21 19:31:08 voss Exp $
+# $Id: Makefile.am,v 1.15 1999/01/30 17:24:10 voss Rel $
 
 EXTRA_DIST = hpath.c moonman.in maintman.in instcmds text2c.sed merge.sed \
 	mbuggy.spec moon-buggy.gif moon-buggy.png title.eps
@@ -14,9 +14,9 @@ moon_buggy_LDADD = @LIBOBJS@
 
 bin_SCRIPTS = maint-buggy
 uninst.pre: Makefile instcmds
-	AWK=$(AWK) $(srcdir)/instcmds --uninstall pre >uninst.pre
+	$(srcdir)/instcmds --uninstall pre >uninst.pre
 uninst.post: Makefile instcmds
-	AWK=$(AWK) $(srcdir)/instcmds --uninstall post >uninst.post
+	$(srcdir)/instcmds --uninstall post >uninst.post
 maint-buggy: maint.in merge.sed uninst.pre uninst.post
 	sed -f $(srcdir)/merge.sed $< >$@
 
