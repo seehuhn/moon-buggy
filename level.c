@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: level.c,v 1.3 1999/05/24 19:22:05 voss Rel $";
+static const  char  rcsid[] = "$Id: level.c,v 1.4 1999/05/26 22:02:06 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -17,7 +17,8 @@ static const  char  rcsid[] = "$Id: level.c,v 1.3 1999/05/24 19:22:05 voss Rel $
 #define  PAUSE  40
 
 
-static  int  hole, first, crater_seen;
+static  int  hole, plateau;
+static  int  is_edge, crater_seen;
 static  int  level, initial_level, last_level, ticks;
 
 static union {
@@ -56,7 +57,7 @@ level0_init (void)
 static void
 level0 (double t)
 {
-  if (first) {
+  if (is_edge) {
     if (ticks < 345) {
       data.l0.gap = 14.5 - ticks*4.0/345 + uniform_rnd (4.5 + ticks*4.0/345);
     } else {
@@ -89,7 +90,7 @@ static void
 level1 (double t)
 {
   static const  int  table [11] = { 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4 };
-  if (first) {
+  if (is_edge) {
     if (ticks < 300) {
       data.l1.gap = 14.5 - ticks*4.0/300 + uniform_rnd (3);
     } else {
@@ -121,7 +122,6 @@ level1 (double t)
       break;
     case 3:
       hole = 5;
-      bonus[0] += 24;
       break;
     default:
       hole = table [uniform_rnd (11)];
@@ -141,7 +141,7 @@ level2_init (void)
 static void
 level2 (double t)
 {
-  if (first) {
+  if (is_edge) {
     if (data.l2.state == 0) {
       data.l2.gap = 8;
       if (ticks >= 310) {
@@ -190,7 +190,7 @@ level3 (double t)
     data.l3.state = 0;
   }
   
-  if (first) {
+  if (is_edge) {
     data.l3.gap = 20 + uniform_rnd (10);
     if (ticks > 160)  ++data.l3.state;
     switch (data.l3.state) {
@@ -204,6 +204,7 @@ level3 (double t)
       data.l3.pos = data.l3.gap - uniform_rnd (2) - 1;
       break;
     default:
+      bonus[0] += 20;
       ++level;
       break;
     }
@@ -226,7 +227,7 @@ level4_init (void)
 static void
 level4 (double t)
 {
-  if (first) {
+  if (is_edge) {
     data.l4.gap = data.l4.next_gap;
     if (data.l4.state == 0 && ticks < 700) {
       data.l4.state = 3 + uniform_rnd (3 + 2*(ticks < 350));
@@ -298,7 +299,7 @@ level6 (double t)
 {
   int  slip;			/* this many ticks/meteor may the user vaste */
   
-  if (first) {
+  if (is_edge) {
     data.l6.gap = data.l6.next_gap;
     if (data.l6.state == 0) {
       data.l6.state = 3 + uniform_rnd (5);
@@ -347,7 +348,7 @@ level_fin_init (void)
 static void
 level_fin (double t)
 {
-  if (first) {
+  if (is_edge) {
     data.l_fin.gap = data.l_fin.next_gap;
     if (data.l_fin.state == 0) {
       data.l_fin.state = 3 + uniform_rnd (6);
@@ -416,6 +417,15 @@ score_crater (int width)
   bonus[0] += score_table [width];
 }
 
+static void
+score_plateau (int width)
+{
+  static const  int  score_table [] = { 0, 0, 0, 0, 0, 0, 32, 18, 9 };
+  if (width > 8)  return;
+  ground2[1] = '0' + width;
+  bonus[0] += score_table [width];
+}
+
 void
 level_tick (double t)
 /* Advance the current level's state by one.
@@ -441,7 +451,7 @@ level_tick (double t)
       add_event (msg_t, print_message_h, (void *)levels[level].msg);
     }
     last_level = level;
-    first = 1;
+    is_edge = 1;
     crater_seen = 0;
   }
   if (ticks < 0) {
@@ -449,16 +459,21 @@ level_tick (double t)
   } else if (hole > 0) {
     if (! crater_seen) {
       score_crater (hole);
-      first = 1;
+      is_edge = 1;
       crater_seen = 1;
+      plateau = 0;
     }
-    --hole;
+
     ground = ' ';
+    --hole;
   } else {
     levels[level].fn (t);
-    ground = '#';
-    first = 0;
+    is_edge = 0;
     crater_seen = 0;
+
+    ground = '#';
+    ++plateau;
+    if (hole > 0)  score_plateau (plateau);
   }
 
   ground2[0] = ground;
