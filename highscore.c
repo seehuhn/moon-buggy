@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.33 2000/04/08 12:55:53 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.34 2000/04/08 12:57:17 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -38,7 +38,6 @@ struct mode *highscore_mode;
 
 
 #define SCORE_FILE "mbscore"
-#define HIST_FILE "history"
 #define MAX_NAME_CHARS 40
 #define HIGHSCORE_SLOTS 100
 
@@ -496,27 +495,6 @@ update_score_file (const struct score_entry *entry)
   free (local_name);
   free (global_name);
 }
-
-static void
-update_hist_file (int score, int level)
-{
-  char *history;
-  int  out_fd;
-
-  history = compose_filename (score_dir, HIST_FILE);
-
-  set_persona (pers_GAME);
-  out_fd = do_open (history, O_WRONLY|O_CREAT|O_APPEND, 2, 0);
-  if (out_fd != -1) {
-    FILE *f = fdopen (out_fd, "a");
-    
-    if (score>=10) fprintf (f, "%d %d\n", score, level);
-    fclose (f);
-  }
-  set_persona (pers_USER);
-
-  free (history);
-}
 
 void
 create_highscores (void)
@@ -525,7 +503,6 @@ create_highscores (void)
 {
   block_all ();
   update_score_file (NULL);
-  update_hist_file (0, 0);
   unblock ();
 }
 
@@ -647,11 +624,6 @@ highscore_enter (int level)
   unblock ();
   center_new ();
   print_scores ();
-
-  /* TODO: remove */
-  block_all ();
-  update_hist_file (last_score, level);
-  unblock ();
 
   if (last_score > highscore[HIGHSCORE_SLOTS-1].score) {
     struct score_entry  entry;
