@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: moon-buggy.h,v 1.2 1999/07/21 10:48:09 voss Exp $ */
+ * $Id: moon-buggy.h,v 1.3 1999/07/21 12:44:36 voss Exp $ */
 
 #ifndef FILE_MOON_BUGGY_H_SEEN
 #define FILE_MOON_BUGGY_H_SEEN
@@ -122,6 +122,7 @@ extern  void  get_date (int *day_p, int *month_p, int *year_p);
 /* from "persona.c" */
 enum persona { pers_GAME, pers_USER };
 extern  void  initialise_persona (void);
+extern  int  is_setgid (void);
 extern  void  set_persona (enum persona  pers);
 
 /* from "signal.c" */
