@@ -17,12 +17,12 @@ dangerous craters there.  Fortunately your car can jump over them!
    Moon-Buggy comes with NO WARRANTY, to the extent permitted by law.
 You may redistribute copies of Moon-Buggy under the terms of the GNU
 General Public License.  For more information about these matters, read
-the file COPYING of the source code distribution or press `c' at
+the file COPYING of the source code distribution or press 'c' at
 moon-buggy's title screen.
 
    Please mail any suggestions and bug reports to
 <voss@mathematik.uni-kl.de>.  Your message should include the
-moon-buggy version number, as obtained by the command `moon-buggy -V'.
+moon-buggy version number, as obtained by the command 'moon-buggy -V'.
 
 
 INSTALLATION:
@@ -36,12 +36,12 @@ you will need the ncurses package.
 are some points of interest:
 
    * By default, the program will be installed as
-     `/usr/local/bin/moon-buggy'.  You can specify an installation
-     prefix other than `/usr/local' by giving `configure' the
-     `--prefix=PATH' option.
+     '/usr/local/bin/moon-buggy'.  You can specify an installation
+     prefix other than '/usr/local' by giving 'configure' the
+     '--prefix=PATH' option.
 
-   * You can choose the score file's location via `configure''s
-     `--sharedstatedir' option.  On Linux you should use
+   * You can choose the score file's location via 'configure''s
+     '--sharedstatedir' option.  On Linux you should use
 
           --sharedstatedir=/var/games
 
@@ -49,7 +49,7 @@ are some points of interest:
 
    * Moon-buggy supports shared score files.  As explained in
      moon-buggy's manual, you may want to make moon-buggy a setgid
-     program.  This can be done with the `--with-setgid' option.  If
+     program.  This can be done with the '--with-setgid' option.  If
      you use
 
           --with-setgid=games
@@ -61,8 +61,8 @@ are some points of interest:
      remember: moon-buggy comes with no warranty.
 
    * If your version of the curses library is not autodetected, you
-     have to use some of the `--with-curses-includedir',
-     `--with-curses-header', and `--with-curses-libs' options.  For
+     have to use some of the '--with-curses-includedir',
+     '--with-curses-header', and '--with-curses-libs' options.  For
      example you should use
 
           --with-curses-includedir=/usr/pkg/include
