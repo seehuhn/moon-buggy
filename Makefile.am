@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 # Copyright 1999  Jochen Voss
-# $Id: Makefile.am,v 1.39 1999/07/21 12:46:05 voss Exp $
+# $Id: Makefile.am,v 1.40 1999/07/21 18:14:01 voss Exp $
 
 EXTRA_DIST = moonman.in maintman.in instcmds car.img \
 	text2c.sed merge.sed img.sed ANNOUNCE moon-buggy.lsm \
@@ -53,7 +53,7 @@ install-data-hook:
 	    && { test ! -f "$(DESTDIR)$(scoredir)/mbscore" \
 		 || chgrp "@GAMEGROUP@" "$(DESTDIR)$(scoredir)/mbscore" ; } \
 	    && { test ! -f "$(DESTDIR)$(scoredir)/mbscore" \
-		 || chmod 454 "$(DESTDIR)$(scoredir)/mbscore" ; } \
+		 || chmod 464 "$(DESTDIR)$(scoredir)/mbscore" ; } \
 	    && chmod 575 "$(DESTDIR)$(scoredir)" ; \
 	fi
 
