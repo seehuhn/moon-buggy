@@ -2,18 +2,14 @@
 # instcmds - extract shell commands from the Makefile
 # Copyright 1999  Jochen Voﬂ
 
-version="0.1"
-
-if test "x${AWK+set}" != xset; then
-  AWK=awk
-fi
+version="0.2"
 
 usage()
 {
   cat <<EOF
 Usage: instcmds [options] TYPE
 
-Extract shell commands from the Makefile.
+Extract (un-)installation commands from the Makefile.
 This script may only be interesting to maintainers.
 
 The options are
@@ -70,10 +66,20 @@ if [ "x$type" = "x" ]; then
   usage 1
 fi
 
+unique=47272088
+pre_label=$unique-ignore
+normal_label=$unique-ignore
+post_label=$unique-ignore
+case "$type" in
+  pre)    pre_label=$unique-fetch ;;
+  normal) normal_label=$unique-fetch ;;
+  post)   post_label=$unique-fetch ;;
+esac
+
 make --no-print-directory -n ${un}install -o all \
-  PRE_${UN}INSTALL=prdflv-pre-${un}install \
-  POST_${UN}INSTALL=prdflv-post-${un}install \
-  NORMAL_${UN}INSTALL=prdflv-normal-${un}install \
-| $AWK "\$0 ~ /^[ \t]*prdflv-/ { on = 0 }
-    on {print \$0}
-    \$0 ~ \"^[ \t]*prdflv-\" tpty \"[ \t]*\$\" { on = 1 }" "tpty=$type-${un}install"
+  PRE_${UN}INSTALL=$pre_label \
+  NORMAL_${UN}INSTALL=$normal_label \
+  POST_${UN}INSTALL=$post_label \
+| sed -n -e "/^[ \t]*$unique-fetch[ \t]*\$/, /^[ \t]*$unique-ignore[ \t]*\$/! d" \
+	-e "/^[ \t]*$unique-\\(fetch\\|ignore\\)[ \t]*\$/ d" \
+	-e "p" -
