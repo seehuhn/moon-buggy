@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: pager.c,v 1.14 2000/03/31 11:14:56 voss Exp $";
+static const  char  rcsid[] = "$Id: pager.c,v 1.15 2000/04/01 07:53:43 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -46,10 +46,7 @@ static void
 setup_screen (void)
 {
   mb_lines = LINES;
-  werase (moon);
   print_page (current_line);
-
-  werase (status);
 }
 
 static void
