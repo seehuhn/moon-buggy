@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.23 1999/06/06 13:18:09 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.24 1999/06/13 18:37:39 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -24,6 +24,10 @@ static const  char  rcsid[] = "$Id: queue.c,v 1.23 1999/06/06 13:18:09 voss Exp 
 extern  int  errno;
 #endif
 #include <assert.h>
+
+#if defined(__hp9000s800)
+#include <stdarg.h>
+#endif
 
 #include "mbuggy.h"
 
