@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.30 2000/03/19 18:47:19 voss Rel $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.31 2000/03/31 11:17:01 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -32,6 +32,9 @@ extern  int  errno;
 #endif
 
 #include "moon-buggy.h"
+
+
+struct mode *highscore_mode;
 
 
 #define SCORE_FILE "mbscore"
@@ -557,7 +560,7 @@ show_highscores (void)
 static int  highscore_valid, last_score;
 
 static void
-print_scores (int my_score)
+print_scores (void)
 /* Print the highscore table to the screen.  */
 {
   time_t  now;
@@ -566,7 +569,7 @@ print_scores (int my_score)
   now = time (NULL);
 
   for (i=1; i<HIGHSCORE_SLOTS; ++i) {
-    if (highscore[i].score < my_score)  break;
+    if (highscore[i].score < last_score)  break;
   }
   current = i-1;
 
@@ -596,7 +599,7 @@ print_scores (int my_score)
     
     if (highscore[i].new) {
       wstandout (moon);
-      if (highscore[i].score == my_score)  my_rank = i+1;
+      if (highscore[i].score == last_score)  my_rank = i+1;
     }
     format_display_date (date, highscore[i].date);
     dt = difftime (expire_date (i, highscore[i].date), now);
@@ -608,55 +611,47 @@ print_scores (int my_score)
     if (highscore[i].new)  wstandend (moon);
   }
   ++line;
-  mvwprintw (moon, line++, 17, "your score: %d", my_score);
+  mvwprintw (moon, line++, 17, "your score: %d", last_score);
   if (my_rank > 0) mvwprintw (moon, line++, 17, "your rank: %d", my_rank);
   wrefresh (moon);
 }
-
-
-static  int  abort_flag;
-
-static void
-key_handler (game_time t)
+
+void
+score_set (int score)
 {
-  int  meaning = read_key ();
-  if (meaning & mbk_start) {
-    quit_main_loop ();
-  } else if (meaning & mbk_end) {
-    abort_flag = 1;
-    quit_main_loop ();
-  } else {
-    beep ();
-    doupdate ();
-  }
+  last_score = score;
 }
 
-int
-highscore_mode (int score, int level)
+static void
+highscore_enter (int level)
 {
-  game_state = HIGHSCORE;
-  
   print_message ("loading score file ...");
   doupdate ();
   block_all ();
   update_score_file (NULL);
   highscore_valid = 1;
-  last_score = score;
   unblock ();
-  print_scores (score);
+  print_scores ();
 
   /* TODO: remove */
   block_all ();
-  update_hist_file (score, level);
+  update_hist_file (last_score, level);
   unblock ();
 
-  if (score > highscore[HIGHSCORE_SLOTS-1].score) {
+  if (last_score > highscore[HIGHSCORE_SLOTS-1].score) {
     struct score_entry  entry;
-    entry.score = score;
+    int  res;
+    
+    entry.score = last_score;
     entry.level = level;
     entry.date = time (NULL);
+  retry:
     entry.name[0] = '\0';
-    get_real_user_name (entry.name, MAX_NAME_CHARS);
+    res = get_real_user_name (entry.name, MAX_NAME_CHARS);
+    if (res == ERR) {
+      mode_redraw ();
+      goto retry;
+    }
     entry.new = 1;
   
     print_message ("writing score file ...");
@@ -664,23 +659,47 @@ highscore_mode (int score, int level)
     block_all ();
     update_score_file (&entry);
     unblock ();
-    print_scores (score);
+    print_scores ();
   }
-
-  print_message ("play again (y/n)?");
-  abort_flag = 0;
-  add_event (0, quit_main_loop_h, NULL);
-  main_loop (3600, key_handler);
-  
-  return  ! abort_flag;
+  mode_keys ();
 }
 
 void
 resize_highscore (void)
 {
-  resize_game ();
-  if (highscore_valid) {
-    print_message ("play again (y/n)?");
-    print_scores (last_score);
+  werase (moon);
+  werase (status);
+
+  resize_meteors ();
+  resize_ground (0);
+  
+  print_ground ();
+  adjust_score (0);
+  print_lives ();
+  print_buggy ();
+  if (highscore_valid)  print_scores ();
+}
+
+static void
+key_handler (game_time t, int val)
+{
+  switch (val) {
+  case 1:
+    mode_change (game_mode, 0);
+    break;
+  case 2:
+    quit_main_loop ();
+    break;
   }
+}
+
+void
+setup_highscore_mode (void)
+{
+  highscore_mode = new_mode ();
+  highscore_mode->enter = highscore_enter;
+  highscore_mode->redraw = resize_highscore;
+  highscore_mode->keypress = key_handler;
+  mode_add_key (highscore_mode, mbk_start, "new game", 1);
+  mode_add_key (highscore_mode, mbk_end, "quit", 2);
 }

@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: title.c,v 1.16 1999/07/21 10:38:18 voss Rel $";
+static const  char  rcsid[] = "$Id: title.c,v 1.17 2000/03/31 11:13:25 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -10,6 +10,9 @@ static const  char  rcsid[] = "$Id: title.c,v 1.16 1999/07/21 10:38:18 voss Rel 
 #endif
 
 #include "moon-buggy.h"
+
+
+struct mode *title_mode;
 
 
 const char *title [] = {
@@ -65,64 +68,47 @@ static void
 setup_screen (void)
 {
   werase (moon);
+  werase (status);
+  wnoutrefresh (status);
   resize_ground (1);
   print_title ();
   print_ground ();
-
-  werase (status);
-  wnoutrefresh (status);
-  
-  werase (message);
-  waddstr (message, "press `space' to start");
-  wnoutrefresh (message);
 }
 
-
-static  int  abort_flag;
+static void
+title_enter (int x)
+{
+  setup_screen ();
+}
 
 static void
-key_handler (game_time t)
+key_handler (game_time t, int val)
 {
-  int  meaning = read_key ();
-  if (meaning & mbk_end) {
-    abort_flag = 1;
+  switch (val) {
+  case 1:
+    mode_change (game_mode, 0);
+    break;
+  case 2:
     quit_main_loop ();
-  } else if (meaning & mbk_start) {
-    quit_main_loop ();
-  } else if (meaning & mbk_copyright) {
-    save_queue ();
-    pager_mode (0);
-    restore_queue ();
-    game_state = TITLE;
-    setup_screen ();
-  } else if (meaning & mbk_warranty) {
-    save_queue ();
-    pager_mode (1);
-    restore_queue ();
-    game_state = TITLE;
-    setup_screen ();
-  } else {
-    beep ();
+    break;
+  case 3:
+    mode_change (pager_mode, 0);
+    break;
+  case 4:
+    mode_change (pager_mode, 1);
+    break;
   }
 }
 
-int
-title_mode (void)
-/* Show the title, until the user does not want to see it any more.  */
-{
-  game_state = TITLE;
-  setup_screen ();
-
-  abort_flag = 0;
-  add_event (0, quit_main_loop_h, NULL);
-  main_loop (3600, key_handler);
-
-  return  abort_flag;
-}
-
 void
-resize_title (void)
+setup_title_mode (void)
 {
-  setup_screen ();
-  doupdate ();
+  title_mode = new_mode ();
+  title_mode->enter = title_enter;
+  title_mode->redraw = setup_screen;
+  title_mode->keypress = key_handler;
+  mode_add_key (title_mode, mbk_start, "start game", 1);
+  mode_add_key (title_mode, mbk_end, "quit", 2);
+  mode_add_key (title_mode, mbk_copyright, "show copyright", 3);
+  mode_add_key (title_mode, mbk_warranty, "show warranty", 4);
 }

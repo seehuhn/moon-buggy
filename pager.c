@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: pager.c,v 1.13 1999/07/21 10:40:19 voss Rel $";
+static const  char  rcsid[] = "$Id: pager.c,v 1.14 2000/03/31 11:14:56 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -12,6 +12,10 @@ static const  char  rcsid[] = "$Id: pager.c,v 1.13 1999/07/21 10:40:19 voss Rel 
 
 #include "moon-buggy.h"
 #include "copying.h"
+
+
+
+struct mode *pager_mode;
 
 
 static int  lines_used, current_line;
@@ -46,56 +50,55 @@ setup_screen (void)
   print_page (current_line);
 
   werase (status);
-  
-  werase (message);
-  waddstr (message, "`q' to return, ` ' page down, `b' page up");
-  wnoutrefresh (message);
 }
 
 static void
-key_handler (game_time t)
+key_handler (game_time t, int val)
 {
-  int  meaning = read_key ();
-  if (meaning & mbk_end) {
-    quit_main_loop ();
-  } else if (meaning & mbk_up) {
+  switch (val) {
+  case 1:
+    mode_change (title_mode, 0);
+    break;
+  case 2:
     if (current_line > 0)  --current_line;
     print_page (current_line);
-  } else if (meaning & mbk_down) {
+    break;
+  case 3:
     if (current_line < lines_used-1)  ++current_line;
     print_page (current_line);
-  } else if (meaning & mbk_pagedown) {
-    current_line += mb_lines-3;
-    if (current_line >= lines_used) {
-      current_line = lines_used-1;
-      if (current_line < 0)  current_line = 0;
-    }
-    print_page (current_line);
-  } else if (meaning & mbk_pageup) {
+    break;
+  case 4:
     if (current_line > mb_lines-3) {
       current_line -= mb_lines-3;
     } else {
       current_line = 0;
     }
     print_page (current_line);
-  } else if (meaning & mbk_first) {
+    break;
+  case 5:
+    current_line += mb_lines-3;
+    if (current_line >= lines_used) {
+      current_line = lines_used-1;
+      if (current_line < 0)  current_line = 0;
+    }
+    print_page (current_line);
+    break;
+  case 6:
     current_line = 0;
     print_page (current_line);
-  } else if (meaning & mbk_last) {
+    break;
+  case 7:
     current_line = lines_used-1;
     if (current_line < 0)  current_line = 0;
     print_page (current_line);
-  } else {
-    beep ();
+    break;
   }
 }
 
 void
-pager_mode (int what)
+pager_enter (int what)
 {
   int  i;
-
-  game_state = PAGER;
 
   lines_used = sizeof (copying_lines) / sizeof (const char *);
   switch (what) {
@@ -114,14 +117,20 @@ pager_mode (int what)
     break;
   }
   setup_screen ();
-
-  add_event (0, quit_main_loop_h, NULL);
-  main_loop (3600, key_handler);
 }
 
 void
-resize_pager (void)
+setup_pager_mode (void)
 {
-  setup_screen ();
-  doupdate ();
+  pager_mode = new_mode ();
+  pager_mode->enter = pager_enter;
+  pager_mode->redraw = setup_screen;
+  pager_mode->keypress = key_handler;
+  mode_add_key (pager_mode, mbk_end, "quit", 1);
+  mode_add_key (pager_mode, mbk_up, "up", 2);
+  mode_add_key (pager_mode, mbk_down, "down", 3);
+  mode_add_key (pager_mode, mbk_pageup, "pg up", 4);
+  mode_add_key (pager_mode, mbk_pagedown, "pg down", 5);
+  mode_add_key (pager_mode, mbk_first, "home", 6);
+  mode_add_key (pager_mode, mbk_last, "end", 7);
 }

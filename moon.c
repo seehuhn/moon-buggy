@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: moon.c,v 1.24 1999/07/21 10:40:34 voss Rel $";
+static const  char  rcsid[] = "$Id: moon.c,v 1.25 2000/03/31 11:15:21 voss Rel $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -71,7 +71,7 @@ scroll_handler (game_time t, void *client_data)
   if (crash_detected)  shift_buggy (1);
   if (crash_detected || crash_check ()) {
     ++crash_detected;
-    if (crash_detected > 2)  quit_main_loop ();
+    if (crash_detected > 2)  mode_change (pause_mode, 1);
   }
 
   if (can_jump () && stakes) {

@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: signal.c,v 1.12 1999/09/07 15:21:12 voss Rel $";
+static const  char  rcsid[] = "$Id: signal.c,v 1.13 2000/03/31 11:13:37 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -117,32 +117,11 @@ termination_handler (int signum)
 static void
 tstp_handler (int signum)
 {
-  fix_game_time ();
-  if (game_state == PLAYING)  quit_game ();
+  clock_freeze ();
+  mode_signal (signum);
   prepare_for_exit ();
   install_signal (SIGTSTP, SIG_DFL);
   raise (SIGTSTP);
-}
-
-static void
-do_resize ()
-{
-  switch (game_state) {
-  case TITLE:
-    resize_title ();
-    break;
-  case PAGER:
-    resize_pager ();
-    break;
-  case PLAYING:
-    resize_game ();
-    break;
-  case HIGHSCORE:
-    resize_highscore ();
-    break;
-  default:
-    break;
-  }
 }
 
 static void
@@ -153,20 +132,16 @@ cont_handler (int signum)
   refresh ();
   cbreak ();
   noecho ();
-  leaveok (moon, TRUE);
-  leaveok (status, TRUE);
-  leaveok (message, TRUE);
-  do_resize ();
-  if (game_state == PLAYING) {
-    print_message ("GAME OVER (suspended)");
-  }
-  clock_adjust_delay (0);
+  hide_cursor ();
+  mode_redraw ();
+  mode_signal (signum);
+  clock_thaw (0);
 }
 
 static void
 winch_handler (int signum)
 {
-  fix_game_time ();
+  clock_freeze ();
   delwin (moon);
   delwin (status);
   delwin (message);
@@ -174,8 +149,9 @@ winch_handler (int signum)
   refresh ();
   clearok (curscr, TRUE);
   allocate_windows ();
-  do_resize ();
-  clock_adjust_delay (1);	/* wait some extra time */
+  hide_cursor ();
+  mode_redraw ();
+  clock_thaw (1);	/* wait some extra time */
 }
 
 /************************************************************
