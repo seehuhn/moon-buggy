@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: title.c,v 1.20 2000/06/01 18:44:24 voss Exp $";
+static const  char  rcsid[] = "$Id: title.c,v 1.21 2000/06/16 10:50:47 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -38,8 +38,8 @@ print_title (void)
 {
   int  title_lines = sizeof (title) / sizeof (const char *);
 
-  waddstr (moon, "  Moon-Buggy version "
-	   VERSION ", Copyright 2000 Jochen Voss\n");
+  mvwaddstr (moon, 0, 0, "  Moon-Buggy version "
+	     VERSION ", Copyright 2000 Jochen Voss\n");
   waddstr (moon, "  Moon-Buggy comes with ABSOLUTELY NO WARRANTY;"
 	   " for details type `w'.\n");
   waddstr (moon,
@@ -56,23 +56,18 @@ print_title (void)
     }
   }
 
-  if (5 + title_lines + 7 <= LINES)  print_buggy ();
+  if (5 + title_lines + 7 <= LINES
+      || 5 + title_lines + 5 > LINES)  print_buggy ();
 
   wnoutrefresh (moon);
 }
 
 static void
-setup_screen (void)
+title_redraw (void)
 {
   resize_ground (1);
   print_ground ();
   print_title ();
-}
-
-static void
-title_enter (int x)
-{
-  setup_screen ();
 }
 
 static void
@@ -101,8 +96,7 @@ void
 setup_title_mode (void)
 {
   title_mode = new_mode ();
-  title_mode->enter = title_enter;
-  title_mode->redraw = setup_screen;
+  title_mode->redraw = title_redraw;
   title_mode->keypress = key_handler;
   mode_add_key (title_mode, mbk_start, "start game", 1);
   mode_add_key (title_mode, mbk_end, "quit", 2);
