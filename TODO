@@ -1,26 +1,20 @@
-BUGS:
-· What happens if two new score files are created at the same time?
-· Wenn man das Spiel nicht installiert, aber sich ein scorefile teilen
-moechte, muss man das "moon-buggy/"-Verzeichnis selbst anlegen.  Das
-sollte geaendert oder erklärt werden.
+BUG FIXES:
+· Wenn man das Spiel nicht installiert, aber sich ein Scorefile teilen
+möchte, muß man das "moon-buggy/"-Verzeichnis selbst anlegen.  Das
+sollte erklärt werden.
 · Laser und Meteoriten sollten Bildgrößenveränderungen beachten.
+· Punkteverteilung verbessern
+· Portabilität bekümmern
+· Remove score files from different versions on installation.
 
 IMPROVEMENTS:
-· Der Laser ist nicht limitiert.  Sollte man das ändern?
+· rpm Zeugs: "Autoreq: false" ausprobieren, "BuildRoot" wieder einführen
+· rpm Zeugs: "mbuggy.spec" aus "mbuggy.spec.in" erzeugen
 · Was ist mit der Loadanzeige?
-· Punkteverteilung verbessern
-· Die Pause nach dem Kaputtgehen sollte sich mit den meisten Tasten
-beenden lassen!  Vera wird nur durch einige, spezielle Tasten verwirrt!
-· Portabilität bekümmern
 · "--with-suid" sollte den aktuellen Benutzer als default verwenden
-· Remove score files from different versions on installation
-· Irgendwo kurz "curses" erklären
 · Hilfetext für den Pager, den man von der Titelseite aus aufrufen
 kann.  Erklärung der Tastaturbelegung.
 · Neue "--show-highscores" Option.
-
-· rpm Zeugs: "Autoreq: false" ausprobieren, "BuildRoot" wieder einführen
-· rpm Zeugs: "mbuggy.spec" aus "mbuggy.spec.in" erzeugen
 
 · Könnte man die Events 0.1 Sekunden zu früh ausführen und nur das
 `doupdate' verzögern?  Wie ist das dann mit Tastendrücken während der
@@ -31,7 +25,8 @@ Verbesserung?
 · Den `fd_set' Teil von "configure.in" verbessern.  Zumindest
 sollte der cache verwendet werden.
 · wgetnstr-Ersatz verbessern
-· Score file locking: recover from failure (use an alternative method)
+· Score file locking: recover from failure, i.e. use an alternative method.
+(What happens if two new score files are created at the same time?)
 · Use a timeout when waiting for a file lock
 · Internationalisieren
 · Peter: Graphik verbessern, insbesondere abgestürzte Autos
