@@ -1,13 +1,11 @@
 BUGS:
 · What happens if two new score files are created at the same time?
-
 · Wenn man das Spiel nicht installiert, aber sich ein scorefile teilen
 moechte, muss man das "moon-buggy/"-Verzeichnis selbst anlegen.  Das
 sollte geaendert oder erklärt werden.
 
 IMPROVEMENTS:
 · queue.c: messe nach, welcher Anteil der Zeit verschlafen wird
-· Sollte ich `poll' verwenden
 · Den `fd_set' Teil von "configure.in" verbessern.  Zumindest
 sollte der cache verwendet werden.
 · Portabilität bekümmern
