@@ -1,12 +1,13 @@
 ## Process this file with automake to produce Makefile.in
-# $Id: Makefile.am,v 1.7 1998/12/28 20:16:34 voss Exp $
+# $Id: Makefile.am,v 1.8 1998/12/29 00:42:06 voss Exp $
 
 EXTRA_DIST = mbpaths.c manpage.in moon-buggy-0.2-1.spec mbicon.gif mbicon.png
 DISTCLEANFILES = moon-buggy.6
 
 bin_PROGRAMS = moon-buggy
 moon_buggy_SOURCES = main.c queue.c moon.c buggy.c highscore.c lag.c moon.h \
-	realname.c vclock.c persona.c error.c xmalloc.c xstrdup.c @LIBOBJS@
+	realname.c title.c pager.c copying.h \
+	vclock.c persona.c error.c xmalloc.c xstrdup.c @LIBOBJS@
 moon_buggy_LDADD = mbpaths.o @CURSLIB@ -lm
 info_TEXINFOS = mbuggy.texi
 man_MANS = moon-buggy.6
@@ -14,6 +15,10 @@ man_MANS = moon-buggy.6
 scoredir = $(sharedstatedir)/moon-buggy
 mbpaths.o: mbpaths.c moon.h Makefile
 	$(COMPILE) -DSCORE_DIR=\"$(scoredir)\" -c $<
+
+BUILT_SOURCES = copying.h
+copying.h: COPYING text2c.sed
+	cd $(srcdir) && sed -f text2c.sed $< >$@
 
 install-data-hook:
 	$(mkinstalldirs) $(DESTDIR)$(scoredir)
