@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 # Copyright 1999  Jochen Voss
-# $Id: Makefile.am,v 1.44 1999/09/02 18:39:31 voss Rel $
+# $Id: Makefile.am,v 1.45 2000/01/03 14:22:34 voss Exp $
 
 EXTRA_DIST = moonman.in maintman.in instcmds car.img \
 	text2c.sed merge.sed img.sed ANNOUNCE moon-buggy.lsm \
@@ -10,7 +10,7 @@ DISTCLEANFILES = moon-buggy.6 maint-buggy maint-buggy.6 uninst.pre
 bin_PROGRAMS = moon-buggy
 moon_buggy_SOURCES = moon-buggy.h main.c title.c pager.c copying.h \
 	game.c level.c moon.c buggy.c buggy.h laser.c meteor.c highscore.c \
-	realname.c queue.c vclock.c getdate.c persona.c signal.c keyboard.c \
+	realname.c queue.c vclock.c date.c persona.c signal.c keyboard.c \
 	random.c error.c xmalloc.c xstrdup.c darray.h hpath.c
 moon_buggy_LDADD = @LIBOBJS@
 
