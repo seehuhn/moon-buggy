@@ -1,10 +1,10 @@
 ## Process this file with automake to produce Makefile.in
 # Copyright 1999  Jochen Voﬂ
-# $Id: Makefile.am,v 1.33 1999/06/25 21:31:35 voss Exp $
+# $Id: Makefile.am,v 1.34 1999/06/25 22:20:30 voss Exp $
 
 EXTRA_DIST = moonman.in maintman.in instcmds car.img \
 	text2c.sed merge.sed img.sed \
-	mbuggy.spec mbuggy.lsm moon-buggy.gif moon-buggy.png title.eps
+	ANNOUNCE mbuggy.spec mbuggy.lsm mbuggy.gif mbuggy.png title.eps
 DISTCLEANFILES = moon-buggy.6 maint-buggy maint-buggy.6 uninst.pre
 
 bin_PROGRAMS = moon-buggy
