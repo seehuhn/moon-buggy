@@ -4,7 +4,7 @@ Für Distributionen:
 · ANNOUNCE aktualisieren.  Keine tabs überlassen.
 · ChangeLog aktualisieren
 · Neues revision tag setzen (rel_maj_min, Rel)
-	cvs tag -F rel_0_4_0_91 .
+	cvs tag -F rel_0_6 .
 	cvs admin -sRel .
 · Quelltexte neu auschecken
 	cvs checkout moon-buggy
@@ -15,6 +15,5 @@ Für Distributionen:
 · run
 	./autogen.sh
 	./configure
-	rm uninst.pre.in
 · make
 · make distcheck

@@ -1,5 +1,5 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: moon-buggy.texi,v 1.11 2000/04/24 18:43:08 voss Rel $
+@c $Id: moon-buggy.texi,v 1.12 2000/04/26 20:43:35 voss Rel $
 @c %**start of header
 @setfilename moon-buggy.info
 @settitle Moon-Buggy Usage and Maintenance
@@ -83,7 +83,6 @@ version @value{VERSION} of the program.
 @menu
 * Introduction::                Introduction
 * Moon-buggy Invocation::       Moon-buggy Invocation
-* Maint-buggy Invocation::      Maint-buggy Invocation
 * Playing the Game::            Keyboard commands
 * Shared Score Files::          Competition via the highscore table
 * Installation::                Installation and setup
@@ -112,7 +111,7 @@ New versions of Moon-buggy may be found on the sunsite ftp server or on
 the moon-buggy download page (@pxref{References}).
 
 
-@node  Moon-buggy Invocation, Maint-buggy Invocation, Introduction, Top
+@node  Moon-buggy Invocation, Playing the Game, Introduction, Top
 @chapter Moon-buggy Invocation
 
 Normal usage is to start @samp{moon-buggy} without any options.
@@ -138,37 +137,7 @@ prints the program's version to standard output and exits.
 @end table
 
 
-@node  Maint-buggy Invocation, Playing the Game, Moon-buggy Invocation, Top
-@chapter Maint-buggy Invocation
-
-The @samp{maint-buggy} script is installed as part of the moon-buggy
-package.  It helps you to maintain your moon-buggy installation and is
-only useful for the system administrator.
-
-At the moment, its only purpose is to remove moon-buggy from your
-system.
-
-The script understands the following options.
-
-@table @samp
-@item --help
-shows a short usage message.
-
-@item --uninstall
-removes the moon-buggy installation from the system.  Use with caution:
-As this includes the @file{maint-buggy} script itself, this step cannot
-easily be undone!
-
-Note: If you installed moon-buggy with the help of a package manager
-(like @code{rpm}) you probably should use the same program for
-deinstallation.
-
-@item --version
-prints moon-buggy's version string to standard output and exits.
-@end table
-
-
-@node Playing the Game, Shared Score Files, Maint-buggy Invocation, Top
+@node Playing the Game, Shared Score Files, Moon-buggy Invocation, Top
 @chapter Playing the Game
 
 The game is controlled by a couple of keys, which are described near the
@@ -331,10 +300,6 @@ commands.  For the last one you need root user permissions.
 make
 make install
 @end example
-
-Once you do not want this program on your system any more, you can use
-the @samp{maint-buggy} script to cleanly remove the package
-(@pxref{Maint-buggy Invocation}).
 
 
 @node References,  , Installation, Top

@@ -1,11 +1,11 @@
 ## Process this file with automake to produce Makefile.in
 # Copyright 1999, 2000  Jochen Voss
-# $Id: Makefile.am,v 1.49 2000/04/08 13:14:14 voss Rel $
+# $Id: Makefile.am,v 1.50 2000/04/26 20:43:35 voss Rel $
 
-EXTRA_DIST = moonman.in maintman.in instcmds car.img \
-	text2c.sed merge.sed img.sed ANNOUNCE moon-buggy.lsm \
+EXTRA_DIST = moonman.in car.img \
+	text2c.sed img.sed ANNOUNCE moon-buggy.lsm \
 	moon-buggy.png moon-buggy.xpm title.eps
-DISTCLEANFILES = moon-buggy.6 maint-buggy maint-buggy.6 uninst.pre
+DISTCLEANFILES = moon-buggy.6
 
 INCLUDES = @CURSES_INCLUDEDIR@
 
@@ -16,15 +16,8 @@ moon_buggy_SOURCES = moon-buggy.h main.c mode.c title.c pager.c copying.h \
 	cursor.c random.c error.c xmalloc.c xstrdup.c darray.h hpath.c
 moon_buggy_LDADD = @CURSES_LIBS@
 
-bin_SCRIPTS = maint-buggy
-$(srcdir)/uninst.pre.in: Makefile.am instcmds
-	echo cd "@"infodir@ >$@ \
-	  && $(srcdir)/instcmds --uninstall --type=pre infodir="@"infodir@ >>$@
-maint-buggy: maint.in merge.sed uninst.pre
-	sed -f $(srcdir)/merge.sed maint.in >$@
-
 info_TEXINFOS = moon-buggy.texi
-man_MANS = moon-buggy.6 maint-buggy.6
+man_MANS = moon-buggy.6
 
 scoredir = $(sharedstatedir)/moon-buggy
 hpath.o: hpath.c moon-buggy.h Makefile
@@ -42,7 +35,6 @@ install-exec-hook:
 	  chgrp "@GAMEGROUP@" "$(DESTDIR)$(bindir)/moon-buggy" \
 	    && chmod 2111 "$(DESTDIR)$(bindir)/moon-buggy" ; \
 	fi
-	chmod go-x "$(DESTDIR)$(bindir)/maint-buggy"
 	@$(NORMAL_INSTALL)
 
 install-data-local:
@@ -80,7 +72,3 @@ moon-buggy.6: moonman.in Makefile
 		s:@C@:$(mbsep):g;\
 		s:@MBNAME@:$(PACKAGE):g;\
 		s:@MBVERS@:$(VERSION):g" $(srcdir)/moonman.in >>$@
-maint-buggy.6: maintman.in Makefile
-	echo ".\\\" $@ - automatically created from maintman.in" >$@
-	sed "s:@MBNAME@:$(PACKAGE):g;\
-		s:@MBVERS@:$(VERSION):g" $(srcdir)/maintman.in >>$@

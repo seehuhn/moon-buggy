@@ -10,9 +10,6 @@ config.log
 config.status
 configure
 copying.h
-maint.in
-maint-buggy
-maint-buggy.6
 moon-buggy.info
 moon-buggy.log
 moon-buggy.dvi
@@ -30,6 +27,4 @@ stamp-h
 stamp-h.in
 stamp-vti
 texinfo.tex
-uninst.pre
-uninst.pre.in
 version.texi

@@ -1,6 +1,6 @@
 .\" moonman.in - template for the "moon-buggy.6" manual page
 .\" Copyright 1999  Jochen Voss
-.\" $Id: moonman.in,v 1.7 2000/04/16 10:40:57 voss Rel $
+.\" $Id: moonman.in,v 1.8 2000/04/26 20:43:35 voss Rel $
 .de Op
 .BR -\\$1 @C@ ", " --\\$2
 ..
@@ -47,11 +47,6 @@ The following files on your system are related to moon-buggy.
 .I "@MBBINDIR@/moon-buggy"
 the moon-buggy executable.
 .TP
-.I "@MBBINDIR@/maint-buggy"
-the moon-buggy maintenance script.  See
-.BR maint-buggy (6)
-for details.
-.TP
 .I "@MBSCORE@/mbscore"
 the global score file
 .TP
@@ -60,9 +55,10 @@ the local score file.  This is used, if
 .B moon-buggy
 has no write access to the global score file.
 .SH SEE ALSO
-.BR maint-buggy (6)
+.B "Moon-buggy Usage and Maintenance"
+by Jochen Voss.
 .SH COPYING
-Copyright \(co 1999  Jochen Voss
+Copyright \(co 2000  Jochen Voss
 .PP
 .B Moon-buggy
 is free software.  Read the file
