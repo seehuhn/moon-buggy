@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: xstrdup.c,v 1.4 1999/01/18 21:01:55 voss Rel $";
+static const  char  rcsid[] = "$Id: xstrdup.c,v 1.5 1999/01/30 16:55:38 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -22,7 +22,7 @@ xstrdup (const char *str)
   return  tmp;
 }
 
-static size_t
+size_t
 xstrnlen (const char *str, size_t size)
 {
   size_t  n = 0;
