@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.14 $)
-AC_INIT(moon.h)
+AC_REVISION($Revision: 1.15 $)
+AC_INIT(mbuggy.h)
 AM_INIT_AUTOMAKE(moon-buggy, 0.3.90)
 AM_CONFIG_HEADER(config.h)
 
