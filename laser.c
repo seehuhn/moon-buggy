@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: laser.c,v 1.3 1999/05/08 12:40:38 voss Exp $";
+static const  char  rcsid[] = "$Id: laser.c,v 1.4 1999/05/15 16:49:12 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -37,7 +37,9 @@ beam_handler (game_time t, void *client_data)
     wmove (moon, LINES-b->y, b->left);
     for (i=0; i<b->right-b->left; ++i)  waddch (moon, '-');
     b->state = bs_RUN;
-    b->count = 40;
+    if (b->y == 5 && meteor_hit (b->left, b->right)) {
+      b->count = 0;
+    }
     add_event (t+TICK(0.25), beam_handler, client_data);
     break;
   case bs_RUN:
@@ -46,7 +48,11 @@ beam_handler (game_time t, void *client_data)
       b->right -= 1;
       mvwaddch (moon, LINES-b->y, b->left, '-');
       mvwaddch (moon, LINES-b->y, b->right, ' ');
-      b->count -= 1;
+      if (b->y == 5 && meteor_hit (b->left, b->right)) {
+	b->count = 0;
+      } else {
+	b->count -= 1;
+      }
       add_event (t+TICK(0.25), beam_handler, client_data);
     } else {
       wmove (moon, LINES-b->y, b->left);
@@ -92,6 +98,7 @@ fire_laser (double t)
   if (! beam_table.data)  DA_INIT (beam_table, struct beam *);
   b = xmalloc (sizeof (struct beam));
   b->state = bs_START;
+  b->count = 40;
   b->left = car_x-8;
   b->right = car_x;
   b->y = car_y;
@@ -114,4 +121,22 @@ extinguish_laser (void)
   }
   DA_CLEAR (beam_table);
   wnoutrefresh (moon);
+}
+
+int
+laser_hit (int x)
+/* Return true, if a beam covers location X of the baseline.
+ * These beams hit a meteor and stop immediately.  */
+{
+  int  j;
+  int  res = 0;
+
+  for (j=0; j<beam_table.used; ++j) {
+    struct beam *b = beam_table.data[j];
+    if (b->y == 5 && b->left >= x && b->right < x) {
+      if (b->state < bs_CLOUD)  b->count = 0;
+      res = 1;
+    }
+  }
+  return  res;
 }
