@@ -1,4 +1,27 @@
-2001-08-26  Jochen Voss  <jvoss2@gmx.de>
+2003-02-18  Jochen Voss  <voss@localhost>
+
+	* ChangeLog: Add 2002-07-13 to 2003-02-18
+
+	* moon-buggy.texi: Minor fix.
+
+	* configure.ac: Increase the version string to "0.5.54".
+	Fix the --with-setgid error message.
+
+	* checklist: minor fixes.
+
+	* TODO: Add new items.
+
+	* README: Fix the single quote characters.
+
+2002-07-13  Jochen Voss  <voss@localhost>
+
+	* main.c: Rename old 'RND_SHORT_OPTIONS' to new 'MB_SHORT_OPTIONS'.
+
+2001-08-26  Jochen Voss  <voss@localhost>
+
+	* queue.c: Minor fixes.
+
+	* configure.ac: Fix the AC_DEFINE calls.
 
 	* ChangeLog: add 2000-11-13 to 2001-08-26
 
