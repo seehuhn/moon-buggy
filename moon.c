@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: moon.c,v 1.2 1998/12/23 09:33:01 voss Exp $";
+static const  char  rcsid[] = "$Id: moon.c,v 1.3 1998/12/28 20:13:35 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -23,7 +23,7 @@ static const  char  rcsid[] = "$Id: moon.c,v 1.2 1998/12/23 09:33:01 voss Exp $"
 #include "moon.h"
 
 
-chtype *ground1, *ground2, *ground1;
+char *ground1, *ground2;
 
 static  int  hole = 2;
 
@@ -38,7 +38,7 @@ d_rnd (int limit)
 void
 scroll_ground (void)
 {
-  chtype  nextchar;
+  char  nextchar;
 
   assert (hole != 0);
   if (hole > 0) {
@@ -51,6 +51,6 @@ scroll_ground (void)
     if (hole == 0)  hole = 2+d_rnd (2);
   }
   
-  memmove (ground2+1, ground2, (COLS-1)*sizeof(chtype));
+  memmove (ground2+1, ground2, COLS-1);
   ground2[0] = nextchar;
 }
