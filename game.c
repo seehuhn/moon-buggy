@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.17 1999/05/22 17:12:57 voss Exp $";
+static const  char  rcsid[] = "$Id: game.c,v 1.18 1999/05/23 14:20:25 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -66,7 +66,7 @@ life_key_handler (game_time t)
 }
 
 static void
-spend_life (int first)
+spend_life ()
 {
   crash_detected = 0;
   bonus = 0;
@@ -79,11 +79,9 @@ spend_life (int first)
   print_buggy ();
 
   start_scrolling (1);
-  add_event (3, clear_message_h, NULL);
   add_event (TICK(75), score_handler, NULL);
-  control_init (first);
 
-  main_loop (1, life_key_handler);
+  main_loop (0.5, life_key_handler);
 
   extinguish_laser ();
 }
@@ -120,20 +118,19 @@ game_key_handler (game_time t)
 int
 game_mode (void)
 {
-  int  i, first;
+  int  i;
   
   game_state = PLAYING;
   setup_screen ();
   
   score = 0;
-  first = 1;
   lives = 3;
+  level_start ();
   do {
     for (i=car_base-4; i<car_base+8; ++i) {
       ground2[i] = '#';
     }
-    spend_life (first);
-    first = 0;
+    spend_life ();
     --lives;
 
     print_lives ();
