@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: mbuggy.h,v 1.8 1999/05/24 19:24:18 voss Rel $ */
+ * $Id: mbuggy.h,v 1.9 1999/05/26 21:04:46 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -35,6 +35,39 @@
 #endif
 #ifndef KEY_UNDO
 #define KEY_UNDO -6
+#endif
+#ifndef KEY_BREAK
+#define KEY_BREAK -7
+#endif
+#ifndef KEY_CLEAR
+#define KEY_CLEAR -8
+#endif
+#ifndef KEY_ENTER
+#define KEY_ENTER -9
+#endif
+#ifndef KEY_UP
+#define KEY_UP -10
+#endif
+#ifndef KEY_DOWN
+#define KEY_DOWN -11
+#endif
+#ifndef KEY_LEFT
+#define KEY_LEFT -12
+#endif
+#ifndef KEY_NPAGE
+#define KEY_NPAGE -13
+#endif
+#ifndef KEY_PPAGE
+#define KEY_PPAGE -14
+#endif
+#ifndef KEY_A1
+#define KEY_A1 -15
+#endif
+#ifndef KEY_C1
+#define KEY_C1 -16
+#endif
+#ifndef KEY_HOME
+#define KEY_HOME -17
 #endif
 
 #define TICK(x) ((x)*0.08/(MB_SPEED))
