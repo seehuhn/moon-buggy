@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.
  *
- * $Id: moon.h,v 1.7 1998/12/27 14:08:54 voss Exp $ */
+ * $Id: moon.h,v 1.8 1998/12/28 20:12:53 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -36,14 +36,15 @@ extern  void  fatal (const char *format, ...);
 
 /* from "queue.c" */
 enum event_type { ev_KEY, ev_STATUS, ev_SCROLL, ev_BUGGY, ev_SCORE };
+extern  double  sleep_meter;
 extern  void  clock_adjust_delay (double dt);
 extern  void  clear_queue (void);
 extern  void  add_event (double t, enum event_type type);
 extern  enum event_type  get_event (double *t);
 extern  int  remove_event (enum event_type type, double *t);
 
-/* from "ground.c" */
-extern  chtype *ground1, *ground2;
+/* from "moon.c" */
+extern  char *ground1, *ground2;
 extern  void  scroll_ground (void);
 
 /* from "buggy.c" */
@@ -58,12 +59,12 @@ extern  int  crash_check (void);
 extern  void  write_hiscore (void);
 
 /* from "lag.c" */
-struct lagmeter;
-extern  struct lagmeter *new_lagmeter (void);
-extern  void  add_lag (struct lagmeter *lm, double x);
-extern  double  get_lag (const struct lagmeter *lm);
+struct circle_buffer;
+extern  struct circle_buffer *new_circle_buffer (void);
+extern  void  add_value (struct circle_buffer *lm, double x);
+extern  double  get_mean (const struct circle_buffer *lm);
 
-extern  struct lagmeter *queuelag;
+extern  struct circle_buffer *queuelag;
 
 /* from "realname.c" */
 extern  void  get_real_user_name (char *buffer, size_t size);
