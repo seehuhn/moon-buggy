@@ -1,4 +1,23 @@
+1999-09-02  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: Added 1999-08-31 and 1999-09-02.
+
+	* configure.in: Changed the version string to "0.4.0.92".
+
+	* Makefile.am (dist-hook):
+	corrected the handling of the "debian/" subdirectory.
+
+	* main.c (print_message): bug fix
+
+	* highscore.c: Bug fixes: handle corrupted score files
+
+1999-08-31  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* download.html: initial revision
+
 1999-08-30  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: Added 1999-07-23 and 1999-08-30.
 
 	* Makefile.am (dist-hook): minor fix
 
