@@ -2,10 +2,10 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.10 1999/01/09 13:50:56 voss Rel $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.11 1999/01/30 17:11:14 voss Rel $";
 
-#define _XOPEN_SOURCE
-#define _XOPEN_SOURCE_EXTENDED
+#define _XOPEN_SOURCE 1
+#define _XOPEN_SOURCE_EXTENDED 1
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -428,6 +428,7 @@ highscore_mode (void)
     print_message ("play again (y/n)?");
     doupdate ();
     switch (xgetch (message)) {
+    case KEY_ENTER:
     case 'y':
     case ' ':
       done = 1;
