@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.19 1999/05/22 13:43:58 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.20 1999/05/23 14:18:19 voss Exp $";
 
 #define _POSIX_SOURCE 1
 
@@ -39,6 +39,9 @@ print_message (const char *str)
   werase (message);
   waddstr (message, str);
   wnoutrefresh (message);
+  
+  remove_event (clear_message_h);
+  add_event (3, clear_message_h, NULL);
 }
 
 void
@@ -171,7 +174,6 @@ the file named COPYING or press `c' at Moon-Buggy's title screen.");
   }
 
   if (! res) {
-    print_message ("good luck (or use SPACE to jump)");
     while (game_mode ())
       ;
     mvwaddstr (moon, LINES-11, car_base-1, "GAME OVER");
