@@ -8,8 +8,6 @@ zu neu ist.  Wie konnte das passieren?
 ∑ CVS Tags setzen
 
 BUG FIXES:
-∑ highscore.c: Warum heiﬂt es "get_real_user_name (entry.name,
-NAME_MAX_LEN)" aber "char  name [NAME_MAX_LEN+1];"?
 ∑ Punkteverteilung verbessern
 ∑ Remove score files from different versions on installation.
 ∑ Copyrightdaten richtigstellen!
