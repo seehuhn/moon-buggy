@@ -1,8 +1,8 @@
 /* meteor.c - stones on the moon to shoot on
  *
- * Copyright 1999  Jochen Voss.  */
+ * Copyright 1999, 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: meteor.c,v 1.9 1999/07/21 10:40:59 voss Rel $";
+static const  char  rcsid[] = "$Id: meteor.c,v 1.10 2000/11/16 17:56:36 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -33,63 +33,69 @@ score_meteor (struct meteor *m)
   bonus[m->x] -= 20;
 }
 
-static void
-meteor_handler (game_time t, void *client_data)
-/* Move a meteor along with the ground.  Check for laser hits. */
+static int
+scroll_one_meteor (struct meteor *m)
+/* Move the meteor *M along with the ground.
+ * Check for collisions with the car or with laser beams.
+ * Return 1 iff the meteor should be removed from the list.  */
 {
-  struct meteor *m = client_data;
-
-  switch (m->state) {
-  case ms_START:
-    mvwaddch (moon, BASELINE, m->x, m_image[m->state]);
+  if (m->state == ms_START) {
     m->state = ms_BIG;
-    add_event (t+TICK(1), meteor_handler, m);
-    break;
-  default:
+  } else {
     mvwaddch (moon, BASELINE, m->x, ' ');
-    if (m->x < COLS-1 ) {
-      m->x += 1;
-      if (laser_hit (m->x)) {
-	m->state += 1;
-	if (m->state > ms_SMALL) {
-	  score_meteor (m);
-	  DA_REMOVE_VALUE (meteor_table, struct meteor *, m);
-	  free (m);
-	} else {
-	  mvwaddch (moon, BASELINE, m->x, m_image[m->state]);
-	  add_event (t+TICK(1), meteor_handler, m);
-	}
-      } else if (car_meteor_hit (t, m->x)) {
-	DA_REMOVE_VALUE (meteor_table, struct meteor *, m);
-	free (m);
-      } else {
-	mvwaddch (moon, BASELINE, m->x, m_image[m->state]);
-	add_event (t+TICK(1), meteor_handler, m);
-      }
-    } else {
-      DA_REMOVE_VALUE (meteor_table, struct meteor *, m);
+  }
+
+  m->x += 1;
+  if (m->x >= COLS )  return 1;
+  
+  if (laser_hit (m->x)) {
+    m->state += 1;
+    if (m->state > ms_SMALL) {
+      score_meteor (m);
+      return  1;
+    }
+  }
+  if (car_meteor_hit (m->x))  return  1;
+
+  mvwaddch (moon, BASELINE, m->x, m_image[m->state]);
+  return  0;
+}
+
+void
+scroll_meteors (void)
+/* Move the meteors along with the ground.
+ * Handle collisions with the car or with laser beams. */
+{
+  int  j;
+
+  if (meteor_table.used > 0)  wnoutrefresh (moon);
+  for (j=meteor_table.used-1; j>=0; --j) {
+    struct meteor *m = meteor_table.data[j];
+    int  res;
+
+    res = scroll_one_meteor (m);
+    if (res) {
+      DA_REMOVE (meteor_table, struct meteor *, j);
       free (m);
     }
-    break;
   }
+  
+  mvwprintw (moon, BASELINE-4, car_x, " %5d ", meteor_table.used);
   wnoutrefresh (moon);
 }
 
 void
-place_meteor (double t)
-/* Place a new meteor on the ground.
- * This is the only function, that must be called from the outside.
- * The complete handling of the meteor results automatically.  */
+place_meteor (void)
+/* Place a new meteor on the ground.  */
 {
   struct meteor *m;
 
   if (! meteor_table.data)  DA_INIT (meteor_table, struct meteor *);
   m = xmalloc (sizeof (struct meteor));
   m->state = ms_START;
-  m->x = 1;
-  bonus[1] += 20;
+  m->x = 0;
+  bonus[0] += 20;
   DA_ADD (meteor_table, struct meteor *, m);
-  add_event (t+TICK(1), meteor_handler, m);
 }
 
 void
@@ -99,14 +105,13 @@ remove_meteors (void)
 {
   int  j;
 
-  remove_event (meteor_handler);
+  if (meteor_table.used > 0)  wnoutrefresh (moon);
   for (j=0; j<meteor_table.used; ++j) {
     struct meteor *m = meteor_table.data[j];
     mvwaddch (moon, BASELINE, m->x, ' ');
     free (m);
   }
   DA_CLEAR (meteor_table);
-  wnoutrefresh (moon);
 }
 
 int
