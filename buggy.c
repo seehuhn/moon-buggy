@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: buggy.c,v 1.19 1999/07/21 10:43:32 voss Rel $";
+static const  char  rcsid[] = "$Id: buggy.c,v 1.20 2000/03/31 11:18:02 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -106,7 +106,7 @@ jump_handler (game_time t, void *client_data)
 }
 
 void
-jump (double t)
+jump (game_time t)
 {
   assert (state->has_ground);
   remove_event (jump_handler);	/* only one jump at a time */
@@ -146,7 +146,7 @@ shift_buggy (int dx)
 }
 
 int
-car_meteor_hit (double t, int x)
+car_meteor_hit (game_time t, int x)
 /* Return true, if the car is down a occupies position X.
  * Then the car crashes immediately.  */
 {
