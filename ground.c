@@ -1,8 +1,8 @@
-/* moon.c - implement the moon to drive on
+/* ground.c - implement the moon to drive on
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: moon.c,v 1.25 2000/03/31 11:15:21 voss Rel $";
+static const  char  rcsid[] = "$Id: ground.c,v 1.1 2000/06/01 19:11:13 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -47,6 +47,7 @@ print_ground (void)
 {
   mvwaddnstr (moon, LINES-4, 0, ground2, ground_width);
   mvwaddnstr (moon, LINES-3, 0, ground1, ground_width);
+  mvwprintw (moon, LINES-3, 3, " %d ", getpid ());
   wnoutrefresh (moon);
 }
 
