@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: buggy.c,v 1.10 1999/04/24 17:55:28 voss Exp $";
+static const  char  rcsid[] = "$Id: buggy.c,v 1.11 1999/04/25 17:10:32 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -14,7 +14,7 @@ static const  char  rcsid[] = "$Id: buggy.c,v 1.10 1999/04/24 17:55:28 voss Exp 
 #include "buggy.h"
 
 
-int  car_base, score_base;
+int  car_x, car_y;
 
 
 typedef  struct scene {
@@ -62,36 +62,41 @@ print_buggy (void)
   
   switch (cstate) {
   case car_NORMAL:
-    mvwaddstr (moon, LINES-8, car_base-speed, "         ");
-    mvwaddstr (moon, LINES-7, car_base-speed, "         ");
-    mvwaddstr (moon, LINES-6, car_base-speed, "    Omm  ");
-    mvwaddstr (moon, LINES-5, car_base-speed, " (0)-(0) ");
+    car_y = 5;
+    mvwaddstr (moon, LINES-8, car_x, "         ");
+    mvwaddstr (moon, LINES-7, car_x, "         ");
+    mvwaddstr (moon, LINES-6, car_x, "    Omm  ");
+    mvwaddstr (moon, LINES-5, car_x, " (0)-(0) ");
     break;
   case car_START:
-    mvwaddstr (moon, LINES-8, car_base-speed, "         ");
-    mvwaddstr (moon, LINES-7, car_base-speed, "         ");
-    mvwaddstr (moon, LINES-6, car_base-speed, "    OMM  ");
-    mvwaddstr (moon, LINES-5, car_base-speed, " (0)-(0) ");
+    car_y = 5;
+    mvwaddstr (moon, LINES-8, car_x, "         ");
+    mvwaddstr (moon, LINES-7, car_x, "         ");
+    mvwaddstr (moon, LINES-6, car_x, "    OMM  ");
+    mvwaddstr (moon, LINES-5, car_x, " (0)-(0) ");
     break;
   case car_UP1:
-    mvwaddstr (moon, LINES-8, car_base-speed, "         ");
-    mvwaddstr (moon, LINES-7, car_base-speed, "    OMm  ");
-    mvwaddstr (moon, LINES-6, car_base-speed, " (0)-(0) ");
-    mvwaddstr (moon, LINES-5, car_base-speed, "         ");
+    car_y = 6;
+    mvwaddstr (moon, LINES-8, car_x, "         ");
+    mvwaddstr (moon, LINES-7, car_x, "    OMm  ");
+    mvwaddstr (moon, LINES-6, car_x, " (0)-(0) ");
+    mvwaddstr (moon, LINES-5, car_x, "         ");
     break;
   case car_UP2:
-    mvwaddstr (moon, LINES-8, car_base-speed, "    oMm  ");
-    mvwaddstr (moon, LINES-7, car_base-speed, " (0)-(0) ");
-    mvwaddstr (moon, LINES-6, car_base-speed, "         ");
-    mvwaddstr (moon, LINES-5, car_base-speed, "         ");
+    car_y = 7;
+    mvwaddstr (moon, LINES-8, car_x, "    oMm  ");
+    mvwaddstr (moon, LINES-7, car_x, " (0)-(0) ");
+    mvwaddstr (moon, LINES-6, car_x, "         ");
+    mvwaddstr (moon, LINES-5, car_x, "         ");
     break;
   case car_LAND:
     crash = crash_check ();
     if (! crash) {
-      mvwaddstr (moon, LINES-8, car_base-speed, "         ");
-      mvwaddstr (moon, LINES-7, car_base-speed, "         ");
-      mvwaddstr (moon, LINES-6, car_base-speed, "    omm  ");
-      mvwaddstr (moon, LINES-5, car_base-speed, " (o)_(o) ");
+      car_y = 5;
+      mvwaddstr (moon, LINES-8, car_x, "         ");
+      mvwaddstr (moon, LINES-7, car_x, "         ");
+      mvwaddstr (moon, LINES-6, car_x, "    omm  ");
+      mvwaddstr (moon, LINES-5, car_x, " (o)_(o) ");
     }
     break;
   }
@@ -132,7 +137,7 @@ can_jump (void)
 int
 crash_check (void)
 {
-  int  base = car_base - speed;
+  int  base = car_x;
   
   if (cstate == car_START || cstate == car_UP1 || cstate == car_UP2)  return 0;
   if (ground2[base+2] == ' ') {
