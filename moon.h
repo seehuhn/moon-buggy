@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: moon.h,v 1.13 1999/03/02 18:30:45 voss Exp $ */
+ * $Id: moon.h,v 1.14 1999/03/08 20:33:55 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -93,20 +93,15 @@ extern  void  get_real_user_name (char *buffer, size_t size);
 /* from "queue.c" */
 enum event_type { ev_KEY, ev_TIMEOUT, ev_MESSAGE, ev_SCROLL, ev_BUGGY, \
 		  ev_SCORE };
+typedef  double  game_time;
 extern  double  sleep_meter;
 extern  struct circle_buffer *queuelag;
 
 extern  void  clock_adjust_delay (double dt);
 extern  void  clear_queue (void);
-extern  void  add_event (double t, enum event_type type);
-extern  enum event_type  get_event (double *t);
-extern  int  remove_event (enum event_type type, double *t);
-
-/* from "lag.c" */
-struct circle_buffer;
-extern  struct circle_buffer *new_circle_buffer (void);
-extern  void  add_value (struct circle_buffer *lm, double x);
-extern  double  get_mean (const struct circle_buffer *lm);
+extern  void  add_event (game_time t, enum event_type type);
+extern  enum event_type  get_event (game_time *t_return);
+extern  int  remove_event (enum event_type type, game_time *t_return);
 
 /* from "vclock.c" */
 extern  double  vclock (void);
