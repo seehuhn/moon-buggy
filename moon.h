@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.
  *
- * $Id: moon.h,v 1.6 1998/12/26 14:05:06 voss Exp $ */
+ * $Id: moon.h,v 1.7 1998/12/27 14:08:54 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -20,6 +20,11 @@ extern  double  vclock (void);
 extern  void *xmalloc (size_t size);
 extern  void *xrealloc (void *ptr, size_t size);
 extern  char *xstrdup (const char *str);
+
+/* from "persona.c" */
+extern  void  initialize_persona (void);
+extern  void  set_game_persona (void);
+extern  void  set_user_persona (void);
 
 /* from "error.c" */
 #ifdef __GNUC__
