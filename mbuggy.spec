@@ -1,17 +1,16 @@
-Summary: drive a strange car across the moon
+Summary: drive some car across the moon
 Name: moon-buggy
 Copyright: GPL
 Group: Games
 Version: 0.3.1
 Release: 1
-Packager: Jochen Voﬂ <voss@mathematik.uni-kl.de>
+Packager: Jochen Voss <voss@mathematik.uni-kl.de>
 Source: moon-buggy-0.3.1.tar.gz
 Icon: moon-buggy.gif
 %description
-moon-buggy is a simple, curses-based game, where you drive some kind
-of car across the surface of the moon.  Unfortunately there are
-dangerous craters there.  Fortunately your car can jump!  So just go
-on, and jump over the craters.
+Moon-buggy is a simple character graphics game, where you drive some
+kind of car across the moon's surface.  Unfortunately there are
+dangerous craters there.  Fortunately your car can jump over them!
 
 %prep
 %setup
