@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.8 1999/01/30 16:56:21 voss Rel $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.9 1999/03/02 18:29:58 voss Exp $";
 
 #define _POSIX_SOURCE 1
 
@@ -46,29 +46,52 @@ struct circle_buffer *queuelag;
 double  sleep_meter = 0;
 
 
+int
+my_select (fd_set *read_fds, double target_time)
+/* Wait until input is ready on a file descriptor from READ_FDS or
+ * TARGET_TIME is reached.  The value -1 for TARGET_TIME is special.
+ * It indicates that no timeout should be used.  The return value is 0
+ * if we return because of TARGET_TIME being reached, and positive
+ * else.  */
+{
+  int  retval;
+
+  do {
+    struct timeval  tv;
+    struct timeval *timeout;
+
+    handle_signals ();
+    if (target_time < -0.5) {
+      timeout = NULL;
+    } else {
+      double  dt, sec, usec;
+      
+      dt = target_time - vclock ();
+      if (dt < 0)  dt = 0;
+      sleep_meter += dt;
+      usec = 1e6 * modf (dt, &sec) + 0.5;
+      tv.tv_sec = sec + 0.5;
+      tv.tv_usec = usec + 0.5;
+      timeout = &tv;
+    }
+    retval = select (FD_SETSIZE, read_fds, NULL, NULL, timeout);
+    if (retval < 0 && errno == EINTR)  handle_signals ();
+  } while (retval < 0 && errno == EINTR);
+  if (retval < 0)  fatal ("Select failed: %s", strerror (errno));
+
+  return  retval;
+}
+
 static int
 key_ready (void)
 /* Return a positive value iff keyboard input is ready.  */
 {
   fd_set  rfds;
-  int  retval;
 
   /* Watch stdin (fd 0) to see when it has input. */
   FD_ZERO (&rfds);
   FD_SET (0, &rfds);
-  
-  do {
-    struct timeval  tv;
-    
-    tv.tv_sec = 0;
-    tv.tv_usec = 0;
-    retval = select (FD_SETSIZE, &rfds, NULL, NULL, &tv);
-  } while (retval<0 && errno == EINTR);
-  if (retval < 0) {
-    fatal ("Select failed: %s", strerror (errno));
-  }
-  
-  return  retval;
+  return  my_select (&rfds, 0);
 }
 
 static int
@@ -76,20 +99,11 @@ wait_for_key (void)
 /* Wait for the next key press and return a positive value.  */
 {
   fd_set  rfds;
-  int  retval;
 
   /* Watch stdin (fd 0) to see when it has input. */
   FD_ZERO (&rfds);
   FD_SET (0, &rfds);
-  
-  do {
-    retval = select (FD_SETSIZE, &rfds, NULL, NULL, NULL);
-  } while (retval<0 && errno == EINTR);
-  if (retval < 0) {
-    fatal ("Select failed: %s", strerror (errno));
-  }
-  
-  return  retval;
+  return  my_select (&rfds, -1);
 }
 
 static int
@@ -98,31 +112,11 @@ wait_until (double t)
  * Return a positive value, if a key was pressed, and 0 else.  */
 {
   fd_set  rfds;
-  int  retval;
 
   /* Watch stdin (fd 0) to see when it has input. */
   FD_ZERO (&rfds);
   FD_SET (0, &rfds);
-  
-  do {
-    struct timeval  tv;
-    double  dt, sec, usec;
-    
-    dt = t - vclock ();
-    if (dt < 0)  dt = 0;
-    sleep_meter += dt;
-    
-    usec = 1e6 * modf (dt, &sec) + 0.5;
-    tv.tv_sec = sec + 0.5;
-    tv.tv_usec = usec + 0.5;
-    retval = select (FD_SETSIZE, &rfds, NULL, NULL, &tv);
-  } while (retval<0 && errno == EINTR);
-
-  if (retval < 0) {
-    fatal ("Select failed: %s", strerror (errno));
-  }
-  
-  return  retval;
+  return  my_select (&rfds, t);
 }
 
 void
