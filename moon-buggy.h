@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss
  *
- * $Id: moon-buggy.h,v 1.17 2000/11/01 13:13:18 voss Exp $ */
+ * $Id: moon-buggy.h,v 1.18 2000/11/13 20:48:29 voss Exp $ */
 
 #ifndef FILE_MOON_BUGGY_H_SEEN
 #define FILE_MOON_BUGGY_H_SEEN
@@ -184,9 +184,9 @@ extern  void  mode_redraw (void);
 extern  int  mode_keypress (game_time t, int meaning);
 extern  void  mode_signal (int signum);
 
-/* from "mesg.c" */
-extern  void  mesg_off (void);
-extern  void  mesg_restore (void);
+/* from "terminal.c" */
+extern  void  term_prepare (int mesg_n_flag);
+extern  void  term_restore (void);
 
 /* from "cursor.c" */
 extern  void  hide_cursor (void);
