@@ -1,3 +1,49 @@
+2000-03-19  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: added 2000-03-14 to 2000-03-19
+
+	* configure.in: Removed some debugging output.
+
+	* TODO: Doc fix
+
+	* moon-buggy.h:
+	Added a declaration for the new function `format_relative_time' from
+	"date.c".
+
+	* highscore.c: New expiration method for higscore entries.
+	(expire_date): new function.
+
+	* date.c (format_relative_time): new function
+
+2000-03-17  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* README, moon-buggy.texi:
+	Explain the new curses options for configure.
+
+	* acconfig.h: BSD fixes
+
+	* acinclude.m4: Added some auto-detection code again.
+
+	* configure.in, highscore.c, persona.c, queue.c, realname.c, vclock.c:
+	BSD fixes
+
+2000-03-14  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* acinclude.m4: initial revision
+
+	* TODO: updates
+
+	* queue.c: Remove the unused loadmeter code.
+
+	* moon-buggy.h: Use CURSES_HEADER.
+
+	* Makefile.am: Use CURSES_INCLUDEDIR and CURSES_LIBS
+
+	* configure.in:
+	Moved all the curses checks to the new file "acinclude.m4".
+
+	* configure.in: Changed the version string to "0.4.52".
+
 2000-01-13  Jochen Voss  <voss@tatonka.pfalz.de>
 
 	* ChangeLog: Added 2001-01-03 and 2000-01-13
