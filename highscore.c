@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.15 1999/05/25 15:35:36 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.16 1999/05/30 19:48:35 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -13,12 +13,11 @@ static const  char  rcsid[] = "$Id: highscore.c,v 1.15 1999/05/25 15:35:36 voss 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fcntl.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <sys/stat.h>
 #include <pwd.h>
-#include <fcntl.h>
-#include <time.h>
+#include <assert.h>
 #if HAVE_ERRNO_H
 #include <errno.h>
 #else
@@ -32,46 +31,77 @@ extern  int  errno;
 #include "mbuggy.h"
 
 
+static int
+do_open (const char *name, int flags, int lock, int must_succeed)
+/* Try to open the file NAME using open flags FLAGS.
+ * If LOCK ist 1, try to get a shared lock for the file.
+ * If LOCK ist 2, try to get a exclusive lock for the file.
+ * If MUST_SUCCEED is true, then abort on failure.
+ * Otherwise return -1 if the file cannot be accessed.  */
+{
+  int  fd;
+  int  lock_done;
+
+  lock_done = 1;
+  if (lock == 1) {
+#ifdef O_SHLOCK
+    flags |= O_SHLOCK;
+#else
+    lock_done = 0;
+#endif
+  }
+  if (lock == 2) {
+#ifdef O_SHLOCK
+    flags |= O_EXLOCK;
+#else
+    lock_done = 0;
+#endif
+  }
+  
+  do {
+    fd = open (name, flags, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+  } while (fd == -1 && errno == EINTR);
+  if (fd == -1 && (must_succeed || (errno != EACCES && errno != ENOENT))) {
+    fatal ("Cannot open score file \"%s\": %s", name, strerror (errno));
+  }
+
+  if (fd != -1 && ! lock_done) {
+    struct flock  l;
+    int  res;
+    
+    l.l_type = (lock == 1) ? F_RDLCK : F_WRLCK;
+    l.l_whence = SEEK_SET;
+    l.l_start = 0;
+    l.l_len = 0;
+    
+    do {
+      res = fcntl (fd, F_SETLKW, &l);
+    } while (res == -1 && errno == EINTR);
+    if (res == -1) {
+      fatal ("Cannot lock score file \"%s\": %s", name, strerror (errno));
+    }
+  }
+  
+  return  fd;
+}
+
 #define SCORE_FILE "mbscore"
-#define PLAYER_MAX_LEN 40
-#define HIGHSCORE_SLOTS 10
+#define NAME_MAX_LEN 40
+#define TOPTEN_SLOTS 10
 
 #define qx(str) #str
 #define quote(str) qx(str)
 
 
-/* The top ten list, as read by `read_table'.  */
+/* The top ten list, as read by `read_data'.  */
 struct score_entry {
-  long  score;
+  int  score, level;
   int  day, month, year;
-  char  player [PLAYER_MAX_LEN+1];
+  char  name [NAME_MAX_LEN+1];
   int  new;
 };
-static  struct score_entry  hiscores [HIGHSCORE_SLOTS];
-static  int  highscore_valid = 0;
+static  struct score_entry  topten [TOPTEN_SLOTS];
 
-/* The name of the score file to write.  */
-static  char *score_file_name;
-
-static long  my_score;
-
-
-static void
-get_current_date (int *day_p, int *month_p, int *year_p)
-{
-  time_t curtime;
-  struct tm *loctime;
-  
-  /* Get the current time. */
-  curtime = time (NULL);
-  
-  /* Convert it to local time representation. */
-  loctime = localtime (&curtime);
-
-  *day_p = loctime->tm_mday;
-  *month_p = loctime->tm_mon + 1;
-  *year_p = loctime->tm_year + 1900;
-}
 
 static char *
 compose_filename (const char *dir, const char *name)
@@ -90,122 +120,57 @@ compose_filename (const char *dir, const char *name)
   return  res;
 }
 
-static int
-do_open (const char *name, int flags, int must_succeed)
-/* Try to open the file NAME using open flags FLAGS.
- * If MUST_SUCCEED is true, then abort on failure.
- * Otherwise return -1 if the file cannot be accessed.  */
+static char *
+local_score_file_name (void)
+/* Return the local score file's name.
+ * The is reponsible for freeing the returned string via `free'.  */
 {
-  int  res;
-  
-  do {
-    res = open (name, flags, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
-  } while (res == -1 && errno == EINTR);
-  if (res == -1 && (must_succeed || (errno != EACCES && errno != ENOENT))) {
-    fatal ("Cannot open score file \"%s\": %s", name, strerror (errno));
-  }
-  return  res;
-}
+  uid_t  me = getuid ();
+  struct passwd *my_passwd = getpwuid (me);
 
-static void
-do_lock (int fd, int type, const char *name)
-/* Try to get a file lock on file descriptor FD with lock type TYPE.
- * The string NAME is used to construct error messages only.  It
- * should be the file name associated with FD.  */
-{
-  struct flock  l;
-  int  res;
-
-  l.l_type = type;
-  l.l_whence = SEEK_SET;
-  l.l_start = 0;
-  l.l_len = 0;
-
-  do {
-    res = fcntl (fd, F_SETLKW, &l);
-  } while (res == -1 && errno == EINTR);
-#if 0
-  if (res == -1) {
-    fatal ("Cannot lock score file \"%s\": %s", name, strerror (errno));
-  }
-#endif
-}
-
-static void
-find_tables (int *in_fd, int *out_fd)
-/* Locate the highscore files for reading and writing (and try to lock them).
- * The file descriptor to read from is placed in *IN_FD.  A value of
- * -1 directs the caller to create an empty table.  The modified table
- * should be written to file descriptor *OUT_FD.  Note the *IN_FD and
- * *OUT_FD may be equal.  */
-{
-  char *global_name;
-  uid_t me;
-  struct passwd *my_passwd;
-  int  res;
-
-  global_name = compose_filename (score_dir, SCORE_FILE);
-
-  /* step 1: try read/write access to global score file */
-  set_game_persona ();
-  res = do_open (global_name, O_RDWR, 0);
-  set_user_persona ();
-  if (res >= 0) {
-    do_lock (res, F_WRLCK, global_name);
-    *in_fd = *out_fd = res;
-    return;
-  }
-  
-  /* step 2: try write access to global score file */
-  set_game_persona ();
-  res = do_open (global_name, O_WRONLY|O_CREAT, 0);
-  set_user_persona ();
-  if (res >= 0) {
-    do_lock (res, F_WRLCK, global_name);
-    *in_fd = -1;
-    *out_fd = res;
-    return;
-  }
-
-  /* construct the local score file name */
-  me = getuid ();
-  my_passwd = getpwuid (me);
   if (my_passwd && my_passwd->pw_dir) {
-    score_file_name = compose_filename (my_passwd->pw_dir, "." SCORE_FILE);
+    return  compose_filename (my_passwd->pw_dir, "." SCORE_FILE);
   } else {
-    score_file_name = compose_filename (NULL, "." SCORE_FILE);
+    return  compose_filename (NULL, "." SCORE_FILE);
   }
-
-  /* step 3: try read/write access to local score file */
-  res = do_open (score_file_name, O_RDWR, 0);
-  if (res >= 0) {
-    do_lock (res, F_WRLCK, score_file_name);
-    *in_fd = *out_fd = res;
-    free (global_name);
-    return;
-  }
-  
-  /* step 4: try write access to local score file */
-  res = do_open (score_file_name, O_WRONLY|O_CREAT, 1);
-  do_lock (res, F_WRLCK, score_file_name);
-  *out_fd = res;
-  
-  /* step 4a: try read access to global score file */
-  set_game_persona ();
-  res = do_open (global_name, O_RDONLY, 0);
-  set_user_persona ();
-  if (res >= 0) {
-    do_lock (res, F_RDLCK, global_name);
-    *in_fd = res;
-  } else {
-    *in_fd = -1;
-  }
-  free (global_name);
 }
 
+static char *
+global_score_file_name (void)
+/* Return the global score file's name.
+ * The is reponsible for freeing the returned string via `free'.  */
+{
+  return  compose_filename (score_dir, SCORE_FILE);
+}
+
+
 static void
-read_table (FILE *score_file)
-/* Read the top ten list from SCORE_FILE.  */
+generate_data (void)
+/* Generate an empty top-ten table and write it into `topten'.  */
+{
+  static const char *names [13] = {
+    "Dwalin", "Balin", "Kili", "Fili", "Dori", "Nori", "Ori",
+    "Oin", "Gloin", "Bifur", "Bofur", "Bombur", "Thorin"
+  };
+  int  day, month, year;
+  int  i;
+
+  get_date (&day, &month, &year);
+  for (i=0; i<TOPTEN_SLOTS; ++i) {
+    topten[i].score = 100*(TOPTEN_SLOTS-i);
+    topten[i].level = 1;
+    topten[i].day = day;
+    topten[i].month = month;
+    topten[i].year = year;
+    strcpy (topten[i].name, names[uniform_rnd(13)]);
+    topten[i].new = 0;
+  }
+}
+
+
+static void
+read_data (FILE *score_file)
+/* Read the top ten list from SCORE_FILE into `topten'.  */
 {
   int  version, i;
   int  res;
@@ -213,101 +178,61 @@ read_table (FILE *score_file)
   res = fscanf (score_file, "moon-buggy hiscore file (version %d)\n",
 		&version);
   if (res != 1)  fatal ("Score file corrupted");
-  if (version != 1)  fatal ("Unknown save file version %d", version);
+  if (version != 2)  fatal ("Wrong save file version %d", version);
 
-  for (i=0; i<HIGHSCORE_SLOTS; ++i) {
-    long  score;
+  for (i=0; i<TOPTEN_SLOTS; ++i) {
+    int  score, level;
     int  day, month, year;
-    char  name [PLAYER_MAX_LEN+1];
+    char  name [NAME_MAX_LEN+1];
     res = fscanf (score_file,
-		  "|%ld|%d|%d|%d|%" quote(PLAYER_MAX_LEN) "[^|]|\n",
-		  &score, &day, &month, &year, name);
-    if (res != 5)  fatal ("Score file corrupted: %d", res);
-    hiscores[i].score = score;
-    hiscores[i].day = day;
-    hiscores[i].month = month;
-    hiscores[i].year = year;
-    hiscores[i].player[0] = '\0';
-    hiscores[i].new = 0;
-    strncat (hiscores[i].player, name, PLAYER_MAX_LEN);
-  }
-}
-
-/* A list of names for use in newly created highscore lists.  */
-static const char *names [13] = {
-  "Dwalin",
-  "Balin",
-  "Kili",
-  "Fili",
-  "Dori",
-  "Nori",
-  "Ori",
-  "Oin",
-  "Gloin",
-  "Bifur",
-  "Bofur",
-  "Bombur",
-  "Thorin"
-};
-
-static void
-generate_table (void)
-/* Generate an empty highscore table.  */
-{
-  int  day, month, year;
-  int  i;
-
-  get_current_date (&day, &month, &year);
-  for (i=0; i<HIGHSCORE_SLOTS; ++i) {
-    hiscores[i].score = 200*(HIGHSCORE_SLOTS-i);
-    hiscores[i].day = day;
-    hiscores[i].month = month;
-    hiscores[i].year = year;
-    strcpy (hiscores[i].player, names[uniform_rnd(13)]);
-    hiscores[i].new = 0;
+		  "|%d|%d|%d|%d|%d|%" quote(NAME_MAX_LEN) "[^|]|\n",
+		  &score, &level, &day, &month, &year, name);
+    if (res != 6)  fatal ("Score file corrupted");
+    topten[i].score = score;
+    topten[i].level = level;
+    topten[i].day = day;
+    topten[i].month = month;
+    topten[i].year = year;
+    topten[i].name[0] = '\0';
+    topten[i].new = 0;
+    strncat (topten[i].name, name, NAME_MAX_LEN);
   }
 }
 
 static void
-write_table (FILE *score_file)
-/* Write out the current top ten list to file SCORE_FILE.  */
+write_data (FILE *score_file, int trunc)
+/* Write out the current top ten list to stream SCORE_FILE.
+ * If TRUNC is true, try to truncate the file.  */
 {
   int  i;
   int  res;
 
-  res = fprintf (score_file, "moon-buggy hiscore file (version 1)\n");
-  if (res < 0) {
-    fatal ("Cannot write score file \"%s\": %s",
-	   score_file_name, strerror (errno));
+  res = fprintf (score_file, "moon-buggy hiscore file (version 2)\n");
+  if (res < 0)  fatal ("Score file write error (%s)", strerror (errno));
+
+  for (i=0; i<TOPTEN_SLOTS; ++i) {
+    res = fprintf (score_file,
+		   "|%d|%d|%d|%d|%d|%." quote(NAME_MAX_LEN) "s|\n",
+		   topten[i].score, topten[i].level,
+		   topten[i].day, topten[i].month, topten[i].year,
+		   topten[i].name);
+    if (res < 0)  fatal ("Score file write error (%s)", strerror (errno));
   }
 
-  for (i=0; i<HIGHSCORE_SLOTS; ++i) {
-    fprintf (score_file, "|%ld|%d|%d|%d|%." quote(PLAYER_MAX_LEN) "s|\n",
-	     hiscores[i].score,
-	     hiscores[i].day, hiscores[i].month, hiscores[i].year,
-	     hiscores[i].player);
-  }
-}
-
-static void
-print_scores (void)
-/* Print the top ten table to the screen.  */
-{
-  int  i;
-
-  mvwaddstr (moon, 1, PLAYER_MAX_LEN-4, "name     date     score");
-  for (i=0; i<HIGHSCORE_SLOTS; ++i) {
-    if (hiscores[i].new)  wstandout (moon);
-    mvwprintw (moon, 3+i, 0,
-	       "%" quote(PLAYER_MAX_LEN) "s%c %4d-%02d-%02d  %-12lu",
-	       hiscores[i].player, hiscores[i].new ? '*' : ' ',
-	       hiscores[i].year, hiscores[i].month, hiscores[i].day,
-	       hiscores[i].score);
-    if (hiscores[i].new)  wstandend (moon);
-  }
-  mvwprintw (moon, 3+HIGHSCORE_SLOTS+1, PLAYER_MAX_LEN+2, "your score: %d",
-	     my_score);
-  wrefresh (moon);
+#if HAVE_FTRUNCATE
+    if (trunc) {
+      int  fd = fileno (score_file);
+      long int  pos = ftell (score_file);
+      if (pos != -1) {
+#if HAVE_FCLEAN
+	fclean (score_file);
+#else
+	fflush (score_file);
+#endif
+	ftruncate (fd, pos);
+      }
+    }
+#endif
 }
 
 static int
@@ -322,113 +247,216 @@ compare_entries (const void *a, const void *b)
   return  0;
 }
 
-static char  real_name [PLAYER_MAX_LEN];
+static int
+merge_entry (const struct score_entry *entry)
+{
+  struct score_entry *last;
+
+  last = topten+(TOPTEN_SLOTS-1);
+  
+  if (entry->score > last->score) {
+    memcpy (last, entry, sizeof (struct score_entry));
+    qsort (topten, TOPTEN_SLOTS, sizeof (struct score_entry),
+	   compare_entries);
+    return  1;
+  } else {
+    return  0;
+  }
+}
+
+static void
+load_table (void)
+/* Load the top-ten list into the variable `topten'.  */
+{
+  char *local_name, *global_name;
+  int  in_fd, out_fd;
+  enum  persona  in_pers, out_pers;
+  FILE *f;
+  int  res;
+
+  global_name = global_score_file_name ();
+  local_name = local_score_file_name ();
+  out_pers = pers_USER;
+  out_fd = -1;
+
+  do {
+    /* step 1: try read/write access to global score file */
+    set_persona (pers_GAME);
+    in_pers = pers_GAME;
+    in_fd = do_open (global_name, O_RDWR, 2, 0);
+    if (in_fd != -1)  break;
+  
+    /* step 2: try write access to global score file */
+    out_pers = pers_GAME;
+    out_fd = do_open (global_name, O_WRONLY|O_CREAT, 2, 0);
+    if (out_fd != -1)  break;
+
+    /* step 3: try read/write access to local score file */
+    set_persona (pers_USER);
+    in_pers = pers_USER;
+    in_fd = do_open (local_name, O_RDWR, 2, 0);
+    if (in_fd != -1)  break;
+  
+    /* step 4: try write access to local score file and
+     *	     read access to global score file */
+    out_pers = pers_USER;
+    out_fd = do_open (local_name, O_WRONLY|O_CREAT, 2, 1);
+    set_persona (pers_GAME);
+    in_pers = pers_GAME;
+    in_fd = do_open (global_name, O_RDONLY, 1, 0);
+  } while (0);
+
+  if (in_fd != -1) {
+    assert (in_fd != out_fd);
+    set_persona (in_pers);
+    f = fdopen (in_fd, "r");
+    read_data (f);
+    res = fclose (f);
+    if (res == EOF)  fatal ("Score file read error (%s)", strerror (errno));
+  } else {
+    generate_data ();
+  }
+
+  if (out_fd != -1) {
+    set_persona (out_pers);
+    f = fdopen (out_fd, "w");
+    write_data (f, 0);
+    res = fclose (f);
+    if (res == EOF)  fatal ("Score file write error (%s)", strerror (errno));
+  }
+  
+  set_persona (pers_USER);
+  free (local_name);
+  free (global_name);
+}
 
 static void
-write_scores (void)
-/* Load the top ten table and add the current game if appropriate.  */
+modify_table (const struct score_entry *entry)
+/* Modify the top-ten list, to contain the data from *ENTRY.  */
 {
-  struct score_entry *new_entry;
+  char *local_name, *global_name;
   int  in_fd, out_fd;
-  FILE *in, *out;
-  int  changed = 0;
-  int  i, res;
+  enum  persona  in_pers, out_pers;
+  FILE *f;
+  int  res, changed;
+
+  global_name = global_score_file_name ();
+  local_name = local_score_file_name ();
+
+  do {
+    /* step 1: try read/write access to global score file */
+    set_persona (pers_GAME);
+    in_pers = out_pers = pers_GAME;
+    in_fd = out_fd = do_open (global_name, O_RDWR, 2, 0);
+    if (in_fd != -1)  break;
   
-  find_tables (&in_fd, &out_fd);
-  if (in_fd >= 0) {
-    if (in_fd == out_fd) {
-      in = out = fdopen (in_fd, "r+");
-      if (in == NULL)
-	fatal ("fdopen failed on score file: %s", strerror (errno));
-    } else {
-      in = fdopen (in_fd, "r");
-      if (in == NULL)
-	fatal ("fdopen failed on global score file: %s", strerror (errno));
-      out = fdopen (out_fd, "w");
-      if (out == NULL)
-	fatal ("fdopen failed on local score file: %s", strerror (errno));
-    }
-  } else {
-    in = NULL;
-    out = fdopen (out_fd, "w");
-    if (out == NULL)
-      fatal ("fdopen failed on score file: %s", strerror (errno));
-  }
-    
-  if (in_fd >= 0) {
-    read_table (in);
+    /* step 2: try write access to global score file */
+    out_pers = pers_GAME;
+    out_fd = do_open (global_name, O_WRONLY|O_CREAT, 2, 0);
+    if (out_fd != -1)  break;
+
+    /* step 3: try read/write access to local score file */
+    set_persona (pers_USER);
+    in_pers = out_pers = pers_USER;
+    in_fd = out_fd = do_open (local_name, O_RDWR, 2, 0);
+    if (in_fd != -1)  break;
+  
+    /* step 4: try write access to local score file and
+     *	     read access to global score file */
+    out_pers = pers_USER;
+    out_fd = do_open (local_name, O_WRONLY|O_CREAT, 2, 1);
+    set_persona (pers_GAME);
+    in_pers = pers_GAME;
+    in_fd = do_open (global_name, O_RDONLY, 1, 0);
+  } while (0);
+
+  if (in_fd != -1) {
+    set_persona (in_pers);
+    f = fdopen (in_fd, in_fd==out_fd ? "r+" : "r");
+    read_data (f);
     if (in_fd != out_fd) {
-      res = fclose (in);
+      res = fclose (f);
+      if (res == EOF)  fatal ("Score file read error (%s)", strerror (errno));
     } else {
-      fseek (out, 0, SEEK_SET);
+      res = fseek (f, 0, SEEK_SET);
+      if (res != 0)  fatal ("Score file seek error (%s)", strerror (errno));
     }
   } else {
-    generate_table ();
-    changed = 1;
-  }
-  
-  new_entry = hiscores+(HIGHSCORE_SLOTS-1);
-  if (my_score > new_entry->score) {
-    int  day, month, year;
-
-    get_real_user_name (real_name, PLAYER_MAX_LEN);
-    strncpy (new_entry->player, real_name, PLAYER_MAX_LEN);
-    for (i=0; i<PLAYER_MAX_LEN; ++i) {
-      if (new_entry->player[i] == '|')  new_entry->player[i] = ';';
-    }
-    get_current_date (&day, &month, &year);
-    new_entry->score = my_score;
-    new_entry->day = day;
-    new_entry->month = month;
-    new_entry->year = year;
-    new_entry->new = 1;
-    qsort (hiscores, HIGHSCORE_SLOTS, sizeof (struct score_entry),
-	   compare_entries);
-    changed = 1;
+    generate_data ();
   }
 
+  changed = merge_entry (entry);
+
+  assert (out_fd != -1);
+  set_persona (out_pers);
   if (changed) {
-    write_table (out);
-
-#if HAVE_FTRUNCATE
-    if (in_fd == out_fd) {
-      long int  pos = ftell (out);
-      if (pos != -1) {
-#if HAVE_FCLEAN
-	fclean (out);
-#else
-	fflush (out);
-#endif
-	ftruncate (out_fd, pos);
-      }
-    }
-#endif
+    if (in_fd != out_fd)  f = fdopen (out_fd, "w");
+    write_data (f, 0);
   }
+  res = fclose (f);
+  if (res == EOF)  fatal ("Score file write error (%s)", strerror (errno));
   
-  res = fclose (out);
-  if (res == EOF) {
-    fatal ("cannot write score file \"%s\": %s",
-	   score_file_name, strerror (errno));
+  set_persona (pers_USER);
+  free (local_name);
+  free (global_name);
+}
+
+static int  topten_valid, last_score;
+
+static void
+print_scores (int my_score)
+/* Print the top ten table to the screen.  */
+{
+  int  i;
+
+  mvwaddstr (moon, 1, NAME_MAX_LEN-4, "name     date     level score");
+  for (i=0; i<TOPTEN_SLOTS; ++i) {
+    if (topten[i].new)  wstandout (moon);
+    mvwprintw (moon, 3+i, 0,
+	       "%" quote(NAME_MAX_LEN) "s%c %4d-%02d-%02d  %3d   %-12lu",
+	       topten[i].name, topten[i].new ? '*' : ' ',
+	       topten[i].year, topten[i].month, topten[i].day,
+	       topten[i].level, topten[i].score);
+    if (topten[i].new)  wstandend (moon);
   }
+  mvwprintw (moon, 3+TOPTEN_SLOTS+1, NAME_MAX_LEN+2, "your score: %d",
+	     my_score);
+  wrefresh (moon);
 }
 
 int
-highscore_mode (long score)
+highscore_mode (int score, int level)
 {
   int  done = 0;
   int  again = 1;
 
-  my_score = score;
   game_state = HIGHSCORE;
   
-  block_all ();
   print_message ("loading score file ...");
   doupdate ();
-  write_scores ();
-  highscore_valid = 1;
+  block_all ();
+  load_table ();
+  topten_valid = 1;
+  last_score = score;
   unblock ();
+  print_scores (score);
+
+  if (score > topten[TOPTEN_SLOTS-1].score) {
+    struct score_entry  entry;
+    entry.score = score;
+    entry.level = level;
+    get_date (&entry.day, &entry.month, &entry.year);
+    entry.name[0] = '\0';
+    get_real_user_name (entry.name, NAME_MAX_LEN);
+    entry.new = 1;
   
-  print_scores ();
+    print_message ("writing score file ...");
+    doupdate ();
+    block_all ();
+    modify_table (&entry);
+    unblock ();
+    print_scores (score);
+  }
 
   do {
     print_message ("play again (y/n)?");
@@ -460,8 +488,8 @@ void
 resize_highscore (void)
 {
   resize_game ();
-  if (highscore_valid) {
+  if (topten_valid) {
     print_message ("play again (y/n)?");
-    print_scores ();
+    print_scores (last_score);
   }
 }
