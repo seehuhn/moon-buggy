@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 # Copyright 1999  Jochen Voﬂ
-# $Id: Makefile.am,v 1.25 1999/05/23 21:08:02 voss Exp $
+# $Id: Makefile.am,v 1.26 1999/05/24 19:24:47 voss Rel $
 
 EXTRA_DIST = moonman.in maintman.in instcmds car.img \
 	text2c.sed merge.sed img.sed \
@@ -65,7 +65,8 @@ mbsep = \\\\\"
 endif
 moon-buggy.6: moonman.in Makefile
 	echo ".\\\" $@ - automatically created from $<" >$@
-	sed "s:@MBSCORE@:$(scoredir):g;\
+	sed "s:@MBBINDIR@:$(bindir):g;\
+		s:@MBSCORE@:$(scoredir):g;\
 		s:@C@:$(mbsep):g;\
 		s:@MBNAME@:$(PACKAGE):g;\
 		s:@MBVERS@:$(VERSION):g" $< >>$@
