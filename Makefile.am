@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 # Copyright 1999, 2000  Jochen Voss
-# $Id: Makefile.am,v 1.52 2000/06/16 10:55:01 voss Exp $
+# $Id: Makefile.am,v 1.53 2000/10/16 16:03:39 voss Exp $
 
 EXTRA_DIST = manpage.in car.img \
 	text2c.sed img.sed ANNOUNCE moon-buggy.lsm \
@@ -66,7 +66,7 @@ if short_getopt
 mbsep = \\\\\"
 endif
 moon-buggy.6: manpage.in Makefile
-	echo ".\\\" $@ - automatically created from manpage.in" >$@
+	echo ".\\\" $@ - automatically created from" $< >$@
 	sed "s:@MBBINDIR@:$(bindir):g;\
 		s:@MBSCORE@:$(scoredir):g;\
 		s:@C@:$(mbsep):g;\
