@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: laser.c,v 1.7 1999/05/26 22:00:24 voss Exp $";
+static const  char  rcsid[] = "$Id: laser.c,v 1.8 1999/06/05 13:34:35 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -116,6 +116,7 @@ extinguish_laser (void)
 {
   int  j;
 
+  remove_event (beam_handler);
   for (j=0; j<beam_table.used; ++j) {
     struct beam *b = beam_table.data[j];
     int  i;
@@ -143,4 +144,15 @@ laser_hit (int x)
     }
   }
   return  res;
+}
+
+void
+resize_laser (void)
+/* Clear all laser beams from the screen.  */
+{
+  int  j;
+
+  remove_event (beam_handler);
+  for (j=0; j<beam_table.used; ++j)  free (beam_table.data[j]);
+  DA_CLEAR (beam_table);
 }
