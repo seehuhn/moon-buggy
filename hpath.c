@@ -1,8 +1,8 @@
 /* hpath.c - the central highscore file location
  *
- * Copyright (C) 1998  Jochen Voss.  */
+ * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: hpath.c,v 1.1 1999/01/01 16:25:50 voss Exp $";
+static const  char  rcsid[] = "$Id: hpath.c,v 1.2 1999/01/02 12:29:52 voss Rel $";
 
 
 #ifdef HAVE_CONFIG_H

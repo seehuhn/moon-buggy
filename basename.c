@@ -1,8 +1,8 @@
-/* basename.c - Strip the leading path of a file name.
+/* basename.c - strip the leading path of a file name
  *
- * Copyright (C) 1997  Jochen Voss.  */
+ * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: basename.c,v 1.2 1999/01/01 18:06:04 voss Exp $";
+static const  char  rcsid[] = "$Id: basename.c,v 1.3 1999/01/02 12:36:24 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

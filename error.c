@@ -1,8 +1,8 @@
 /* error.c - functions to signal error conditions
  *
- * Copyright (C) 1998  Jochen Voss.  */
+ * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: error.c,v 1.4 1999/01/01 18:05:37 voss Exp $";
+static const  char  rcsid[] = "$Id: error.c,v 1.5 1999/01/02 12:33:51 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
