@@ -2,9 +2,9 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.7 1999/01/02 12:09:43 voss Rel $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.8 1999/01/30 16:56:21 voss Rel $";
 
-#define _POSIX_SOURCE
+#define _POSIX_SOURCE 1
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -13,6 +13,9 @@ static const  char  rcsid[] = "$Id: queue.c,v 1.7 1999/01/02 12:09:43 voss Rel $
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
+#if HAVE_SYS_SELECT_H
+#include <sys/select.h>
+#endif
 #include <sys/time.h>
 #include <math.h>
 #if HAVE_ERRNO_H
