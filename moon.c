@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: moon.c,v 1.3 1998/12/28 20:13:35 voss Exp $";
+static const  char  rcsid[] = "$Id: moon.c,v 1.4 1998/12/30 19:39:23 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -23,16 +23,46 @@ static const  char  rcsid[] = "$Id: moon.c,v 1.3 1998/12/28 20:13:35 voss Exp $"
 #include "moon.h"
 
 
-char *ground1, *ground2;
+char *ground1 = NULL, *ground2 = NULL;
+static int  ground_width = 0;
 
 static  int  hole = 2;
 
+
+void
+resize_ground (int clear_it)
+{
+  int  cols, i;
+
+  block_winch ();
+  cols = COLS;
+  if (ground_width != cols) {
+    ground1 = xrealloc (ground1, cols);
+    ground2 = xrealloc (ground2, cols);
+  }
+  for (i=(clear_it ? 0 : ground_width); i<cols; ++i) {
+    ground1[i] = '#';
+    ground2[i] = '#';
+  }
+  ground_width = cols;
+  car_base = (cols > 80 ? 80 : cols) - 12;
+  score_base = car_base + 7;
+  unblock ();
+}
 
 int
 d_rnd (int limit)
 /* Returns a random integer `x' with `0 <= x < limit'.  */
 {
   return  (int)((double)limit*rand()/(RAND_MAX+1.0));
+}
+
+void
+print_ground (void)
+{
+  mvwaddnstr (moon, LINES-4, 0, ground2, COLS);
+  mvwaddnstr (moon, LINES-3, 0, ground1, COLS);
+  wnoutrefresh (moon);
 }
 
 void
