@@ -7,6 +7,7 @@ BUG FIXES:
 blinkend.  Auf io/jupiter ist alles noch schlimmer!
 · Auf hpux wird der Cursor nicht abgeschaltet.
 Man sollte ihn evtl. auf eine günstige Position stellen.
+· gnome-libs/macros/curses.m4 verwenden
 
 IMPROVEMENTS:
 · Ist `addchstr' sinnvoll (wg. Geschwindigkeit)
