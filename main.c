@@ -2,9 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.21 1999/05/24 19:16:05 voss Rel $";
-
-#define _POSIX_SOURCE 1
+static const  char  rcsid[] = "$Id: main.c,v 1.22 1999/05/25 15:35:11 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
