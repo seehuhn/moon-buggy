@@ -1,0 +1,118 @@
+\input texinfo   @c -*-texinfo-*-
+@c $Id: mbuggy.texi,v 1.1 1998/12/19 20:34:58 voss Exp $
+@c %**start of header
+@setfilename mbuggy.info
+@settitle Moon-Buggy Usage and Maintainance
+@include version.texi
+@c %**end of header
+
+@dircategory Games
+@direntry
+* moon-buggy: (mbuggy).   Moon-Buggy Usage and Maintainance
+@end direntry
+
+@ifinfo
+This file documents moon-buggy, a simple, curses-based game
+
+Copyright 1998 Jochen Vo@ss{}
+
+Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+@ignore
+Permission is granted to process this file through TeX and print the
+results, provided the printed document carries a copying permission
+notice identical to this one except for the removal of this paragraph
+(this paragraph not being relevant to the printed manual).
+
+@end ignore
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the
+entire resulting derived work is distributed under the terms of a
+permission notice identical to this one.
+
+Permission is granted to copy and distribute translations of this
+manual into another language, under the above conditions for modified
+versions, except that this permission notice may be stated in a
+translation approved by the Free Software Foundation.
+@end ifinfo
+
+@titlepage
+@title Moon-Buggy Usage and Maintainance
+@author by Jochen Vo@ss{}
+
+@page
+@vskip 0pt plus 1filll
+Copyright @copyright{} 1998 Jochen Vo@ss{}
+
+Published by Jochen Vo@ss{}
+
+Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided also that the
+entire resulting derived work is distributed under the terms of a
+permission notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation
+approved by the Free Software Foundation.
+@end titlepage
+
+@node Top, Introduction, (dir), (dir)
+
+@ifinfo
+This document describes the usage and installation of Moon-Buggy.  It is
+a simple, curses-based game, where you drive some kinf of car across the
+surface of the moon.  Unfortunately there are dangerous craters there.
+Fortunately your car can jump!  This edition of the manual applies to
+version @value{VERSION} of the program.
+@end ifinfo
+
+@menu
+* Introduction::                Introduction
+* Invocation::                  Invocation
+* Installation::                Installation and setup
+@end menu
+
+@node Introduction, Invocation, Top, Top
+@chapter Introduction
+
+Moon-buggy is a simple, curses-based game, where you drive some kinf
+of car across the surface of the moon.  Unfortunately there are
+dangerous craters there.  Fortunately your car can jump!
+
+Moon-buggy is free software.  Read the file COPYING of the source code
+distribution for details.
+
+
+@node Invocation, Installation, Introduction, Top
+@chapter Invocation
+
+Just start it.  Use the @key{space} bar to jump.
+
+
+@node Installation,  , Invocation, Top
+@chapter Installation
+
+When you unpack the moon-buggy distribution, you get one directory, which
+holds all the source files and the documentation.  If you have built
+moon-buggy in this directory before, you can use the command @samp{make
+distclean} to remove any files, which were created during the last
+build.
+
+The file @file{INSTALL} contains generic installation instructions,
+which you can follow.  But in most cases you just type
+
+@example
+configure
+make
+make install
+@end example
+
+@contents
+@bye
