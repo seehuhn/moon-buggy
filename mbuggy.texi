@@ -1,5 +1,5 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: mbuggy.texi,v 1.15 1999/06/06 13:18:51 voss Exp $
+@c $Id: mbuggy.texi,v 1.16 1999/06/13 18:39:49 voss Rel $
 @c %**start of header
 @setfilename mbuggy.info
 @settitle Moon-Buggy Usage and Maintenance
@@ -193,30 +193,29 @@ play.
 The global score file should be writable by the moon-buggy program.
 Otherwise each user gets a local score file in his home directory.  Thus
 he only sees his own scores and no real competition arises.  But to
-achive this goal is somewhat tricky, because we have to use the
-operating system's access controls properly.
+achive this goal on a multi-user system is somewhat tricky, because we
+have to use the operating system's access controls properly.
 
 One solution is to make the score file world writable, but this opens
 the opportunity to cheat.
 
-The other possibility is to make moon-buggy a suid-program.  This means
-the following: you choose a user id, which cannot be used by ordinary
-users, and allow only this user to write the score file.  Many system
-have a user @samp{games} for this purpose (Check your @file{/etc/passwd}
-file).  Then you make this user own the @file{moon-buggy} executable and
-set the file's suid-bit (so moon-buggy gains its owner's access
-permission in addition to your's and can write the score file).  The
-drawback is, that this may open some security holes.
+The other possibility is to make moon-buggy a setuid program.  This
+means the following: you choose an user ID, which cannot be used by
+ordinary users, and allow only this user to write the score file.  Many
+systems have a user @samp{games} for this purpose (Check your
+@file{/etc/passwd} file).  Then you make this user own the
+@file{moon-buggy} executable and set the file's setuid bit.  This gives
+moon-buggy its file owner's access permissions in addition to the
+player one's and thus moon-buggy can access the score file.
 
 When you install the program, you can choose, which method to use:
 First, you could do nothing about it.  Then the program is installed
 without an special privileges and the score file is @emph{not} shared.
-You may set the set-user-id or set-group-id bit of the executable
-lateron or may change the access permissions of the score file, as you
-like.
+You may set the setuid or setgid bit of the executable later on and you
+may change the access permissions of the score file, as you like.
 
-Second, you can use @code{configure}'s @samp{--with-suid} option
-(@pxref{Installation}).  This enables set-user-id usage by default.
+Second, you can use @code{configure}'s @samp{--with-setuid} option
+(@pxref{Installation}).  This enables setuid usage by default.
 
 
 @node Installation, References, Shared Score Files, Top
@@ -247,7 +246,7 @@ There are some points of interest:
 By default, the program will be installed as
 @file{/usr/local/bin/moon-buggy}.  You can specify an installation
 prefix other than @file{/usr/local} by giving @samp{configure} the
-option @samp{--prefix=@var{path}}.
+@samp{--prefix=@var{path}} option.
 
 @item
 You can choose the score file's location via @code{configure}'s
@@ -261,26 +260,18 @@ You can choose the score file's location via @code{configure}'s
 to comply with the Filesystem Hierarchy Standard (@pxref{References}).
 
 @item
-Please read the following carefully:
-
-The global score file should be writable by the moon-buggy program.
-Otherwise each user gets a local score file in his home directory.  Thus
-he only sees his own scores and no real competition arises.
-
-One solution is to make the score file world writable, but this opens
-the opportunity to cheat.
-
-The other possibility is to make moon-buggy a suid-program
-(@pxref{Shared Score Files}).  This second possibility can be realized
-by @code{configure}'s @samp{--with-suid} option.  If you use
+Moon-buggy supports shared score files.  For details, see @ref{Shared
+Score Files}.  As explained there, you may want to make moon-buggy a
+setuid program.  This can be done with the @samp{--with-setuid} option.
+If you use
 
 @example
---with-suid=games
+--with-setuid=games
 @end example
 
 @noindent
-then the user called @samp{games} owns the @file{moon-buggy} executable
-and the suid-bit is set as explained above.
+then the user @samp{games} owns the @file{moon-buggy} executable and the
+setuid bit is set.
 
 @strong{Caution}: this introduces potential security risks.  I tried to
 minimise these, but nevertheless do @strong{not} choose the user
@@ -292,7 +283,7 @@ Example: On GNU/Linux systems you probably can use the following
 commands.  For the last one you may need root user permissions.
 
 @example
-./configure --sharedstatedir=/var/games --with-suid=games
+./configure --sharedstatedir=/var/games --with-setuid=games
 make
 make install
 @end example
