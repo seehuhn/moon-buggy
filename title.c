@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: title.c,v 1.7 1999/03/02 18:29:40 voss Exp $";
+static const  char  rcsid[] = "$Id: title.c,v 1.8 1999/03/08 20:24:12 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -27,6 +27,7 @@ const char *title [] = {
   "      B     B  U     U  G     G  G     G    Y",
   "      BBBBBB    UUUUU    GGGGG    GGGGG   YY"
 };
+
 
 static void
 print_title (void)

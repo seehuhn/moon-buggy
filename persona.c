@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: persona.c,v 1.5 1999/03/02 18:30:11 voss Exp $";
+static const  char  rcsid[] = "$Id: persona.c,v 1.6 1999/03/08 20:24:20 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -25,6 +25,7 @@ static  enum { pers_GAME, pers_USER }  persona = pers_GAME;
 /* The real and effective ids */
 static  uid_t  user_user_id, game_user_id;
 static  gid_t  user_group_id, game_group_id;
+
 
 void
 initialise_persona (void)

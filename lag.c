@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: lag.c,v 1.2 1998/12/28 20:11:26 voss Rel $";
+static const  char  rcsid[] = "$Id: lag.c,v 1.3 1999/03/08 20:24:57 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -11,6 +11,7 @@ static const  char  rcsid[] = "$Id: lag.c,v 1.2 1998/12/28 20:11:26 voss Rel $";
 
 #include "moon.h"
 
+
 #define TIME_BUFFER_SIZE 10
 
 struct circle_buffer {
@@ -18,6 +19,7 @@ struct circle_buffer {
   int  used, pos;
   double  sum;
 };
+
 
 struct circle_buffer *
 new_circle_buffer (void)
