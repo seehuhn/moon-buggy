@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.37 2000/04/08 13:14:14 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.38 2000/04/24 18:40:30 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -69,6 +69,10 @@ void
 allocate_windows (void)
 /* Create the curses windows.  */
 {
+  initscr ();
+  cbreak ();
+  noecho ();
+
   moon = newwin (LINES-2, 0, 0, 0);
   keypad (moon, TRUE);
   intrflush (moon, FALSE);
@@ -80,6 +84,8 @@ allocate_windows (void)
   message = newwin (1, 0, LINES-2, 0);
   keypad (message, TRUE);
   intrflush (message, FALSE);
+
+  hide_cursor ();
 }
 
 void
@@ -210,12 +216,8 @@ the file named COPYING or press `c' at Moon-Buggy's title screen.");
   
   initialise_signals ();
   
-  initscr ();
-  cbreak ();
-  noecho ();
   allocate_windows ();
   curses_initialised = 1;
-  hide_cursor ();
 
   install_keys ();
   setup_title_mode ();
