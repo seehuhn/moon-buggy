@@ -1,17 +1,71 @@
 moon-buggy - drive a strange car across the moon
 
-moon-buggy is a simple, curses-based game, where you drive some kind
+INTRODUCTION:
+
+  Moon-buggy is a simple, curses-based game, where you drive some kind
 of car across the surface of the moon.  Unfortunately there are
 dangerous craters there.  Fortunately your car can jump!  So just go
 on, and jump over the craters (using the space key).
 
-Generic installation instructions are in the file INSTALL.  You can
-choose the score file location via configure's `--sharedstatedir'
-option.  On Linux systems you should use
-	--sharedstatedir=/var/games
-to comply with the Filesystem Hierarchy Standard FHS.
+  The game is not yet finished.  So be prepared to encounter bugs (and
+please report them).  But it works to some extent at least on
+GNU/Linux systems, it has a top-ten list, and it may be fun.  Just try
+it!
 
+  Moon-Buggy comes with NO WARRANTY, to the extent permitted by law.
+You may redistribute copies of Moon-Buggy under the terms of the GNU
+General Public License.  For more information about these matters, read
+the file COPYING of the source code distribution or press `c' at
+moon-buggy's title screen.
 
-Please mail any suggestions and bug reports to
+  Please mail any suggestions and bug reports to
 <voss@mathematik.uni-kl.de>.  Your message should include the
 moon-buggy version number, as obtained by the command `moon-buggy -V'.
+
+
+INSTALLATION:
+
+  Generic installation instructions are in the file INSTALL.
+There are some points of interest:
+
+* You can choose the game's score file location via configure's
+  `--sharedstatedir' option.  On Linux systems you should use
+	--sharedstatedir=/var/games
+  to comply with the Filesystem Hierarchy Standard FHS.
+
+* Please read the following carefully:
+
+  The global score file should be writable by the moon-buggy program.
+  Otherwise each user gets a local score file in his home directory.
+  Thus he only sees his own scores and no real competition arises.
+
+  One solution is to make the score file world writable, but this
+  opens the opportunity to cheat.
+
+  The other possibility is to make moon-buggy a suid-program.  This
+  means the following: you choose a user id, which cannot used by
+  ordinary users, and allow only this user to write the score file.
+  Many system have a user "games" for this purpose (Check your
+  "/etc/passwd" file).  Then you make this user own the "moon-buggy"
+  executable and set the file's suid-bit (so moon-buggy gains its
+  owner's access permission in addition to your's and can write the
+  score file).
+
+  This second possibility can be realized by configure's `--with-suid'
+  option.  If you use
+	--with-suid=games
+  then the user called `games' owns the "moon-buggy" executable and
+  the suid-bit is used as explained above.
+
+  Caution: this introduces potential security risks.  I tried to
+  minimise these, but nevertheless do NOT choose the user `root'
+  instead of `games'.  And remember: moon-buggy comes with NO
+  WARRANTY.
+
+
+Example: On GNU/Linux systems you probably can use the following
+commands.  For the last one you may need root user permissions.
+
+	configure --sharedstatedir=/var/games --with-suid=games
+	make
+	make install
