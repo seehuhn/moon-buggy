@@ -1,9 +1,8 @@
 /* game.c - play the game
  *
- * Copyright (C) 1998  Jochen Voss.  */
+ * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.2 1999/01/01 18:05:20 voss Exp $";
-
+static const  char  rcsid[] = "$Id: game.c,v 1.3 1999/01/02 12:33:04 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -74,7 +73,7 @@ spend_life (void)
       if (crash_check ())  done = 1;
       add_value (load_meter,
 		 limited (0, (sleep_delta-sleep_meter)/sleep_delta, 1));
-#if 0
+#if MB_DEBUG
       mvwprintw (status, 0, 0, "load: %d%%  ",
 		 (int)(100.0*get_mean (load_meter)+.5));
       wnoutrefresh (status);
@@ -84,7 +83,7 @@ spend_life (void)
       sleep_delta = TICK(1);
       break;
     case ev_KEY:
-      switch (wgetch (moon)) {
+      switch (xgetch (moon)) {
       case ' ':
 	if (can_jump()) {
 	  jump (t);
@@ -106,7 +105,7 @@ spend_life (void)
       wnoutrefresh (message);
       break;
     case ev_BUGGY:
-      print_buggy ();
+      if (print_buggy ())  done = 1;
       break;
     case ev_SCORE:
       ++score;
@@ -146,18 +145,23 @@ game_mode (void)
     }
     spend_life ();
     --lives;
+      
+    add_event (vclock()+.3, ev_TIMEOUT);
+    while (get_event (NULL) != ev_TIMEOUT)
+      ;
+    
     if (lives > 0) {
       int  done = 0;
       
       clear_queue ();
-      add_event (vclock()+1, ev_TIMEOUT);
+      add_event (vclock()+.7, ev_TIMEOUT);
       do {
 	switch (get_event (NULL)) {
 	case ev_TIMEOUT:
 	  done = 1;
 	  break;
 	case ev_KEY:
-	  switch (wgetch (moon)) {
+	  switch (xgetch (moon)) {
 	  case KEY_BREAK:
 	  case KEY_CANCEL:
 	  case KEY_EXIT:
