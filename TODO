@@ -1,9 +1,11 @@
-· Steigenden Schwierigkeitsgrad einführen
-· Klären, was es mit /usr/games auf sich hat
 · Signal handlers dürfen `doupdate' nicht aufrufen.
-· Score file locking: recover from failure (use an alternative method)
-· Internationalisieren
-· Use a timeout when waiting for a file lock
-· wgetnstr-Ersatz verbessern
 · Portabilität bekümmern
+· Steigenden Schwierigkeitsgrad einführen
+· wgetnstr-Ersatz verbessern
 · Use sed instead of awk for "instcmds"
+· Remove score files from different version on installation
+· Score file locking: recover from failure (use an alternative method)
+· Use a timeout when waiting for a file lock
+· Internationalisieren
+· Lars: Ufos und Laser einführen
+· Klären, was es mit /usr/games auf sich hat
