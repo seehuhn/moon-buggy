@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.
  *
- * $Id: darray.h,v 1.3 1999/05/30 18:57:31 voss Exp $ */
+ * $Id: darray.h,v 1.4 1999/06/13 18:40:18 voss Rel $ */
 
 #ifndef FILE_DARRAY_H_SEEN
 #define FILE_DARRAY_H_SEEN
@@ -54,7 +54,8 @@
 #define DA_REMOVE(x,type,idx) \
 	do { \
 	  int _idx = (idx); \
-	  memmove((x).data+_idx, (x).data+_idx+1, ((x).used-_idx-1)*sizeof(type)); \
+	  memmove((x).data+_idx, (x).data+_idx+1, \
+		  ((x).used-_idx-1)*sizeof(type)); \
 	  (x).used -= 1; \
 	} while(0)
 
@@ -63,7 +64,8 @@
 	  int _i = 0; \
 	  while (_i < (x).used) { \
 	    if ((x).data[_i] == (val)) { \
-	      memmove((x).data+_i, (x).data+_i+1, ((x).used-_i-1)*sizeof(type)); \
+	      memmove((x).data+_i, (x).data+_i+1, \
+		      ((x).used-_i-1)*sizeof(type)); \
 	      (x).used -= 1; \
 	    } else { \
 	      ++_i; \
