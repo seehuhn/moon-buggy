@@ -1,6 +1,6 @@
 This file is mostly written in German.  I think that this is
 acceptable for the moment, because (almost) all items should be
-resolved before the first stable release, i.e. before version 1.0.
+resolved before version 1.0.
 
 BUG FIXES:
 · Fenstergrößenveränderungen während man den Namen eingibt, sind nicht
@@ -30,8 +30,6 @@ sollte der cache verwendet werden.
 · rpm Zeugs: "moon-buggy.spec" aus "moon-buggy.spec.in" erzeugen
 · Hilfetext für den Pager, den man von der Titelseite aus aufrufen
 kann.  Erklärung der Tastaturbelegung.
-· Punkteverteilung verbessern (sollte der erste Level nicht immer
-genau 100 Punkte geben?)
 · Sollte der schwierige Teil der Level am Anfang (statt Ende) sein,
 damit der Spieler nicht deprimiert wird.  Insbesondere bei Level 2.
 · Prüfsumme für das Scorefile.
