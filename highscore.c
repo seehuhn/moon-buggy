@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.20 1999/06/06 19:29:30 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.21 1999/06/17 15:19:04 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -197,21 +197,30 @@ read_data (FILE *score_file)
 /* Read the top ten list from SCORE_FILE into `topten'.  */
 {
   int  version, i;
+  int  err = 0;
   int  res;
   
   res = fscanf (score_file, "moon-buggy hiscore file (version %d)\n",
 		&version);
-  if (res != 1)  fatal ("Score file corrupted");
-  if (version != 2)  fatal ("Wrong save file version %d", version);
+  if (res != 1) {
+    print_message ("Score file corrupted");
+    err = 1;
+  } else if (version != 2) {
+    print_message ("Wrong score file version");
+    err = 1;
+  }
 
-  for (i=0; i<TOPTEN_SLOTS; ++i) {
+  for (i=0; i<TOPTEN_SLOTS && ! err; ++i) {
     int  score, level;
     int  day, month, year;
     char  name [NAME_MAX_LEN+1];
     res = fscanf (score_file,
 		  "|%d|%d|%d|%d|%d|%" quote(NAME_MAX_LEN) "[^|]|\n",
 		  &score, &level, &day, &month, &year, name);
-    if (res != 6)  fatal ("Score file corrupted");
+    if (res != 6) {
+      print_message ("Score file corrupted");
+      err = 1;
+    }
     topten[i].score = score;
     topten[i].level = level;
     topten[i].day = day;
@@ -220,6 +229,16 @@ read_data (FILE *score_file)
     topten[i].name[0] = '\0';
     topten[i].new = 0;
     strncat (topten[i].name, name, NAME_MAX_LEN);
+  }
+  if (ferror (score_file)) {
+    print_message ("Error while reading score file");
+    err = 1;
+  }
+
+  if (err) {
+    beep ();
+    xsleep (3);
+    fatal ("Invalid score file");    
   }
 }
 
