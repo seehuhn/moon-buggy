@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: mode.c,v 1.8 2000/11/01 13:14:44 voss Rel $";
+static const  char  rcsid[] = "$Id$";
 
 
 #ifdef HAVE_CONFIG_H

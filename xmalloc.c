@@ -2,7 +2,7 @@
  *
  * Copyright 1998  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: xmalloc.c,v 1.7 1999/07/21 10:37:53 voss Rel $";
+static const  char  rcsid[] = "$Id$";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss
  *
- * $Id: moon-buggy.h,v 1.20 2000/11/16 17:59:30 voss Rel $ */
+ * $Id$ */
 
 #ifndef FILE_MOON_BUGGY_H_SEEN
 #define FILE_MOON_BUGGY_H_SEEN

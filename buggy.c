@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: buggy.c,v 1.21 2000/11/16 17:55:42 voss Rel $";
+static const  char  rcsid[] = "$Id$";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -28,7 +28,10 @@ typedef  struct scene {
 }  scenario [];
 
 static  scenario  sz_empty = {
-  { car_NORMAL, 5, -1, 1 }
+  { car_NORMAL, 5, TICK(1), 1 },
+  { car_NORMAL1, 5, TICK(2.5), 1 },
+  { car_NORMAL2, 5, TICK(4), 1 },
+  { car_NORMAL3, 5, TICK(5.5), 1 }
 };
 
 static scenario sz_jump = {
@@ -56,6 +59,8 @@ static  scenario  sz_sit = {
 
 static  struct scene *state;
 
+int nextG;
+
 
 void
 initialise_buggy (void)
@@ -82,8 +87,20 @@ print_buggy (void)
     mvwaddstr (moon, LINES-car_y, car_x, "       ");
   }
   car_y = y;
-  mvwaddstr (moon, LINES-y-1, car_x, image[n][0]);
-  mvwaddstr (moon, LINES-y, car_x, image[n][1]);
+
+/* ++pg the changing of the 4 normal states is realized 
+        in the following lines.
+*/
+  if (n==car_NORMAL)  {
+    mvwaddstr (moon, LINES-y-1, car_x, image[n+nextG][0]);
+    mvwaddstr (moon, LINES-y, car_x, image[n+nextG][1]);
+  } else {
+    mvwaddstr (moon, LINES-y-1, car_x, image[n][0]);
+    mvwaddstr (moon, LINES-y, car_x, image[n][1]);
+  }
+  nextG++; if (nextG>3) nextG=0;
+ 
+
   if (n == car_BROKEN) {
     if (ground2[car_x+1] == ' ')  mvwaddch (moon, LINES-4, car_x+1, 'o');
     if (ground2[car_x+5] == ' ')  mvwaddch (moon, LINES-4, car_x+5, 'o');

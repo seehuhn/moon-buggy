@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: pager.c,v 1.19 2000/11/01 13:16:44 voss Rel $";
+static const  char  rcsid[] = "$Id$";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

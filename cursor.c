@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: cursor.c,v 1.1 2000/03/31 11:19:34 voss Rel $";
+static const  char  rcsid[] = "$Id$";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000, 2001  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.43 2001/08/26 20:42:14 voss Rel $";
+static const  char  rcsid[] = "$Id$";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

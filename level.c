@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: level.c,v 1.10 2000/11/16 17:56:56 voss Rel $";
+static const  char  rcsid[] = "$Id$";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -481,6 +481,8 @@ level_tick (double t)
   }
 
   ground2[0] = ground;
+  print_buggy(); /* ++pg now the refresh of the car is needed here. */
+
   ++ticks;
 }
 

@@ -2,7 +2,7 @@
  *
  * Copyright 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: xstrdup.c,v 1.8 1999/07/21 10:37:44 voss Rel $";
+static const  char  rcsid[] = "$Id$";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: hpath.c,v 1.4 1999/07/21 10:42:06 voss Rel $";
+static const  char  rcsid[] = "$Id$";
 
 
 #ifdef HAVE_CONFIG_H

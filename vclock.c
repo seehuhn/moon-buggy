@@ -2,7 +2,7 @@
  *
  * Copyright 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: vclock.c,v 1.7 2000/03/17 23:01:51 voss Rel $";
+static const  char  rcsid[] = "$Id$";
 
 
 #ifdef HAVE_CONFIG_H

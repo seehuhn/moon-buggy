@@ -1,6 +1,6 @@
 .\" manpage.in - template for the "moon-buggy.6" manual page
 .\" Copyright 1999, 2000  Jochen Voss
-.\" $Id: manpage.in,v 1.9 2001/05/24 07:18:09 voss Rel $
+.\" $Id$
 .de Op
 .BR -\\$1 @C@ ", " --\\$2
 ..
