@@ -1,3 +1,11 @@
+1999-06-27  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: Added 199-06-27
+
+	* mbuggy.lsm: Added another keyword.
+
+	* ANNOUNCE: Minor fixes.
+
 1999-06-25  Jochen Voss  <voss@tatonka.pfalz.de>
 
 	* ChangeLog: Added remaining items.
