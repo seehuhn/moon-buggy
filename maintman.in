@@ -1,0 +1,45 @@
+.\" $Id: maintman.in,v 1.1 1999/01/01 19:07:17 voss Exp $
+.\"
+.TH maint-buggy 6 "Jan 1 1999" "@MBNAME@ @MBVERS@"
+.SH NAME
+maint-buggy \- maintain the moon-buggy installation
+.SH SYNOPSIS
+maint-buggy [--help] [--uninstall] [--version]
+.SH DESCRIPTION
+The
+.B maint-buggy
+script is part of the
+.B moon-buggy
+package.  It helps to maintain your moon-buggy installation and
+is only useful for the system administrator.
+.SH OPTIONS
+The script understands the following options.
+.TP
+.B --help
+shows a short usage message.
+.TP
+.B --uninstall
+removes the
+.B moon-buggy
+installation from the system.  As this includes the
+.B maint-buggy
+script itself, this step cannot easily be undone.  Use with
+caution!
+.TP
+.B --version
+prints moon-buggy's version string to standard output and exits.
+.SH SEE ALSO
+.BR moon-buggy (6)
+.SH COPYING
+Copyright \(co 1999  Jochen Voss
+.PP
+.B Moon-buggy
+is free software.  Read the file
+.I COPYING
+of the source code distribution for details or press `c' at
+.BR moon-buggy 's
+title screen.
+.SH AUTHOR
+The program
+.B moon-buggy
+was implemented by Jochen Voss (voss@mathematik.uni-kl.de).
