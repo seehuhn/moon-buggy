@@ -1,8 +1,8 @@
 /* queue.c - a queue of events to happen
  *
- * Copyright (C) 1998  Jochen Voss.  */
+ * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.6 1999/01/01 17:58:49 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.7 1999/01/02 12:09:43 voss Rel $";
 
 #define _POSIX_SOURCE
 
@@ -126,8 +126,12 @@ void
 clock_adjust_delay (double dt)
 /* Make the next event occur after DT time steps.  */
 {
-  double  t = vclock ();
-  double  new_time_base = t + dt - queue->t;
+  double  t, new_time_base;
+
+  if (! queue)  return;
+  
+  t = vclock ();
+  new_time_base = t + dt - queue->t;
   if (new_time_base > time_base)  time_base = new_time_base;
 }
 
@@ -143,7 +147,7 @@ clear_queue (void)
   }
   queue = NULL;
 
-  while (key_ready ())  wgetch (moon);
+  while (key_ready ())  xgetch (moon);
 }
 
 void
@@ -190,10 +194,12 @@ get_event (double *t_return)
       s = time_base + queue->t - correct;
       retval = wait_until (s);
       t = vclock ();
-      if (t-s > 0.4) {
-	clock_adjust_delay (0.4);
-      } else {
-	add_value (queuelag, t - s);
+      if (retval == 0) {
+	if (t-s > 0.4) {
+	  clock_adjust_delay (0.4);
+	} else {
+	  add_value (queuelag, t - s);
+	}
       }
     
       ev = queue;
