@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss
  *
- * $Id: moon-buggy.h,v 1.14 2000/05/23 06:35:23 voss Exp $ */
+ * $Id: moon-buggy.h,v 1.15 2000/06/01 18:48:42 voss Exp $ */
 
 #ifndef FILE_MOON_BUGGY_H_SEEN
 #define FILE_MOON_BUGGY_H_SEEN
@@ -179,7 +179,7 @@ extern  void  mode_start (const struct mode *m, int seed);
 extern  void  mode_change (const struct mode *m, int seed);
 extern  void  mode_leave (void);
 extern  void  mode_redraw (void);
-extern  void  mode_keypress (game_time t);
+extern  int  mode_keypress (game_time t, int meaning);
 extern  void  mode_signal (int signum);
 extern  void  mode_keys (void);
 
