@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 # Copyright 1999  Jochen Voss
-# $Id: Makefile.am,v 1.38 1999/07/21 10:55:09 voss Exp $
+# $Id: Makefile.am,v 1.39 1999/07/21 12:46:05 voss Exp $
 
 EXTRA_DIST = moonman.in maintman.in instcmds car.img \
 	text2c.sed merge.sed img.sed ANNOUNCE moon-buggy.lsm \
@@ -38,7 +38,7 @@ install-exec-hook:
 	@$(POST_INSTALL)
 	if test "x@GAMEGROUP@" != "x"; then \
 	  chgrp "@GAMEGROUP@" "$(DESTDIR)$(bindir)/moon-buggy" \
-	    && chmod g+s "$(DESTDIR)$(bindir)/moon-buggy" ; \
+	    && chmod 2111 "$(DESTDIR)$(bindir)/moon-buggy" ; \
 	fi
 	chmod go-x "$(DESTDIR)$(bindir)/maint-buggy"
 	@$(NORMAL_INSTALL)
@@ -53,8 +53,8 @@ install-data-hook:
 	    && { test ! -f "$(DESTDIR)$(scoredir)/mbscore" \
 		 || chgrp "@GAMEGROUP@" "$(DESTDIR)$(scoredir)/mbscore" ; } \
 	    && { test ! -f "$(DESTDIR)$(scoredir)/mbscore" \
-		 || chmod o-w "$(DESTDIR)$(scoredir)/mbscore" ; } \
-	    && chmod o-w "$(DESTDIR)$(scoredir)" ; \
+		 || chmod 454 "$(DESTDIR)$(scoredir)/mbscore" ; } \
+	    && chmod 575 "$(DESTDIR)$(scoredir)" ; \
 	fi
 
 uninstall-local:
