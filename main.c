@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.9 1998/12/28 20:15:53 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.10 1998/12/30 19:39:08 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -17,7 +17,7 @@ static const  char  rcsid[] = "$Id: main.c,v 1.9 1998/12/28 20:15:53 voss Exp $"
 #else
 #include <unistd.h>
 extern char *optarg;
-extern int optind, opterr, optopt;
+extern int  optind;
 #endif
 #include <signal.h>
 
@@ -25,212 +25,70 @@ extern int optind, opterr, optopt;
 
 
 const char *my_name;
+WINDOW *moon, *status, *message;
+enum game_state  game_state = INIT;
 
-long  score, bonus;
-static int  lives;
-static  struct circle_buffer *load_meter;
 
-static void
-print_score ()
-{
-  mvwprintw (status, 0, car_base-7, "score: %-8ld", score);
-  wnoutrefresh (status);
-}
-
-static void
-print_lives ()
-{
-  mvwprintw (status, 0, car_base-20, "lives: %d", lives);
-  wnoutrefresh (status);
-}
-
-static void
-print_ground ()
-{
-  mvwaddnstr (moon, LINES-4, 0, ground2, COLS);
-  wnoutrefresh (moon);
-}
-
-static void
+void
 print_message (const char *str)
 {
-  mvwaddstr (status, 1, 0, str);
-  wclrtoeol (status);
-  wnoutrefresh (status);
+  wclear (message);
+  waddstr (message, str);
+  wnoutrefresh (message);
+}
+
+static void
+allocate_windows (void)
+{
+  moon = newwin (LINES-2, 0, 0, 0);
+  keypad (moon, TRUE);
+  leaveok (moon, TRUE);
+
+  status = newwin (1, 0, LINES-2, 0);
+  keypad (status, TRUE);
+  leaveok (status, TRUE);
+
+  message = newwin (1, 0, LINES-1, 0);
+  keypad (message, TRUE);
+  leaveok (message, TRUE);
 }
 
 void
 prepare_for_exit (void)
 {
-  wmove (status, 1, 0);
-  wclrtoeol (status);
+  wclear (message);
   wnoutrefresh (moon);
   wnoutrefresh (status);
+  wnoutrefresh (message);
   doupdate ();
   endwin ();
 }
 
-/**********************************************************************
- * game control
+/************************************************************
+ * signal handling
  */
 
-static double
-limited (double min, double x, double max)
-/* Return the point of [MIN; MAX], which is nearest to X.  */
-{
-  if (x < min)  return min;
-  if (x > max)  return max;
-  return  x;
-}
-
-static void
-spend_life (void)
-{
-  double  base, t, sleep_delta;
-  int  done = 0;
-
-  bonus = 0;
-  print_ground ();
-  print_score ();
-  print_lives ();
-
-  clear_queue ();
-
-  initialize_buggy ();
-  print_buggy ();
-  
-  doupdate ();
-  
-  base = vclock ();
-  add_event (base+1, ev_SCROLL);
-  sleep_meter = 0;
-  sleep_delta = 1;
-  add_event (base+3, ev_STATUS);
-  add_event (base+6, ev_SCORE);
-
-  do {
-    switch (get_event (&t)) {
-    case ev_SCROLL:
-      scroll_ground ();
-      print_ground ();
-      if (ground2[score_base] == ' ')  ++bonus;
-      if (crash_check ())  done = 1;
-      add_value (load_meter,
-		 limited (0, (sleep_delta-sleep_meter)/sleep_delta, 1));
-#if 1
-      mvwprintw (status, 1, car_base-7, "load: %d%%  ",
-		 (int)(100.0*get_mean (load_meter)+.5));
-      wnoutrefresh (status);
-#endif
-      add_event (t+0.08, ev_SCROLL);
-      sleep_meter = 0;
-      sleep_delta = 0.08;
-      break;
-    case ev_KEY:
-      switch (wgetch (moon)) {
-      case ' ':
-	if (can_jump()) {
-	  jump (t);
-	  ++score;
-	  print_score ();
-	}
-	break;
-      case KEY_BREAK:
-      case KEY_CLOSE:
-      case '\e':
-      case 'q':
-	done = 1;
-	lives = 1;
-	break;
-      }
-      break;
-    case ev_STATUS:
-      wmove (status, 1, 0);
-      wclrtoeol (status);
-      wnoutrefresh (status);
-      break;
-    case ev_BUGGY:
-      print_buggy ();
-      break;
-    case ev_SCORE:
-      ++score;
-      print_score ();
-      add_event (t+1, ev_SCORE);
-      break;
-    }
-    doupdate ();
-  } while (! done);
-}
-
-static void
-play_game ()
-{
-  int  i;
-  
-  wclear (moon);
-  wmove (status, 0, 0);
-  wclrtoeol (status);
-  
-  for (i=0; i<COLS; ++i) {
-    ground1[i] = '#';
-    ground2[i] = '#';
-  }
-  mvwaddnstr (moon, LINES-3, 0, ground1, COLS);
-  car_base = (COLS > 80 ? 80 : COLS) - 12;
-  score_base = car_base + 7;
-
-  score = 0;
-  lives = 3;
-  do {
-    spend_life ();
-    --lives;
-    if (lives > 0) {
-      sleep (1);
-      for (i=car_base-4; i<car_base+8; ++i) {
-	ground2[i] = '#';
-      }
-    }
-  } while (lives > 0);
-
-  wattron (moon, A_BLINK);
-  mvwaddstr (moon, LINES-11, car_base-1, "GAME OVER");
-  wattroff (moon, A_BLINK);
-
-  print_lives ();
-  write_hiscore ();
-}
-
-static void
-main_loop (void)
-{
-  int  done = 0;
-  
-  do {
-    int  c;
-    play_game ();
-  ask:
-    print_message ("play again (y/n)?");
-    doupdate ();
-    c = wgetch (status);
-    switch (c) {
-    case 'y':
-    case 'Y':
-      break;
-    case 'n':
-    case 'N':
-    case 'q':
-    case 'Q':
-      done = 1;
-      break;
-    default:
-      beep ();
-      goto ask;
-    }
-  } while (! done);
-}
-
 static volatile  sig_atomic_t  termination_in_progress = 0;
-     
+static  sigset_t  winch_set, full_set, old_sigset;
+
+void
+block_winch (void)
+{
+  sigprocmask (SIG_BLOCK, &winch_set, &old_sigset);
+}
+
+void
+block_all (void)
+{
+  sigprocmask (SIG_BLOCK, &full_set, &old_sigset);
+}
+
+void
+unblock (void)
+{
+  sigprocmask (SIG_SETMASK, &old_sigset, NULL);
+}
+   
 static RETSIGTYPE
 termination_handler (int signum)
 {
@@ -246,10 +104,12 @@ static RETSIGTYPE
 tstp_handler (int signum)
 {
   signal (SIGTSTP, SIG_DFL);
-  score -= 10;
-  print_score ();
+  if (game_state == PLAYING) {
+    score_bonus (-10);
+  }
   prepare_for_exit ();
-  fputs ("suspended (penalty: 10 points)\n", stderr);
+  if (game_state == PLAYING)
+    fputs ("suspended (penalty: 10 points)\n", stderr);
   raise (SIGTSTP);
 }
     
@@ -258,27 +118,67 @@ cont_handler (int signum)
 {
   signal (SIGCONT, cont_handler);
   signal (SIGTSTP, tstp_handler);
-  print_message ("suspended (penalty: 10 points)");
+  if (game_state == PLAYING)  print_message ("suspended (penalty: 10 points)");
+  leaveok (moon, TRUE);
+  leaveok (status, TRUE);
+  leaveok (message, TRUE);
+
   wnoutrefresh (moon);
   wnoutrefresh (status);
+  wnoutrefresh (message);
   doupdate ();
-  clock_adjust_delay (0.5);
+  if (game_state == PLAYING)  clock_adjust_delay (0.5);
 }
- 
+    
+static RETSIGTYPE
+winch_handler (int signum)
+{
+  delwin (moon);
+  delwin (status);
+  delwin (message);
+  endwin ();
+  refresh ();
+  allocate_windows ();
+  
+  switch (game_state) {
+  case TITLE:
+    resize_title ();
+    break;
+  case PAGER:
+    resize_pager ();
+    break;
+  case PLAYING:
+    resize_game ();
+    break;
+  case HIGHSCORE:
+    resize_highscore ();
+    break;
+  default:
+    break;
+  }
+}
+
+/************************************************************
+ * main procedure
+ */
+
 int
 main (int argc, char **argv)
 {
 #ifdef HAVE_GETOPT_LONG
   struct option  long_options [] = {
     { "help", no_argument, 0, 'h'},
+    { "no-title", no_argument, 0, 'n' },
     { "version", no_argument, 0, 'V'},
     { NULL, 0, NULL, 0}
   };
 #endif
-#define RND_SHORT_OPTIONS "hV"
+#define RND_SHORT_OPTIONS "hnV"
   int  help_flag = 0;
+  int  title_flag = 1;
   int  version_flag = 0;
   int  error_flag = 0;
+  int  res;
   
   initialize_persona ();
   set_user_persona ();
@@ -296,6 +196,9 @@ main (int argc, char **argv)
     switch (c) {
     case 'h':
       help_flag = 1;
+      break;
+    case 'n':
+      title_flag = 0;
       break;
     case 'V':
       version_flag = 1;
@@ -324,6 +227,7 @@ main (int argc, char **argv)
     fprintf (out, "usage:  %s [options]\n\n", my_name);
     fputs ("The options are\n", out);
     fputs (OPT("-h","--help    ") "show this message and exit\n", out);
+    fputs (OPT("-n","--no-title") "omit the title screen\n", out);
     fputs (OPT("-V","--version ") "show the version number and exit\n", out);
     exit (error_flag);
   }
@@ -336,26 +240,32 @@ main (int argc, char **argv)
     signal (SIGTERM, SIG_IGN);
   signal (SIGCONT, cont_handler);
   signal (SIGTSTP, tstp_handler);
- 
+  signal (SIGWINCH, winch_handler);
+
+  sigemptyset (&winch_set);
+  sigfillset (&full_set);
+  sigaddset (&winch_set, SIGWINCH);
+  
   initscr ();
   cbreak ();
   noecho ();
-  
-  status = newwin (2, 0, LINES-2, 0);
-  keypad (status, TRUE);
-  leaveok (status, TRUE);
-  moon = newwin (LINES-2, 0, 0, 0);
-  keypad (moon, TRUE);
-  leaveok (moon, TRUE);
+
+  allocate_windows ();
 
   queuelag = new_circle_buffer ();
-  load_meter = new_circle_buffer ();
-  ground1 = xmalloc (COLS);
-  ground2 = xmalloc (COLS);
 
-  print_message ("good luck");
-  main_loop ();
-  mvwaddstr (moon, LINES-11, car_base-1, "GAME OVER");
+  if (title_flag) {
+    res = title_mode ();
+  } else {
+    res = 0;
+  }
+
+  if (! res) {
+    print_message ("good luck");
+    while (game_mode ())
+      ;
+    mvwaddstr (moon, LINES-11, car_base-1, "GAME OVER");
+  }
   
   prepare_for_exit ();
   return  0;
