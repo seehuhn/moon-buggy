@@ -1,8 +1,8 @@
 /* highscore.c - maintain the highscore list
  *
- * Copyright 1999, 2000  Jochen Voss  */
+ * Copyright 1999, 2000, 2001  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.42 2001/05/24 07:19:13 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.43 2001/08/26 20:42:14 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
