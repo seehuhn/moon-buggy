@@ -3,6 +3,8 @@ acceptable for the moment, because (almost) all items should be
 resolved before version 1.0.
 
 BUG FIXES:
+· Tastendrücke nach resize geben einen beep
+· Die GAME OVER Meldung ist weg
 · Zu kleine Fenstergrößen geben Katastophen bei der Tastenerklärung
 · Namen nur aus Leerzeichen als leer werten
 · Die Anleitung sollte auf sunsite verweisen
@@ -17,10 +19,6 @@ Man sollte ihn evtl. auf eine günstige Position stellen.
 `parse_date' ist das schwierig.
 
 IMPROVEMENTS:
-· Man sollte im Programm die vollständige Highscoreliste ansehen
-können.
-· Hilfetext für den Pager, den man von der Titelseite aus aufrufen
-kann.  Erklärung der Tastaturbelegung.
 · words of wisdom/advice
 · Loch in level 6?
 · Levels für Zwerge
