@@ -8,7 +8,7 @@ dnl ncurses.  Any other problems must be handled by the user
 dnl via configure's --with-curses-includedir,
 dnl --with-curses-header, and --with-curses-libs options.
 
-AC_DEFUN(JV_CHECK_CURSES,[
+AC_DEFUN([JV_CHECK_CURSES],[
   dnl step 1: find the correct preprocessor flags
   dnl         This is completely left to the user.
   AC_MSG_CHECKING([for curses preprocessor flags])

@@ -25,7 +25,7 @@ static const  char  rcsid[] = "$Id$";
 double
 vclock (void)
 /* Return the elapsed (wall clock) time (measured in seconds) since
- * some base time with greater precision than `clock()' does.  */
+ * some base time with greater precision than `time()' does.  */
 {
   struct timeval  x;
 

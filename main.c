@@ -223,7 +223,7 @@ the file named COPYING or press `c' at Moon-Buggy's title screen.");
     fputs (OPT("-s","--show-scores  ") "only show the highscore list\n", out);
     fputs (OPT("-V","--version      ") "show the version number and exit\n\n",
 	   out);
-    fputs ("Please report bugs to <voss@mathematik.uni-kl.de>.\n", out);
+    fputs ("Please report bugs to <voss@seehuhn.de>.\n", out);
     exit (error_flag);
   }
 

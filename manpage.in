@@ -2,17 +2,18 @@
 .\" Copyright 1999, 2000  Jochen Voss
 .\" $Id$
 .de Op
-.BR -\\$1 @C@ ", " --\\$2
+.BR \-\\$1 @C@ ", " \-\-\\$2
 ..
-.TH moon-buggy 6 "Nov 1 2000" "@MBNAME@ @MBVERS@"
+.TH moon\-buggy 6 "Nov 16 2003" "@MBNAME@ @MBVERS@"
 .SH NAME
-moon-buggy \- drive some car across the moon
+moon\-buggy \- drive some car across the moon
 .SH SYNOPSIS
-moon-buggy [-hnsV] @C@[--help] [--no-title] [--show-scores] [--version]
+moon\-buggy [\-hnsV] @C@[\-\-help] [\-\-no\-title] [\-\-show\-scores] [\-\-version]
 .SH DESCRIPTION
-.B Moon-buggy
+.B Moon\-buggy
 is a simple character graphics game, where you drive some kind of car
-across the moon's surface.  Unfortunately there are dangerous craters
+across the moon\'s surface.
+Unfortunately there are dangerous craters
 there.  Fortunately your car can jump over them!
 .SH OPTIONS
 The program understands the following command line options.
@@ -22,56 +23,63 @@ shows a short usage message.
 .TP
 .Op m mesg
 disable write access to your terminal by other users,
-so your boss can't disturb your game play with the help
+so your boss can\'t disturb your game play with the help
 of "write" or "finger".
 .TP
-.Op n no-title
+.Op n no\-title
 skips the title screen.
 .TP
-.Op s show-scores
+.Op s show\-scores
 shows the current highscore list and exits.
 .TP
 .Op V version
-prints the program's version to standard output and exits.
+prints the program\'s version to standard output and exits.
 .SH KEYS
-The moon-buggy is controlled by a couple of keys, which are described
+The moon\-buggy is controlled by a couple of keys, which are described
 near the bottom of the screen.  Most important are the following keys.
 .IP "SPC, j"
-makes your car jump.  The length of a jump is fixed and you can only
+makes your car jump.
+The length of a jump is fixed and you can only
 start a new jump, while the wheels have contact to the ground.
 .IP "a, l"
-fires the mining laser.  The laser is used to remove stones, which may
+fires the mining laser.
+The laser is used to remove stones, which may
 block your way.
 .IP q
-quits the game prematurely.  But you still keep your score and may
+quits the game prematurely.
+But you still keep your score and may
 enter the highscore list.
 .IP 
 .SH FILES
-The following files on your system are related to moon-buggy.
+The following files on your system are related to moon\-buggy.
 .TP
-.I "@MBBINDIR@/moon-buggy"
-the moon-buggy executable.
+.I "@MBBINDIR@/moon\-buggy"
+the moon\-buggy executable.
 .TP
 .I "@MBSCORE@/mbscore"
 the global score file
 .TP
 .I "$HOME/.mbscore"
 the local score file.  This is used, if
-.B moon-buggy
+.B moon\-buggy
 has no write access to the global score file.
 .SH SEE ALSO
-.B "Moon-buggy Usage and Maintenance"
+.B "Moon\-buggy Usage and Maintenance"
 by Jochen Voss.
 .SH COPYING
 Copyright \(co 2000  Jochen Voss
 .PP
-.B Moon-buggy
-is free software.  Read the file
+.B Moon\-buggy
+is free software.
+Read the file
 .I COPYING
-of the source code distribution for details or press `c' at
-.BR moon-buggy 's
+of the source code distribution for details or press \'c\' at
+.BR moon\-buggy \'s
 title screen.
 .SH AUTHOR
 The program
-.B moon-buggy
-was implemented by Jochen Voss (voss@mathematik.uni-kl.de).
+.B moon\-buggy
+was implemented by Jochen Voss (voss@seehuhn.de).
+.\" Local Variables:
+.\" mode: nroff
+.\" End:

@@ -3,6 +3,7 @@ acceptable for the moment, because (almost) all items should be
 resolved before version 1.0.
 
 BUG FIXES:
+· make the manual page work on UTF-8 terminals
 · Score file locking: recover from failure, i.e. use an alternative method.
 (What happens if two new score files are created at the same time?)
 Auf hyperion:
