@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: moon.h,v 1.22 1999/05/22 11:57:30 voss Exp $ */
+ * $Id: mbuggy.h,v 1.1 1999/05/22 13:33:08 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
