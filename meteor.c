@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: meteor.c,v 1.6 1999/05/26 22:01:11 voss Exp $";
+static const  char  rcsid[] = "$Id: meteor.c,v 1.7 1999/06/05 13:33:06 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -99,6 +99,7 @@ remove_meteors (void)
 {
   int  j;
 
+  remove_event (meteor_handler);
   for (j=0; j<meteor_table.used; ++j) {
     struct meteor *m = meteor_table.data[j];
     mvwaddch (moon, BASELINE, m->x, ' ');
@@ -159,4 +160,23 @@ meteor_car_hit (int x0, int x1)
   }
   if (res)  wnoutrefresh (moon);
   return  res;
+}
+
+void
+resize_meteors (void)
+/* Silently remove all meteors, which are no longer visible.  */
+{
+  int  j;
+
+  j = 0;
+  while (j<meteor_table.used) {
+    struct meteor *m = meteor_table.data[j];
+    if (m->x >= COLS) {
+      remove_client_data (m);
+      DA_REMOVE_VALUE (meteor_table, struct meteor *, m);
+      free (m);
+    } else {
+      ++j;
+    }
+  }
 }
