@@ -4,7 +4,7 @@
 .de Op
 .BR \-\\$1 @C@ ", " \-\-\\$2
 ..
-.TH moon\-buggy 6 "Nov 16 2003" "moon\-buggy @MBVERS@"
+.TH moon\-buggy 6 "Dec 27 2004" "moon\-buggy @MBVERS@"
 .SH NAME
 moon\-buggy \- drive some car across the moon
 .SH SYNOPSIS
@@ -67,7 +67,7 @@ has no write access to the global score file.
 .B "Moon\-buggy Usage and Maintenance"
 by Jochen Voss.
 .SH COPYING
-Copyright \(co 2000  Jochen Voss
+Copyright \(co 2004  Jochen Voss
 .PP
 .B Moon\-buggy
 is free software.

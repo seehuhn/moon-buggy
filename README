@@ -1,13 +1,6 @@
 moon-buggy - drive some car across the moon
 
 
-WARNING:
-
-   This is an experimental version of moon-buggy.
-The last stable version is labeled 0.5.1 and may be found at
-ftp://sunsite.unc.edu/pub/Linux/games/arcade/moon-buggy-0.5.1.tar.gz
-
-
 INTRODUCTION:
 
    Moon-buggy is a simple character graphics game, where you drive some
@@ -83,6 +76,7 @@ are some points of interest:
    Example: On GNU/Linux systems you probably can use the following
 commands.  For the last one you need root user permissions.
 
-     ./configure --sharedstatedir=/var/games --with-setgid=games
+     ./configure --sharedstatedir=/var/games --mandir=/usr/share/man \
+       --with-setgid=games
      make
      make install

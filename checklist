@@ -1,26 +1,26 @@
 Für Distributionen:
 · "test-score-modes" ausprobieren
 · Copyright-Daten
-· getpid()-Zeugs aus "ground.c" entfernen
 · "README" aktualisieren.  Experimentell entfernen.
 · "ANNOUNCE" aktualisieren.  Keine tabs überlassen.
 · Datum in der manual page aktualisieren
 · "moon-buggy.lsm" aktualisieren
 · "ChangeLog" aktualisieren
-· Neues revision tag setzen (rel_maj_min, Rel)
-	cvs tag -F rel_0_6 .
-	cvs admin -sRel .
-· Quelltexte neu auschecken
-	cvs checkout moon-buggy
-	cd moon-buggy
-· unset LANG
-· run
-	./autogen.sh
-	./configure
-	make
-	make distcheck
-
-· Versionsnummer in "configure.ac" erhöhen
+· create a safe environment
+    unset LANG
+    unset CC CFLAGS LDFLAGS
+· unpack it
+    svn co file:///remie/svn/project/moon-buggy
+    cd moon-buggy
+    ./autogen.sh
+· compile it:
+    ./configure
+    make
+    make distcheck
+· handle the version control matters
+    TAG=$(./moon-buggy --version | awk 'NR==1 { print "rel_"$2 }' | sed 's/\./_/g')
+    echo $TAG
+    svn cp -m "* tag the new moon-buggy release" file:///remie/svn/project/moon-buggy file:///remie/svn/tags/moon-buggy/$TAG
 
 · Mail an Christian
 und (für stable) an "Felix Kronlage <fkr@grummel.net>" wegen OpenBSD

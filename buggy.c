@@ -1,6 +1,6 @@
 /* buggy.c - implement the moon buggy
  *
- * Copyright 1999  Jochen Voss  */
+ * Copyright 1999, 2004  Jochen Voss  */
 
 static const  char  rcsid[] = "$Id$";
 
@@ -59,7 +59,7 @@ static  scenario  sz_sit = {
 
 static  struct scene *state;
 
-int nextG;
+static  int  nextG;
 
 
 void

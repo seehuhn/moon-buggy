@@ -1,6 +1,6 @@
 /* main.c - moon-buggy main file
  *
- * Copyright 1999, 2000  Jochen Voss  */
+ * Copyright 1999, 2000, 2004  Jochen Voss  */
 
 static const  char  rcsid[] = "$Id$";
 
