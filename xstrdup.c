@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: xstrdup.c,v 1.1 1998/12/17 19:59:40 voss Exp $";
+static const  char  rcsid[] = "$Id: xstrdup.c,v 1.2 1998/12/22 22:29:55 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -16,7 +16,8 @@ static const  char  rcsid[] = "$Id: xstrdup.c,v 1.1 1998/12/17 19:59:40 voss Exp
 char *
 xstrdup (const char *str)
 {
-  char *tmp = strdup (str);
+  char *tmp = xmalloc (strlen(str) + 1);
   if (tmp == NULL)  fatal ("Memory exhausted");
+  strcpy (tmp, str);
   return  tmp;
 }
