@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.16 1999/05/22 13:43:58 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.17 1999/05/23 14:18:48 voss Exp $";
 
 #define _POSIX_SOURCE 1
 
@@ -290,7 +290,7 @@ main_loop (double dt, void (*key_handler)(game_time))
       ev->callback (ev->t, ev->client_data);
       free (ev);
     }
-#if 1
+#if 0				/* TODO */
     mvwprintw (status, 0, 3, "load:%5.1f%%", cpu_load*100);
     wnoutrefresh (status);
 #endif
