@@ -1,8 +1,8 @@
 /* signal.c - signal handling
  *
- * Copyright (C) 1999  Jochen Voss.  */
+ * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: signal.c,v 1.9 1999/06/05 13:30:26 voss Exp $";
+static const  char  rcsid[] = "$Id: signal.c,v 1.10 1999/06/13 19:17:44 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

@@ -1,8 +1,8 @@
 /* random.c - generate pseudo random numbers
  *
- * Copyright (C) 1999  Jochen Voss.  */
+ * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: random.c,v 1.3 1999/06/06 19:28:25 voss Exp $";
+static const  char  rcsid[] = "$Id: random.c,v 1.4 1999/06/13 19:17:52 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

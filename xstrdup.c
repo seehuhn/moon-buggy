@@ -1,8 +1,8 @@
 /* xstrdup.c - fail save strdup
  *
- * Copyright (C) 1998  Jochen Voss.  */
+ * Copyright 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: xstrdup.c,v 1.6 1999/05/22 13:43:59 voss Rel $";
+static const  char  rcsid[] = "$Id: xstrdup.c,v 1.7 1999/06/13 19:16:46 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

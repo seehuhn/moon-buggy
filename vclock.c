@@ -1,8 +1,8 @@
 /* vclock.c - high-precision wall clock time
  *
- * Copyright (C) 1998  Jochen Voss.  */
+ * Copyright 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: vclock.c,v 1.4 1999/06/13 18:36:59 voss Exp $";
+static const  char  rcsid[] = "$Id: vclock.c,v 1.5 1999/06/13 19:16:53 voss Rel $";
 
 
 #ifdef HAVE_CONFIG_H
