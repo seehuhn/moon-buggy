@@ -1,13 +1,13 @@
-· "--help"
-· Manche Sprünge sind anders.  Das soll nicht so sein.
 · Copyright
-· Manual: suid erklären
-· Manual: auf ncurses verweisen
-· Score file locking
-· Mit Fenstervergrößenänderungen rechnen
+· Daten in der Highscoreliste
+· Mit Fenstergrößenveränderungen rechnen
 · Wenn mehr als 0.5 Sekunden Verzögerung auftreten, sollte das Spiel
 etwas Zeit "durchrutschen" lassen.
 · Entferne das `sleep' und <unistd.h> aus "main.c".  Verwende stattdessen `select'.
-· error.c:warning: verwende curses
-· Kann man die gesamte curses-Abhängigkeit in einer Datei versammeln
-und <curses.h> aus "moon.h" entfernen?
+· Manual: suid erklären (und vorher sicher machen)
+· Manual: auf ncurses und fsstnd verweisen
+· Uhr entfernen
+----
+· Score file locking: recover from failure (use an alternative method)
+· Internationalisieren
+· Use a timeout when waiting for a file lock
