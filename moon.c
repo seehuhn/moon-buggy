@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: moon.c,v 1.15 1999/05/22 14:34:49 voss Exp $";
+static const  char  rcsid[] = "$Id: moon.c,v 1.16 1999/05/22 17:12:12 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -25,8 +25,6 @@ static const  char  rcsid[] = "$Id: moon.c,v 1.15 1999/05/22 14:34:49 voss Exp $
 
 char *ground1, *ground2;
 static int  ground_width;
-
-static  int  hole = 2;
 
 
 void
@@ -60,30 +58,19 @@ print_ground (void)
 static void
 scroll_handler (game_time t, void *client_data)
 {
-  char  nextchar;
-
-  assert (hole != 0);
-  if (hole > 0) {
-    nextchar = ' ';
-    --hole;
-    if (hole == 0)  hole = -11-uniform_rnd (7);
-  } else {
-    nextchar = '#';
-    ++hole;
-    if (hole == 0)  hole = 2+uniform_rnd (2);
-  }
+  char  nextchar = control_tick () ? ' ' : '#';
   
   memmove (ground2+1, ground2, ground_width-1);
   ground2[0] = nextchar;
-
-  if (uniform_rnd(20) == 0)  place_meteor (t);
   print_ground ();
+
   if (ground2[car_x + 7] == ' ')  ++bonus;
   if (crash_detected)  shift_buggy (1);
   if (crash_detected || crash_check ()) {
     ++crash_detected;
     if (crash_detected >= 2)  quit_main_loop ();
   }
+  
   add_event (t+TICK(1), scroll_handler, NULL);
 }
 
