@@ -1,12 +1,12 @@
 ## Process this file with automake to produce Makefile.in
-# $Id: Makefile.am,v 1.5 1998/12/23 15:16:15 voss Exp $
+# $Id: Makefile.am,v 1.6 1998/12/27 14:12:38 voss Exp $
 
-EXTRA_DIST = mbpaths.c manpage.in
+EXTRA_DIST = mbpaths.c manpage.in moon-buggy-0.2-1.spec mbicon.gif mbicon.png
 DISTCLEANFILES = moon-buggy.6
 
 bin_PROGRAMS = moon-buggy
 moon_buggy_SOURCES = main.c queue.c moon.c buggy.c highscore.c lag.c moon.h \
-	realname.c vclock.c error.c xmalloc.c xstrdup.c @LIBOBJS@
+	realname.c vclock.c persona.c error.c xmalloc.c xstrdup.c @LIBOBJS@
 moon_buggy_LDADD = mbpaths.o -lcurses -lm
 info_TEXINFOS = mbuggy.texi
 man_MANS = moon-buggy.6
