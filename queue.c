@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.10 1999/03/08 20:31:44 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.11 1999/04/07 15:26:36 voss Exp $";
 
 #define _POSIX_SOURCE 1
 
@@ -36,39 +36,53 @@ struct event {
   enum event_type  type;	/* the event's type */
 };
 static  struct event *queue;
+
+/**********************************************************************
+ * convert between game time and real time
+ */
+
+typedef  double  real_time;
 
 /* The type `game_time' is relative to `time_base'.  */
 static  double  time_base;
 
-
-int
-my_select (fd_set *read_fds, double target_time)
-/* Wait until input is ready on a file descriptor from READ_FDS or
- * TARGET_TIME is reached.  The value -1 for TARGET_TIME is special.
- * It indicates that no timeout should be used.  The return value is 0
- * if we return because of TARGET_TIME being reached, and positive
- * else.  */
+static real_time
+to_real (game_time t)
 {
+  return  t + time_base;
+}
+
+static game_time
+to_game (real_time t)
+{
+  return  t - time_base;
+}
+
+/**********************************************************************
+ * wait for timeouts or keyboard input
+ */
+
+/* These are used to measure the system's load.  */
+static  double  time_slept;
+static  game_time  sleep_base;
+
+static int
+my_select (struct timeval *timeout)
+/* Wait until input is ready on from stdin or a timeout is reached.
+ * TIMEOUT has the same meaning, as is has for the `select' system
+ * call.  The return value is 0 if we return because of a timeout, and
+ * positive when input is ready.  */
+{
+  fd_set  rfds;
   int  retval;
 
-  do {
-    struct timeval  tv;
-    struct timeval *timeout;
+  /* Watch stdin (fd 0) to see when it has input. */
+  FD_ZERO (&rfds);
+  FD_SET (0, &rfds);
 
-    handle_signals ();
-    if (target_time < -0.5) {
-      timeout = NULL;
-    } else {
-      double  dt, sec, usec;
-      
-      dt = target_time - vclock ();
-      if (dt < 0)  dt = 0;
-      usec = 1e6 * modf (dt, &sec) + 0.5;
-      tv.tv_sec = sec + 0.5;
-      tv.tv_usec = usec + 0.5;
-      timeout = &tv;
-    }
-    retval = select (FD_SETSIZE, read_fds, NULL, NULL, timeout);
+  handle_signals ();
+  do {
+    retval = select (FD_SETSIZE, &rfds, NULL, NULL, timeout);
     if (retval < 0 && errno == EINTR)  handle_signals ();
   } while (retval < 0 && errno == EINTR);
   if (retval < 0)  fatal ("Select failed: %s", strerror (errno));
@@ -80,47 +94,66 @@ static int
 key_ready (void)
 /* Return a positive value iff keyboard input is ready.  */
 {
-  fd_set  rfds;
+  struct timeval  ancient_time;
 
-  /* Watch stdin (fd 0) to see when it has input. */
-  FD_ZERO (&rfds);
-  FD_SET (0, &rfds);
-  return  my_select (&rfds, 0);
+  ancient_time.tv_sec = 0;
+  ancient_time.tv_usec = 0;
+  return  my_select (&ancient_time);
 }
 
-static int
+static void
 wait_for_key (void)
-/* Wait for the next key press and return a positive value.  */
+/* Wait for the next key press.
+ * The key is not removed from the input buffer and must be read by a
+ * function like `xgetch'.  */
 {
-  fd_set  rfds;
-
-  /* Watch stdin (fd 0) to see when it has input. */
-  FD_ZERO (&rfds);
-  FD_SET (0, &rfds);
-  return  my_select (&rfds, -1);
+  my_select (NULL);
 }
 
 static int
-wait_until (double t)
-/* Wait for time T or the next key press, whichever comes first.
- * Return a positive value, if a key was pressed, and 0 else.  */
+wait_until (real_time *t)
+/* Wait for time *T or the next key press, whichever comes first.
+ * Return a positive value, if a key was pressed, and 0 else.
+ * Set *T to the return time.  */
 {
-  fd_set  rfds;
+  double  start, stop, dt;
+  double  sec, usec;
+  struct timeval  tv;
+  int  retval;
 
-  /* Watch stdin (fd 0) to see when it has input. */
-  FD_ZERO (&rfds);
-  FD_SET (0, &rfds);
-  return  my_select (&rfds, t);
+  start = vclock ();
+  dt = *t - start;
+  if (dt <= 0) {
+    *t = start;
+    return  key_ready ();
+  }
+    
+  usec = 1e6 * modf (dt, &sec) + 0.5;
+  tv.tv_sec = sec + 0.5;
+  tv.tv_usec = usec + 0.5;
+  retval = my_select (&tv);
+
+  *t = stop = vclock ();
+  time_slept += stop-start;
+  
+  return  retval;
 }
 
 void
 clock_adjust_delay (double dt)
-/* Make the next event occur after DT steps of time.
+/* Adjust the clock to make the next event occur after DT steps of time.
  * The queue must contain at least one element.
  * This function MUST be called before the first `get_event' call.  */
 {
+  double  now;
+  
   assert (queue);
-  time_base = vclock () + dt - queue->t;
+  
+  now = vclock ();
+  time_base = now + dt - queue->t;
+  
+  time_slept = 0;
+  sleep_base = to_game (now);
 }
 
 void
@@ -163,8 +196,8 @@ add_event (game_time t, enum event_type type)
 enum event_type
 get_event (game_time *t_return)
 /* Wait until the next event happens and return it.
- * In *T_RETURN the specified event time is stored and the event's
- * type is returned.  */
+ * The specified event time is stored in *T_RETURN and the return
+ * value is the event's type.  */
 {
   struct event *ev;
   enum event_type  res;
@@ -174,27 +207,22 @@ get_event (game_time *t_return)
     double  t;
     
     if (queue) {
-      double  s;
-      
-      s = time_base + queue->t;
-      retval = wait_until (s);
-      t = vclock ();
-      if (retval == 0 && t-s > 0.4) {
-	clock_adjust_delay (0.4);
-      }
-    
+      t = to_real (queue->t);
+      retval = wait_until (&t);
+
       ev = queue;
-      while (ev && time_base+ev->t <= t) {
+      while (ev && ev->t <= to_game (t)) {
 	ev->reached = 1;
 	ev = ev->next;
       }
     } else {
-      retval = wait_for_key ();
+      wait_for_key ();
       t = vclock ();
+      retval = 1;
     }
 
     if (retval>0) {		/* key pressed */
-      if (t_return)  *t_return = t - time_base;
+      if (t_return)  *t_return = to_game (t);
       return  ev_KEY;
     }
   }
@@ -205,6 +233,7 @@ get_event (game_time *t_return)
   if (t_return)  *t_return = ev->t;
   res = ev->type;
   free (ev);
+  
   return  res;
 }
 
