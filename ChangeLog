@@ -1,4 +1,94 @@
+1998-12-26  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* TODO: Einige Punkte erledigt.
+	Dafür einen neuen hinzugefügt.
+
+	* README: Changed from fsstnd to fhs.
+
+	* main.c: Do not print the time.
+	Minor display fixes.
+
+	* moon.h:
+	Added a prototype for the new function `clock_adjust_delay' from
+	"queue.c".
+
+	* mbuggy.texi: Added a new chapter named "References".
+	Minor fixes.
+
+	* queue.c: Read all events from the queue relative to the new variable
+	`time_base'.
+	(clock_adjust_delay): new function
+
+	* realname.c (get_real_user_name):
+	turn the cursor on while doing `getstr'.
+
+1998-12-23  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* Makefile.am (uninstall-local): bug fix
+
+	* highscore.c: Use correct dates in the highscore list.
+	(get_current_date): new function
+
+	* configure.in: Check for the `getopt' stuff.
+	Added AC_TYPE_SIZE_T, AC_TYPE_UID_T and AC_TYPE_SIGNAL.
+	Check for `ftruncate'.
+
+	* .cvsignore: Added the new files "moon-buggy.6" and "texinfo.tex".
+
+	* Makefile.am:
+	Removed all references to the obsolete file "mbscore.tmpl".
+	Added the manual page.
+
+	* README: Improved the spelling.
+	Mention the `-V' option.
+
+	* TODO: Updated the task list.
+
+	* buggy.c (jump): bug fix.
+
+	* error.c: Removed the obsolete function `warning'.
+
+	* highscore.c: Doc fixes.
+	Fixed the error messages.
+	Old `find_table' replaced by completely new `find_tables'.
+	(compose_filename, do_open, do_lock): new functions
+	(generate_table): new function.
+
+	* main.c: Changed the definition of `score' and `bonus'.
+	Changed the layout of the `status' window.
+	(print_message): new function
+	Renamed old `main_loop' to new `spend_life'.
+	Renamed old `do_one_game' to new `play_game'.
+	(main_loop): new function
+	(main): do some signal handling.  Add option parsing.
+
+	* manpage.in:
+	Remove the explanation of the obsolete file "mbscore.tmpl".
+	Added explanation of ".mbscore".
+
+	* mbuggy.texi: Improved the spelling.
+	Mention the `-V' option.
+
+	* moon.c (d_rnd): changed to global scope
+
+	* moon.h:
+	Changed the type of the global variables `score' and `bonus' to `long'.
+	Added a prototype for `d_rnd'.
+	Removed the prototype for the obsolete function `warning'.
+
+1998-12-22  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* xmalloc.c: Fixed the error messages.
+
+	* xstrdup.c (xstrdup): Do not use `strdup'.
+
+	* mbscore, mbscore.tmpl: moved mbscore.tmpl to mbscore
+
+	* manpage.in: initial revision
+
 1998-12-20  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: Mention the fix in "mbuggy.texi".
 
 	* mbuggy.texi: Bug fix.
 
@@ -69,4 +159,3 @@
 	* .cvsignore, acconfig.h, AUTHORS, vclock.c, moon.h, main.c,
 	xstrdup.c, xmalloc.c, error.c, basename.c, configure.in,
 	Makefile.am: initial revision
-
