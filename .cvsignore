@@ -9,6 +9,16 @@ config.log
 config.status
 configure
 mbuggy.info
+mbuggy.log
+mbuggy.dvi
+mbuggy.aux
+mbuggy.toc
+mbuggy.cp
+mbuggy.fn
+mbuggy.vr
+mbuggy.tp
+mbuggy.ky
+mbuggy.pg
 moon-buggy
 moon-buggy.6
 stamp-h
