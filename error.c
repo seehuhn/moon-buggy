@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: error.c,v 1.6 1999/05/22 13:43:58 voss Rel $";
+static const  char  rcsid[] = "$Id: error.c,v 1.7 1999/05/30 19:51:32 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -20,7 +20,8 @@ static const  char  rcsid[] = "$Id: error.c,v 1.6 1999/05/22 13:43:58 voss Rel $
 void
 fatal (const char *format, ...)
 /* Signal a fatal error and quit immediately.  The arguments have the
- * same meaning, as in the function `printf'.  */
+ * same meaning, as in the function `printf'.
+ * The message should start with a capital letter.  */
 {
   va_list  ap;
 
