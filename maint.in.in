@@ -2,7 +2,8 @@
 # maint-buggy - maintain the moon-buggy installation
 #:notice
 # @configure_input@
-# $Id: maint.in.in,v 1.1 1999/01/01 19:22:20 voss Exp $
+# Copyright 1999  Jochen Voﬂ
+# $Id: maint.in.in,v 1.2 1999/01/02 12:24:26 voss Exp $
 
 prefix="@prefix@"
 exec_prefix="@exec_prefix@"

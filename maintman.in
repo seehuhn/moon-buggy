@@ -1,4 +1,6 @@
-.\" $Id: maintman.in,v 1.1 1999/01/01 19:07:17 voss Exp $
+.\" maintman.in - template for the "maint-buggy.6" manual page
+.\" Copyright 1999  Jochen Voﬂ
+.\" $Id: maintman.in,v 1.2 1999/01/02 12:23:09 voss Rel $
 .\"
 .TH maint-buggy 6 "Jan 1 1999" "@MBNAME@ @MBVERS@"
 .SH NAME
