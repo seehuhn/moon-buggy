@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.40 2000/06/16 10:51:20 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.41 2000/11/01 13:15:55 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -26,6 +26,7 @@ extern int  optind;
 
 const char *my_name;
 static  int  curses_initialised;
+static  int  mesg_flag;
 WINDOW *moon, *status, *message;
 
 int  car_base;
@@ -66,12 +67,38 @@ print_hint (const char *str)
 }
 
 void
+prepare_screen (void)
+/* Prepare the screen for the program.
+ * Calls to `prepare_screen' and `prepare_for_exit' must be paired.  */
+{
+  cbreak ();
+  noecho ();
+  hide_cursor ();
+  if (mesg_flag)  mesg_off ();
+}
+
+void
+prepare_for_exit (void)
+/* Prepare the screen to exit from the program.
+ * Calls to `prepare_screen' and `prepare_for_exit' must be paired.  */
+{
+  if (! curses_initialised)  return;
+  mesg_restore ();
+  show_cursor ();
+  wrefresh (moon);
+  wrefresh (message);
+  werase (status);
+  wmove (status, 0, 0);
+  wrefresh (status);
+  endwin ();
+  fflush (NULL);
+}
+
+void
 allocate_windows (void)
 /* Create the curses windows.  */
 {
   initscr ();
-  cbreak ();
-  noecho ();
 
   moon = newwin (LINES-2, 0, 0, 0);
   keypad (moon, TRUE);
@@ -84,23 +111,14 @@ allocate_windows (void)
   message = newwin (1, 0, LINES-2, 0);
   keypad (message, TRUE);
   intrflush (message, FALSE);
-
-  hide_cursor ();
 }
 
 void
-prepare_for_exit (void)
-/* Prepare the screen to exit from the program.  */
+clear_windows (void)
 {
-  if (! curses_initialised)  return;
-  show_cursor ();
-  wrefresh (moon);
-  wrefresh (message);
-  werase (status);
-  wmove (status, 0, 0);
-  wrefresh (status);
-  endwin ();
-  fflush (NULL);
+  wclear (moon);  wnoutrefresh (moon);
+  wclear (status);  wnoutrefresh (status);
+  wclear (message);  wnoutrefresh (message);
 }
 
 /************************************************************
@@ -114,13 +132,14 @@ main (int argc, char **argv)
   struct option  long_options [] = {
     { "create-scores", no_argument, 0, 'c' },
     { "help", no_argument, 0, 'h' },
+    { "mesg", no_argument, 0, 'm' },
     { "no-title", no_argument, 0, 'n' },
     { "show-scores", no_argument, 0, 's' },
     { "version", no_argument, 0, 'V' },
     { NULL, 0, NULL, 0}
   };
 #endif
-#define RND_SHORT_OPTIONS "chnsV"
+#define RND_SHORT_OPTIONS "chmnsV"
   int  help_flag = 0;
   int  highscore_flag = 0;
   int  title_flag = 1;
@@ -153,6 +172,9 @@ main (int argc, char **argv)
       break;
     case 'h':
       help_flag = 1;
+      break;
+    case 'm':
+      mesg_flag = 1;
       break;
     case 'n':
       title_flag = 0;
@@ -195,6 +217,8 @@ the file named COPYING or press `c' at Moon-Buggy's title screen.");
     fputs ("The options are\n", out);
     /* --create-scores: create the highscore file (internal use only) */
     fputs (OPT("-h","--help         ") "show this message and exit\n", out);
+    fputs (OPT("-m","--mesg         ") "imply the effect of \"mesg n\"\n",
+	   out);
     fputs (OPT("-n","--no-title     ") "omit the title screen\n", out);
     fputs (OPT("-s","--show-scores  ") "only show the highscore list\n", out);
     fputs (OPT("-V","--version      ") "show the version number and exit\n\n",
@@ -218,6 +242,7 @@ the file named COPYING or press `c' at Moon-Buggy's title screen.");
   
   allocate_windows ();
   curses_initialised = 1;
+  prepare_screen ();
 
   install_keys ();
   setup_title_mode ();
@@ -225,10 +250,7 @@ the file named COPYING or press `c' at Moon-Buggy's title screen.");
   setup_game_mode ();
   setup_highscore_mode ();
 
-  wclear (status);
-  wnoutrefresh (status);
-  wclear (message);
-  wnoutrefresh (message);
+  clear_windows ();
 
   resize_ground (1);
   initialise_buggy ();
