@@ -10,7 +10,9 @@ config.status
 configure
 mbuggy.info
 moon-buggy
+moon-buggy.6
 stamp-h
 stamp-h.in
 stamp-vti
+texinfo.tex
 version.texi
