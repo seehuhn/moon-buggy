@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: realname.c,v 1.16 2000/04/08 13:14:14 voss Rel $";
+static const  char  rcsid[] = "$Id: realname.c,v 1.17 2000/10/16 15:59:02 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -42,6 +42,8 @@ get_real_user_name (char *buffer, size_t size)
     uid_t me = geteuid ();
     struct passwd *my_passwd = getpwuid (me);
     if (my_passwd) {
+      char *w = strchr (my_passwd->pw_gecos, ',');
+      if (w)  *w = '\0';
       strncpy (buffer, my_passwd->pw_gecos, size);
     }
   }
