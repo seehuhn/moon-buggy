@@ -2,13 +2,15 @@
  *
  * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: getdate.c,v 1.2 1999/06/17 14:45:31 voss Rel $";
+static const  char  rcsid[] = "$Id: getdate.c,v 1.3 1999/07/21 10:44:06 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include <time.h>
+
+#include "moon-buggy.h"
 
 
 void
