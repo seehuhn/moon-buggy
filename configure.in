@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.18 $)
+AC_REVISION($Revision: 1.19 $)
 AC_INIT(mbuggy.h)
-AM_INIT_AUTOMAKE(moon-buggy, 0.3.92)
+AM_INIT_AUTOMAKE(moon-buggy, 0.3.93)
 AM_CONFIG_HEADER(config.h)
 
 dnl Some systems want this as we use curses.
@@ -64,4 +64,4 @@ AC_CHECK_FUNCS(fclean ftruncate getopt_long setreuid)
 
 AM_CONDITIONAL(short_getopt, test "x$ac_cv_func_getopt_long" != xyes)
 
-AC_OUTPUT(Makefile maint.in)
+AC_OUTPUT(Makefile maint.in uninst.pre)
