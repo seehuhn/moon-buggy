@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.23 1999/06/03 13:20:49 voss Exp $";
+static const  char  rcsid[] = "$Id: game.c,v 1.24 1999/06/05 13:36:12 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -141,6 +141,9 @@ resize_game (void)
 {
   werase (moon);
   werase (status);
+  werase (message);
+  resize_meteors ();
+  resize_laser ();
   resize_ground (0);
   print_ground ();
   adjust_score (0);
