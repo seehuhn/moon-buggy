@@ -1,3 +1,85 @@
+1999-06-06  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: Added 1999-06-05 to 1999-06-06
+
+	* TODO: Another item done.
+
+	* mbuggy.h: Removed the obsolete KEY_* stuff.
+	Fixed the prototype for `uniform_rnd'.
+
+	* highscore.c (struct score_entry): bug fix.
+	(generate_date): every dwarf plays only once.
+
+	* keyboard.c: Removed some unnecessary code.
+
+	* random.c (uniform_rnd): changed the calling syntax
+
+	* Makefile.am: Use "keyboard.c" instead of "xgetch.c".
+
+	* TODO: Some items done.
+
+	* game.c (life_key_handler, game_key_handler): use `read_key'.
+
+	* highscore.c (highscore_mode):
+	use `main_loop' instead of looping manually.
+	(key_handler): new function.
+
+	* main.c (main): call `install_keys'.
+
+	* keyboard.c: initial revision
+
+	* mbuggy.h: Added declarations for the new file "keyboard.c".
+
+	* mbuggy.texi: Added a new "shared score files" chapter.
+
+	* pager.c (key_handler): use `read_key'.
+
+	* queue.c (clear_queue): do not use `xgetch' any more.
+
+	* title.c (key_handler): use `read_key'.
+
+	* wgetnstr.c: Do not use `xgetch' any more.
+
+	* xgetch.c: xgetch.c is no longer needed
+
+1999-06-05  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* autogen.sh: bug fix
+
+	* Makefile.am (uninst.pre.in):
+	call "instcmds" with the build directory being
+	current.
+	(install-data-hook): replaced the "-e" flags for "test" by "-f".
+
+	* configure.in: Changed the version string to "0.3.94".
+
+	* mbuggy.h: Added prototypes for the new functions `resize_meteors',
+	`resize_laser', and `fix_game_time'.
+	Removed the prototype for the obsolete function `block_winch'.
+
+	* game.c (resize_game): call the new functions `resize_meteors' and
+	`resize_laser'.
+
+	* instcmds: bug fix: increased the version number.
+
+	* laser.c (extinguish_laser): bug fix
+	(resize_laser): new function
+
+	* main.c (main): do not call `block_all'.
+
+	* meteor.c (remove_meteors): bug fix
+	(resize_meteors): new function
+
+	* moon.c (resize_ground): do not block any signals anymore.
+
+	* queue.c (fix_game_time): new function
+
+	* signal.c: Removed the obsolete function `block_winch'.
+	Use `fix_game_time'.
+	(winch_handler): call `clearok' and add some extra delay.
+
+	* xgetch.c (xgetch): undo the last changes.
+
 1999-06-03  Jochen Voss  <voss@tatonka.pfalz.de>
 
 	* ChangeLog: Added 1999-05-27 to 1999-06-03
