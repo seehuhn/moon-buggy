@@ -1,5 +1,5 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: mbuggy.texi,v 1.14 1999/05/24 19:25:46 voss Rel $
+@c $Id: mbuggy.texi,v 1.15 1999/06/06 13:18:51 voss Exp $
 @c %**start of header
 @setfilename mbuggy.info
 @settitle Moon-Buggy Usage and Maintenance
@@ -82,7 +82,8 @@ program.
 * Introduction::                Introduction
 * Moon-buggy Invocation::       Moon-buggy Invocation
 * Maint-buggy Invocation::      Maint-buggy Invocation
-* Playing the Game::            Playing the Game
+* Playing the Game::            Keyboard commands
+* Shared Score Files::          Competition via the top-ten table
 * Installation::                Installation and setup
 * References::                  References
 @end menu
@@ -162,7 +163,7 @@ prints moon-buggy's version string to standard output and exits.
 @end table
 
 
-@node Playing the Game, Installation, Maint-buggy Invocation, Top
+@node Playing the Game, Shared Score Files, Maint-buggy Invocation, Top
 @chapter Playing the Game
 
 Just start it and follow the instructions.  The car is controlled by a
@@ -186,7 +187,39 @@ significantly less columns it may look strange and could be hard to
 play.
 
 
-@node Installation, References, Playing the Game, Top
+@node Shared Score Files, Installation, Playing the Game, Top
+@chapter Shared Score Files
+
+The global score file should be writable by the moon-buggy program.
+Otherwise each user gets a local score file in his home directory.  Thus
+he only sees his own scores and no real competition arises.  But to
+achive this goal is somewhat tricky, because we have to use the
+operating system's access controls properly.
+
+One solution is to make the score file world writable, but this opens
+the opportunity to cheat.
+
+The other possibility is to make moon-buggy a suid-program.  This means
+the following: you choose a user id, which cannot be used by ordinary
+users, and allow only this user to write the score file.  Many system
+have a user @samp{games} for this purpose (Check your @file{/etc/passwd}
+file).  Then you make this user own the @file{moon-buggy} executable and
+set the file's suid-bit (so moon-buggy gains its owner's access
+permission in addition to your's and can write the score file).  The
+drawback is, that this may open some security holes.
+
+When you install the program, you can choose, which method to use:
+First, you could do nothing about it.  Then the program is installed
+without an special privileges and the score file is @emph{not} shared.
+You may set the set-user-id or set-group-id bit of the executable
+lateron or may change the access permissions of the score file, as you
+like.
+
+Second, you can use @code{configure}'s @samp{--with-suid} option
+(@pxref{Installation}).  This enables set-user-id usage by default.
+
+
+@node Installation, References, Shared Score Files, Top
 @chapter Installation
 
 Moon-buggy requires the curses library as a prerequisite.  If curses is
@@ -237,16 +270,9 @@ he only sees his own scores and no real competition arises.
 One solution is to make the score file world writable, but this opens
 the opportunity to cheat.
 
-The other possibility is to make moon-buggy a suid-program.  This means
-the following: you choose a user id, which cannot be used by ordinary
-users, and allow only this user to write the score file.  Many system
-have a user @samp{games} for this purpose (Check your @file{/etc/passwd}
-file).  Then you make this user own the @file{moon-buggy} executable and
-set the file's suid-bit (so moon-buggy gains its owner's access
-permission in addition to your's and can write the score file).
-
-This second possibility can be realized by @code{configure}'s
-@samp{--with-suid} option.  If you use
+The other possibility is to make moon-buggy a suid-program
+(@pxref{Shared Score Files}).  This second possibility can be realized
+by @code{configure}'s @samp{--with-suid} option.  If you use
 
 @example
 --with-suid=games
