@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.31 1999/08/30 20:54:40 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.32 1999/09/02 18:38:11 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -31,11 +31,15 @@ int  car_base;
 
 void
 print_message (const char *str)
-/* Display STR in the message line.  T must be the current game time.  */
+/* Display STR in the message line.  */
 {
-  werase (message);
-  waddstr (message, str);
-  wnoutrefresh (message);
+  if (curses_initialised) {
+    werase (message);
+    waddstr (message, str);
+    wnoutrefresh (message);
+  } else {
+    fprintf (stderr, "%s\n", str);
+  }
 }
 
 void
