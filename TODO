@@ -18,7 +18,6 @@ Man sollte ihn evtl. auf eine günstige Position stellen.
 `parse_date' ist das schwierig.
 
 IMPROVEMENTS:
-· Groß- und Kleinschreibung für Tasten ignorieren.
 · Loch in level 6.  Level 9 für Klaus.
 · `resize_ground' wird meist nicht zum "resizen" verwendet.
 Umbenennen?
@@ -44,7 +43,6 @@ Tastendrücken während der letzen zehntel Sekunde?  Bringt das
 · Portabilität bekümmern
 · Ufos einführen
 · Internationalisieren
-· "reload" Taste für die Highscoreliste
 · Man sollte die Tastenbelegungen ändern können
 · Verwende COPYING.DOC
 
