@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.35 2000/04/13 20:10:58 voss Rel $";
+static const  char  rcsid[] = "$Id: game.c,v 1.36 2000/06/01 19:06:05 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -177,7 +177,6 @@ pause_enter (int seed)
   add_event (2.0, leave_pause_mode, NULL);
   print_ground ();
   adjust_score (0);
-  print_lives ();
   print_buggy ();
   if (lives <= 0)  print_game_over (1);
 }
