@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: buggy.c,v 1.4 1998/12/23 10:09:24 voss Exp $";
+static const  char  rcsid[] = "$Id: buggy.c,v 1.5 1998/12/30 20:00:29 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -24,17 +24,17 @@ typedef  struct scene {
 }  scenario [];
 
 static  scenario  sz_empty = {
-  { -1.0, -1 }
+  { -1, -1 }
 };
 
 static  scenario  sz_jump = {
-  { 0.0, car_START },
-  { 0.1, car_UP1 },
-  { 0.3, car_UP2 },
-  { 0.7, car_UP1 },
-  { 0.9, car_LAND },
-  { 1.1, car_NORMAL },
-  { -1.0, -1 }
+  { TICK(0), car_START },
+  { TICK(1.25), car_UP1 },
+  { TICK(3.75), car_UP2 },
+  { TICK(8.75), car_UP1 },
+  { TICK(11.25), car_LAND },
+  { TICK(13.75), car_NORMAL },
+  { -1, -1 }
 };
 
 static  struct scene *state;
@@ -139,7 +139,7 @@ crash_check (void)
     return 1;
   }
   if (bonus) {
-    score += 1<<bonus;
+    score_bonus (1<<bonus);
     bonus = 0;
   }
   
