@@ -12,8 +12,8 @@ esac])
 AC_SUBST(GAMEUSER)
 
 dnl Checks for programs.
-AC_PROG_CC
 AC_PROG_AWK
+AC_PROG_CC
 
 dnl Checks for libraries.
 AC_CHECK_LIB(curses,initscr,CURSLIB=-lcurses)
@@ -34,13 +34,13 @@ AC_CHECK_HEADERS(getopt.h errno.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
-AC_TYPE_SIZE_T
 AC_TYPE_UID_T
+AC_TYPE_SIZE_T
 
 dnl Checks for library functions.
 AC_TYPE_SIGNAL
 AC_REPLACE_FUNCS(basename mvwaddnstr wgetnstr)
-AC_CHECK_FUNCS(memmove ftruncate getopt_long setreuid)
+AC_CHECK_FUNCS(memmove fclean ftruncate getopt_long setreuid)
 
 AM_CONDITIONAL(short_getopt, test "x$ac_cv_func_getopt_long" != xyes)
 
