@@ -1,17 +1,6 @@
-· Copyright
-· Manual: suid erklären
-· Signal handlers dürfen `doupdate' nicht aufrufen.  Oder?
-· Anleitung: "Minimum" von 80 Spalten erwähnen
-· Steigender Schwierigkeitsgrad
-· Aus der ncurses-Anleitung:
-Programmers concerned about portability should be prepared
-for  either  of  two  cases:  (a)  signal receipt does not
-interrupt getch; (b) signal receipt interrupts  getch  and
-causes  it  to  return ERR with errno set to EINTR.  Under
-the ncurses implementation, handled signals  never  inter-
-rupt getch.
-----
+· Steigenden Schwierigkeitsgrad einführen
 · Klären, was es mit /usr/games auf sich hat
+· Signal handlers dürfen `doupdate' nicht aufrufen.
 · Score file locking: recover from failure (use an alternative method)
 · Internationalisieren
 · Use a timeout when waiting for a file lock
