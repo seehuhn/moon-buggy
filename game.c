@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.19 1999/05/23 21:02:51 voss Exp $";
+static const  char  rcsid[] = "$Id: game.c,v 1.20 1999/05/24 19:19:30 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -11,17 +11,18 @@ static const  char  rcsid[] = "$Id: game.c,v 1.19 1999/05/23 21:02:51 voss Exp $
 #include "mbuggy.h"
 
 
-long  bonus;
-int  crash_detected;
-static  int  lives;
-static  long  score;
+int  crash_detected;		/* a crash is in progress */
+long  stakes;			/* points to get, we we reach the ground */
+static  long  score;		/* points we already got */
+static  int  lives;		/* cars left (including the current one) */
 
 
 void
-adjust_score (int adjust)
+adjust_score (int val)
+/* Add VAL to the score.  */
 {
   if (crash_detected)  return;
-  score += adjust;
+  score += val;
   mvwprintw (status, 0, car_base-7, "score: %-8ld", score);
   wnoutrefresh (status);
 }
@@ -34,22 +35,11 @@ print_lives (void)
 }
 
 static void
-score_handler (game_time t, void *client_data)
-{
-  if (crash_detected)  return;
-  adjust_score (1);
-  add_event (t+TICK(12.5), score_handler, NULL);
-}
-
-static void
 life_key_handler (game_time t)
 {
   switch (xgetch (moon)) {
   case ' ':
-    if (! crash_detected && can_jump()) {
-      jump (t);
-      adjust_score (+1);
-    }
+    if (! crash_detected && can_jump())  jump (t);
     break;
   case KEY_BREAK:
   case KEY_CLOSE:
@@ -69,7 +59,7 @@ static void
 spend_life ()
 {
   crash_detected = 0;
-  bonus = 0;
+  stakes = 0;
   print_ground ();
   print_lives ();
 
@@ -79,9 +69,6 @@ spend_life ()
   print_buggy ();
 
   start_scrolling (1);
-  requeue_meteors (1);
-  add_event (TICK(75), score_handler, NULL);
-
   main_loop (1, life_key_handler);
 
   extinguish_laser ();
@@ -106,6 +93,7 @@ game_key_handler (game_time t)
     quit_main_loop ();
     lives = 0;
     break;
+  case 'y':
   case KEY_BEG:
   case KEY_ENTER:
     quit_main_loop ();
@@ -119,26 +107,25 @@ game_key_handler (game_time t)
 int
 game_mode (void)
 {
-  int  i;
+  int  level = 0;
   
   game_state = PLAYING;
   setup_screen ();
   
   score = 0;
   lives = 3;
-  level_start ();
   do {
-    for (i=car_x-5; i<car_x+7; ++i) {
-      ground2[i] = '#';
-    }
-    meteor_car_hit (car_x-20, car_x+7);
+    resize_ground (1);
+    level_start (level);
     spend_life ();
-    --lives;
+    level = current_level ();
 
+    --lives;
     print_lives ();
 
     add_event (2, quit_main_loop_h, NULL);
     main_loop (2, game_key_handler);
+    remove_meteors ();
   } while (lives > 0);
   remove_meteors ();
 
