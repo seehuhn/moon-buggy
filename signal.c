@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: signal.c,v 1.8 1999/06/03 13:19:07 voss Exp $";
+static const  char  rcsid[] = "$Id: signal.c,v 1.9 1999/06/05 13:30:26 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -28,15 +28,8 @@ static struct {
 
 static volatile  sig_atomic_t  signal_arrived;
 
-static  sigset_t  winch_set, full_set, old_sigset;
+static  sigset_t  full_set, old_sigset;
 
-
-void
-block_winch (void)
-/* Block the WINCH signal until `unblock' is called.  */
-{
-  sigprocmask (SIG_BLOCK, &winch_set, &old_sigset);
-}
 
 void
 block_all (void)
@@ -47,7 +40,7 @@ block_all (void)
 
 void
 unblock (void)
-/* Undo the effect of `block_winch' or `block_all'.  */
+/* Undo the effect of `block_all'.  */
 {
   sigprocmask (SIG_SETMASK, &old_sigset, NULL);
 }
@@ -112,9 +105,10 @@ termination_handler (int signum)
 static void
 tstp_handler (int signum)
 {
-  signal (SIGTSTP, SIG_DFL);
+  fix_game_time ();
   if (game_state == PLAYING)  quit_game ();
   prepare_for_exit ();
+  signal (SIGTSTP, SIG_DFL);
   raise (SIGTSTP);
 }
 
@@ -154,19 +148,22 @@ cont_handler (int signum)
   leaveok (status, TRUE);
   leaveok (message, TRUE);
   do_resize ();
-  if (game_state == PLAYING)  clock_adjust_delay (0.5);
+  clock_adjust_delay (0);
 }
 
 static void
 winch_handler (int signum)
 {
+  fix_game_time ();
   delwin (moon);
   delwin (status);
   delwin (message);
   endwin ();
   refresh ();
+  clearok (curscr, TRUE);
   allocate_windows ();
   do_resize ();
+  clock_adjust_delay (1);	/* wait some extra time */
 }
 
 /************************************************************
@@ -186,10 +183,6 @@ initialise_signals (void)
   my_signal (SIGWINCH, winch_handler, 0);
 #endif
   
-  sigemptyset (&winch_set);
-#ifdef SIGWINCH
-  sigaddset (&winch_set, SIGWINCH);
-#endif
   sigfillset (&full_set);
 }
 
