@@ -1,4 +1,6 @@
 BUGS:
+· Schuesse, die in der Luft sind während man stirbt, werden nicht
+gelöscht.
 · What happens if two new score files are created at the same time?
 · Wenn man das Spiel nicht installiert, aber sich ein scorefile teilen
 moechte, muss man das "moon-buggy/"-Verzeichnis selbst anlegen.  Das
@@ -21,7 +23,7 @@ sollte der cache verwendet werden.
 · Use a timeout when waiting for a file lock
 · Internationalisieren
 · Peter: Graphik verbessern, insbesondere abgestürzte Autos
-· Lars: Ufos und Laser einführen
+· Lars: Ufos einführen
 
 ; Local Variables:
 ; mode: auto-fill
