@@ -6,7 +6,7 @@ Version: 0.2
 Release: 1
 Packager: Jochen Voﬂ <voss@mathematik.uni-kl.de>
 Source: moon-buggy-0.2.tar.gz
-Icon: mbicon.gif
+Icon: moon-buggy.gif
 %description
 moon-buggy is a simple, curses-based game, where you drive some kind
 of car across the surface of the moon.  Unfortunately there are
