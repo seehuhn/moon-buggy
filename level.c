@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: level.c,v 1.8 1999/07/21 10:41:15 voss Rel $";
+static const  char  rcsid[] = "$Id: level.c,v 1.9 2000/03/29 07:55:49 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -452,7 +452,7 @@ level_tick (double t)
       msg_t = t;
     }
     if (levels[level].msg) {
-      add_event (msg_t, print_message_h, (void *)levels[level].msg);
+      add_event (msg_t, print_hint_h, (void *)levels[level].msg);
     }
     last_level = level;
     is_edge = 1;
