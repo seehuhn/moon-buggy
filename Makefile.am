@@ -71,5 +71,4 @@ moon-buggy.6: manpage.in Makefile.am
 	sed "s:@MBBINDIR@:$(bindir):g;\
 		s:@MBSCORE@:$(scoredir):g;\
 		s:@C@:$(mbsep):g;\
-		s:@MBNAME@:$(PACKAGE):g;\
 		s:@MBVERS@:$(VERSION):g" $(srcdir)/manpage.in >>$@

@@ -3,7 +3,7 @@ AC_REVISION($Revision: 1.4 $)
 
 AC_INIT(moon-buggy, 1.0, voss@seehuhn.de)
 AC_CONFIG_SRCDIR([moon-buggy.h])
-AM_INIT_AUTOMAKE(moon-buggy, 0.5.54)
+AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER(config.h)
 
 AC_CANONICAL_HOST

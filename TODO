@@ -1,21 +1,11 @@
-This file is mostly written in German.  I think that this is
-acceptable for the moment, because (almost) all items should be
-resolved before version 1.0.
-
 BUG FIXES:
-· make the manual page work on UTF-8 terminals
 · Score file locking: recover from failure, i.e. use an alternative method.
 (What happens if two new score files are created at the same time?)
 Auf hyperion:
 /users/cip/sto/voss/test/bin/moon-buggy -c
 Fatal error: Cannot lock score file "/users/cip/sto/voss/test/com/moon-buggy/mbscore": Keine Sperren verfügbar
-· Auf der Hyperion geht das Fenstergrößenverändern nicht gut!
 · Fenstergrößenveränderungen beim Nameneingeben funktionieren mit
 ncurses-5 nicht gut.
-· Auf nereid: Schüsse werden invers dargestellt, die Highscoreliste
-blinkend.  Auf io/jupiter ist alles noch schlimmer!
-· Auf hpux wird der Cursor nicht abgeschaltet.
-Man sollte ihn evtl. auf eine günstige Position stellen.
 
 · Levels für Zwerge
 · Die Taste `j' sollte SPC immer und nicht nur meistens ersetzen
@@ -28,7 +18,6 @@ IMPROVEMENTS:
 noch irgendwo in die Ecke setzen soll?  Das macht die Ausgabe ein
 winziges bisschen langsamer, aber auf seltsamen Terminals das Spielen
 angenehmer.
-· mention the web site in the manual
 · words of wisdom/advice
 · Loch in level 6.  Level 9 für Klaus.
 · `resize_ground' wird meist nicht zum "resizen" verwendet.
@@ -48,12 +37,10 @@ Tastendrücken während der letzen zehntel Sekunde?  Bringt das
 "Interrupt Input" in der glibc-Anleitung)
 · Prüfsumme für das Scorefile.
 · Use a timeout when waiting for a file lock
-· "make uninstall" braucht "install-info".  Ist das sinnvoll?
 · Portabilität bekümmern
 · Ufos einführen
 · Internationalisieren
 · Man sollte die Tastenbelegungen ändern können
-· Verwende COPYING.DOC
 · "Andreas K. Foerster" <akf1@akfoerster.de> suggests:
     Wie wäre es mit einem System-Beep beim Crash?
     Und ncurses kann doch auch Farbe...

@@ -1,8 +1,9 @@
+version 1.0 (27 Dec 2004):
   new animations donated by Piotr Grzybowski
-  use autoconf version 2.57 and automake version 1.7
   new "-m" option to simulate the effect of "mesg n"
   added a "redraw screen" key
   removed the maintbuggy script
+  use autoconf version 2.59 and automake version 1.9
   bug fixes
 
 version 0.5:
