@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.22 1999/07/21 10:42:26 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.23 1999/07/21 12:02:48 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -42,6 +42,7 @@ do_open (const char *name, int flags, int lock, int must_succeed)
 {
   int  fd;
   int  lock_done;
+  mode_t  mode, mask;
 
   lock_done = 1;
   if (lock == 1) {
@@ -59,12 +60,20 @@ do_open (const char *name, int flags, int lock, int must_succeed)
 #endif
   }
   
+  mode = S_IRUSR|S_IRGRP|S_IROTH;
+  mask = umask (0);
+  if ( is_setgid() ) {
+    mode |= S_IWGRP;
+  } else {
+    mode |= S_IWUSR;
+  }
   do {
-    fd = open (name, flags, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+    fd = open (name, flags, mode);
   } while (fd == -1 && errno == EINTR);
   if (fd == -1 && (must_succeed || (errno != EACCES && errno != ENOENT))) {
     fatal ("Cannot open score file \"%s\": %s", name, strerror (errno));
   }
+  umask (mask);
 
   if (fd != -1 && ! lock_done) {
     struct flock  l;
