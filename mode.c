@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: mode.c,v 1.5 2000/04/13 20:11:18 voss Rel $";
+static const  char  rcsid[] = "$Id: mode.c,v 1.6 2000/06/01 18:49:07 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -107,20 +107,20 @@ mode_redraw (void)
   doupdate ();
 }
 
-void
-mode_keypress (game_time t)
+int
+mode_keypress (game_time t, int meaning)
+/* Feed a keypress with meaning MEANING to the current mode.
+ * Return 1 if the keypress could be processed, and 0 else.  */
 {
-  int  meaning = read_key ();
   int  i;
 
-  if (meaning == -1)  return;
   for (i=0; i<current->keys.used; ++i) {
     if (current->keys.data[i].meanings & meaning) {
       current->keypress (t, current->keys.data[i].res);
-      return;
+      return  1;
     }
   }
-  beep ();
+  return  0;
 }
 
 void
