@@ -1,8 +1,8 @@
-/* moon.c - implement the moon
+/* moon.c - implement the moon to drive on
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: moon.c,v 1.11 1999/05/11 22:02:11 voss Exp $";
+static const  char  rcsid[] = "$Id: moon.c,v 1.12 1999/05/19 21:11:47 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -49,13 +49,6 @@ resize_ground (int clear_it)
   unblock ();
 }
 
-int
-d_rnd (int limit)
-/* Returns a random integer `x' with `0 <= x < limit'.  */
-{
-  return  (int)((double)limit*rand()/(RAND_MAX+1.0));
-}
-
 void
 print_ground (void)
 {
@@ -64,8 +57,8 @@ print_ground (void)
   wnoutrefresh (moon);
 }
 
-void
-scroll_ground (void)
+static void
+scroll_handler (game_time t, void *client_data)
 {
   char  nextchar;
 
@@ -73,13 +66,26 @@ scroll_ground (void)
   if (hole > 0) {
     nextchar = ' ';
     --hole;
-    if (hole == 0)  hole = -11-d_rnd (7);
+    if (hole == 0)  hole = -11-uniform_rnd (7);
   } else {
     nextchar = '#';
     ++hole;
-    if (hole == 0)  hole = 2+d_rnd (2);
+    if (hole == 0)  hole = 2+uniform_rnd (2);
   }
   
   memmove (ground2+1, ground2, ground_width-1);
   ground2[0] = nextchar;
+
+  if (uniform_rnd(20) == 0)  place_meteor (t);
+  print_ground ();
+  print_buggy ();
+  if (ground2[car_x + 7] == ' ')  ++bonus;
+  if (crash_check ())  quit_main_loop ();
+  add_event (t+TICK(1), scroll_handler, NULL);
+}
+
+void
+start_scrolling (double t)
+{
+  add_event (t, scroll_handler, NULL);
 }
