@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.15 1999/03/08 20:26:29 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.16 1999/04/23 22:21:01 voss Exp $";
 
 #define _POSIX_SOURCE 1
 
@@ -34,7 +34,7 @@ void
 print_message (const char *str)
 /* Display STR in the message line.  */
 {
-  wclear (message);
+  werase (message);
   waddstr (message, str);
   wnoutrefresh (message);
 }
@@ -60,7 +60,7 @@ void
 prepare_for_exit (void)
 /* Prepare the screen to exit from the program.  */
 {
-  wclear (message);
+  werase (message);
   wnoutrefresh (moon);
   wnoutrefresh (status);
   wnoutrefresh (message);
