@@ -3,7 +3,7 @@
 #:notice
 # @configure_input@
 # Copyright 1999  Jochen Voﬂ
-# $Id: maint.in.in,v 1.3 1999/01/02 14:10:49 voss Rel $
+# $Id: maint.in.in,v 1.4 1999/06/02 07:32:50 voss Exp $
 
 prefix="@prefix@"
 exec_prefix="@exec_prefix@"
@@ -54,8 +54,6 @@ EOF
       ;;
     --uninstall)
       set -x
-      # the next line is a hack
-      cd $infodir
 #:pre-uninstall
       rm -f "$bindir/moon-buggy"
       rm -f "$infodir/mbuggy.info"
