@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.47 $)
+AC_REVISION($Revision: 1.48 $)
 
 AC_INIT(moon-buggy.h)
 AM_INIT_AUTOMAKE(moon-buggy, 0.5.52)
@@ -32,7 +32,7 @@ AC_CHECK_CURSES
 
 dnl Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS(getopt.h errno.h locale.h)
+AC_CHECK_HEADERS(getopt.h errno.h locale.h termios.h)
 
 # Check if <sys/select.h> needs to be included for fd_set
 AC_MSG_CHECKING([for fd_set])
