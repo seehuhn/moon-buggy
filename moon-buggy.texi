@@ -1,14 +1,14 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: moon-buggy.texi,v 1.1 1999/07/21 09:37:05 voss Exp $
+@c $Id: moon-buggy.texi,v 1.2 1999/07/21 10:47:50 voss Exp $
 @c %**start of header
-@setfilename mbuggy.info
+@setfilename moon-buggy.info
 @settitle Moon-Buggy Usage and Maintenance
 @include version.texi
 @c %**end of header
 
 @dircategory Games
 @direntry
-* moon-buggy: (mbuggy).         Drive some car across the moon
+* moon-buggy: (moon-buggy).     Drive some car across the moon
 @end direntry
 
 @ifinfo
