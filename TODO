@@ -3,14 +3,7 @@ acceptable for the moment, because (almost) all items should be
 resolved before version 1.0.
 
 BUG FIXES:
-· Tastendrücke nach resize geben einen beep
-· Die GAME OVER Meldung ist weg
-· Zu kleine Fenstergrößen geben Katastophen bei der Tastenerklärung
-· Namen nur aus Leerzeichen als leer werten
-· Die Anleitung sollte auf sunsite verweisen
-· Copyrighthinweis in der Anleitung freundlicher formulieren
-· "history" file wieder entfernen
-
+· Levels für Zwerge
 · Auf nereid: Schüsse werden invers dargestellt, die Highscoreliste
 blinkend.  Auf io/jupiter ist alles noch schlimmer!
 · Auf hpux wird der Cursor nicht abgeschaltet.
@@ -21,10 +14,8 @@ Man sollte ihn evtl. auf eine günstige Position stellen.
 IMPROVEMENTS:
 · words of wisdom/advice
 · Loch in level 6?
-· Levels für Zwerge
 · Den `fd_set' Teil von "configure.in" verbessern.  Zumindest
 sollte der cache verwendet werden.
-
 · `has_key' Ersatz für andere curses-Versionen einführen
 · Sollte jeder Hint nur höchstens alle 2 Minuten erscheinen?
 · Ist `addchstr' sinnvoll (wg. Geschwindigkeit)
@@ -34,9 +25,6 @@ Tastendrücken während der letzen zehntel Sekunde?  Bringt das
 überhaupt eine signifikante Verbesserung?
 · Wäre eine asynchrone Behandlung von Tastendrücken sinnvoll?  (siehe
 "Interrupt Input" in der glibc-Anleitung)
-· wgetnstr-Ersatz verbessern
-· rpm Zeugs: "Autoreq: false" ausprobieren
-· rpm Zeugs: "moon-buggy.spec" aus "moon-buggy.spec.in" erzeugen
 · Prüfsumme für das Scorefile.
 · Score file locking: recover from failure, i.e. use an alternative method.
 (What happens if two new score files are created at the same time?)
