@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: buggy.c,v 1.2 1998/12/20 00:47:19 voss Exp $";
+static const  char  rcsid[] = "$Id: buggy.c,v 1.3 1998/12/20 13:14:21 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -37,10 +37,17 @@ static  scenario  sz_jump = {
   { -1.0, -1 }
 };
 
-static  struct scene *state = sz_empty;
-static  enum car_state  cstate = car_NORMAL;
+static  struct scene *state;
+static  enum car_state  cstate;
 
 #define  speed  1
+
+void
+initialize_buggy (void)
+{
+  state = sz_empty;
+  cstate = car_NORMAL;
+}
 
 void
 print_buggy (void)
