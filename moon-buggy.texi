@@ -104,7 +104,7 @@ Public License.  For more information about these matters, read the file
 moon-buggy's title screen.
 
 Please mail any suggestions and bug reports to
-@email{voss@@mathematik.uni-kl.de}.  Your message should include the
+@email{voss@@seehuhn.de}.  Your message should include the
 moon-buggy version number, as obtained by the command @samp{moon-buggy -V}.
 
 New versions of Moon-buggy may be found on the sunsite ftp server or on
@@ -320,7 +320,7 @@ archive in the directory
 @url{ftp://sunsite.unc.edu/pub/linux/games/arcade/}.
 
 I provide a @strong{moon-buggy download page}, which is located at
-@url{http://www.mathematik.uni-kl.de/~wwwstoch/voss/moon-buggy.html}.
+@url{http://seehuhn.de/comp/moon-buggy.html}.
 
 Version 2.0 of the @strong{Filesystem Hierarchy Standard} (FHS 2.0) may
 be found on the internet at

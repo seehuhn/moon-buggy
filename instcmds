@@ -22,7 +22,7 @@ The options are
 
 The ARGS are passed directly to the make command.
 
-Please report bugs to <voss@mathematik.uni-kl.de>.
+Please report bugs to <voss@seehuhn.de>.
 EOF
 
   exit $1
