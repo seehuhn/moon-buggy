@@ -3,19 +3,20 @@ acceptable for the moment, because (almost) all items should be
 resolved before the first stable release, i.e. before version 1.0.
 
 BUG FIXES:
+· Fenstergrößenveränderungen während man den Namen eingibt, sind nicht
+gut.
 · Copyrighthinweis in der Anleitung freundlicher formulieren
 · Auf nereid: Schüsse werden invers dargestellt, die Highscoreliste
 blinkend.  Auf io/jupiter ist alles noch schlimmer!
 · Auf hpux wird der Cursor nicht abgeschaltet.
 Man sollte ihn evtl. auf eine günstige Position stellen.
-· gnome-libs/macros/curses.m4 verwenden
 · Speichere die Zeit in der Highscoreliste als GMT.  Wegen `mktime' in
 `parse_date' ist das schwierig.
 · Die Anleitung sollte auf sunsite verweisen
 
 IMPROVEMENTS:
+· words of wisdom/advice
 · Ist `addchstr' sinnvoll (wg. Geschwindigkeit)
-· Was ist mit der Loadanzeige?
 · Könnte man die Events einen Tick (oder 0.1 Sekunden) zu früh
 ausführen und nur das `doupdate' verzögern?  Wie ist das dann mit
 Tastendrücken während der letzen zehntel Sekunde?  Bringt das
@@ -38,7 +39,6 @@ damit der Spieler nicht deprimiert wird.  Insbesondere bei Level 2.
 (What happens if two new score files are created at the same time?)
 · Use a timeout when waiting for a file lock
 · "make uninstall" braucht "install-info".  Ist das sinnvoll?
-· Was soll mit dem (im Moment leeren) uninst.post Zeugs geschehen?
 · Portabilität bekümmern
 · Ufos einführen
 · Internationalisieren
