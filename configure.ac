@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.2 $)
+AC_REVISION($Revision: 1.3 $)
 
 AC_INIT(moon-buggy, 0.5.53, voss@mathematik.uni-kl.de)
 AC_CONFIG_SRCDIR([moon-buggy.h])
@@ -12,7 +12,7 @@ dnl Some systems want _XOPEN_SOURCE to be defined as we use curses.
 case "$host_os" in
   *bsd*) ;;
   sparc-sun-solaris2.4) ;;
-  *) AC_DEFINE(_XOPEN_SOURCE, 1, [Define this if your system supports it.]) ;;
+  *) AC_DEFINE(_XOPEN_SOURCE,1,[Define this if your system supports it.]) ;;
 esac
 
 AC_ARG_WITH(setgid,
@@ -44,11 +44,11 @@ if test $mb_ok = yes; then
 else
     AC_EGREP_HEADER(fd_mask, sys/select.h, mb_ok=yes)
     if test $mb_ok = yes; then
-        AC_DEFINE(HAVE_SYS_SELECT_H,,
+        AC_DEFINE(HAVE_SYS_SELECT_H,1,
 		  [Define if you have the <errno.h> header file.])
         AC_MSG_RESULT([yes, found in sys/select.h])
     else
-        AC_DEFINE(NO_FD_SET,,[Define if your system lacks `fd_set'.])
+        AC_DEFINE(NO_FD_SET,1,[Define if your system lacks `fd_set'.])
         AC_MSG_RESULT(no)
     fi
 fi
