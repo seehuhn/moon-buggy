@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: keyboard.c,v 1.7 2000/03/31 11:16:41 voss Exp $";
+static const  char  rcsid[] = "$Id: keyboard.c,v 1.8 2000/04/01 07:54:28 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -122,6 +122,8 @@ install_keys (void)
 #endif
 
   add_key ('w', mbk_warranty, 100);
+
+  add_key ('s', mbk_scores, 100);
 }
 
 int
