@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: title.c,v 1.3 1998/12/30 19:35:10 voss Exp $";
+static const  char  rcsid[] = "$Id: title.c,v 1.4 1999/01/01 17:57:31 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -96,7 +96,7 @@ title_mode (void)
       case KEY_CLEAR:
       case KEY_ENTER:
       case KEY_EXIT:
-      case '\e':
+      case 27:			/* ESC */
       case ' ':
 	done = 1;
 	break;
