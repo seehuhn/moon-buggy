@@ -1,5 +1,5 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: mbuggy.texi,v 1.12 1999/03/03 14:59:39 voss Exp $
+@c $Id: mbuggy.texi,v 1.13 1999/03/08 20:26:01 voss Exp $
 @c %**start of header
 @setfilename mbuggy.info
 @settitle Moon-Buggy Usage and Maintenance
@@ -225,7 +225,7 @@ One solution is to make the score file world writable, but this opens
 the opportunity to cheat.
 
 The other possibility is to make moon-buggy a suid-program.  This means
-the following: you choose a user id, which cannot used by ordinary
+the following: you choose a user id, which cannot be used by ordinary
 users, and allow only this user to write the score file.  Many system
 have a user @samp{games} for this purpose (Check your @file{/etc/passwd}
 file).  Then you make this user own the @file{moon-buggy} executable and
