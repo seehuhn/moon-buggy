@@ -15,7 +15,10 @@ werden?  Ein Beispiel ist `scroll_handler'.
 · Nach einem Crash fahre alles außer dem Auto noch etwas weiter.
 · Die Pause nach dem kaputtgehen, sollte sich mit den meisten Tasten
 beenden lassen!  Vera wird nur durch einige spezielle Tasten verwirrt!
-· queue.c: messe nach, welcher Anteil der Zeit verschlafen wird
+· Könnte man die Events 0.1 Sekunden zu früh ausführen und nur das
+`doupdate' verzögern?  Wie ist das dann mit Tastendrücken während der
+letzen zehntel Sekunde?  Bringt das überhaupt eine signifikante
+Verbesserung?
 · Den `fd_set' Teil von "configure.in" verbessern.  Zumindest
 sollte der cache verwendet werden.
 · Portabilität bekümmern
