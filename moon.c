@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: moon.c,v 1.9 1999/04/24 17:56:10 voss Exp $";
+static const  char  rcsid[] = "$Id: moon.c,v 1.10 1999/04/25 17:05:40 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -48,7 +48,6 @@ resize_ground (int clear_it)
   }
   ground_width = cols;
   car_base = (cols > 80 ? 80 : cols) - 12;
-  score_base = car_base + 7;
   unblock ();
 }
 
