@@ -1,0 +1,18 @@
+Für Distributionen:
+· ANNOUNCE aktualisieren.  Keine tabs überlassen.
+· ChangeLog aktualisieren
+· Neues revision tag setzen (rel_maj_min, Rel)
+	cvs tag rel_0_4_0_91 .
+	...
+· Quelltexte neu auschecken
+	cvs checkout moon-buggy
+	cd moon-buggy
+· Das "debian/" Verzeichnis wieder hinkopieren
+	cp -a ~/src/games/moon-buggy/debian .
+· unset LANG
+· run
+	./autogen.sh
+	./configure
+	rm uninst.pre.in
+· make
+· make distcheck
