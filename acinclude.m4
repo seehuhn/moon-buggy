@@ -1,6 +1,6 @@
 dnl acinclude.m4 - aclocal include file for "aclocal.m4"
 dnl Copyright 2000  Jochen Voss
-dnl $Id: acinclude.m4,v 1.2 2000/03/17 23:04:17 voss Rel $
+dnl $Id: acinclude.m4,v 1.3 2001/05/24 07:28:42 voss Exp $
 
 dnl The idea of this tests, is to be as simple, as possible.
 dnl The only special case we check for, is old versions of
@@ -8,10 +8,10 @@ dnl ncurses.  Any other problems must be handled by the user
 dnl via configure's --with-curses-includedir,
 dnl --with-curses-header, and --with-curses-libs options.
 
-AC_DEFUN(AC_CHECK_CURSES,[
+AC_DEFUN(JV_CHECK_CURSES,[
   dnl step 1: find the correct preprocessor flags
   dnl         This is completely left to the user.
-  AC_MSG_CHECKING("for curses preprocessor flags")
+  AC_MSG_CHECKING([for curses preprocessor flags])
   AC_ARG_WITH(curses-includedir,
     [  --with-curses-includedir[=DIR]
                           special header file location for the curses library
@@ -57,12 +57,12 @@ AC_DEFUN(AC_CHECK_CURSES,[
       CURSES_HEADER="<ncurses/curses.h>"
     fi
   fi
-  AC_MSG_CHECKING("how to include the curses header file")
+  AC_MSG_CHECKING([how to include the curses header file])
   if test -n "$CURSES_HEADER"; then
     AC_DEFINE_UNQUOTED(CURSES_HEADER, $CURSES_HEADER, [define to the curses header file name (including brackets). ])
     AC_MSG_RESULT($CURSES_HEADER)
   else
-    AC_MSG_RESULT("unknown")
+    AC_MSG_RESULT([unknown])
     AC_MSG_WARN([no curses header found, try --with-curses-header])
   fi
 
@@ -84,12 +84,12 @@ AC_DEFUN(AC_CHECK_CURSES,[
       AC_CHECK_LIB(ncurses,initscr,CURSES_LIBS=-lncurses)
     fi
   fi
-  AC_MSG_CHECKING("for curses linker flags")
+  AC_MSG_CHECKING([for curses linker flags])
   if test -n "$CURSES_LIBS"; then
     AC_SUBST(CURSES_LIBS)
     AC_MSG_RESULT($CURSES_LIBS)
   else
-    AC_MSG_RESULT("unknown")
+    AC_MSG_RESULT([unknown])
     AC_MSG_WARN([curses library not found, try --with-curses-libs])
   fi
 ])
