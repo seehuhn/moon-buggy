@@ -3,6 +3,8 @@ acceptable for the moment, because (almost) all items should be
 resolved before version 1.0.
 
 BUG FIXES:
+· Fenstergrößenveränderungen beim Nameneingeben funktionieren mit
+ncurses-5 nicht gut.
 · Levels für Zwerge
 · Auf nereid: Schüsse werden invers dargestellt, die Highscoreliste
 blinkend.  Auf io/jupiter ist alles noch schlimmer!
@@ -13,7 +15,7 @@ Man sollte ihn evtl. auf eine günstige Position stellen.
 
 IMPROVEMENTS:
 · words of wisdom/advice
-· Loch in level 6?
+· Loch in level 6.  Level 9 für Klaus.
 · Den `fd_set' Teil von "configure.in" verbessern.  Zumindest
 sollte der cache verwendet werden.
 · `has_key' Ersatz für andere curses-Versionen einführen
