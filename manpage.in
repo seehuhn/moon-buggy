@@ -1,6 +1,6 @@
 .\" manpage.in - template for the "moon-buggy.6" manual page
 .\" Copyright 1999, 2000  Jochen Voss
-.\" $Id: manpage.in,v 1.8 2000/11/01 19:48:49 voss Exp $
+.\" $Id: manpage.in,v 1.9 2001/05/24 07:18:09 voss Rel $
 .de Op
 .BR -\\$1 @C@ ", " --\\$2
 ..
@@ -22,7 +22,7 @@ shows a short usage message.
 .TP
 .Op m mesg
 disable write access to your terminal by other users,
-so your chef can't disturb your game play with the help
+so your boss can't disturb your game play with the help
 of "write" or "finger".
 .TP
 .Op n no-title

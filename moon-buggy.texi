@@ -1,5 +1,5 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: moon-buggy.texi,v 1.13 2000/11/01 13:13:43 voss Exp $
+@c $Id: moon-buggy.texi,v 1.14 2001/05/24 07:18:03 voss Rel $
 @c %**start of header
 @setfilename moon-buggy.info
 @settitle Moon-Buggy Usage and Maintenance
@@ -126,7 +126,7 @@ shows a short usage message.
 @item -m
 @itemx --mesg
 disable write access to your terminal by other users,
-so your chef can't disturb your game play with the help
+so your boss can't disturb your game play with the help
 of "write" or "finger".
 
 @item -n
