@@ -1,4 +1,54 @@
+2000-01-13  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: Added 2001-01-03 and 2000-01-13
+
+	* checklist: mention README.
+
+	* README: Added a warning about experimental versions.
+
+	* TODO: updates
+
+	* configure.in: Changed the version string to "0.4.51".
+
+	* game.c (game_mode): cosmetic changes
+
+	* highscore.c: Introduced a history file.
+
+2000-01-03  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* date.c: initial revision
+
+	* NEWS: new news
+
+	* TODO: Updates
+
+	* highscore.c: Cosmetic changes.
+	Renamed old "topten" to new "highscore".
+
+	* Makefile.am: remove old "getdate.c" in favour of new "date.c".
+
+	* configure.in: Changed the version string to "0.4.50".
+
+	* moon-buggy.h:
+	Remove declarations for old "getdate.c" in favour of new "date.c".
+
+	* checklist: Fixed the cvs commands.
+
+	* getdate.c: remove old "getdate.c" in favour of new "date.c"
+
+	* highscore.c: Changed the highscore list to 100 entries.
+	Old entries are removed after 30 days, now.
+	Changed the highscore file format.
+
+	* main.c (main): move the `init_rnd' call to a better position.
+
 1999-09-28  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* moon-buggy.lsm: Fixed the moon-buggy-0.4.1.tar.gz package size.
+
+	* checklist: initial revision
+
+	* ANNOUNCE: untabified
 
 	* ChangeLog: Added 1999-09-15 and 1999-09-28
 
