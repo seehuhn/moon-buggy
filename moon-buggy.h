@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: moon-buggy.h,v 1.4 1999/08/30 20:57:49 voss Rel $ */
+ * $Id: moon-buggy.h,v 1.5 2000/01/03 14:21:58 voss Exp $ */
 
 #ifndef FILE_MOON_BUGGY_H_SEEN
 #define FILE_MOON_BUGGY_H_SEEN
@@ -13,6 +13,7 @@
 
 #include <curses.h>
 #include <stdlib.h>		/* we use `size_t' */
+#include <time.h>		/* we use `time_t' */
 
 #define TICK(x) ((x)*0.08/(MB_SPEED))
 #define BASELINE (LINES-5)
@@ -118,8 +119,12 @@ extern  void  clear_message_h (game_time, void *);
 /* from "vclock.c" */
 extern  double  vclock (void);
 
-/* from "getdate.c" */
-extern  void  get_date (int *day_p, int *month_p, int *year_p);
+/* from "date.c" */
+#define MAX_DATE_CHARS 32
+extern  time_t  parse_date (const char *str);
+extern  time_t  convert_old_date (int day, int month, int year);
+extern  void  format_date (char *buffer, time_t date);
+extern  void  format_display_date (char *buffer, time_t date);
 
 /* from "persona.c" */
 enum persona { pers_GAME, pers_USER };
