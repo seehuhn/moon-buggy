@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: signal.c,v 1.4 1999/05/22 13:43:59 voss Exp $";
+static const  char  rcsid[] = "$Id: signal.c,v 1.5 1999/05/22 14:33:40 voss Rel $";
 
 #define _POSIX_SOURCE 1
 #define _SVID_SOURCE 1
@@ -93,7 +93,7 @@ tstp_handler (int signum)
 {
   signal (SIGTSTP, SIG_DFL);
   if (game_state == PLAYING) {
-    score_bonus (-10);
+    adjust_score (-10);
   }
   prepare_for_exit ();
   if (game_state == PLAYING)
