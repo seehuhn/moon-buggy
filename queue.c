@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.12 1999/04/23 22:17:03 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.13 1999/05/11 21:58:13 voss Exp $";
 
 #define _POSIX_SOURCE 1
 
@@ -217,6 +217,24 @@ remove_event (callback_fn callback)
   while (*evp) {
     struct event *ev = *evp;
     if (ev->callback == callback) {
+      *evp = (*evp)->next;
+      free (ev);
+    } else {
+      evp = &((*evp)->next);
+    }
+  }
+}
+
+void
+remove_client_data (void *client_data)
+/* Remove all events from the queue, which refer to CLIENT_DATA.  */
+{
+  struct event **evp;
+
+  evp = &queue;
+  while (*evp) {
+    struct event *ev = *evp;
+    if (ev->client_data == client_data) {
       *evp = (*evp)->next;
       free (ev);
     } else {
