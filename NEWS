@@ -1,3 +1,5 @@
+  New highscore list
+
 version 0.4.1:
   Removed the old "--with-setuid" option in favour of "--with-setgid".
   Renamed the package from old "mbuggy" to "moon-buggy" again.
