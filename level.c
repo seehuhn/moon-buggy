@@ -2,17 +2,23 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: level.c,v 1.2 1999/05/23 21:06:08 voss Exp $";
+static const  char  rcsid[] = "$Id: level.c,v 1.3 1999/05/24 19:22:05 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
+#include <assert.h>
+
 #include "mbuggy.h"
 
 
-static  int  hole, first;
-static  int  level, last_level, ticks;
+/* The length of the inter-level gap (measured in ticks)  */
+#define  PAUSE  40
+
+
+static  int  hole, first, crater_seen;
+static  int  level, initial_level, last_level, ticks;
 
 static union {
   struct {
@@ -32,7 +38,10 @@ static union {
   } l4;
   /* l5 */
   struct {
-    int  state, gap, next_gap;
+    int  state, gap, next_gap, spare_time;
+  } l6;
+  struct {
+    int  state, gap, next_gap, spare_time;
   } l_fin;
 } data;
 
@@ -40,7 +49,6 @@ static union {
 static void
 level0_init (void)
 {
-  print_message ("good luck (or use SPACE to jump)");
   hole = 2;
   data.l0.state = 0;
 }
@@ -49,8 +57,8 @@ static void
 level0 (double t)
 {
   if (first) {
-    if (ticks < 350) {
-      data.l0.gap = 14.5 - ticks*4.0/350 + uniform_rnd (4);
+    if (ticks < 345) {
+      data.l0.gap = 14.5 - ticks*4.0/345 + uniform_rnd (4.5 + ticks*4.0/345);
     } else {
       if (data.l0.state) {
 	data.l0.gap = 10;
@@ -80,9 +88,10 @@ level1_init (void)
 static void
 level1 (double t)
 {
+  static const  int  table [11] = { 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4 };
   if (first) {
     if (ticks < 300) {
-      data.l1.gap = 13.5 - ticks*4.0/300 + uniform_rnd (4);
+      data.l1.gap = 14.5 - ticks*4.0/300 + uniform_rnd (3);
     } else {
       switch (data.l1.state) {
       default:
@@ -112,9 +121,10 @@ level1 (double t)
       break;
     case 3:
       hole = 5;
+      bonus[0] += 24;
       break;
     default:
-      hole = 2 + uniform_rnd (2);
+      hole = table [uniform_rnd (11)];
       break;
     }
   }
@@ -170,7 +180,6 @@ static void
 level3_init (void)
 {
   data.l3.state = -1;
-  print_message ("use key <a> to fire the laser");
 }
 
 static void
@@ -209,13 +218,8 @@ level3 (double t)
 static void
 level4_init (void)
 {
-  if (uniform_rnd (2)) {
-    hole = 6;
-    data.l4.next_gap = 8 + uniform_rnd (10);
-  } else {
-    hole = 2;
-    data.l4.next_gap = 7;
-  }
+  hole = 6;
+  data.l4.next_gap = 8 + uniform_rnd (10);
   data.l4.state = 3;
 }
 
@@ -226,8 +230,9 @@ level4 (double t)
     data.l4.gap = data.l4.next_gap;
     if (data.l4.state == 0 && ticks < 700) {
       data.l4.state = 3 + uniform_rnd (3 + 2*(ticks < 350));
+    } else {
+      --data.l4.state;
     }
-    --data.l4.state;
     if (data.l4.state < -5)  ++level;
   }
   --data.l4.gap;
@@ -280,11 +285,63 @@ level5 (double t)
 
 
 static void
+level6_init (void)
+{
+  hole = 5;
+  data.l6.next_gap = 8 + uniform_rnd (10);
+  data.l6.state = 3;
+  data.l6.spare_time = 6;
+}
+
+static void
+level6 (double t)
+{
+  int  slip;			/* this many ticks/meteor may the user vaste */
+  
+  if (first) {
+    data.l6.gap = data.l6.next_gap;
+    if (data.l6.state == 0) {
+      data.l6.state = 3 + uniform_rnd (5);
+      if (ticks >= 375)  ++level;
+    } else {
+      --data.l6.state;
+    }
+  }
+  --data.l6.gap;
+  ++data.l6.spare_time;
+  if (data.l6.gap <= 0) {
+    if (data.l6.state) {
+      hole = 2 + uniform_rnd (3);
+      data.l6.next_gap = 15 + uniform_rnd (6) - hole;
+    } else {
+      if (uniform_rnd (3)) {
+	hole = 5;
+	data.l6.next_gap = 9 + uniform_rnd (10);
+      } else {
+	hole = 2 + uniform_rnd (2);
+	data.l6.next_gap = 9;
+      }
+    }
+    data.l6.spare_time -= 11;
+  }
+
+  slip = (380-ticks)*3.0/374 + 1.5;
+  if (data.l6.spare_time >= 3+slip) {
+    if (uniform_rnd (data.l6.spare_time) > 2) {
+      place_meteor (t);
+      data.l6.spare_time -= 3+slip;
+    }
+  }
+}
+
+
+static void
 level_fin_init (void)
 {
   data.l_fin.state = uniform_rnd (10);
   hole = 2;
   data.l_fin.next_gap = 7;
+  data.l_fin.spare_time = 0;
 }
 
 static void
@@ -293,85 +350,126 @@ level_fin (double t)
   if (first) {
     data.l_fin.gap = data.l_fin.next_gap;
     if (data.l_fin.state == 0) {
-      data.l_fin.state = 2 + uniform_rnd (5);
+      data.l_fin.state = 3 + uniform_rnd (6);
     } else {
       --data.l_fin.state;
     }
   }
   --data.l_fin.gap;
-  if (uniform_rnd (20) == 0)  place_meteor (t);
+  ++data.l_fin.spare_time;
   if (data.l_fin.gap <= 0) {
-    switch (data.l_fin.state) {
-    default:
+    if (data.l_fin.state) {
       hole = 2 + uniform_rnd (3);
-      data.l_fin.next_gap = 14 + uniform_rnd (6) - hole;
-      break;
-    case 0:
-      if (uniform_rnd (2)) {
-	hole = 5;
+      data.l_fin.next_gap = 15 + uniform_rnd (6) - hole;
+    } else {
+      if (uniform_rnd (3)) {
+	hole = 5 + uniform_rnd (2);
 	data.l_fin.next_gap = 9 + uniform_rnd (10);
       } else {
-	hole = 2;
-	data.l_fin.next_gap = 8;
+	hole = 2 + uniform_rnd (3);
+	data.l_fin.next_gap = 9;
       }
-      break;
+    }
+    data.l_fin.spare_time -= 11;
+  }
+
+  if (data.l_fin.spare_time >= 5) {
+    if (uniform_rnd (data.l_fin.spare_time) > 2) {
+      place_meteor (t);
+      data.l_fin.spare_time -= 5;
     }
   }
 }
 
-#define LEVEL_COUNT 7
+#define LEVEL_COUNT 8
 
 static struct {
   void (*init_fn) (void);
   void (*fn) (double t);
+  const char *msg;
 } levels [LEVEL_COUNT] = {
-  { level0_init, level0 },
-  { level1_init, level1 },
+  { level0_init, level0, "good luck (or use <SPC> to jump)" },
+  { level1_init, level1, "some craters are wider than others" },
   { level2_init, level2 },
-  { level3_init, level3 },
+  { level3_init, level3, "use <a> to fire the laser" },
   { level4_init, level4 },
-  { NULL, level5 },
-  { level_fin_init, level_fin }
+  { NULL, level5, "... but what is that?" },
+  { level6_init, level6 },
+  { level_fin_init, level_fin, "You may start your journey, now." }
 };
 
 void
-level_start ()
-/* Start the game anew with level 0.  */
+level_start (int initial)
+/* Start the game anew with level INITIAL.  */
 {
-  level = 0;
+  assert (initial >= 0 && initial < LEVEL_COUNT);
+  level = initial_level = initial;
   last_level = -1;
   ticks = 0;
 }
 
-int
+static void
+score_crater (int width)
+{
+  static const  int  score_table [] = { 0, 0, 4, 8, 9, 16, 32 };
+  assert (width < 7);
+  bonus[0] += score_table [width];
+}
+
+void
 level_tick (double t)
 /* Advance the current level's state by one.
- * This must be called every time the ground moves.
- * The parameter T must be the current game time.  */
+ * The function must be called every time the ground moved.  It fills
+ * in the new values of `ground2[0]' and `bonus[0]'.  The parameter T
+ * must be the current game time.  */
 {
-  int  res;
+  int  ground;
 
+  bonus[0] = 0;
   if (level != last_level) {
+    double  msg_t;
     level = level % LEVEL_COUNT;
     hole = 0;
     if (levels[level].init_fn)  levels[level].init_fn ();
-    if (last_level >= 0)  ticks = -40;
+    if (last_level >= 0) {
+      ticks = -PAUSE;
+      msg_t = t + TICK(car_x + PAUSE/5);
+    } else {
+      msg_t = t;
+    }
+    if (levels[level].msg) {
+      add_event (msg_t, print_message_h, (void *)levels[level].msg);
+    }
     last_level = level;
     first = 1;
+    crater_seen = 0;
   }
   if (ticks < 0) {
-    res = 0;
+    ground = '#';
   } else if (hole > 0) {
+    if (! crater_seen) {
+      score_crater (hole);
+      first = 1;
+      crater_seen = 1;
+    }
     --hole;
-    res = 1;
-    first = 1;
+    ground = ' ';
   } else {
     levels[level].fn (t);
-    res = 0;
+    ground = '#';
     first = 0;
+    crater_seen = 0;
   }
 
+  ground2[0] = ground;
   ++ticks;
-  
+}
+
+int
+current_level (void)
+/* Return the current level's number as the car sees it.  */
+{
+  int  res = (ticks+PAUSE/2 >= car_x) ? level : level - 1;
+  if (res < initial_level)  res = initial_level;
   return  res;
 }
