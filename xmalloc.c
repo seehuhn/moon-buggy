@@ -18,14 +18,16 @@
  *
  * Written by Jochen Voﬂ (voss@mathematik.uni-kl.de).  */
 
-static const  char  rcsid[] = "$Id: xmalloc.c,v 1.1 1998/12/17 19:59:35 voss Exp $";
+static const  char  rcsid[] = "$Id: xmalloc.c,v 1.2 1998/12/22 22:37:45 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include <stdio.h>
-#include <stdlib.h>
+#if STDC_HEADERS
+# include <stdlib.h>
+#endif
 
 #include "moon.h"
 
@@ -36,7 +38,7 @@ xmalloc (size_t size)
  * returns `NULL'.  */
 {
   void *ptr = malloc (size);
-  if (ptr == NULL)  fatal ("out of memory");
+  if (ptr == NULL)  fatal ("Out of memory");
   return  ptr;
 }
 
@@ -46,6 +48,6 @@ xrealloc (void *ptr, size_t size)
  * returns `NULL'.  */
 {
   void *tmp = realloc (ptr, size);
-  if (tmp == NULL)  fatal ("out of memory");
+  if (tmp == NULL)  fatal ("Out of memory");
   return  tmp;
 }
