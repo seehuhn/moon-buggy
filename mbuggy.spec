@@ -5,7 +5,6 @@ Group: Amusements/Games
 Version: 0.4
 Release: 1
 Source: mbuggy-0.4.tar.gz
-Icon: mbuggy.gif
 BuildRoot: /tmp/moon-buggy
 %description
 Moon-buggy is a simple character graphics game, where you drive some
