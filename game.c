@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.13 1999/05/15 16:50:29 voss Exp $";
+static const  char  rcsid[] = "$Id: game.c,v 1.14 1999/05/19 21:12:21 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -27,18 +27,6 @@ print_lives (void)
 {
   mvwprintw (status, 0, car_base-20, "lives: %d", lives);
   wnoutrefresh (status);
-}
-
-static void
-scroll_handler (game_time t, void *client_data)
-{
-  scroll_ground ();
-  if (d_rnd(20) == 0)  place_meteor (t);
-  print_ground ();
-  print_buggy ();
-  if (ground2[car_x + 7] == ' ')  ++bonus;
-  if (crash_check ())  quit_main_loop ();
-  add_event (t+TICK(1), scroll_handler, NULL);
 }
 
 static void
@@ -86,8 +74,8 @@ spend_life (void)
 
   initialise_buggy ();
   print_buggy ();
-  
-  add_event (1, scroll_handler, NULL);
+
+  start_scrolling (1);
   add_event (3, clear_message_h, NULL);
   add_event (TICK(75), score_handler, NULL);
 
