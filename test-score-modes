@@ -1,0 +1,311 @@
+#! /bin/sh
+# test-score-modes - test different methods to access the score file
+#
+# This should exercise the `update_score_file' function from "highscore.c".
+#
+# The script should be started from within the source directory.  It
+# recompiles the program with gcov-support, runs several checks and
+# and creates a "highscore.c.gcov" file, to prove that each and every
+# path of control is exercised.
+
+: ${sourcedir:=`pwd`}
+: ${testdir:=$sourcedir/test}
+: ${exec:=$testdir/bin/moon-buggy}
+: ${local:=$HOME/.mbscore}
+: ${global:=$testdir/com/moon-buggy/mbscore}
+: ${tmpfile:=$testdir/mbscore.tmp}
+globaldir=`dirname $global`
+echo "** sourcedir=$sourcedir"
+echo "** testdir=$testdir"
+echo "** exec=$exec"
+echo "** local=$local"
+echo "** global=$global"
+echo "** tmpfile=$tmpfile"
+echo "** globaldir=$globaldir"
+
+
+function test_start () {
+  error=0
+}
+
+function test_end () {
+  if [ $error -ne 0 ]; then
+    echo "  FAILED"
+    failed=$((failed+1))
+  fi
+}
+
+function error_occured () {
+  error=1
+}
+
+######################################################################
+
+function rebuild () {
+    cd $sourcedir
+    CFLAGS="-fprofile-arcs -ftest-coverage" ./configure --prefix="$testdir"
+    make clean
+    make
+    make install
+}
+
+function check_exec () {
+    if $exec -c; then
+	echo "  execution: OK"
+    else
+	echo "! error: execution failed" >&2
+	error_occured
+    fi
+}
+
+function check_exec_fail () {
+    if $exec -c; then
+	echo "! error: execution succeeded where it should not" >&2
+	error_occured
+    else
+	echo "  execution failed: OK"
+    fi
+}
+
+function check_global () {
+    if [ -e $global ]; then
+	echo "  global exists: OK"
+    else
+	echo "! error: global score file \"$global\" does not exist" >&2
+	error_occured
+	return
+    fi
+    if [ -s $global ]; then
+	echo "  global is non-empty: OK"
+    else
+	echo "! error: global score file \"$global\" is empty" >&2
+	error_occured
+    fi
+}
+
+function check_non_global () {
+    if [ -e $global ]; then
+	echo "! error: global score file \"$global\" exists" >&2
+	error_occured
+    else
+	echo "  global does not exist: OK"
+    fi
+}
+
+function check_local () {
+    if [ -e $local ]; then
+	echo "  local exists: OK"
+    else
+	echo "! error: local score file \"$local\" does not exist" >&2
+	error_occured
+	return
+    fi
+    if [ -s $local ]; then
+	echo "  local is non-empty: OK"
+    else
+	echo "! error: local score file \"$local\" is empty" >&2
+	error_occured
+    fi
+}
+
+function check_non_local () {
+    if [ -e $local ]; then
+	echo "! error: local score file \"$local\" exists" >&2
+	error_occured
+    else
+	echo "  local does not exist: OK"
+    fi
+}
+
+function check_different () {
+    if cmp -s $local $global; then
+	echo "! error: score files are equal" >&2
+	error_occured
+    else
+	echo "  score files differ: OK"
+    fi
+}
+
+function check_equal () {
+    if cmp -s $local $global; then
+	echo "  score files equal: OK"
+    else
+	echo "! error: score files differ" >&2
+	error_occured
+    fi
+}
+
+######################################################################
+
+function test0 () {
+    test_start
+    echo "TEST 0 - existence of \"$global\""
+    check_exec
+    check_global
+    test_end
+}
+
+function test1 () {
+    test_start
+    echo "TEST 1 - local:none global:rw"
+    rm -f $local
+    cp -a $tmpfile $global
+    check_exec
+    check_global
+    check_non_local
+    test_end
+}
+
+function test2 () {
+    test_start
+    echo "TEST 2 - local:none global:none"
+    rm -f $local $global
+    check_exec
+    check_global
+    check_non_local
+    test_end
+}
+
+function test3 () {
+    test_start
+    echo "TEST 3 - local:none global:ro"
+    rm -f $local
+    cp -a $tmpfile $global
+    chmod 444 $global
+    check_exec
+    chmod 644 $global
+    check_global
+    check_local
+    test_end
+}
+
+function test4 () {
+    test_start
+    echo "TEST 4 - local:none global:corrupted"
+    rm -f $local $global
+    : >$global
+    check_exec
+    check_global
+    check_non_local
+    test_end
+}
+
+function test5 () {
+    test_start
+    echo "TEST 5 - local:none global:corrupted,ro"
+    rm -f $local $global
+    echo "corrupted" >$global
+    chmod 444 $global
+    check_exec
+    chmod 644 $global
+    check_global
+    check_local
+    test_end
+}
+
+function test6 () {
+    test_start
+    echo "TEST 6 - local:none global:unaccessible"
+    rm -f $local $global
+    chmod 000 $globaldir
+    check_exec
+    chmod 755 $globaldir
+    check_non_global
+    check_local
+    test_end
+}
+
+function test7 () {
+    test_start
+    echo "TEST 7 - local:rw global:none"
+    cp -a $tmpfile $local
+    rm -f $global
+    check_exec
+    check_global
+    check_local
+    check_different
+    test_end
+}
+
+function test8 () {
+    test_start
+    echo "TEST 8 - local:rw global:ro"
+    # we use the files created by test7
+    check_different
+    chmod 444 $global
+    check_exec
+    chmod 644 $global
+    check_global
+    check_local
+    check_different
+    test_end
+}
+
+function test9 () {
+    test_start
+    echo "TEST 9 - local:ro global:ro"
+    cp -a $tmpfile $local
+    cp -a $tmpfile $global
+    chmod 444 $local $global
+    check_exec_fail
+    chmod 644 $local $global
+    test_end
+}
+
+function test10 () {
+    test_start
+    echo "TEST 10 - local:corrupted global:ro"
+    echo "corrupted" >$local
+    cp -a $tmpfile $global
+    chmod 444 $global
+    check_exec
+    chmod 644 $global
+    check_global
+    check_local
+    check_equal
+    test_end
+}
+
+function test11 () {
+    test_start
+    echo "TEST 11 - local:currupted,ro global:ro"
+    echo "corrupted" >$local
+    cp -a $tmpfile $global
+    chmod 444 $local $global
+    check_exec_fail
+    chmod 644 $local $global
+    test_end
+}
+
+######################################################################
+
+rm -rf "$testdir"
+rm -f $global $local
+rebuild
+failed=0
+test0
+cp -a $global $tmpfile
+sleep 2 # we need different random numbers in the following runs
+test1
+test2
+test3
+test4
+test5
+test6
+test7
+test8
+test9
+test10
+test11
+rm -rf "$testdir"
+
+gcov highscore.c
+rm -f *.da *.bb *.bbg
+
+echo "--"
+if [ "$failed" -gt 0 ]; then
+  echo "WARNING: $failed tests failed" >&2
+  exit 1
+else
+  echo "all tests succeeded"
+fi
