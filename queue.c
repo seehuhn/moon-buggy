@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.27 1999/07/21 10:40:02 voss Rel $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.28 2000/03/14 19:54:48 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -92,11 +92,6 @@ to_game (real_time t)
  * wait for timeouts or keyboard input
  */
 
-/* These are used to measure the system's load.  */
-static  double  time_slept, sleep_base;
-static  double  cpu_load = 0;
-#define ALPHA 2.0
-
 static int
 my_select (struct timeval *timeout)
 /* Wait until input is ready on stdin or a timeout is reached.
@@ -147,7 +142,7 @@ wait_until (real_time *t)
  * Return a positive value, if a key was pressed, and 0 else.
  * Set *T to the return time.  */
 {
-  double  start, stop;
+  double  start;
   int  res;
 
   do {
@@ -166,16 +161,8 @@ wait_until (real_time *t)
     tv.tv_usec = usec + 0.5;
     res = my_select (&tv);
   } while (res < 0);
+  *t = vclock ();
 
-  *t = stop = vclock ();
-  time_slept += stop-start;
-  if (! res && stop-sleep_base > 0.1) {
-    double  q = exp (-ALPHA*(stop-sleep_base));
-    cpu_load = q*cpu_load + (1-q)*(1-time_slept/(stop-sleep_base));
-    time_slept = 0;
-    sleep_base = stop;
-  }
-  
   return  res;
 }
 
@@ -208,9 +195,6 @@ clock_adjust_delay (double dt)
   
   now = vclock ();
   time_base = now + dt - queue->t;
-  
-  time_slept = 0;
-  sleep_base = now;
 }
 
 void
@@ -355,10 +339,6 @@ main_loop (double dt, void (*key_handler)(game_time))
       ev->callback (ev->t, ev->client_data);
       free (ev);
     }
-#if 0				/* TODO */
-    mvwprintw (status, 0, 3, "load:%5.1f%%", cpu_load*100);
-    wnoutrefresh (status);
-#endif
     doupdate ();
   }
   res = (queue != NULL);
