@@ -2,13 +2,12 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.18 1999/05/24 19:11:14 voss Rel $";
-
-#define _POSIX_SOURCE 1
+static const  char  rcsid[] = "$Id: queue.c,v 1.19 1999/05/25 15:32:52 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#define _XOPEN_SOURCE_EXTENDED 1
 
 #include <stdlib.h>
 #include <string.h>
