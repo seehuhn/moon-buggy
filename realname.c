@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: realname.c,v 1.1 1998/12/19 20:34:12 voss Exp $";
+static const  char  rcsid[] = "$Id: realname.c,v 1.2 1998/12/26 11:40:51 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -39,8 +39,10 @@ get_real_user_name (char *buffer, size_t size)
     mvwprintw (moon, 4, 8, tmpl, buffer);
   }
   echo ();
+  leaveok (moon, FALSE);
   mvwgetnstr (moon, 5, 10, tmp, size);
   noecho ();
+  leaveok (moon, TRUE);
   if (tmp[0]) {
     strncpy (buffer, tmp, size);
   }
