@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.28 1999/09/14 15:37:04 voss Rel $";
+static const  char  rcsid[] = "$Id: game.c,v 1.29 2000/01/13 18:14:34 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -78,6 +78,14 @@ setup_screen (void)
   resize_ground (1);
 }
 
+void
+print_lives_h (game_time t, void *client_data)
+/* This function is a possible callback argument to `add_event'.
+ * It updates the number of lives display.  */
+{
+  print_lives ();
+}
+
 static void
 game_key_handler (game_time t)
 {
@@ -106,16 +114,17 @@ game_mode (void)
     resize_ground (1);
     level_start (level);
     spend_life ();
+    --lives;
     level = current_level ();
 
-    --lives;
-    print_lives ();
-
     xsleep (0.5);
+
+    add_event (1.0, print_lives_h, NULL);
     add_event (1.5, quit_main_loop_h, NULL);
-    main_loop (1.5, game_key_handler);
+    main_loop (1.0, game_key_handler);
     remove_meteors ();
   } while (lives > 0);
+  print_lives ();
   remove_meteors ();
 
 #ifdef A_BLINK
