@@ -1,8 +1,8 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: mbuggy.texi,v 1.8 1999/01/01 19:09:22 voss Exp $
+@c $Id: mbuggy.texi,v 1.9 1999/01/02 12:22:01 voss Exp $
 @c %**start of header
 @setfilename mbuggy.info
-@settitle Moon-Buggy Usage and Maintainance
+@settitle Moon-Buggy Usage and Maintenance
 @include version.texi
 @c %**end of header
 
@@ -14,7 +14,7 @@
 @ifinfo
 This file documents moon-buggy, a simple, curses-based game
 
-Copyright 1998 Jochen Vo@ss{}
+Copyright 1999 Jochen Vo@ss{}
 
 Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice are
@@ -38,13 +38,16 @@ versions, except that this permission notice may be stated in a
 translation approved by the Free Software Foundation.
 @end ifinfo
 
+@setchapternewpage off
 @titlepage
 @title Moon-Buggy Usage and Maintenance
+@sp 8
+@center @image{title,,}
 @author by Jochen Vo@ss{}
 
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1998 Jochen Vo@ss{}
+Copyright @copyright{} 1999 Jochen Vo@ss{}
 
 Published by Jochen Vo@ss{}
 
@@ -62,6 +65,7 @@ into another language, under the above conditions for modified versions,
 except that this permission notice may be stated in a translation
 approved by the Free Software Foundation.
 @end titlepage
+@headings double
 
 @node Top, Introduction, (dir), (dir)
 
@@ -75,40 +79,47 @@ version @value{VERSION} of the program.
 
 @menu
 * Introduction::                Introduction
-* Invocation::                  Invocation
+* Moon-buggy Invocation::       Moon-buggy Invocation
+* Maint-buggy Invocation::      Maint-buggy Invocation
 * Playing the Game::            Playing the Game
 * Installation::                Installation and setup
 * References::                  References
 @end menu
 
-@node Introduction, Invocation, Top, Top
+
+@node Introduction, Moon-buggy Invocation, Top, Top
 @chapter Introduction
 
 Moon-buggy is a simple, curses-based game, where you drive some kind
 of car across the surface of the moon.  Unfortunately there are
 dangerous craters there.  Fortunately your car can jump!
 
-Moon-Buggy comes with NO WARRANTY, to the extent permitted by law.  You
+The game is not yet finished.  So be prepared to encounter bugs (and
+please report them).  But it works to some extent, it has a top-ten
+list, and it may be fun.  Just try it!
+
+Moon-Buggy comes with no warranty, to the extent permitted by law.  You
 may redistribute copies of Moon-Buggy under the terms of the GNU General
 Public License.  For more information about these matters, read the file
-COPYING of the source code distribution or press @kbd{c} at moon-buggy's
-title screen.
+@file{COPYING} of the source code distribution or press @kbd{c} at
+moon-buggy's title screen.
 
 Please mail any suggestions and bug reports to
 @email{voss@@mathematik.uni-kl.de}.  Your message should include the
 moon-buggy version number, as obtained by the command @samp{moon-buggy -V}.
 
 
-@node Invocation, Playing the Game, Introduction, Top
-@chapter Invocation
+@node  Moon-buggy Invocation, Maint-buggy Invocation, Introduction, Top
+@chapter Moon-buggy Invocation
 
-Moon-buggy understands the following options.  The long options starting
-with @samp{--} are only supported on some system types.
+Normal usage is to start @samp{moon-buggy} without any options.
+Nevertheless there are some.  The long options (starting with @samp{--})
+are only supported on some system types.
 
 @table @samp
 @item -h
 @itemx --help
-shows a short but helpful message.
+shows a short usage message.
 
 @item -n
 @itemx --no-tile
@@ -120,18 +131,49 @@ prints the program's version to standard output and exits.
 @end table
 
 
-@node Playing the Game, Installation, Invocation, Top
+@node  Maint-buggy Invocation, Playing the Game, Moon-buggy Invocation, Top
+@chapter Maint-buggy Invocation
+
+The @samp{maint-buggy} script is installed as part of the moon-buggy
+package.  It helps you to maintain your moon-buggy installation and is
+only useful for the system administrator.
+
+At the moment, its only purpose is to remove moon-buggy from your
+system.
+
+The script understands the following options.
+
+@table @samp
+@item --help
+shows a short usage message.
+
+@item --uninstall
+removes the moon-buggy installation from the system.  Use with caution:
+As this includes the @file{maint-buggy} script itself, this step cannot
+easily be undone!
+
+@item --version
+prints moon-buggy's version string to standard output and exits.
+@end table
+
+
+@node Playing the Game, Installation, Maint-buggy Invocation, Top
 @chapter Playing the Game
 
 Just start it.  Follow the instructions and use the @key{SPC} bar to
 jump.
+
+Moon-buggy can handle a wide range of screen sizes.  But it runs best,
+if the screen has at least 80 columns.  If you run it on a screen with
+significantly less columns it may look strange and could be hard to
+play.
 
 
 @node Installation, References, Playing the Game, Top
 @chapter Installation
 
 Moon-buggy requires the curses library as a prerequisite.  If curses is
-not installed on your system, you may obtain the ncurses package
+not installed on your system, you may use the free ncurses package
 (@pxref{References}).
 
 When you unpack the moon-buggy distribution, you get one directory,
@@ -143,21 +185,22 @@ cd moon-buggy-@value{VERSION}
 @end example
 
 @noindent
-If you have built
-moon-buggy in this directory before, you can use the command @samp{make
-distclean} to remove any files, which were created during the last
-build.
+If you have built moon-buggy in this directory before, you can use the
+command @samp{make distclean} to remove any files, which were created
+during the last build.
 
-The file @file{INSTALL} contains generic installation instructions,
-which you can follow.  But in most cases you just type
+Generic installation instructions are in the file @file{INSTALL}.
+There are some points of interest:
 
-@example
-configure
-make
-make install
-@end example
+@itemize @bullet
+@item
+By default, the program will be installed as
+@file{/usr/local/bin/moon-buggy}.  You can specify an installation
+prefix other than @file{/usr/local} by giving @samp{configure} the
+option @samp{--prefix=@var{path}}.
 
-You can choose the score file location via configure's
+@item
+You can choose the score file's location via @code{configure}'s
 @samp{--sharedstatedir} option.  On Linux you should use
 
 @example
@@ -166,6 +209,54 @@ You can choose the score file location via configure's
 
 @noindent
 to comply with the Filesystem Hierarchy Standard (@pxref{References}).
+
+@item
+Please read the following carefully:
+
+The global score file should be writable by the moon-buggy program.
+Otherwise each user gets a local score file in his home directory.  Thus
+he only sees his own scores and no real competition arises.
+
+One solution is to make the score file world writable, but this opens
+the opportunity to cheat.
+
+The other possibility is to make moon-buggy a suid-program.  This means
+the following: you choose a user id, which cannot used by ordinary
+users, and allow only this user to write the score file.  Many system
+have a user @samp{games} for this purpose (Check your @file{/etc/passwd}
+file).  Then you make this user own the @file{moon-buggy} executable and
+set the file's suid-bit (so moon-buggy gains its owner's access
+permission in addition to your's and can write the score file).
+
+This second possibility can be realized by @code{configure}'s
+@samp{--with-suid} option.  If you use
+
+@example
+--with-suid=games
+@end example
+
+@noindent
+then the user called @samp{games} owns the @file{moon-buggy} executable
+and the suid-bit is set as explained above.
+
+@strong{Caution}: this introduces potential security risks.  I tried to
+minimise these, but nevertheless do @strong{not} choose the user
+@samp{root} instead of @samp{games}.  And remember: moon-buggy comes
+with no warranty.
+@end itemize
+
+Example: On GNU/Linux systems you probably can use the following
+commands.  For the last one you may need root user permissions.
+
+@example
+configure --sharedstatedir=/var/games --with-suid=games
+make
+make install
+@end example
+
+Once you do not want this program on your system any more, you can use
+the @samp{maint-buggy} script to cleanly remove the package from your
+system (@pxref{Maint-buggy Invocation}).
 
 
 @node References,  , Installation, Top
