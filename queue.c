@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.22 1999/06/05 13:31:20 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.23 1999/06/06 13:18:09 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -11,6 +11,7 @@ static const  char  rcsid[] = "$Id: queue.c,v 1.22 1999/06/05 13:31:20 voss Exp 
 
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <sys/types.h>
 #if HAVE_SYS_SELECT_H
 #include <sys/select.h>
@@ -202,7 +203,10 @@ clear_queue (void)
     ev = old->next;
     free (old);
   }
-  while (key_ready ())  xgetch (moon);
+  while (key_ready ()) {	/* eat up input */
+    char  c;
+    read (0, &c, 1);
+  }
 }
 
 void
