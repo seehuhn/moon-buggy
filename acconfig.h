@@ -1,3 +1,6 @@
+/* Define this unconditionally */
+#define _XOPEN_SOURCE
+
 /* Define if you have the <errno.h> header file.  */
 #undef HAVE_SYS_SELECT_H
 
