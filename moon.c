@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: moon.c,v 1.4 1998/12/30 19:39:23 voss Exp $";
+static const  char  rcsid[] = "$Id: moon.c,v 1.5 1999/01/01 18:02:32 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -60,8 +60,8 @@ d_rnd (int limit)
 void
 print_ground (void)
 {
-  mvwaddnstr (moon, LINES-4, 0, ground2, COLS);
-  mvwaddnstr (moon, LINES-3, 0, ground1, COLS);
+  mvwaddnstr (moon, LINES-4, 0, ground2, ground_width);
+  mvwaddnstr (moon, LINES-3, 0, ground1, ground_width);
   wnoutrefresh (moon);
 }
 
@@ -81,6 +81,6 @@ scroll_ground (void)
     if (hole == 0)  hole = 2+d_rnd (2);
   }
   
-  memmove (ground2+1, ground2, COLS-1);
+  memmove (ground2+1, ground2, ground_width-1);
   ground2[0] = nextchar;
 }
