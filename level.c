@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: level.c,v 1.1 1999/05/23 14:30:58 voss Exp $";
+static const  char  rcsid[] = "$Id: level.c,v 1.2 1999/05/23 21:06:08 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -30,6 +30,7 @@ static union {
   struct {
     int  state, gap, next_gap;
   } l4;
+  /* l5 */
   struct {
     int  state, gap, next_gap;
   } l_fin;
@@ -271,6 +272,14 @@ level4 (double t)
 
 
 static void
+level5 (double t)
+{
+  if (uniform_rnd (ticks % 20 < 8 ? 4 : 8) == 0)  place_meteor (t);
+  if (ticks >= 125)  ++level;
+}
+
+
+static void
 level_fin_init (void)
 {
   data.l_fin.state = uniform_rnd (10);
@@ -310,7 +319,7 @@ level_fin (double t)
   }
 }
 
-#define LEVEL_COUNT 6
+#define LEVEL_COUNT 7
 
 static struct {
   void (*init_fn) (void);
@@ -321,6 +330,7 @@ static struct {
   { level2_init, level2 },
   { level3_init, level3 },
   { level4_init, level4 },
+  { NULL, level5 },
   { level_fin_init, level_fin }
 };
 
