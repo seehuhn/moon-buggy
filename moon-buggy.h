@@ -2,10 +2,10 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: moon-buggy.h,v 1.1 1999/07/21 09:42:44 voss Exp $ */
+ * $Id: moon-buggy.h,v 1.2 1999/07/21 10:48:09 voss Exp $ */
 
-#ifndef FILE_MBUGGY_H_SEEN
-#define FILE_MBUGGY_H_SEEN
+#ifndef FILE_MOON_BUGGY_H_SEEN
+#define FILE_MOON_BUGGY_H_SEEN
 
 /* The game's overall speed.  High values indicate fast scrolling.
  * You may try to decrease this, if the animation flickers too much. */
@@ -171,4 +171,4 @@ extern  int  mvwaddnstr (WINDOW *win, int y, int x, const char *str, int n);
 extern  int  wgetnstr (WINDOW *win, char *str, int n);
 #endif
 
-#endif /* FILE_MBUGGY_H_SEEN */
+#endif /* FILE_MOON_BUGGY_H_SEEN */
