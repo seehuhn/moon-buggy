@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.40 2000/11/01 13:16:30 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.41 2000/11/01 19:44:13 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -720,6 +720,16 @@ key_handler (game_time t, int val)
       print_scores ();
     }
     break;
+  case 7:
+    print_message ("reloading score file ...");
+    doupdate ();
+    block_all ();
+    update_score_file (NULL);
+    highscore_valid = 1;
+    unblock ();
+    center_new ();
+    mode_redraw ();
+    break;
   }
 }
 
@@ -737,5 +747,6 @@ setup_highscore_mode (void)
   mode_add_key (highscore_mode, mbk_down, "down", 4);
   mode_add_key (highscore_mode, mbk_pageup, "pg up", 5);
   mode_add_key (highscore_mode, mbk_pagedown, "pg down", 6);
+  mode_add_key (highscore_mode, mbk_scores, "reload", 7);
   mode_complete (highscore_mode);
 }
