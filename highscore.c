@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.5 1998/12/27 14:10:21 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.6 1998/12/30 19:59:59 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -39,6 +39,7 @@ struct score_entry {
   int  new;
 };
 static  struct score_entry  hiscores [HIGHSCORE_SLOTS];
+static  int  highscore_valid = 0;
 
 /* The name of the score file to write.  */
 static  char *score_file_name;
@@ -312,15 +313,15 @@ compare_entries (const void *a, const void *b)
 
 static char  real_name [PLAYER_MAX_LEN];
 
-void
-write_hiscore (void)
+static void
+write_scores (void)
 /* Load the top ten table and add the current game if appropriate.  */
 {
   struct score_entry *new_entry;
   int  in_fd, out_fd;
   FILE *in, *out;
   int  i, res;
-
+  
   find_tables (&in_fd, &out_fd);
   if (in_fd >= 0) {
     if (in_fd == out_fd) {
@@ -386,6 +387,56 @@ write_hiscore (void)
 	     score_file_name, strerror (errno));
     }
   }
+}
+
+int
+highscore_mode (void)
+{
+  int  done = 0;
+  int  again = 1;
+  
+  game_state = HIGHSCORE;
+  
+  block_all ();
+  print_message ("loading score file ...");
+  doupdate ();
+  write_scores ();
+  highscore_valid = 1;
+  unblock ();
   
   print_scores ();
+
+  do {
+    print_message ("play again (y/n)?");
+    doupdate ();
+    switch (wgetch (message)) {
+    case 'y':
+    case ' ':
+      done = 1;
+      break;
+    case KEY_BREAK:
+    case KEY_CLOSE:
+    case '\e':
+    case 'n':
+    case 'q':
+      again = 0;
+      done = 1;
+      break;
+    default:
+      beep ();
+      doupdate ();
+    }
+  } while (! done);
+
+  return  again;
+}
+
+void
+resize_highscore (void)
+{
+  resize_game ();
+  if (highscore_valid) {
+    print_message ("play again (y/n)?");
+    print_scores ();
+  }
 }
