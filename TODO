@@ -1,4 +1,11 @@
 BUG FIXES:
+· Auf HPUX ist NSIG nicht definiert.  (Bei uns auch nicht, fall man
+die Definition von _SVID_SOURCE entfernt!)  Was tut man da?
+· Auf HPUX: Schüsse werden invers dargestellt, die Highscoreliste blinkend.
+· Auf hpux wird der Cursor nicht abgeschaltet.
+Man sollte ihn evtl. auf eine günstige Position stellen.
+· Auf der Pamuk ist A_BLINK nicht definiert.
+· Auf der Pamuk gibt es `sig_atomic_t' nicht.
 · Wenn man das Spiel nicht installiert, aber sich ein Scorefile teilen
 möchte, muß man das "moon-buggy/"-Verzeichnis selbst anlegen.  Das
 sollte erklärt werden.
@@ -6,6 +13,8 @@ sollte erklärt werden.
 · Punkteverteilung verbessern
 · Portabilität bekümmern
 · Remove score files from different versions on installation.
+· set-group-id ist evtl. besser als set-user-id.
+· Füge der Anleitung ein "shared score files" Kapitel hinzu.
 
 IMPROVEMENTS:
 · rpm Zeugs: "Autoreq: false" ausprobieren, "BuildRoot" wieder einführen
@@ -16,6 +25,7 @@ IMPROVEMENTS:
 kann.  Erklärung der Tastaturbelegung.
 · Neue "--show-highscores" Option.
 
+· Prüfsumme für das Scorefile.
 · Könnte man die Events 0.1 Sekunden zu früh ausführen und nur das
 `doupdate' verzögern?  Wie ist das dann mit Tastendrücken während der
 letzen zehntel Sekunde?  Bringt das überhaupt eine signifikante
