@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: keyboard.c,v 1.8 2000/04/01 07:54:28 voss Exp $";
+static const  char  rcsid[] = "$Id: keyboard.c,v 1.9 2000/04/08 13:00:51 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -136,6 +136,9 @@ read_key (void)
     key_code = wgetch (moon);
   } while (key_code == ERR && errno == EINTR);
   if (key_code == ERR)  fatal ("Cannot read keyboard input");
+#ifdef KEY_RESIZE
+  if (key_code == KEY_RESIZE)  return -1;
+#endif
   entry_p = locate (key_code);
   return  *entry_p ? (*entry_p)->meaning : 0;
 }
@@ -289,11 +292,11 @@ describe_keys (int n, const struct binding *b)
 
   /* Is there enough space to explain all functions?  */
   len = max_len;
-  for (i=0; i<n; ++i) {
+  for (i=0; i<n && len>3; ++i) {
     int  x;
     if (i>0)  --len;		/* " " */
     x = 2 + strlen(b[i].desc);	/* "x:desc" */
-    if (x <= len) {
+    if (len >= x) {
       len -= x;
     } else {
       n=i;
@@ -311,7 +314,7 @@ describe_keys (int n, const struct binding *b)
     for (i=0; i<n; ++i) {
       if (k < keys[i].k
 	  && (strlen (keys[i].data[k].name) < len
-	      || (strlen (keys[i].data[k].name) == len))) {
+	      || (k==0 && strlen (keys[i].data[k].name)<=len))) {
 	keys[i].data[k].priority = 1;
 	len -= strlen (keys[i].data[k].name);
 	if (k>0)  --len;	/* "," */
