@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.32 2000/04/01 07:55:10 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.33 2000/04/08 12:55:53 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -678,6 +678,13 @@ highscore_enter (int level)
     print_scores ();
   }
   mode_keys ();
+  if (level > 0)  print_game_over (1);
+}
+
+static void
+highscore_leave (void)
+{
+  print_game_over (0);
 }
 
 void
@@ -748,6 +755,7 @@ setup_highscore_mode (void)
 {
   highscore_mode = new_mode ();
   highscore_mode->enter = highscore_enter;
+  highscore_mode->leave = highscore_leave;
   highscore_mode->redraw = resize_highscore;
   highscore_mode->keypress = key_handler;
   mode_add_key (highscore_mode, mbk_start, "new game", 1);
