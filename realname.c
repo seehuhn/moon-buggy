@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: realname.c,v 1.9 1999/05/25 15:32:31 voss Exp $";
+static const  char  rcsid[] = "$Id: realname.c,v 1.10 1999/05/26 21:02:39 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -10,8 +10,8 @@ static const  char  rcsid[] = "$Id: realname.c,v 1.9 1999/05/25 15:32:31 voss Ex
 
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <sys/types.h>
+#include <unistd.h>
 #include <pwd.h>
 #include <assert.h>
 
@@ -29,7 +29,7 @@ get_real_user_name (char *buffer, size_t size)
   tmp = xmalloc (size);
   
   if (buffer[0] == '\0') {
-    uid_t me = getuid ();
+    uid_t me = geteuid ();
     struct passwd *my_passwd = getpwuid (me);
     if (my_passwd) {
       strncpy (buffer, my_passwd->pw_gecos, size);
