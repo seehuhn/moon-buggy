@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: moon.c,v 1.21 1999/05/30 19:47:01 voss Exp $";
+static const  char  rcsid[] = "$Id: moon.c,v 1.22 1999/06/03 13:20:11 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -23,7 +23,7 @@ static int  ground_width;
 void
 resize_ground (int clear_it)
 {
-  int  cols, i;
+  int  cols, i, old;
 
   block_winch ();
   cols = COLS;
@@ -38,7 +38,9 @@ resize_ground (int clear_it)
     ground2[i] = '#';
   }
   ground_width = cols;
+  old = car_base;
   car_base = (cols > 80 ? 80 : cols) - 12;
+  car_x += (car_base-old);
   unblock ();
 }
 
