@@ -1,5 +1,6 @@
-.\" $Id: moonman.in,v 1.1 1999/01/01 19:04:44 voss Exp $
-.\"
+.\" moonman.in - template for the "moon-buggy.6" manual page
+.\" Copyright 1999  Jochen Voﬂ
+.\" $Id: moonman.in,v 1.2 1999/01/02 12:14:59 voss Rel $
 .de Op
 .BR -\\$1 @C@ ", " --\\$2
 ..
