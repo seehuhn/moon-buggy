@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: meteor.c,v 1.2 1999/05/22 13:43:58 voss Exp $";
+static const  char  rcsid[] = "$Id: meteor.c,v 1.3 1999/05/23 14:23:37 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -75,7 +75,7 @@ place_meteor (double t)
   if (! meteor_table.data)  DA_INIT (meteor_table, struct meteor *);
   m = xmalloc (sizeof (struct meteor));
   m->state = ms_START;
-  m->x = 0;
+  m->x = 1;
   DA_ADD (meteor_table, struct meteor *, m);
   add_event (t+TICK(1), meteor_handler, m);
 }
