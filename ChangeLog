@@ -1,3 +1,148 @@
+1999-05-22  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* TODO: Replaced one item by another.
+
+	* mbuggy.h: Fixed the prototype for `control_tick'.
+
+	* moon.c (scroll_handler):
+	Use the new calling syntax for `control_tick'.
+
+	* control.c: Major reorganisation: implement different levels.
+
+	* Makefile.am: Mention the new file "control.c".
+
+	* mbuggy.h: Added declarations for the new file "control.c".
+
+	* TODO: Drei neue Einträge.
+
+	* buggy.c (sz_jump): slightly changed the jump length
+
+	* game.c (spend_life): added a call to `control_init'.
+
+	* moon.c (scroll_handler): Use the new function `control_tick' from
+	"control.c".
+
+	* control.c: initial revision
+
+	* configure.in: Fixed the `AC_INIT' statement.
+
+	* TODO: Removed one item.
+
+	* mbuggy.h: Changed the declarations for "game.c".
+	Added a declaration for the new function `shift_buggy' from "buggy.c".
+	Changed the prototype of `highscore_mode'.
+
+	* car.img (BROKEN): new image
+
+	* buggy.c (sz_crash): new screnario
+	(initialise_buggy): clear the old buggy from the screen.  Set `car_x'
+	  and `car_y'
+	(print_buggy): handle `car_BROKEN' in a special way
+	(jump_handler): use `crash_detected' instead of `quit_main_loop'
+	(crash_check): use `sz_crash'
+	(shift_buggy): new function
+
+	* game.c (crash_detected): new variable
+	Changed the variable `score' from global scope to file local scope.
+	Renamed old `score_bonus' into new `adjust_score'.
+	(print_score): merged into `adjust_score'.
+	(game_mode): do not set `car_x' any more.
+
+	* highscore.c: Do not access the global variable `score' any more.
+	(highscore_mode): changed the calling syntax.
+
+	* moon.c (scroll_handler):
+	delay the game's end after a crash by two ticks.
+
+	* signal.c: Rename old `score_bonus' to new `adjust_score'.
+
+	* title.c (setup_screen): do not set `car_x' any more.
+
+	* realname.c, signal.c, title.c, vclock.c, xgetch.c, xmalloc.c,
+	xstrdup.c, Makefile.am, buggy.c, error.c, game.c, highscore.c,
+	hpath.c, laser.c, main.c, meteor.c, moon.c, pager.c, persona.c,
+	queue.c: renamed old "moon.h" to new "mbuggy.h"
+
+	* mbuggy.h: Fixed the header comment.
+
+	* TODO: Spelling fix.
+
+	* mbuggy.h, moon.h: moved moon.h to mbuggy.h
+
+	* TODO: Removed three items, added one.
+
+	* moon.h: Changed the declaration for `print_buggy'.
+
+	* buggy.c (struct_scene): complete change
+	Removed the obsolete variable `cstate'.
+	Joined old `animate_buggy' into `print_buggy'.
+	(print_buggy): use the table from "buggy.h".  Do not check for crashs.
+	(jump, can_jump, crash_check): fixes.
+
+	* img.sed, car.img: Changed the images to height 2.
+
+	* moon.c (scroll_handler): removed unnecessary calls to `print_buggy'.
+
+	* queue.c: Made the loadmeter more responsive.
+
+1999-05-19  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* TODO: Ein Punkt entfert.
+	Dafür zwei neue.
+
+	* Makefile.am: Mention the new file "random.c".
+
+	* moon.h: Added declarations for the new file "random.c".
+	Added a declaration for `start_scrolling' from "moon.c".
+
+	* highscore.c: Use `uniform_rnd' instead of old `d_rnd'.
+
+	* main.c (main): call `init_rnd'.
+
+	* game.c: Moved `scroll_handler' from "game.c" into "moon.c".
+
+	* moon.c: Moved `d_rnd' from "moon.c" into `uniform_rnd' in "random.c".
+	Moved `scroll_handler' from "game.c" into "moon.c".
+	Incorporated the old function `scroll_ground' into `scroll_handler'.
+	(start_scrolling): new function.
+
+	* random.c: initial revision
+
+1999-05-16  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* TODO: CPU load done.
+	New entry.
+
+	* configure.in: Check for function `exp' in -lm.
+
+	* queue.c: Measure the system's CPU load.
+
+1999-05-15  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* TODO: Viele neue Einträge.
+
+	* Makefile.am: Mention the new file "meteor.c".
+
+	* moon.h: Define `BASELINE'.
+	Removed the obsolete declaration of `ground3'.
+	Added a declaration for the new function `laser_hit' from "laser.c".
+	Added declarations for the new file "meteor.c".
+	Added a declaration for the new function `remove_client_data' from "queue.c".
+
+	* game.c (scroll_handler): Randomly place some meteors.
+	(game_mode): remove them, if the player did not.
+
+	* laser.c: Check for meteors, which are hit by the laser.
+	(laser_hit): new function
+
+	* meteor.c: initial revision
+
+1999-05-11  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* moon.c: Removed any reference to `ground3'.
+
+	* queue.c (remove_client_data): new function
+
 1999-05-08  Jochen Voss  <voss@tatonka.pfalz.de>
 
 	* ChangeLog: Added 1999-04-25 to 1999-05-08
@@ -11,6 +156,8 @@
 	* autogen.sh: initial revision
 
 	* TODO: New entries.
+
+	* darray.h: removed link out of the cvs controlled area
 
 	* game.c (spend_life): add a call to `extinguish_laser'.
 
