@@ -3,7 +3,7 @@
 #:notice
 # @configure_input@
 # Copyright 1999  Jochen Voss
-# $Id: maint.in.in,v 1.5 1999/06/25 23:14:05 voss Rel $
+# $Id: maint.in.in,v 1.6 1999/07/21 10:52:51 voss Rel $
 
 prefix="@prefix@"
 exec_prefix="@exec_prefix@"
@@ -56,7 +56,7 @@ EOF
       set -x
 #:pre-uninstall
       rm -f "$bindir/moon-buggy"
-      rm -f "$infodir/mbuggy.info"
+      rm -f "$infodir/moon-buggy.info"
       rm -f "$man6dir/moon-buggy.6"
       rm -f "$man6dir/maint-buggy.6"
       rm -f "$scoredir/mbscore"

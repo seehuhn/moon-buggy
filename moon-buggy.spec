@@ -1,10 +1,10 @@
 Summary: Drive some car across the moon
-Name: mbuggy
+Name: moon-buggy
 Copyright: GPL
 Group: Amusements/Games
-Version: 0.4
+Version: 0.4.0.90
 Release: 1
-Source: mbuggy-0.4.tar.gz
+Source: moon-buggy-0.4.0.90.tar.gz
 BuildRoot: /tmp/moon-buggy
 %description
 Moon-buggy is a simple character graphics game, where you drive some
@@ -29,7 +29,7 @@ if test "xgames" != "x"; then \
 fi
 chmod go-x "/usr/local/bin/maint-buggy"
 if /bin/sh -c 'install-info --version | sed 1q | fgrep -s -v -i debian' >/dev/null 2>&1; then \
-  list='mbuggy.info'; \
+  list='moon-buggy.info'; \
   for file in $list; do \
     echo " install-info --info-dir=/usr/local/info /usr/local/info/$file";\
     install-info --info-dir=/usr/local/info /usr/local/info/$file || :;\
@@ -49,7 +49,7 @@ cd /usr/local/info; \
 if /bin/sh -c 'install-info --version | sed 1q | fgrep -s -v -i debian' >/dev/null 2>&1; then \
   ii=yes; \
 else ii=; fi; \
-list='mbuggy.info'; \
+list='moon-buggy.info'; \
 for file in $list; do \
   test -z "i" \
     || install-info --info-dir=/usr/local/info --remove $file; \
@@ -58,7 +58,7 @@ done
 %files
 /usr/local/bin/moon-buggy
 /usr/local/bin/maint-buggy
-/usr/local/info/mbuggy.info
+/usr/local/info/moon-buggy.info
 /usr/local/man/man6/moon-buggy.6
 /usr/local/man/man6/maint-buggy.6
 /var/games/moon-buggy
