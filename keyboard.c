@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: keyboard.c,v 1.2 1999/06/06 19:28:39 voss Exp $";
+static const  char  rcsid[] = "$Id: keyboard.c,v 1.3 1999/06/13 18:40:04 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -160,7 +160,7 @@ read_key (void)
   do {
     key_code = wgetch (moon);
   } while (key_code == ERR && errno == EINTR);
-  if (key_code == ERR)  fatal ("cannot read keyboard input");
+  if (key_code == ERR)  fatal ("Cannot read keyboard input");
   entry_p = locate (key_code);
   return  *entry_p ? (*entry_p)->meaning : 0;
 }
