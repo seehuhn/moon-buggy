@@ -1,8 +1,8 @@
 /* title.c - print the title page
  *
- * Copyright (C) 1998  Jochen Voss.  */
+ * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: title.c,v 1.4 1999/01/01 17:57:31 voss Exp $";
+static const  char  rcsid[] = "$Id: title.c,v 1.5 1999/01/02 11:55:36 voss Rel $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -30,6 +30,7 @@ const char *title [] = {
 
 static void
 print_title (void)
+/* Print the title screen.  */
 {
   int  title_lines = sizeof (title) / sizeof (const char *);
 
@@ -74,6 +75,7 @@ setup_screen (void)
 
 int
 title_mode (void)
+/* Show the title, until the user does not want to see it any more.  */
 {
   int  done = 0;
   int  abort = 0;
@@ -85,7 +87,7 @@ title_mode (void)
   do {
     switch (get_event (NULL)) {
     case ev_KEY:
-      switch (wgetch (moon)) {
+      switch (xgetch (moon)) {
       case KEY_BREAK:
       case KEY_CANCEL:
       case KEY_UNDO:
