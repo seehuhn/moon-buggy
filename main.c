@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.6 1998/12/23 09:45:41 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.7 1998/12/26 14:08:37 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -25,35 +25,21 @@ extern int optind, opterr, optopt;
 
 
 const char *my_name;
+
 long  score, bonus;
 static int  lives;
-
-
-static void
-print_time (double t)
-{
-  int  tt = t*100+0.5;
-  int  min, sec, frac;
-
-  frac = tt%100;
-  tt /= 100;
-  sec = tt%60;
-  min = tt/60;
-  mvwprintw (status, 0, COLS-17, "time: %2d:%02d.%02d", min, sec, frac);
-  wnoutrefresh (status);
-}
 
 static void
 print_score ()
 {
-  mvwprintw (status, 0, 40, "score: %-10ld", score);
+  mvwprintw (status, 0, car_base-7, "score: %-8ld", score);
   wnoutrefresh (status);
 }
 
 static void
 print_lives ()
 {
-  mvwprintw (status, 0, 20, "lives: %d", lives);
+  mvwprintw (status, 0, car_base-20, "lives: %d", lives);
   wnoutrefresh (status);
 }
 
@@ -69,6 +55,7 @@ print_message (const char *str)
 {
   mvwaddstr (status, 1, 0, str);
   wclrtoeol (status);
+  wnoutrefresh (status);
 }
 
 void
@@ -150,7 +137,6 @@ spend_life (void)
       add_event (t+1, ev_SCORE);
       break;
     }
-    print_time (t-base);
     doupdate ();
   } while (! done);
 }
@@ -203,6 +189,7 @@ main_loop (void)
     play_game ();
   ask:
     print_message ("play again (y/n)?");
+    doupdate ();
     c = wgetch (status);
     switch (c) {
     case 'y':
@@ -251,8 +238,10 @@ cont_handler (int signum)
   signal (SIGCONT, cont_handler);
   signal (SIGTSTP, tstp_handler);
   print_message ("suspended (penalty: 10 points)");
-  wrefresh (moon);
-  wrefresh (status);
+  wnoutrefresh (moon);
+  wnoutrefresh (status);
+  doupdate ();
+  clock_adjust_delay (0.5);
 }
  
 int
@@ -331,8 +320,10 @@ main (int argc, char **argv)
   
   status = newwin (2, 0, LINES-2, 0);
   keypad (status, TRUE);
+  leaveok (status, TRUE);
   moon = newwin (LINES-2, 0, 0, 0);
   keypad (moon, TRUE);
+  leaveok (moon, TRUE);
 
   queuelag = new_lagmeter ();
   ground1 = xmalloc (COLS*sizeof(chtype));
