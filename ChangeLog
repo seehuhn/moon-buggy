@@ -1,3 +1,69 @@
+1999-04-24  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: Added 1999-03-08 to 199-04-24
+	
+	* NEWS: Mention the laser device.
+
+	* moon.h: Moved the definition of `speed' from "buggy.c" to "moon.h".
+	Add a declaration for `fire_laser' from "laser.c".
+
+	* moon.c: Do not output `ground3' for the moment.
+
+	* game.c: Key `a' fires the laser, now.
+
+	* buggy.c: Moved the definition of `speed' from "buggy.c" to "moon.h".
+
+	* Makefile.am: Mention the new file "laser.c".
+	Removed "hpath.c" from `EXTRA_DIST'.
+
+	* laser.c: initial revision
+
+1999-04-23  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* Makefile.am:
+	Mention the new files "car.img", "img.sed", and "buggy.h".
+
+	* TODO: updates
+
+	* car.img: initial revision
+
+	* main.c: Use `werase' instead of `wclear'.
+
+	* img.sed: initial revision
+
+	* buggy.c: Use the new queue mechnism.
+
+	* game.c, pager.c, title.c: Use `werase' instead of `wclear'.
+	Use the new queue mechnism.
+
+	* moon.h: Fixed the prototypes for "queue.c".
+
+	* signal.c (cont_handler): call `cbreak' and `noecho'.
+
+	* queue.c: Partly rewritten.
+	Now, we store a callback function instead of an event type.
+
+	* realname.c: Use `werase' instead of `wclear'.
+
+1999-04-21  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* buggy.c, game.c, moon.c, moon.h:
+	Added some preliminary support for rocks lying around.
+
+1999-04-07  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* game.c: Print a message on game abortion.
+
+	* queue.c: Major clean-ups.
+
+1999-03-12  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* persona.c: doc fix
+
+1999-03-10  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* persona.c: Bug fix.
+
 1999-03-08  Jochen Voss  <voss@tatonka.pfalz.de>
 
 	* ChangeLog: added 1999-02-24 to 1999-03-08
