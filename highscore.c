@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.35 2000/04/08 13:14:14 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.36 2000/04/15 19:56:04 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -659,6 +659,15 @@ highscore_leave (void)
   print_game_over (0);
 }
 
+static void
+fix_gap (void)
+/* Cast `gap' to valid value.  */
+{
+  int  limit = HIGHSCORE_SLOTS-(max_line-3);
+  if (gap > limit)  gap = limit;
+  if (gap < 2)  gap = 0;
+}
+
 void
 resize_highscore (void)
 {
@@ -667,6 +676,8 @@ resize_highscore (void)
 
   max_line = LINES-11;
   if (max_line > 25)  max_line = 25;
+  fix_gap ();
+  
   print_ground ();
   adjust_score (0);
   print_lives ();
@@ -692,30 +703,22 @@ key_handler (game_time t, int val)
     break;
   case 4:
     if (highscore_valid) {
-      int  limit = HIGHSCORE_SLOTS-(max_line-3);
-      if (gap <= 0) {
-	gap = 2;
-      } else if (gap < limit) {
-	++gap;
-      } else {
-	gap = limit;
-      }
+      if (gap < 2) gap = 2; else ++gap;
+      fix_gap ();
       print_scores ();
     }
     break;
   case 5:
     if (highscore_valid) {
       gap -= max_line-7;
-      if (gap < 1)  gap = 0;
+      fix_gap ();
       print_scores ();
     }
     break;
   case 6:
     if (highscore_valid) {
-      int  limit = HIGHSCORE_SLOTS-(max_line-3);
-
       gap += max_line-7;
-      if (gap > limit)  gap = limit;
+      fix_gap ();
       print_scores ();
     }
     break;
