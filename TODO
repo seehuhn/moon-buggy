@@ -23,6 +23,11 @@ können.
 `parse_date' ist das schwierig.
 
 IMPROVEMENTS:
+· Ob ich den Cursor nicht sicherheitshalber zusätzlich zum Abschalten
+noch irgendwo in die Ecke setzen soll?  Das macht die Ausgabe ein
+winziges bisschen langsamer, aber auf seltsamen Terminals das Spielen
+angenehmer.
+· mention the web site in the manual
 · words of wisdom/advice
 · Loch in level 6.  Level 9 für Klaus.
 · `resize_ground' wird meist nicht zum "resizen" verwendet.
@@ -48,6 +53,9 @@ Tastendrücken während der letzen zehntel Sekunde?  Bringt das
 · Internationalisieren
 · Man sollte die Tastenbelegungen ändern können
 · Verwende COPYING.DOC
+· "Andreas K. Foerster" <akf1@akfoerster.de> suggests:
+    Wie wäre es mit einem System-Beep beim Crash?
+    Und ncurses kann doch auch Farbe...
 
 ; Local Variables:
 ; mode: auto-fill
