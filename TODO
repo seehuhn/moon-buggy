@@ -6,33 +6,26 @@ CHECKLIST:
 · CVS Tags setzen
 
 BUG FIXES:
-· Punkteverteilung verbessern
 · Remove score files from different versions on installation.
 · Copyrightdaten richtigstellen!
-· Wenn man das Spiel nicht installiert, aber sich ein Scorefile teilen
-möchte, muß man das "moon-buggy/"-Verzeichnis selbst anlegen.  Das
-sollte erklärt werden.
-· Füge der Anleitung ein "shared score files" Kapitel hinzu.
-· set-group-id ist evtl. besser als set-user-id.
-· Auf jupiter+neptun+io geht "make distclean" nicht.
-· Man pages auf HPUX
-· Make install auf den HPs
-· Auf HPUX: Schüsse werden invers dargestellt, die Highscoreliste blinkend.
+· Auf nereid: Schüsse werden invers dargestellt, die Highscoreliste
+blinkend.  Auf io/jupiter ist alles noch schlimmer!
 · Auf hpux wird der Cursor nicht abgeschaltet.
 Man sollte ihn evtl. auf eine günstige Position stellen.
-· Auf der Pamuk ist A_BLINK nicht definiert.
-· Auf der Pamuk gibt es `sig_atomic_t' nicht.
+· Auf der Pamuk ist A_BLINK nicht definiert und es gibt `sig_atomic_t'
+nicht.  Sollte moon-buggy darauf vorbereitet sein?
 
 IMPROVEMENTS:
 · Ist `addchstr' sinnvoll (wg. Geschwindigkeit)
 · rpm Zeugs: "Autoreq: false" ausprobieren, "BuildRoot" wieder einführen
 · rpm Zeugs: "mbuggy.spec" aus "mbuggy.spec.in" erzeugen
 · Was ist mit der Loadanzeige?
-· "--with-suid" sollte den aktuellen Benutzer als default verwenden
 · Hilfetext für den Pager, den man von der Titelseite aus aufrufen
 kann.  Erklärung der Tastaturbelegung.
 · Neue "--show-highscores" Option.
 
+· Punkteverteilung verbessern
+· setgid ist evtl. besser als setuid.
 · Wie kann man verhindern, daß sich schwächere Spieler langweilen,
 weil sie nicht in die Highscoreliste kommen?
 · Prüfsumme für das Scorefile.
@@ -48,6 +41,7 @@ sollte der cache verwendet werden.
 · Score file locking: recover from failure, i.e. use an alternative method.
 (What happens if two new score files are created at the same time?)
 · Use a timeout when waiting for a file lock
+· "make uninstall" braucht "install-info".  Ist das sinnvoll?
 · Was soll mit dem (im Moment leeren) uninst.post Zeugs geschehen?
 · Portabilität bekümmern
 · Internationalisieren
