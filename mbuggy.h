@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: mbuggy.h,v 1.11 1999/06/03 12:22:49 voss Exp $ */
+ * $Id: mbuggy.h,v 1.12 1999/06/05 13:37:08 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -129,12 +129,14 @@ extern  int  car_meteor_hit (double t, int x);
 extern  void  fire_laser (double t);
 extern  void  extinguish_laser (void);
 extern  int  laser_hit (int x);
+extern  void  resize_laser (void);
 
 /* from "meteor.c" */
 extern  void  place_meteor (double t);
 extern  void  remove_meteors (void);
 extern  int  meteor_laser_hit (int x0, int x1);
 extern  int  meteor_car_hit (int x0, int x1);
+extern  void  resize_meteors (void);
 
 /* from "highscore.c" */
 extern  int  highscore_mode (int score, int level);
@@ -157,6 +159,7 @@ extern  void  clear_queue (void);
 extern  void  add_event (game_time t, callback_fn callback, void *client_data);
 extern  void  remove_event (callback_fn callback);
 extern  void  remove_client_data (void *client_data);
+extern  void  fix_game_time (void);
 extern  void  quit_main_loop (void);
 extern  int  main_loop (double dt, void (*key_handler)(game_time));
 
@@ -176,7 +179,6 @@ extern  void  initialise_persona (void);
 extern  void  set_persona (enum persona  pers);
 
 /* from "signal.c" */
-extern  void  block_winch (void);
 extern  void  block_all (void);
 extern  void  unblock (void);
 extern  void  initialise_signals (void);
