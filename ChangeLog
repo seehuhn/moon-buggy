@@ -1,5 +1,15 @@
 1998-12-20  Jochen Voss  <voss@tatonka.pfalz.de>
 
+	* mbuggy.texi, README: Mention my email address for bug reports.
+
+	* main.c: Call `initialize_buggy'.
+
+	* moon.h: Added prototype for `initialize_buggy'.
+
+	* buggy.c (initialize_buggy): new function
+
+	* ChangeLog: added 1998-12-19 until 1998-12-20
+
 	* configure.in: Changed the version string to "0.2".
 
 	* .cvsignore: Added "mbuggy.info", "stamp-vti", and "version.texi".
@@ -34,7 +44,7 @@
 
 1998-12-19  Jochen Voss  <voss@tatonka.pfalz.de>
 
-	* mbscore.tmpl, mbuggy.texi, realname.c, highscore.c: initial revision
+	* mbscore.tmpl: initial revision
 
 1998-12-18  Jochen Voss  <voss@tatonka.pfalz.de>
 
