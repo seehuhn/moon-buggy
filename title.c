@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: title.c,v 1.8 1999/03/08 20:24:12 voss Exp $";
+static const  char  rcsid[] = "$Id: title.c,v 1.9 1999/04/23 22:19:08 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -64,70 +64,71 @@ print_title (void)
 static void
 setup_screen (void)
 {
-  wclear (moon);
+  werase (moon);
   resize_ground (1);
   print_title ();
   print_ground ();
 
-  wclear (status);
+  werase (status);
   wnoutrefresh (status);
   
-  wclear (message);
+  werase (message);
   waddstr (message, "press `space' to start");
   wnoutrefresh (message);
+}
+
+
+static  int  abort_flag = 0;
+
+static void
+key_handler (game_time t)
+{
+  switch (xgetch (moon)) {
+  case KEY_BREAK:
+  case KEY_CANCEL:
+  case KEY_UNDO:
+  case 'q':
+    abort_flag = 1;
+    quit_main_loop ();
+    break;
+  case KEY_BEG:
+  case KEY_CLEAR:
+  case KEY_ENTER:
+  case KEY_EXIT:
+  case 27:			/* ESC */
+  case ' ':
+    quit_main_loop ();
+    break;
+  case 'c':
+    save_queue ();
+    pager_mode (0);
+    restore_queue ();
+    game_state = TITLE;
+    setup_screen ();
+    break;
+  case 'w':
+    save_queue ();
+    pager_mode (1);
+    restore_queue ();
+    game_state = TITLE;
+    setup_screen ();
+    break;
+  default:
+    break;
+  }
 }
 
 int
 title_mode (void)
 /* Show the title, until the user does not want to see it any more.  */
 {
-  int  done = 0;
-  int  abort = 0;
-  
   game_state = TITLE;
   setup_screen ();
-  doupdate ();
 
-  do {
-    switch (get_event (NULL)) {
-    case ev_KEY:
-      switch (xgetch (moon)) {
-      case KEY_BREAK:
-      case KEY_CANCEL:
-      case KEY_UNDO:
-      case 'q':
-	done = abort = 1;
-	break;
-      case KEY_BEG:
-      case KEY_CLEAR:
-      case KEY_ENTER:
-      case KEY_EXIT:
-      case 27:			/* ESC */
-      case ' ':
-	done = 1;
-	break;
-      case 'c':
-	pager_mode (0);
-	game_state = TITLE;
-	setup_screen ();
-	doupdate ();
-	break;
-      case 'w':
-	pager_mode (1);
-	game_state = TITLE;
-	setup_screen ();
-	doupdate ();
-	break;
-      default:
-	break;
-      }
-      break;
-    default:
-      break;
-    }
-  } while (! done);
+  add_event (0, quit_main_loop_h, NULL);
+  main_loop (3600, key_handler);
 
-  return  abort;
+  return  abort_flag;
 }
 
 void
