@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.9 1999/01/07 15:53:12 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.10 1999/01/09 13:50:56 voss Rel $";
 
 #define _XOPEN_SOURCE
 #define _XOPEN_SOURCE_EXTENDED
@@ -326,6 +326,7 @@ write_scores (void)
   struct score_entry *new_entry;
   int  in_fd, out_fd;
   FILE *in, *out;
+  int  changed = 0;
   int  i, res;
   
   find_tables (&in_fd, &out_fd);
@@ -358,6 +359,7 @@ write_scores (void)
     }
   } else {
     generate_table ();
+    changed = 1;
   }
   
   new_entry = hiscores+(HIGHSCORE_SLOTS-1);
@@ -377,21 +379,31 @@ write_scores (void)
     new_entry->new = 1;
     qsort (hiscores, HIGHSCORE_SLOTS, sizeof (struct score_entry),
 	   compare_entries);
+    changed = 1;
+  }
 
+  if (changed) {
     write_table (out);
 
 #if HAVE_FTRUNCATE
     if (in_fd == out_fd) {
       long int  pos = ftell (out);
-      if (pos != -1)  ftruncate (out_fd, pos);
+      if (pos != -1) {
+#if HAVE_FCLEAN
+	fclean (out);
+#else
+	fflush (out);
+#endif
+	ftruncate (out_fd, pos);
+      }
     }
 #endif
+  }
   
-    res = fclose (out);
-    if (res == EOF) {
-      fatal ("cannot write score file \"%s\": %s",
-	     score_file_name, strerror (errno));
-    }
+  res = fclose (out);
+  if (res == EOF) {
+    fatal ("cannot write score file \"%s\": %s",
+	   score_file_name, strerror (errno));
   }
 }
 
