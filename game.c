@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.27 1999/07/21 10:43:13 voss Exp $";
+static const  char  rcsid[] = "$Id: game.c,v 1.28 1999/09/14 15:37:04 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -118,9 +118,13 @@ game_mode (void)
   } while (lives > 0);
   remove_meteors ();
 
+#ifdef A_BLINK
   wattron (moon, A_BLINK);
+#endif
   mvwaddstr (moon, LINES-11, car_base-1, "GAME OVER");
+#ifdef A_BLINK
   wattroff (moon, A_BLINK);
+#endif
 
   return  highscore_mode (score, level+1);
 }
