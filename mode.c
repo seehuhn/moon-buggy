@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: mode.c,v 1.2 2000/04/01 07:54:02 voss Exp $";
+static const  char  rcsid[] = "$Id: mode.c,v 1.3 2000/04/08 12:59:06 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -88,6 +88,13 @@ mode_change (const struct mode *m, int seed)
 }
 
 void
+mode_leave (void)
+{
+  if (current->leave && mode_entered)  current->leave ();
+  current = NULL;
+}
+
+void
 mode_redraw (void)
 {
   werase (moon);
@@ -103,6 +110,7 @@ mode_keypress (game_time t)
   int  meaning = read_key ();
   int  i;
 
+  if (meaning == -1)  return;
   for (i=0; i<current->keys.used; ++i) {
     if (current->keys.data[i].meanings & meaning) {
       current->keypress (t, current->keys.data[i].res);
