@@ -2,7 +2,10 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: signal.c,v 1.2 1999/04/23 22:18:07 voss Exp $";
+static const  char  rcsid[] = "$Id: signal.c,v 1.3 1999/05/08 12:27:28 voss Exp $";
+
+#define _POSIX_SOURCE 1
+#define _SVID_SOURCE 1
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
