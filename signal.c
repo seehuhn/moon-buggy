@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: signal.c,v 1.11 1999/07/21 10:38:32 voss Exp $";
+static const  char  rcsid[] = "$Id: signal.c,v 1.12 1999/09/07 15:21:12 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -45,6 +45,18 @@ unblock (void)
   sigprocmask (SIG_SETMASK, &old_sigset, NULL);
 }
 
+static void
+install_signal (int signum, RETSIGTYPE (*handler) ())
+/* Emulate the `signal' function via `sigaction'.  */
+{
+  struct sigaction  action;
+
+  action.sa_handler = handler;
+  sigemptyset (&action.sa_mask);
+  action.sa_flags = 0;
+  sigaction (signum, &action, NULL);
+}
+
 static RETSIGTYPE
 generic_handler (int signum)
 /* Interrupt handlers shouldn't do much.  So we just note that the
@@ -61,7 +73,9 @@ generic_handler (int signum)
 
   if (signum == SIGINT || signum == SIGHUP || signum == SIGTERM) {
     /* Pressing `C-c' twice exits, even if the program hangs.  */
-    signal (signum, SIG_DFL);
+    install_signal (signum, SIG_DFL);
+  } else {
+    install_signal (signum, generic_handler);
   }
 }
 
@@ -71,9 +85,10 @@ my_signal (int signum, void (*handler)(int), int ignore_test)
  * IGNORE_TEST is true and SIGNUM was ignored before, do nothing.  */
 {
   struct sig_info *info;
-  struct sigaction  action;
 
   if (ignore_test) {
+    struct sigaction  action;
+    
     sigaction (signum, NULL, &action);
     if (action.sa_handler == SIG_IGN)  return;
   }
@@ -83,10 +98,7 @@ my_signal (int signum, void (*handler)(int), int ignore_test)
   info->pending = 0;
   info->handler = handler;
 
-  action.sa_handler = generic_handler;
-  sigemptyset (&action.sa_mask);
-  action.sa_flags = 0;
-  sigaction (signum, &action, NULL);
+  install_signal (signum, generic_handler);
 }
 
 /************************************************************
@@ -108,7 +120,7 @@ tstp_handler (int signum)
   fix_game_time ();
   if (game_state == PLAYING)  quit_game ();
   prepare_for_exit ();
-  signal (SIGTSTP, SIG_DFL);
+  install_signal (SIGTSTP, SIG_DFL);
   raise (SIGTSTP);
 }
 
@@ -136,10 +148,7 @@ do_resize ()
 static void
 cont_handler (int signum)
 {
-  my_signal (SIGTSTP, tstp_handler, 0);
-  if (game_state == PLAYING) {
-    print_message ("GAME OVER (suspended)");
-  }
+  install_signal (SIGTSTP, tstp_handler);
 
   refresh ();
   cbreak ();
@@ -148,6 +157,9 @@ cont_handler (int signum)
   leaveok (status, TRUE);
   leaveok (message, TRUE);
   do_resize ();
+  if (game_state == PLAYING) {
+    print_message ("GAME OVER (suspended)");
+  }
   clock_adjust_delay (0);
 }
 
