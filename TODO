@@ -3,9 +3,6 @@ acceptable for the moment, because (almost) all items should be
 resolved before version 1.0.
 
 BUG FIXES:
-· Wichert Akkerman: If I play moon-buggy on a 709x356 terminal it
-segfaults after jumping over the first crater in the second level if
-you have just finished level 1.
 · Einzeln hinzugekommene Zwerge haben falsches Datum
 · Auf der Hyperion geht das Fenstergrößenverändern nicht gut!
 · Fenstergrößenveränderungen beim Nameneingeben funktionieren mit
@@ -21,19 +18,17 @@ Man sollte ihn evtl. auf eine günstige Position stellen.
 `parse_date' ist das schwierig.
 
 IMPROVEMENTS:
+· Groß- und Kleinschreibung für Tasten ignorieren.
+· Loch in level 6.  Level 9 für Klaus.
 · `resize_ground' wird meist nicht zum "resizen" verwendet.
 Umbenennen?
-· Verwende COPYING.DOC
-· Icon-Zeugs für Debian
 · Read the new revision of the FHS
 · Neue Funktion `warning', z.B. für die "Score file corrupted" Meldung
 · Compile-time option für Pausentaste
 · words of wisdom/advice
-· Loch in level 6.  Level 9 für Klaus.
 · Den `fd_set' Teil von "configure.in" verbessern.  Zumindest
 sollte der cache verwendet werden.
 · `has_key' Ersatz für andere curses-Versionen einführen
-· Groß- und Kleinschreibung für Tasten ignorieren.
 · Ist `addchstr' sinnvoll (wg. Geschwindigkeit)
 · Könnte man die Events einen Tick (oder 0.1 Sekunden) zu früh
 ausführen und nur das `doupdate' verzögern?  Wie ist das dann mit
@@ -51,6 +46,7 @@ Tastendrücken während der letzen zehntel Sekunde?  Bringt das
 · Internationalisieren
 · "reload" Taste für die Highscoreliste
 · Man sollte die Tastenbelegungen ändern können
+· Verwende COPYING.DOC
 
 ; Local Variables:
 ; mode: auto-fill
