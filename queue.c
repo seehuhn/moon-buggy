@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.13 1999/05/11 21:58:13 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.14 1999/05/16 09:35:14 voss Exp $";
 
 #define _POSIX_SOURCE 1
 
@@ -88,8 +88,9 @@ to_game (real_time t)
  */
 
 /* These are used to measure the system's load.  */
-static  double  time_slept;
-static  game_time  sleep_base;
+static  double  time_slept, sleep_base;
+static  double  cpu_load = 0;
+#define ALPHA 1.0
 
 static int
 my_select (struct timeval *timeout)
@@ -151,6 +152,12 @@ wait_until (real_time *t)
 
   *t = stop = vclock ();
   time_slept += stop-start;
+  if (! retval && stop-sleep_base > 0.1) {
+    double  q = exp (-ALPHA*(stop-sleep_base));
+    cpu_load = q*cpu_load + (1-q)*(1-time_slept/(stop-sleep_base));
+    time_slept = 0;
+    sleep_base = stop;
+  }
   
   return  retval;
 }
@@ -169,7 +176,7 @@ clock_adjust_delay (double dt)
   time_base = now + dt - queue->t;
   
   time_slept = 0;
-  sleep_base = to_game (now);
+  sleep_base = now;
 }
 
 void
@@ -283,6 +290,10 @@ main_loop (double dt, void (*key_handler)(game_time))
       ev->callback (ev->t, ev->client_data);
       free (ev);
     }
+#if 1
+    mvwprintw (status, 0, 3, "load:%5.1f%%", cpu_load*100);
+    wnoutrefresh (status);
+#endif
     doupdate ();
   }
   res = (queue != NULL);
