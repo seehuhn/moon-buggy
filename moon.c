@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: moon.c,v 1.14 1999/05/22 13:43:58 voss Exp $";
+static const  char  rcsid[] = "$Id: moon.c,v 1.15 1999/05/22 14:34:49 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -79,7 +79,11 @@ scroll_handler (game_time t, void *client_data)
   if (uniform_rnd(20) == 0)  place_meteor (t);
   print_ground ();
   if (ground2[car_x + 7] == ' ')  ++bonus;
-  if (crash_check ())  quit_main_loop ();
+  if (crash_detected)  shift_buggy (1);
+  if (crash_detected || crash_check ()) {
+    ++crash_detected;
+    if (crash_detected >= 2)  quit_main_loop ();
+  }
   add_event (t+TICK(1), scroll_handler, NULL);
 }
 
