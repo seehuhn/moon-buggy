@@ -1,4 +1,272 @@
+1999-01-02  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: added 1998-12-28 to 1999-01-02
+
+	* configure.in: changed the version string to "0.3"
+
+	* Makefile.am:
+	Renamed old "moon-buggy-0.2-1.spec" to new "mbuggy.spec".
+	(install-data-hook): changed the install category to `POST_INSTALL'.
+
+	* mbuggy.spec, moon-buggy-0.2-1.spec:
+	moved moon-buggy-0.2-1.spec to mbuggy.spec
+
+	* maint.in.in: uninstall: bug fix
+
+	* xmalloc.c: Fixed the copyright notice.
+
+	* Makefile.am: Add the new file "xgetch.c".
+
+	* NEWS: Added news for version 0.3
+
+	* README: Great improvements
+
+	* TODO: Finished all tasks for the 0.3 release
+
+	* basename.c: copyright fix
+
+	* buggy.c: copyright fix
+	(print_buggy): changed the calling syntax
+	(crash_check): bug fix
+
+	* error.c: copyright fix
+
+	* game.c: copyright fix
+	Use `MB_DEBUG'.
+	Use `xgetch' instead of `wgetch'.
+	(spend_life): Check for crashes during the landing.
+	(game_mode): wait .3 seconds after each life.
+
+	* highscore.c: copyright fix
+	(highscore_mode): Use `xgetch' instead of `wgetch'.
+
+	* hpath.c: copyright fix
+
+	* main.c: copyright fix
+	doc fixes
+
+	* maint.in.in, maintman.in: added a copyright notice
+
+	* mbuggy.texi: Spelling fixes and improved typography
+	Copyright fix
+	Add an image to the title page
+	@setchapternewpage off
+	Explain "maint-buggy"
+	Minor improvements
+	Greatly improved installation instructions
+
+	* merge.sed: added a copyright notice
+
+	* moon.c: copyright fix
+
+	* moon.h: Define `MB_DEBUG'.
+	Changed the declaration of `print_buggy'.
+	Added a declaration for `xgetch' from the new file "xgetch.c".
+
+	* moonman.in: added a copyright notice
+
+	* pager.c: copyright fix
+	(pager_mode): Use `xgetch' instead of `wgetch'.
+
+	* persona.c: copyright fix
+
+	* queue.c: copyright fix
+	(clock_adjust_delay, get_event): bug fixes
+
+	* realname.c: Doc fix.
+	Copyright fix.
+
+	* text2c.sed: Add an initial comment and a copyright notice.
+
+	* title.c: Doc fixes.
+	(title_mode): use `xgetch'.
+
+	* title.eps: initital revision
+
+	* wgetnstr.c (wgetnstr): Bug fix.  Use `xgetch'.
+
+	* xgetch.c: initial revision
+
+1999-01-01  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* .cvsignore: Added the new files.
+
+	* maint.in.in: initital revision
+
+	* persona.c: suppport set-gid usage
+
+	* mbscore: this is now automatically created by moon-buggy
+
+	* TODO: updates
+
+	* Makefile.am:
+	Mention the new files "maintman.in", "instcmds", "merge.sed"
+	Renamed old "manpage.in" to "moonman.in".
+	Renamed old "mbpaths.c" to "hpath.c".
+	Renamed old "mbicon.gif" to "monn-buggy.gif".
+	Renamed old "mbicon.png" to "monn-buggy.png".
+	Create "maint-buggy" and "maint-man.6".
+	Add suid support to the installation targets.
+
+	* merge.sed: initial revision
+
+	* instcmds: initital revision
+
+	* configure.in: Added an "--with-suid" option.
+	Check for "awk".
+	Check for the header file <errno.h>.
+	Check for the functions `wgetnstr' and `setreuid'.
+	Create "maint.in".
+
+	* moon-buggy-0.2-1.spec: Changed the icon name.
+
+	* mbuggy.texi: Explain the command line options.
+	New chapter "Playing the game".
+
+	* maintman.in: initital revision
+
+	* manpage.in, moonman.in: moved manpage.in to moonman.in
+
+	* manpage.in: Minor fixes.
+	Added an "SEE ALSO" section.
+
+	* moon.h (MB_SPEED): new macro
+	Added declarations for the AC_REPLACE_FUNCS functions.
+
+	* basename.c: Include <config.h> and "moon.h".
+
+	* error.c: Include <config.h>.
+
+	* game.c: Avoid using '\e'.
+
+	* highscore.c: Define _XOPEN_SOURCE and _XOPEN_SOURCE_EXTENDED.
+	Conditionalize the inclusion of <errno.h>.
+
+	* main.c: Define _POSIX_SOURCE.
+	Fixed the "--version" and "--help" messages.
+	Prepare for systems without SIGWINCH.
+
+	* moon.c (print_ground, scroll_ground):
+	use `ground_width' instead of `COLS'.
+
+	* pager.c: Avoid using '\e'.
+	Fixed the usage message.
+
+	* queue.c: define _POSIX_SOURCE
+	Conditionalize the inclusion of <errno.h>
+
+	* realname.c: define _POSIX_SOURCE
+	avoid using dynamically sized arrays
+
+	* title.c: avoid using '\e'
+
+	* hpath.c, mbpaths.c: moved mbpaths.c to hpath.c
+
+	* wgetnstr.c: initial revision
+
+1998-12-31  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* persona.c: Handle systems without `setreuid'.
+
+1998-12-30  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* mvwaddnstr.c: initial revision
+
+	* Makefile.am: Do not use "-lm"
+	Add "text2c.sed" to the distribution
+	Do not use @CURSLIB@
+	Fixed the @LIBOBJS@ bug
+
+	* configure.in: Use `LIBS' instead of `CURSLIB'.
+	Check for the existence of `mvwaddnstr'.
+
+	* manpage.in: Explain the "--no-title" option
+	Explain the copyright.
+
+	* moon.h: Add the `message' window.
+	Handle curses versions which do not define the KEY_* macros.
+	Fixed the declarations.
+	doc fixes.
+
+	* buggy.c: Use the `TICK' macro.
+
+	* highscore.c: Renamed old `write_hiscore' into new `write_scores'.
+	(highscore_mode, resize_highscore): new functions
+
+	* game.c: initial revision
+
+	* moon.c (resize_ground): new function
+	Moved `print_ground' from "main.c" into "moon.c".
+
+	* main.c:
+	Moved `print_score', `print_lives', `limited', and `spend_live' from
+	"main.c" into "game.c".
+	Moved `print_ground' from "main.c" into "moon.c".
+	(allocate_windows): new function
+	Handle the `message' window
+	(block_winch, block_all, unblock): new functions
+	handle SIGWINCH
+	New command line option "--no-title"
+
+	* pager.c: display bug fixes
+
+	* queue.c (key_ready, wait_for_key): new functions
+	(clear_queue): eat up all keyboard events
+	(get_event): handle empty queues and `t_return == NULL'
+
+	* title.c: display bug fixes
+
+1998-12-29  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* pager.c (resize_pager): new function
+
+	* realname.c: Use the `message' window.
+
+	* title.c (resize_title): new function
+
+	* text2c.sed: Add an initial comment to the output file.
+
+	* xmalloc.c: Doc fix.
+	Fixed the error messages.
+	(xrealloc): handle NULL pointers specially
+
+	* Makefile.am:
+	Handle the new files "title.c", "pager.c", and "copying.h".
+
+	* xstrdup.c (xstrndup, xstrnlen): new functions.
+
+	* text2c.sed: initital revision
+
+	* title.c, pager.c: initial revision
+
+1998-12-28  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* Makefile.am: Use @CURSLIB@
+
+	* configure.in: Check for curses.
+
+	* main.c: Define and handle the `load_meter'.
+	(limited): new function
+
+	* moon.c: Use `char' instead of curses' `chtype'.
+
+	* queue.c: Adjust `sleep_meter'.
+
+	* moon.h: Changed the declarations for "lag.c"
+	Added a declaration for `sleep_meter'.
+	Use `char' instead of curses' `chtype'.
+	doc fix.
+
+	* lag.c: Choose better names:
+	    --- old --------        --- new --------
+	    struct lagmeter         struct circle_buffer
+	    new_lagmeter            new_circle_buffer
+	    add_lag                 add_value
+	    get_lag                 get_mean
+
 1998-12-27  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: 19998-12-27 hinzugefügt.
 
 	* .cvsignore: Added the temporary TeX files.
 
@@ -10,7 +278,7 @@
 	Include the rpm spec file and the icon files into the distribution.
 	Add "person.c".
 
-	* mbicon.gif, mbicon.png: initital revision
+	* moon-buggy.gif, moon-buggy.png: initital revision
 
 	* README: Minor fix.
 
