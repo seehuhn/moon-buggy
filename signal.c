@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: signal.c,v 1.16 2000/04/24 18:39:55 voss Rel $";
+static const  char  rcsid[] = "$Id: signal.c,v 1.17 2000/05/07 11:24:22 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -10,6 +10,7 @@ static const  char  rcsid[] = "$Id: signal.c,v 1.16 2000/04/24 18:39:55 voss Rel
 
 #include <stdio.h>
 #include <signal.h>
+#include <unistd.h>
 #include <assert.h>
 
 #include "moon-buggy.h"
@@ -145,6 +146,7 @@ winch_handler (int signum)
   delwin (moon);
   delwin (status);
   delwin (message);
+  sleep (1);
   endwin ();
   
   allocate_windows ();

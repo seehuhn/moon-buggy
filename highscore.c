@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.36 2000/04/15 19:56:04 voss Rel $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.37 2000/05/07 11:18:07 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -402,89 +402,82 @@ update_score_file (const struct score_entry *entry)
   int  in_fd, out_fd;
   enum  persona  in_pers, out_pers;
   FILE *f;
-  int  res, step;
+  int  res, method;
 
   global_name = global_score_file_name ();
   local_name = local_score_file_name ();
 
-  do {
-    /* step 1: try read/write access to global score file
-     *         on success: in_fd == global, out_fd == global */
-    step = 1;
-    set_persona (pers_GAME);
-    in_pers = out_pers = pers_GAME;
-    in_fd = out_fd = do_open (global_name, O_RDWR, 2, 0);
-    if (in_fd != -1)  break;
-  
-    /* step 2: try write access to global score file
-     *         on success: in_fd == -1, out_fd == global */
-  retry_global:
-    step = 2;
-    out_pers = pers_GAME;
-    out_fd = do_open (global_name, O_WRONLY|O_CREAT, 2, 0);
-    if (out_fd != -1)  break;
+  for (method=1; method<=4; ++method) {
+    in_fd = out_fd = -1;
+    
+    switch (method) {
+    case 1:
+      /* method 1: try read/write access to global score file
+       *	   on success: in_fd == global, out_fd == global */
+      in_pers = out_pers = pers_GAME;
+      set_persona (pers_GAME);
+      in_fd = out_fd = do_open (global_name, O_RDWR, 2, 0);
+      break;
+    case 2:
+      /* method 2: try write access to global score file
+       *	   on success: in_fd == -1, out_fd == global */
+      out_pers = pers_GAME;
+      set_persona (pers_GAME);
+      out_fd = do_open (global_name, O_WRONLY|O_CREAT, 2, 0);
+      break;
+    case 3:
+      /* method 3: try read/write access to local score file
+       *	   on success: in_fd == local, out_fd == local */
+      in_pers = out_pers = pers_USER;
+      set_persona (pers_USER);
+      in_fd = out_fd = do_open (local_name, O_RDWR, 2, 0);
+      break;
+    case 4:
+      /* method 4: try write access to local score file and
+       *	       read access to global score file
+       *	   on success: in_fd == global or -1, out_fd == local */
+      out_pers = pers_USER;
+      set_persona (pers_USER);
+      out_fd = do_open (local_name, O_WRONLY|O_CREAT, 2, 1);
+      in_pers = pers_GAME;
+      set_persona (pers_GAME);
+      in_fd = do_open (global_name, O_RDONLY, 1, 0);
+      break;
+    }
+    
+    if (in_fd != -1) {
+      int  read_success;
 
-    /* step 3: try read/write access to local score file
-     *         on success: in_fd == local, out_fd == local */
-    step = 3;
-    set_persona (pers_USER);
-    in_pers = out_pers = pers_USER;
-    in_fd = out_fd = do_open (local_name, O_RDWR, 2, 0);
-    if (in_fd != -1)  break;
-  
-    /* step 4: try write access to local score file and
-     *	           read access to global score file
-     *         on success: in_fd == global or -1, out_fd == local */
-  retry_local:
-    step = 4;
-    out_pers = pers_USER;
-    out_fd = do_open (local_name, O_WRONLY|O_CREAT, 2, 1);
-    set_persona (pers_GAME);
-    in_pers = pers_GAME;
-    in_fd = do_open (global_name, O_RDONLY, 1, 0);
-  } while (0);
-
-  if (in_fd != -1) {
-    int  read_success;
-
-    set_persona (in_pers);
-    f = fdopen (in_fd, in_fd==out_fd ? "r+" : "r");
-    read_success = read_data (f);
-    if (read_success) {
-      if (in_fd != out_fd) {
-	res = fclose (f);
-	goto read_failed;
+      set_persona (in_pers);
+      f = fdopen (in_fd, in_fd==out_fd ? "r+" : "r");
+      read_success = read_data (f);
+      if (read_success) {
+	if (in_fd != out_fd) {
+	  res = fclose (f);
+	  if (res == EOF)  fatal ("Score file read error (%s)", strerror (errno));
+	} else {
+	  res = fseek (f, 0, SEEK_SET);
+	  if (res != 0)  fatal ("Score file seek error (%s)", strerror (errno));
+	}
       } else {
-	res = fseek (f, 0, SEEK_SET);
-	if (res != 0)  fatal ("Score file seek error (%s)", strerror (errno));
-      }
-    } else {
-      fclose (f);
-    read_failed:
-      if (out_fd != -1 && in_fd != out_fd)  close (out_fd);
-      switch (step) {
-      case 1:
-	in_fd = out_fd = -1;
-	goto  retry_global;
-      case 3:
-	in_fd = out_fd = -1;
-	goto  retry_local;
-      default:
-	generate_data ();
-	break;
+	fclose (f);
+	if (out_fd == in_fd)
+	  out_fd = -1;
+	in_fd = -1;
       }
     }
-  } else {
-    generate_data ();
+    
+    if (out_fd != -1)  break;
   }
+  if (in_fd == -1)  generate_data ();
 
   refill_old_entries ();
   if (entry)  merge_entry (entry);
   refill_old_entries ();
 
   assert (out_fd != -1);
-  set_persona (out_pers);
-  if (highscore_changed) {
+  if (in_fd != out_fd || highscore_changed) {
+    set_persona (out_pers);
     if (in_fd != out_fd)  f = fdopen (out_fd, "w");
     write_data (f);
   }

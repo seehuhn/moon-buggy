@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.34 2000/04/15 19:44:53 voss Rel $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.35 2000/05/07 11:21:25 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -197,15 +197,15 @@ clock_freeze (void)
 /* Prepare to freeze the game's clock.
  * This function should be called before the game is resumed.
  * Afterwards you should use `clock_thaw ()' to restart the
- * game in the current state.  If the next event is less then 0.5
- * seconds in the future, we add some gap to allow for 0.5 seconds
+ * game in the current state.  If the next event is less then 0.1
+ * seconds in the future, we add some gap to allow for 0.1 seconds
  * pause after the restart.  */
 {
   game_time  t;
 
   remove_event (dummy_h);
   t = current_time ();
-  if (queue && t >= queue->t - 0.5)  t = queue->t - 0.5;
+  if (queue && t >= queue->t - 0.1)  t = queue->t - 0.1;
   add_event (t, dummy_h, NULL);
 }
 
