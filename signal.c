@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: signal.c,v 1.1 1999/03/02 18:32:19 voss Exp $";
+static const  char  rcsid[] = "$Id: signal.c,v 1.2 1999/04/23 22:18:07 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -103,6 +103,9 @@ cont_handler (int signum)
 {
   my_signal (SIGTSTP, tstp_handler, 0);
   if (game_state == PLAYING)  print_message ("suspended (penalty: 10 points)");
+
+  cbreak ();
+  noecho ();
   leaveok (moon, TRUE);
   leaveok (status, TRUE);
   leaveok (message, TRUE);
