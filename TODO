@@ -10,8 +10,6 @@ Diese müssen nach Aufruf neu gestzt werden.  Tue ich das?
 blinkend.  Auf io/jupiter ist alles noch schlimmer!
 · Auf hpux wird der Cursor nicht abgeschaltet.
 Man sollte ihn evtl. auf eine günstige Position stellen.
-· Auf der Pamuk ist A_BLINK nicht definiert und es gibt `sig_atomic_t'
-nicht.  Sollte moon-buggy darauf vorbereitet sein?
 
 IMPROVEMENTS:
 · Ist `addchstr' sinnvoll (wg. Geschwindigkeit)
