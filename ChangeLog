@@ -1,7 +1,65 @@
+1999-05-08  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: Added 1999-04-25 to 1999-05-08
+
+	* TODO: Laser bug is fixed.
+
+	* autogen.sh: Use "ln -sf" instead of "ln -s".
+
+	* Makefile.am (moon_buggy_SOURCES): add "darray.h".
+
+	* autogen.sh: initial revision
+
+	* TODO: New entries.
+
+	* game.c (spend_life): add a call to `extinguish_laser'.
+
+	* moon.h: Declare `extinguish_laser' from "laser.c".
+
+	* laser.c:
+	Changed the meaning of `b->right'.  It is now right of the beam's
+	rightmost character.
+	Use the facilities from "darray.h".
+	(beam_table): new static variable
+	(extinguish_laser): new function.
+
+	* persona.c: Define _XOPEN_SOURCE and _XOPEN_SOURCE_EXTENDED.
+
+	* signal.c: Define _POSIX_SOURCE and _SVID_SOURCE.
+
+1999-05-02  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* TODO: New entry
+
+1999-04-25  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* .cvsignore: Mention the new file "buggy.h".
+
+	* moon.h: Declare new variables `car_x' and `car_y' from "buggy.c".
+	Removed declaration for obsolete variable `score_base'.
+	Removed obsolete definition of `speed'.
+
+	* buggy.c: Define new variables `car_x' and `car_y'.
+	Moved variable `car_base' from "buggy.c" to "main.c".
+	Removed obsolete variable `score_base'.
+	(print_buggy): set `car_y'.
+
+	* game.c (game_mode): initialise `car_x'.
+
+	* laser.c (struct beam): added new `y' field.
+	(beam_handler): clouds move with the ground, now.
+
+	* main.c: Define the new global variable `car_base'.
+
+	* moon.c (resize_ground):
+	do not initialise the obsolete variable `score_base'.
+
+	* title.c (setup_screen): initialise the new variable `car_x'.
+
 1999-04-24  Jochen Voss  <voss@tatonka.pfalz.de>
 
 	* ChangeLog: Added 1999-03-08 to 199-04-24
-	
+
 	* NEWS: Mention the laser device.
 
 	* moon.h: Moved the definition of `speed' from "buggy.c" to "moon.h".
@@ -42,8 +100,6 @@
 
 	* queue.c: Partly rewritten.
 	Now, we store a callback function instead of an event type.
-
-	* realname.c: Use `werase' instead of `wclear'.
 
 1999-04-21  Jochen Voss  <voss@tatonka.pfalz.de>
 
