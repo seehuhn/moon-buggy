@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.1 1998/12/30 19:58:15 voss Exp $";
+static const  char  rcsid[] = "$Id: game.c,v 1.2 1999/01/01 18:05:20 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -94,7 +94,7 @@ spend_life (void)
 	break;
       case KEY_BREAK:
       case KEY_CLOSE:
-      case '\e':
+      case 27:			/* ESC */
       case 'q':
 	done = 1;
 	lives = 1;
