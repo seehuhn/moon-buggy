@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.15 1999/05/22 11:53:48 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.16 1999/05/22 13:43:58 voss Exp $";
 
 #define _POSIX_SOURCE 1
 
@@ -25,7 +25,7 @@ extern  int  errno;
 #endif
 #include <assert.h>
 
-#include "moon.h"
+#include "mbuggy.h"
 
 
 /* The queue of events */

@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: realname.c,v 1.7 1999/04/23 17:54:54 voss Exp $";
+static const  char  rcsid[] = "$Id: realname.c,v 1.8 1999/05/22 13:43:59 voss Rel $";
 
 #define _POSIX_SOURCE 1
 
@@ -17,7 +17,7 @@ static const  char  rcsid[] = "$Id: realname.c,v 1.7 1999/04/23 17:54:54 voss Ex
 #include <pwd.h>
 #include <assert.h>
 
-#include "moon.h"
+#include "mbuggy.h"
 
 
 void

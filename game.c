@@ -2,13 +2,13 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.14 1999/05/19 21:12:21 voss Exp $";
+static const  char  rcsid[] = "$Id: game.c,v 1.15 1999/05/22 13:43:58 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-#include "moon.h"
+#include "mbuggy.h"
 
 
 long  score, bonus;

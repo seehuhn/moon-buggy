@@ -2,13 +2,13 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: laser.c,v 1.4 1999/05/15 16:49:12 voss Exp $";
+static const  char  rcsid[] = "$Id: laser.c,v 1.5 1999/05/22 13:43:58 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-#include "moon.h"
+#include "mbuggy.h"
 #include "darray.h"
 
 

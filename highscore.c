@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.12 1999/05/19 21:13:21 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.13 1999/05/22 13:43:58 voss Exp $";
 
 #define _XOPEN_SOURCE 1
 #define _XOPEN_SOURCE_EXTENDED 1
@@ -26,7 +26,7 @@ static const  char  rcsid[] = "$Id: highscore.c,v 1.12 1999/05/19 21:13:21 voss 
 extern  int  errno;
 #endif
 
-#include "moon.h"
+#include "mbuggy.h"
 
 
 #define SCORE_FILE "mbscore"

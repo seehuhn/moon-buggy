@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.18 1999/05/19 21:12:42 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.19 1999/05/22 13:43:58 voss Exp $";
 
 #define _POSIX_SOURCE 1
 
@@ -22,7 +22,7 @@ extern char *optarg;
 extern int  optind;
 #endif
 
-#include "moon.h"
+#include "mbuggy.h"
 
 
 const char *my_name;

@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: xgetch.c,v 1.2 1999/01/30 16:55:57 voss Rel $";
+static const  char  rcsid[] = "$Id: xgetch.c,v 1.3 1999/05/22 13:43:59 voss Rel $";
 
 #define _POSIX_SOURCE 1
 
@@ -16,7 +16,7 @@ static const  char  rcsid[] = "$Id: xgetch.c,v 1.2 1999/01/30 16:55:57 voss Rel 
 extern  int  errno;
 #endif
 
-#include "moon.h"
+#include "mbuggy.h"
 
 
 int

@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: persona.c,v 1.9 1999/05/08 12:33:37 voss Exp $";
+static const  char  rcsid[] = "$Id: persona.c,v 1.10 1999/05/22 13:43:58 voss Rel $";
 
 #define _XOPEN_SOURCE 1
 #define _XOPEN_SOURCE_EXTENDED 1
@@ -15,7 +15,7 @@ static const  char  rcsid[] = "$Id: persona.c,v 1.9 1999/05/08 12:33:37 voss Exp
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "moon.h"
+#include "mbuggy.h"
 
 
 /* which method of uid handling is used?  */

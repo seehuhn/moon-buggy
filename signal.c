@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: signal.c,v 1.3 1999/05/08 12:27:28 voss Exp $";
+static const  char  rcsid[] = "$Id: signal.c,v 1.4 1999/05/22 13:43:59 voss Exp $";
 
 #define _POSIX_SOURCE 1
 #define _SVID_SOURCE 1
@@ -14,7 +14,7 @@ static const  char  rcsid[] = "$Id: signal.c,v 1.3 1999/05/08 12:27:28 voss Exp 
 #include <stdio.h>
 #include <signal.h>
 
-#include "moon.h"
+#include "mbuggy.h"
 
 
 static  void (*handlers [NSIG]) (int);

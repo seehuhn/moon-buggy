@@ -2,14 +2,14 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: title.c,v 1.10 1999/04/25 17:04:39 voss Exp $";
+static const  char  rcsid[] = "$Id: title.c,v 1.11 1999/05/22 13:43:59 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-#include "moon.h"
+#include "mbuggy.h"
 
 
 const char *title [] = {

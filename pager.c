@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: pager.c,v 1.9 1999/04/23 22:19:25 voss Exp $";
+static const  char  rcsid[] = "$Id: pager.c,v 1.10 1999/05/22 13:43:58 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -10,7 +10,7 @@ static const  char  rcsid[] = "$Id: pager.c,v 1.9 1999/04/23 22:19:25 voss Exp $
 
 #include <string.h>
 
-#include "moon.h"
+#include "mbuggy.h"
 #include "copying.h"
 
 

@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 # Copyright 1999  Jochen Voﬂ
-# $Id: Makefile.am,v 1.22 1999/05/19 21:14:48 voss Exp $
+# $Id: Makefile.am,v 1.23 1999/05/22 13:43:58 voss Exp $
 
 EXTRA_DIST = moonman.in maintman.in instcmds car.img \
 	text2c.sed merge.sed img.sed \
@@ -8,7 +8,7 @@ EXTRA_DIST = moonman.in maintman.in instcmds car.img \
 DISTCLEANFILES = moon-buggy.6 maint-buggy maint-buggy.6 uninst.pre uninst.post
 
 bin_PROGRAMS = moon-buggy
-moon_buggy_SOURCES = moon.h main.c title.c pager.c copying.h \
+moon_buggy_SOURCES = mbuggy.h main.c title.c pager.c copying.h \
 	game.c moon.c buggy.c buggy.h laser.c meteor.c highscore.c \
 	realname.c queue.c vclock.c persona.c signal.c xgetch.c \
 	random.c error.c xmalloc.c xstrdup.c darray.h hpath.c
@@ -26,7 +26,7 @@ info_TEXINFOS = mbuggy.texi
 man_MANS = moon-buggy.6 maint-buggy.6
 
 scoredir = $(sharedstatedir)/moon-buggy
-hpath.o: hpath.c moon.h Makefile
+hpath.o: hpath.c mbuggy.h Makefile
 	$(COMPILE) -DSCORE_DIR=\"$(scoredir)\" -c $<
 
 BUILT_SOURCES = copying.h buggy.h
