@@ -58,6 +58,25 @@ are some points of interest:
      minimise these, but nevertheless be careful with this.  And
      remember: moon-buggy comes with no warranty.
 
+   * If your version of the curses library is not autodetected, you
+     have to use some of the `--with-curses-includedir',
+     `--with-curses-header', and `--with-curses-libs' options.  For
+     example you should use
+
+          --with-curses-includedir=/usr/pkg/include
+
+     if your curses header files are in "/usr/pkg/include/".  You may
+     use
+
+          --with-curses-header="<mycurses.h>"
+
+     if your curses header is called "mycurses.h".  And you may use
+
+          --with-curses-libs="-L/usr/pkg/lib -lncurses"
+
+     if your curses library is called "ncurses.a" and is located in
+     "/usr/pkg/lib/".
+
 
    Example: On GNU/Linux systems you probably can use the following
 commands.  For the last one you may need root user permissions.

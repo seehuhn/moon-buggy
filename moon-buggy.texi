@@ -1,5 +1,5 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: moon-buggy.texi,v 1.6 1999/09/28 17:30:15 voss Rel $
+@c $Id: moon-buggy.texi,v 1.7 2000/03/17 23:05:10 voss Rel $
 @c %**start of header
 @setfilename moon-buggy.info
 @settitle Moon-Buggy Usage and Maintenance
@@ -300,7 +300,37 @@ then the installation process arranges everything for setgid usage.
 @strong{Caution}: this introduces potential security risks.  I tried to
 minimise these, but nevertheless be careful with this.  And remember:
 moon-buggy comes with no warranty.
+
+@item
+If your version of the curses library is not autodetected, you have to
+use some of the @samp{--with-curses-includedir},
+@samp{--with-curses-header}, and @samp{--with-curses-libs} options.  For
+example you should use
+
+@example
+--with-curses-includedir=/usr/pkg/include
+@end example
+
+@noindent
+if your curses header files are in @file{/usr/pkg/include/}.
+You may use
+
+@example
+--with-curses-header="<mycurses.h>"
+@end example
+
+@noindent
+if your curses header is called @file{mycurses.h}.  And you may use
+
+@example
+--with-curses-libs="-L/usr/pkg/lib -lncurses"
+@end example
+
+@noindent
+if your curses library is called @file{ncurses.a} and is located in
+@file{/usr/pkg/lib/}.
 @end itemize
+
 
 Example: On GNU/Linux systems you probably can use the following
 commands.  For the last one you may need root user permissions.
