@@ -1,4 +1,7 @@
-  New highscore list
+version 0.5:
+  new highscore list
+  improved user interface
+  increased BSD compatibility
 
 version 0.4.1:
   Removed the old "--with-setuid" option in favour of "--with-setgid".
