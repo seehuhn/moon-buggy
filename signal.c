@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: signal.c,v 1.14 2000/04/08 13:14:14 voss Exp $";
+static const  char  rcsid[] = "$Id: signal.c,v 1.15 2000/04/15 19:45:29 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -135,7 +135,7 @@ cont_handler (int signum)
   hide_cursor ();
   mode_redraw ();
   mode_signal (signum);
-  clock_thaw (0);
+  clock_thaw ();
 }
 
 static void
@@ -146,12 +146,13 @@ winch_handler (int signum)
   delwin (status);
   delwin (message);
   endwin ();
+  
   refresh ();
   clearok (curscr, TRUE);
   allocate_windows ();
   hide_cursor ();
   mode_redraw ();
-  clock_thaw (1);	/* wait some extra time */
+  clock_thaw ();
 }
 
 /************************************************************
@@ -174,13 +175,18 @@ initialise_signals (void)
   sigfillset (&full_set);
 }
 
-void
+int
 handle_signals (void)
+/* Execute signal actions, for all signals, which occured before.
+ * Return 1, if any action was taken.  */
 {
+  int  res = 0;
+  
   while (signal_arrived) {
     int  i;
 
     signal_arrived = 0;
+    res = 1;
     for (i=0; i<sig_info_table.used; ++i) {
       if (sig_info_table.data[i].pending) {
 	sig_info_table.data[i].pending = 0;	
@@ -188,4 +194,5 @@ handle_signals (void)
       }
     }
   }
+  return  res;
 }
