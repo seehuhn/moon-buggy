@@ -1,6 +1,6 @@
 dnl acinclude.m4 - aclocal include file for "aclocal.m4"
 dnl Copyright 2000  Jochen Voss
-dnl $Id: acinclude.m4,v 1.3 2001/05/24 07:28:42 voss Exp $
+dnl $Id: acinclude.m4,v 1.4 2001/08/26 20:33:44 voss Rel $
 
 dnl The idea of this tests, is to be as simple, as possible.
 dnl The only special case we check for, is old versions of
@@ -59,7 +59,7 @@ AC_DEFUN(JV_CHECK_CURSES,[
   fi
   AC_MSG_CHECKING([how to include the curses header file])
   if test -n "$CURSES_HEADER"; then
-    AC_DEFINE_UNQUOTED(CURSES_HEADER, $CURSES_HEADER, [define to the curses header file name (including brackets). ])
+    AC_DEFINE_UNQUOTED(CURSES_HEADER, $CURSES_HEADER, [Define to the curses header file name (including brackets). ])
     AC_MSG_RESULT($CURSES_HEADER)
   else
     AC_MSG_RESULT([unknown])
