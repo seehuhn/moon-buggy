@@ -1,8 +1,8 @@
 ## Process this file with automake to produce Makefile.in
 # Copyright 1999, 2000  Jochen Voss
-# $Id: Makefile.am,v 1.50 2000/04/26 20:43:35 voss Rel $
+# $Id: Makefile.am,v 1.51 2000/06/01 18:54:28 voss Exp $
 
-EXTRA_DIST = moonman.in car.img \
+EXTRA_DIST = manpage.in car.img \
 	text2c.sed img.sed ANNOUNCE moon-buggy.lsm \
 	moon-buggy.png moon-buggy.xpm title.eps
 DISTCLEANFILES = moon-buggy.6
@@ -65,10 +65,10 @@ dist-hook:
 if short_getopt
 mbsep = \\\\\"
 endif
-moon-buggy.6: moonman.in Makefile
-	echo ".\\\" $@ - automatically created from moonman.in" >$@
+moon-buggy.6: manpage.in Makefile
+	echo ".\\\" $@ - automatically created from manpage.in" >$@
 	sed "s:@MBBINDIR@:$(bindir):g;\
 		s:@MBSCORE@:$(scoredir):g;\
 		s:@C@:$(mbsep):g;\
 		s:@MBNAME@:$(PACKAGE):g;\
-		s:@MBVERS@:$(VERSION):g" $(srcdir)/moonman.in >>$@
+		s:@MBVERS@:$(VERSION):g" $(srcdir)/manpage.in >>$@
