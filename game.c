@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.39 2000/11/13 21:01:00 voss Exp $";
+static const  char  rcsid[] = "$Id: game.c,v 1.40 2000/11/16 17:57:33 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -135,12 +135,16 @@ signal_handler (int signum)
   }
 }
 
+/**********************************************************************
+ * crash mode
+ */
+
 static  int  lives_flag;
 
-void
+static void
 leave_crash_mode (game_time t, void *client_data)
 /* This function is a possible callback argument to `add_event'.
- * It switch control back to either game_mode or highscore_mode.
+ * It switch control back to either `game_mode' or `highscore_mode'.
  * The arguments T and CLIENT_DATA are ignored.  */
 {
   if (lives > 0) {
