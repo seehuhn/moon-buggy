@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.25 1999/06/06 13:21:12 voss Rel $";
+static const  char  rcsid[] = "$Id: game.c,v 1.26 1999/07/17 13:00:11 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -111,8 +111,9 @@ game_mode (void)
     --lives;
     print_lives ();
 
-    add_event (2, quit_main_loop_h, NULL);
-    main_loop (2, game_key_handler);
+    xsleep (0.5);
+    add_event (1.5, quit_main_loop_h, NULL);
+    main_loop (1.5, game_key_handler);
     remove_meteors ();
   } while (lives > 0);
   remove_meteors ();
