@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: meteor.c,v 1.5 1999/05/24 19:14:35 voss Rel $";
+static const  char  rcsid[] = "$Id: meteor.c,v 1.6 1999/05/26 22:01:11 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -27,6 +27,13 @@ static  struct {
 
 
 static void
+score_meteor (struct meteor *m)
+{
+  adjust_score (13);
+  bonus[m->x] -= 20;
+}
+
+static void
 meteor_handler (game_time t, void *client_data)
 /* Move a meteor along with the ground.  Check for laser hits. */
 {
@@ -45,6 +52,7 @@ meteor_handler (game_time t, void *client_data)
       if (laser_hit (m->x)) {
 	m->state += 1;
 	if (m->state > ms_SMALL) {
+	  score_meteor (m);
 	  DA_REMOVE_VALUE (meteor_table, struct meteor *, m);
 	  free (m);
 	} else {
@@ -79,6 +87,7 @@ place_meteor (double t)
   m = xmalloc (sizeof (struct meteor));
   m->state = ms_START;
   m->x = 1;
+  bonus[1] += 20;
   DA_ADD (meteor_table, struct meteor *, m);
   add_event (t+TICK(1), meteor_handler, m);
 }
@@ -116,6 +125,7 @@ meteor_laser_hit (int x0, int x1)
       wnoutrefresh (moon);
       if (m->state > ms_SMALL) {
 	mvwaddch (moon, BASELINE, m->x, ' ');
+	score_meteor (m);
 	remove_client_data (m);
 	DA_REMOVE_VALUE (meteor_table, struct meteor *, m);
 	free (m);
