@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: pager.c,v 1.1 1998/12/29 00:37:21 voss Exp $";
+static const  char  rcsid[] = "$Id: pager.c,v 1.2 1998/12/29 18:08:30 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -15,6 +15,7 @@ static const  char  rcsid[] = "$Id: pager.c,v 1.1 1998/12/29 00:37:21 voss Exp $
 
 
 static unsigned  lines_used, current_line = 0;
+static volatile  int  lines = 25;
 
 
 static void
@@ -22,7 +23,7 @@ print_page (unsigned current_line)
 {
   int  i;
 
-  for (i=0; i<LINES-3; ++i) {
+  for (i=0; i<lines-3; ++i) {
     if (current_line + i < lines_used) {
       mvwaddstr (moon, i, 2, copying_lines[current_line+i]);
     } else {
@@ -40,6 +41,7 @@ print_page (unsigned current_line)
 static void
 setup_screen (void)
 {
+  lines = LINES;
   wclear (moon);
   wclear (status);
   print_page (current_line);
@@ -55,7 +57,6 @@ pager_mode (int what)
   int  changed = 0;
   int  i;
 
-  screen_done = 0;
   game_state = PAGER;
 
   lines_used = sizeof (copying_lines) / sizeof (const char *);
@@ -75,8 +76,6 @@ pager_mode (int what)
     break;
   }
   setup_screen ();
-  
-  screen_done = 1;
   doupdate ();
 
   do {
@@ -100,7 +99,7 @@ pager_mode (int what)
 	break;
       case KEY_NPAGE:
       case ' ':
-	current_line += LINES-3;
+	current_line += lines-3;
 	if (current_line >= lines_used) {
 	  current_line = lines_used-1;
 	  if (current_line < 0)  current_line = 0;
@@ -109,8 +108,8 @@ pager_mode (int what)
 	break;
       case KEY_PPAGE:
       case 'b':
-	if (current_line > LINES-3) {
-	  current_line -= LINES-3;
+	if (current_line > lines-3) {
+	  current_line -= lines-3;
 	} else {
 	  current_line = 0;
 	}
@@ -144,4 +143,11 @@ pager_mode (int what)
       changed = 0;
     }
   } while (! done);
+}
+
+void
+resize_pager (void)
+{
+  setup_screen ();
+  doupdate ();
 }
