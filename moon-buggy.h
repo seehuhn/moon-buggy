@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: moon-buggy.h,v 1.3 1999/07/21 12:44:36 voss Exp $ */
+ * $Id: moon-buggy.h,v 1.4 1999/08/30 20:57:49 voss Rel $ */
 
 #ifndef FILE_MOON_BUGGY_H_SEEN
 #define FILE_MOON_BUGGY_H_SEEN
@@ -84,6 +84,8 @@ extern  int  meteor_car_hit (int x0, int x1);
 extern  void  resize_meteors (void);
 
 /* from "highscore.c" */
+extern  void  create_highscores (void);
+extern  void  show_highscores (void);
 extern  int  highscore_mode (int score, int level);
 extern  void  resize_highscore (void);
 
