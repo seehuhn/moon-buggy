@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.35 2000/05/07 11:21:25 voss Exp $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.36 2000/06/01 18:45:13 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -321,7 +321,12 @@ main_loop (void)
       retval = 1;
     }
 
-    if (retval>0)  mode_keypress (to_game (t));
+    if (retval>0) {
+      int  meaning = read_key ();
+      if (meaning != -1) {
+	if (! mode_keypress (to_game (t), meaning))  beep ();
+      }
+    }
     
     while (queue && queue->t <= current_time ()) {
       struct event *ev = queue;
