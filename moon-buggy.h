@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: moon-buggy.h,v 1.6 2000/03/14 19:53:34 voss Exp $ */
+ * $Id: moon-buggy.h,v 1.7 2000/03/19 18:47:46 voss Rel $ */
 
 #ifndef FILE_MOON_BUGGY_H_SEEN
 #define FILE_MOON_BUGGY_H_SEEN
@@ -129,6 +129,7 @@ extern  time_t  parse_date (const char *str);
 extern  time_t  convert_old_date (int day, int month, int year);
 extern  void  format_date (char *buffer, time_t date);
 extern  void  format_display_date (char *buffer, time_t date);
+extern  void  format_relative_time (char *buffer, double dt);
 
 /* from "persona.c" */
 enum persona { pers_GAME, pers_USER };
