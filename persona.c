@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: persona.c,v 1.2 1998/12/31 00:53:14 voss Exp $";
+static const  char  rcsid[] = "$Id: persona.c,v 1.3 1999/01/01 19:18:42 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -23,7 +23,8 @@ static  enum { m_NONE, m_SAVED, m_EXCH }  method = m_NONE;
 static  enum { pers_GAME, pers_USER }  persona = pers_GAME;
 
 /* The real and effective ids */
-uid_t  user_user_id, game_user_id;
+static  uid_t  user_user_id, game_user_id;
+static  gid_t  user_group_id, game_group_id;
 
 void
 initialize_persona (void)
@@ -35,7 +36,10 @@ initialize_persona (void)
   
   user_user_id = getuid ();
   game_user_id = geteuid ();
-  if (user_user_id == game_user_id)  return;
+  user_group_id = getgid ();
+  game_group_id = getegid ();
+  if (user_user_id == game_user_id
+      && user_group_id == game_group_id)  return;
 
   /* check for the POSIX saved id feature.  */
 #ifdef _POSIX_SAVED_IDS
@@ -54,6 +58,7 @@ initialize_persona (void)
   fputs ("WARNING: suid usage not supported on this system!\n", stderr);
   sleep (3);
   setuid (user_user_id);
+  setgid (user_group_id);
   method = m_NONE;
 #endif
 }
@@ -68,10 +73,12 @@ set_game_persona (void)
     break;
   case m_SAVED:
     setuid (game_user_id);
+    setgid (game_group_id);
     break;
   case m_EXCH:
 #ifdef HAVE_SETREUID
     setreuid (game_user_id, user_user_id);
+    setregid (game_group_id, user_group_id);
 #else
     fatal ("cannot switch user id"); /* should not occur */
 #endif
@@ -90,10 +97,12 @@ set_user_persona (void)
     break;
   case m_SAVED:
     setuid (user_user_id);
+    setgid (user_group_id);
     break;
   case m_EXCH:
 #ifdef HAVE_SETREUID
     setreuid (user_user_id, game_user_id);
+    setregid (user_group_id, game_group_id);
 #else
     fatal ("cannot switch user id"); /* should not occur */
 #endif
