@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: keyboard.c,v 1.1 1999/06/06 13:19:42 voss Exp $";
+static const  char  rcsid[] = "$Id: keyboard.c,v 1.2 1999/06/06 19:28:39 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -17,25 +17,6 @@ extern  int  errno;
 
 #include "mbuggy.h"
 
-
-#define KEY_MEANINGS 12
-static struct {
-  enum mb_key  key;
-  const char *str;
-} strkey_table [KEY_MEANINGS] = {
-  { mbk_copyright, "copyright" },
-  { mbk_down, "down" },
-  { mbk_end, "end" },
-  { mbk_fire, "fire" },
-  { mbk_first, "first" },
-  { mbk_jump, "jump" },
-  { mbk_last, "last" },
-  { mbk_pagedown, "pagedown" },
-  { mbk_pageup, "pageup" },
-  { mbk_start, "start" },
-  { mbk_up, "up" },
-  { mbk_warranty, "warranty" }
-};
 
 struct hash_entry {
   struct hash_entry *next;
