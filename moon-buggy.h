@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss
  *
- * $Id: moon-buggy.h,v 1.15 2000/06/01 18:48:42 voss Exp $ */
+ * $Id: moon-buggy.h,v 1.16 2000/06/16 10:54:46 voss Exp $ */
 
 #ifndef FILE_MOON_BUGGY_H_SEEN
 #define FILE_MOON_BUGGY_H_SEEN
@@ -77,7 +77,7 @@ extern  void  level_start (int initial);
 extern  void  level_tick (double t);
 extern  int  current_level (void);
 
-/* from "moon.c" */
+/* from "ground.c" */
 extern  int *bonus;
 extern  char *ground1, *ground2;
 extern  void  resize_ground (int clear_it);
@@ -112,7 +112,7 @@ extern  struct mode *highscore_mode;
 extern  void  create_highscores (void);
 extern  void  show_highscores (void);
 
-extern  void  score_set (int score);
+extern  void  score_set (int score, int level);
 extern  void  setup_highscore_mode (void);
 
 /* from "realname.c" */
@@ -170,18 +170,14 @@ struct mode {
   void (*keypress) (game_time, int);
 };
 
-extern  void  mode_update (void);
-
 extern  struct mode *new_mode (void);
 extern  void  mode_add_key (struct mode *m,
 			    int meanings, const char *desc, int res);
-extern  void  mode_start (const struct mode *m, int seed);
 extern  void  mode_change (const struct mode *m, int seed);
-extern  void  mode_leave (void);
+extern  void  mode_update (void);
 extern  void  mode_redraw (void);
 extern  int  mode_keypress (game_time t, int meaning);
 extern  void  mode_signal (int signum);
-extern  void  mode_keys (void);
 
 /* from "cursor.c" */
 extern  void  hide_cursor (void);
