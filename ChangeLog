@@ -1,3 +1,170 @@
+1999-05-26  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: Added 1999-05-23 to 1999-05-26
+
+	* level.c: Give a bonus for small plateaus.
+	(score_plateau): new function
+
+	* meteor.c: Shooting on a meteor gives 10 points + laser cost.
+	Jumping over it gives 20 points.
+	(score_meteor): new function
+
+	* laser.c: The laser costs one point per beam.
+
+	* TODO: Mention some problems, which should be fixed.
+
+	* main.c (prepare_for_exit): bug fix.
+
+	* mbuggy.h: Added more keys to the list of possibly missing keys.
+
+	* persona.c (set_user_persona, set_game_persona):
+	Fixed serious bug in setreuid
+	usage.
+	Check systems calls for failure.
+	Improved the error message texts.
+
+	* realname.c (get_real_user_name): fixed a get-login-name bug.
+
+	* signal.c: Removed the declaration of _POSIX_SOURCE.
+
+1999-05-25  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* configure.in: Changed the version string to "0.3.91".
+	AC_DEFINE(_XOPEN_SOURCE, 1)
+
+	* acconfig.h: Added _XOPEN_SOURCE
+
+	* highscore.c: Removed the _POSIX_SOURCE define.
+	For hp9000s800 systems include <stdarg.h>.
+
+	* main.c: Removed the _POSIX_SOURCE define.
+
+	* mvwaddnstr.c: Include "mbuggy.h" instead of old "moon.h".
+
+	* persona.c: Removed the _POSIX_SOURCE define.
+	For hp9000s800 systems include <stdarg.h>.
+
+	* queue.c: Removed the _POSIX_SOURCE define.
+	Define _XOPEN_SOURCE_EXTENDED.
+
+	* realname.c: Removed the _POSIX_SOURCE define.
+
+	* vclock.c: Define _XOPEN_SOURCE_EXTENDED.
+
+	* wgetnstr.c: Include "mbuggy.h" instead of old "moon.h".
+
+	* xgetch.c: Removed the _POSIX_SOURCE define.
+
+1999-05-24  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* TODO: Some items removed.
+
+	* mbuggy.spec: Minor fixes.
+
+	* mbuggy.texi, moonman.in: Minor fixes.
+	Describe the key bindings.
+
+	* Makefile.am (moon-buggy.6): added a substitution.
+
+	* mbuggy.h:
+	Added a declaration for the new variable `stakes' from "game.c".
+	Removed the declaration of the old variable `bonus' from "game.c".
+	Added a declaration for the new variable `bonus from "moon.c".
+	Renamed old "control.c" to new "level.c".
+	Removed the prototype for the obsolete function `requeue_meteors'.
+	Added a prototype for the new function `print_message_h' from "queue.c".
+
+	* level.c: Bug fixes.
+	Use the new scoring system.
+	Added level messages.
+	New level 6.
+	Improved the final level.
+	(level_tick): changed the calling syntax.
+	(current_level): new function.
+
+	* buggy.c: Use the new scoring system.
+
+	* game.c: doc fixes
+	(stakes): new variable
+	Removed old variable `bonus'.
+	Removed obsolete function `score_handler'.
+	(game_mode): when the car crashes, restart the current level from the
+	very beginning.
+
+	* main.c (remove_event): Do not use `clear_message_h' any more.
+
+	* meteor.c: Remove the obsolete function `requeue_meteors'.
+
+	* moon.c: New score system.
+	(bonus): new global variable.
+	(print_level): new function
+
+	* queue.c (print_message_h): new function
+
+	* random.c (uniform_rnd): check for invalid arguments.
+
+1999-05-23  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: Added "1999-05-11" until "1999-05-22".
+
+	* TODO: Removed three (meteor related) items.
+
+	* Makefile.am: Renamed old "control.c" to new "level.c".
+
+	* mbuggy.h: Added prototypes for the new functions `car_meteor_hit',
+	'meteor_car_hit' and `requeue_meteors'.
+	Changed the declarations for "meteor.c".
+
+	* level.c: Added a new level (meteors).
+
+	* buggy.c (sz_ram, sz_sit): new scenarios.
+	(jump_handler): check for landings on a meteor.
+	(car_meteor_hit): new function.
+
+	* car.img: New images of the car being destroyed by a meteor.
+
+	* game.c: Do not remove all meteors on a crash.
+
+	* laser.c (beam_handler): bug fixes.
+
+	* meteor.c (meteor_handler): check whether we hit the car.
+	(requeue_meteors): new function.
+	Renamed old `meteor_hit' to new `meteor_laser_hit'.
+	(meteor_car_hit): new function.
+
+	* moon.c (scroll_handler):
+	After a crash run the animation one tick longer.
+
+	* level.c, control.c: moved control.c to level.c
+
+	* TODO: Cleaned up.  Two items removed.
+
+	* mbuggy.h: Removed the obsolete macro `MB_DEBUG'.
+	Changed the declarations for "control.c".
+
+	* meteor.c (place_meteor): fixed the initial horizontal position.
+
+	* moon.c: Renamed old `control_tick' to new `level_tick'.
+
+	* control.c: Added new levels.
+	Replaced old `control_init' by new `level_start'.
+	Renamed old `control_tick' to new `level_tick'.
+	Overall improvements.
+
+	* buggy.c: Removed the `MB_DEBUG' stuff.
+
+	* game.c (spend_life):
+	calling syntax changed.  Do not call the obsolete
+	function `control_init' any more.
+	(game_mode): call `level_start'.
+
+	* queue.c (main_loop): disable the load display.
+
+	* main.c (print_message):
+	use `clear_message_h' to remove the message later-on.
+	(main): moved the "good luck" message into the level 0 part of
+	"control.c".
+
 1999-05-22  Jochen Voss  <voss@tatonka.pfalz.de>
 
 	* TODO: Replaced one item by another.
