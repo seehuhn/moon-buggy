@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: buggy.c,v 1.14 1999/05/22 14:43:25 voss Exp $";
+static const  char  rcsid[] = "$Id: buggy.c,v 1.15 1999/05/22 17:13:22 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -29,7 +29,7 @@ static  scenario  sz_empty = {
 };
 
 static scenario sz_jump = {
-  { car_START, 5, TICK(1.25), 0 },
+  { car_START, 5, TICK(1), 0 },
   { car_UP1, 6, TICK(2.5), 0 },
   { car_UP2, 7, TICK(5), 0 },
   { car_UP1, 6, TICK(2.5), 0 },
