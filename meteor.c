@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: meteor.c,v 1.4 1999/05/23 21:01:34 voss Exp $";
+static const  char  rcsid[] = "$Id: meteor.c,v 1.5 1999/05/24 19:14:35 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -51,7 +51,7 @@ meteor_handler (game_time t, void *client_data)
 	  mvwaddch (moon, BASELINE, m->x, m_image[m->state]);
 	  add_event (t+TICK(1), meteor_handler, m);
 	}
-      } else if (car_hit (t, m->x)) {
+      } else if (car_meteor_hit (t, m->x)) {
 	DA_REMOVE_VALUE (meteor_table, struct meteor *, m);
 	free (m);
       } else {
@@ -81,17 +81,6 @@ place_meteor (double t)
   m->x = 1;
   DA_ADD (meteor_table, struct meteor *, m);
   add_event (t+TICK(1), meteor_handler, m);
-}
-
-void
-requeue_meteors (double t)
-/* Reenter the meteors into the queue, after a new life is started.  */
-{
-  int  j;
-
-  for (j=0; j<meteor_table.used; ++j) {
-    add_event (t, meteor_handler, meteor_table.data[j]);
-  }
 }
 
 void
