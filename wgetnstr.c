@@ -1,22 +1,14 @@
 /* wgetnstr.c - replacement for the curses function
  *
- * Copyright (C) 1998  Jochen Voss.  */
+ * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: wgetnstr.c,v 1.1 1999/01/01 13:55:44 voss Exp $";
-
-#define _POSIX_SOURCE
+static const  char  rcsid[] = "$Id: wgetnstr.c,v 1.2 1999/01/02 11:47:11 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-#include <stdlib.h>
 #include <ctype.h>
-#if HAVE_ERRNO_H
-#include <errno.h>
-#else
-extern  int  errno;
-#endif
 
 #include "moon.h"
 
@@ -32,14 +24,10 @@ wgetnstr (WINDOW *win, char *str, int n)
   keypad (win, FALSE);
   wrefresh (win);
   do {
-    char  c;
+    int  c;
 
-    do {
-      c = wgetch (win);
-    } while (c == ERR && errno == EINTR);
+    c = xgetch (win);
     switch (c) {
-    case ERR:
-      fatal ("wgetnstr: wgetch failed");
     case '\n':
     case '\r':
       done = 1;
