@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.41 2000/11/01 13:15:55 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.42 2000/11/13 20:49:34 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -74,7 +74,7 @@ prepare_screen (void)
   cbreak ();
   noecho ();
   hide_cursor ();
-  if (mesg_flag)  mesg_off ();
+  term_prepare (mesg_flag);
 }
 
 void
@@ -83,7 +83,7 @@ prepare_for_exit (void)
  * Calls to `prepare_screen' and `prepare_for_exit' must be paired.  */
 {
   if (! curses_initialised)  return;
-  mesg_restore ();
+  term_restore ();
   show_cursor ();
   wrefresh (moon);
   wrefresh (message);
