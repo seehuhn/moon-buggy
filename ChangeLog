@@ -1,6 +1,100 @@
+1999-07-22  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: Added 1999-07-02 to 1999-07-22
+
+	* NEWS: Added news for version "0.4.1".
+
+1999-07-21  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* Makefile.am (install-data-hook): bug fix
+
+	* Makefile.am (install-exec-hook, install-data-hook):
+	Fixed the access premissions
+	for setgid usage.
+
+	* README: Explain setgid usage instead of setuid.
+
+	* TODO: One item done (setgid usage).
+
+	* moon-buggy.h:
+	Added a declaration for the new function `is_setgid' from "persona.c".
+
+	* moon-buggy.spec: Use "--with-setgid" instead of "--with-setuid".
+
+	* moon-buggy.texi: Rewrote the chapter "Shared Score Files".
+	Explain setgid usage instead of setuid.
+
+	* persona.c (is_setgid): new function
+
+	* highscore.c (do_open):
+	fix the score file's access mode for setgid usage.
+
+	* moon-buggy.xpm: initial revision
+
+	* .cvsignore: Changed all occurrences fo "mbuggy" to "moon-buggy".
+
+	* Makefile.am: Changed all occurrences fo "mbuggy" to "moon-buggy".
+	Removed the "--with-setuid" option in favor of a "--with-setgid"
+	option.
+
+	* TODO: Added a new entry.
+
+	* configure.in: Renamed the package to "moon-buggy" again.
+	Changed the version string to "0.4.0.90".
+	Removed the "--with-setuid" option in favor of a "--with-setgid"
+	option.
+
+	* maint.in.in, moon-buggy.lsm, moon-buggy.spec:
+	Changed all occurrences fo "mbuggy" to "moon-buggy".
+
+	* moon-buggy.h: Fixed the header file protection.
+
+	* moon-buggy.texi: Renamed old "mbuggy.info" to new "moon-buggy.info".
+
+	* getdate.c, random.c: Include "moon-buggy.h".
+
+	* buggy.c, error.c, game.c, highscore.c, hpath.c, keyboard.c,
+	laser.c, level.c, main.c, meteor.c, moon.c, mvwaddnstr.c, pager.c,
+	persona.c, queue.c, realname.c, signal.c, title.c, vclock.c,
+	wgetnstr.c, xmalloc.c, xstrdup.c: Renamed old "mbuggy.h" to new
+	"moon-buggy.h".
+
+	* mbuggy.spec, moon-buggy.spec: moved mbuggy.spec to moon-buggy.spec
+
+	* moon-buggy.lsm, mbuggy.lsm: moved mbuggy.lsm to moon-buggy.lsm
+
+	* moon-buggy.png, mbuggy.png: moved mbuggy.png to moon-buggy.png
+
+	* moon-buggy.h, mbuggy.h: moved mbuggy.h to moon-buggy.h
+
+	* moon-buggy.texi, mbuggy.texi: moved mbuggy.texi to moon-buggy.texi
+
+1999-07-17  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* queue.c (drain_input): new function
+	(main_loop): eat up all input in absence of a key handler
+
+	* game.c (game_mode): sleep for half of a second after each crash
+
+	* configure.in: add AC_HEADER_STDC
+
+1999-07-08  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* mbuggy.spec, Makefile.am: Removed "mbuggy.gif" from the distribution.
+
+	* mbuggy.gif: removed gif because of the patent problems
+
+1999-07-02  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* mbuggy.lsm:
+	Fixed the date string format as requested by the son of the lsm robot.
+	Fixed the lsm file's length
+
+	* configure.in: Changed the version string to "0.4.1".
+
 1999-06-27  Jochen Voss  <voss@tatonka.pfalz.de>
 
-	* ChangeLog: Added 199-06-27
+	* ChangeLog: Added 1999-06-27
 
 	* mbuggy.lsm: Added another keyword.
 
