@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.13 $)
+AC_REVISION($Revision: 1.14 $)
 AC_INIT(moon.h)
 AM_INIT_AUTOMAKE(moon-buggy, 0.3.90)
 AM_CONFIG_HEADER(config.h)
@@ -16,6 +16,7 @@ dnl Checks for programs.
 AC_PROG_CC
 
 dnl Checks for libraries.
+AC_CHECK_LIB(m, exp)
 AC_CHECK_LIB(curses,initscr,CURSLIB=-lcurses)
 if test "x$CURSLIB" = x; then
 unset ac_cv_lib_curses_initscr
