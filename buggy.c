@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: buggy.c,v 1.8 1999/04/21 19:19:38 voss Exp $";
+static const  char  rcsid[] = "$Id: buggy.c,v 1.9 1999/04/23 22:20:19 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -12,12 +12,12 @@ static const  char  rcsid[] = "$Id: buggy.c,v 1.8 1999/04/21 19:19:38 voss Exp $
 #include <assert.h>
 
 #include "moon.h"
+#include "buggy.h"
 
 
 int  car_base, score_base;
 
 
-enum car_state { car_NORMAL, car_START, car_UP1, car_UP2, car_LAND };
 typedef  struct scene {
   double  t;
   enum car_state  state;
@@ -49,7 +49,7 @@ initialise_buggy (void)
   cstate = car_NORMAL;
 }
 
-void
+static void
 animate_buggy (void)
 {
   if (state->t >= -0.5) {
@@ -103,19 +103,25 @@ print_buggy (void)
   return  crash;
 }
 
+static void
+jump_handler (game_time t, void *client_data)
+{
+  animate_buggy ();
+  if (print_buggy ())  quit_main_loop ();
+}
+
 void
 jump (double t)
 {
   struct scene *sptr = sz_jump;
 
-  if (cstate != car_NORMAL) {
-    assert (cstate == car_LAND);
-    remove_event (ev_BUGGY, &t);
-  }
+  assert (cstate == car_NORMAL || cstate == car_LAND);
+  remove_event (jump_handler);
+
   cstate = car_START;
   state = sptr;
   while (sptr->t >= -0.5) {
-    add_event (t+sptr->t, ev_BUGGY);
+    add_event (t+sptr->t, jump_handler, NULL);
     ++sptr;
   }
 }
