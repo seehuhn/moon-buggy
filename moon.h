@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: moon.h,v 1.11 1999/01/02 12:16:13 voss Rel $ */
+ * $Id: moon.h,v 1.12 1999/01/30 17:14:15 voss Rel $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -17,6 +17,7 @@
 #define MB_DEBUG 0
 
 #include <curses.h>
+#include <stdlib.h>		/* we use `size_t' */
 
 /* If key symbols are not defined move them out of the way.
  * Avoid duplicate case labels.  */
@@ -133,6 +134,7 @@ extern  void *xmalloc (size_t size);
 extern  void *xrealloc (void *ptr, size_t size);
 
 /* from "xstrdup.c" */
+extern  size_t  xstrnlen (const char *str, size_t size);
 extern  char *xstrdup (const char *str);
 extern  char *xstrndup (const char *str, size_t size);
 
@@ -140,9 +142,6 @@ extern  char *xstrndup (const char *str, size_t size);
 extern  const char *score_dir;
 
 /* for configure's AC_REPLACE_FUNCS calls */
-#ifndef HAVE_BASENAME
-extern  const char *basename (const char *);
-#endif
 #ifndef HAVE_MVWADDNSTR
 extern  int  mvwaddnstr (WINDOW *win, int y, int x, const char *str, int n);
 #endif
