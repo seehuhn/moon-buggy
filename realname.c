@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: realname.c,v 1.6 1999/01/30 17:12:47 voss Rel $";
+static const  char  rcsid[] = "$Id: realname.c,v 1.7 1999/04/23 17:54:54 voss Exp $";
 
 #define _POSIX_SOURCE 1
 
@@ -38,7 +38,7 @@ get_real_user_name (char *buffer, size_t size)
     }
   }
 
-  wclear (message);
+  werase (message);
   if (buffer[0] == '\0') {
     waddstr (message, "please enter your name: ");
   } else {
