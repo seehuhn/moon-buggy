@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.13 1999/01/30 17:13:09 voss Rel $";
+static const  char  rcsid[] = "$Id: main.c,v 1.14 1999/03/02 18:31:24 voss Exp $";
 
 #define _POSIX_SOURCE 1
 
@@ -21,7 +21,6 @@ static const  char  rcsid[] = "$Id: main.c,v 1.13 1999/01/30 17:13:09 voss Rel $
 extern char *optarg;
 extern int  optind;
 #endif
-#include <signal.h>
 
 #include "moon.h"
 
@@ -40,7 +39,7 @@ print_message (const char *str)
   wnoutrefresh (message);
 }
 
-static void
+void
 allocate_windows (void)
 /* Create the curses windows.  */
 {
@@ -70,103 +69,6 @@ prepare_for_exit (void)
 }
 
 /************************************************************
- * signal handling
- */
-
-static volatile  sig_atomic_t  termination_in_progress = 0;
-static  sigset_t  winch_set, full_set, old_sigset;
-
-void
-block_winch (void)
-/* Block the WINCH signal until `unblock' is called.  */
-{
-  sigprocmask (SIG_BLOCK, &winch_set, &old_sigset);
-}
-
-void
-block_all (void)
-/* Block all signals until `unblock' is called.  */
-{
-  sigprocmask (SIG_BLOCK, &full_set, &old_sigset);
-}
-
-void
-unblock (void)
-/* Undo the effect of `block_winch' or `block_all'.  */
-{
-  sigprocmask (SIG_SETMASK, &old_sigset, NULL);
-}
-   
-static RETSIGTYPE
-termination_handler (int signum)
-{
-  signal (signum, SIG_DFL);
-  if (termination_in_progress)  raise (signum);
-  termination_in_progress = 1;
-  prepare_for_exit ();
-  fprintf (stderr, "GAME ABORTED (signal %d)\n", signum);
-  raise (signum);
-}
-
-static RETSIGTYPE
-tstp_handler (int signum)
-{
-  signal (SIGTSTP, SIG_DFL);
-  if (game_state == PLAYING) {
-    score_bonus (-10);
-  }
-  prepare_for_exit ();
-  if (game_state == PLAYING)
-    fputs ("suspended (penalty: 10 points)\n", stderr);
-  raise (SIGTSTP);
-}
-    
-static RETSIGTYPE
-cont_handler (int signum)
-{
-  signal (SIGCONT, cont_handler);
-  signal (SIGTSTP, tstp_handler);
-  if (game_state == PLAYING)  print_message ("suspended (penalty: 10 points)");
-  leaveok (moon, TRUE);
-  leaveok (status, TRUE);
-  leaveok (message, TRUE);
-
-  wnoutrefresh (moon);
-  wnoutrefresh (status);
-  wnoutrefresh (message);
-  doupdate ();
-  if (game_state == PLAYING)  clock_adjust_delay (0.5);
-}
-    
-static RETSIGTYPE
-winch_handler (int signum)
-{
-  delwin (moon);
-  delwin (status);
-  delwin (message);
-  endwin ();
-  refresh ();
-  allocate_windows ();
-  
-  switch (game_state) {
-  case TITLE:
-    resize_title ();
-    break;
-  case PAGER:
-    resize_pager ();
-    break;
-  case PLAYING:
-    resize_game ();
-    break;
-  case HIGHSCORE:
-    resize_highscore ();
-    break;
-  default:
-    break;
-  }
-}
-
-/************************************************************
  * main procedure
  */
 
@@ -188,7 +90,7 @@ main (int argc, char **argv)
   int  error_flag = 0;
   int  res;
   
-  initialize_persona ();
+  initialise_persona ();
   set_user_persona ();
 
   /* `basename' seems to be non-standard.  So we avoid it.  */
@@ -251,23 +153,7 @@ the file named COPYING or press `c' at Moon-Buggy's title screen.");
     exit (error_flag);
   }
 
-  if (signal (SIGINT, termination_handler) == SIG_IGN)
-    signal (SIGINT, SIG_IGN);
-  if (signal (SIGHUP, termination_handler) == SIG_IGN)
-    signal (SIGHUP, SIG_IGN);
-  if (signal (SIGTERM, termination_handler) == SIG_IGN)
-    signal (SIGTERM, SIG_IGN);
-  signal (SIGCONT, cont_handler);
-  signal (SIGTSTP, tstp_handler);
-#ifdef SIGWINCH
-  signal (SIGWINCH, winch_handler);
-#endif
-
-  sigemptyset (&winch_set);
-#ifdef SIGWINCH
-  sigaddset (&winch_set, SIGWINCH);
-#endif
-  sigfillset (&full_set);
+  initialise_signals ();
   
   initscr ();
   cbreak ();
