@@ -1,7 +1,7 @@
 Begin3
 Title:          moon-buggy
-Version:        0.4.1
-Entered-date:   28SEP99
+Version:        0.5
+Entered-date:   24APR00
 Description:    Drive some car across the moon.
                 Moon-buggy is a simple character graphics game, where
                 you drive some kind of car across the moon's surface.
@@ -11,8 +11,8 @@ Keywords:       games, moon, character graphics, curses
 Author:         voss@mathematik.uni-kl.de (Jochen Voss)
 Maintained-by:  voss@mathematik.uni-kl.de (Jochen Voss)
 Primary-site:   sunsite.unc.edu /pub/Linux/games/arcade
-                178k moon-buggy-0.4.1.tar.gz
-                794 moon-buggy.lsm
+                198k moon-buggy-0.5.tar.gz
+                790 moon-buggy.lsm
 Alternate-site: 
 Original-site:  
 Platforms:      POSIX systems, curses
