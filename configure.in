@@ -15,7 +15,9 @@ fi
 if test "x$CURSLIB" = x; then
 AC_CHECK_LIB(ncurses,initscr,CURSLIB=-lncurses)
 fi
-AC_SUBST(CURSLIB)
+if test "x$CURSLIB" != x; then
+LIBS="$CURSLIB $LIBS"
+fi
 
 dnl Checks for header files.
 AC_HEADER_STDC
@@ -28,7 +30,7 @@ AC_TYPE_UID_T
 
 dnl Checks for library functions.
 AC_TYPE_SIGNAL
-AC_REPLACE_FUNCS(basename)
+AC_REPLACE_FUNCS(basename mvwaddnstr)
 AC_CHECK_FUNCS(memmove ftruncate getopt_long)
 
 AM_CONDITIONAL(short_getopt, test "x$ac_cv_func_getopt_long" != xyes)
