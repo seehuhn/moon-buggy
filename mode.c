@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: mode.c,v 1.6 2000/06/01 18:49:07 voss Exp $";
+static const  char  rcsid[] = "$Id: mode.c,v 1.7 2000/06/16 10:49:50 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -19,28 +19,9 @@ static const  struct mode *current;
 static  int  mode_entered, mode_seed;
 
 
-static void
-mode_enter (void)
-{
-  werase (moon);
-  wnoutrefresh (moon);
-  describe_keys (current->keys.used, current->keys.data);
-  current->enter (mode_seed);
-  mode_entered = 1;
-}
-
-void
-mode_update (void)
-{
-  if (! mode_entered) {
-    clear_queue ();
-    mode_enter ();
-  }
-  doupdate ();
-}
-
 struct mode *
 new_mode (void)
+/* Allocate a new mode struct.  */
 {
   struct mode *res = xmalloc (sizeof (struct mode));
   res->enter = NULL;
@@ -55,6 +36,10 @@ new_mode (void)
 
 void
 mode_add_key (struct mode *m, int meanings, const char *desc, int res)
+/* Add a key binding to mode M.
+ * MEANINGS should a combination (via |) of `mbk_key' values, DESC is
+ * the label to display near the bottom of the screen.  RES is passed
+ * through to `keypress' handler.  */
 {
   struct binding *keys;
 
@@ -65,43 +50,45 @@ mode_add_key (struct mode *m, int meanings, const char *desc, int res)
 }
 
 void
-mode_start (const struct mode *m, int seed)
-{
-  wclear (status);
-  wnoutrefresh (status);
-  wclear (message);
-  wnoutrefresh (message);
-
-  current = m;
-  mode_entered = 0;
-  mode_seed = seed;
-}
-
-void
 mode_change (const struct mode *m, int seed)
+/* Change into new mode M.  Pass SEED to the `enter' handler.  */
 {
-  if (current->leave && mode_entered)  current->leave ();
+  if (mode_entered && current->leave)  current->leave ();
 
   current = m;
   mode_entered = 0;
   mode_seed = seed;
 }
 
-void
-mode_leave (void)
+static void
+mode_enter (void)
 {
-  if (current->leave && mode_entered)  current->leave ();
-  current = NULL;
+  werase (moon);
+  wnoutrefresh (moon);
+  if (! current)  return;
+  
+  if (current->enter)  current->enter (mode_seed);
+  mode_entered = 1;
+}
+
+void
+mode_update (void)
+/* Flush queued mode updates.  */
+{
+  if (! mode_entered) {
+    clear_queue ();
+    mode_enter ();
+    mode_redraw ();
+  }
+  doupdate ();
 }
 
 void
 mode_redraw (void)
+/* Make the current mode redraw the screen but leave the status message intact.
+ * This is also called after the screen is resized.  */
 {
   if (! mode_entered)  return;
-  wclear (moon);
-  wnoutrefresh (moon);
-  wclear (status);
-  wnoutrefresh (status);
   describe_keys (current->keys.used, current->keys.data);
   if (current->redraw)  current->redraw ();
   doupdate ();
@@ -125,13 +112,7 @@ mode_keypress (game_time t, int meaning)
 
 void
 mode_signal (int signum)
+/* Feed signal SIGNUM to the current mode.  */
 {
   if (current->signal)  current->signal (signum);
-}
-
-void
-mode_keys (void)
-/* Explain the mode's key bindings.  */
-{
-  describe_keys (current->keys.used, current->keys.data);
 }
