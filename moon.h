@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: moon.h,v 1.19 1999/05/08 12:40:58 voss Exp $ */
+ * $Id: moon.h,v 1.20 1999/05/15 16:52:03 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -18,6 +18,8 @@
 
 #include <curses.h>
 #include <stdlib.h>		/* we use `size_t' */
+
+#define BASELINE (LINES-5)
 
 /* If key symbols are not defined move them out of the way.
  * Avoid duplicate case labels.  */
@@ -72,7 +74,7 @@ extern  void  resize_game (void);
 extern  void  score_bonus (int x);
 
 /* from "moon.c" */
-extern  char *ground1, *ground2, *ground3;
+extern  char *ground1, *ground2;
 extern  int  d_rnd (int limit);
 extern  void  resize_ground (int clear_it);
 extern  void  print_ground (void);
@@ -89,6 +91,12 @@ extern  int  crash_check (void);
 /* from "laser.c" */
 extern  void  fire_laser (double t);
 extern  void  extinguish_laser (void);
+extern  int  laser_hit (int x);
+
+/* from "meteor.c" */
+extern  void  place_meteor (double t);
+extern  void  remove_meteors (void);
+extern  int  meteor_hit (int x0, int x1);
 
 /* from "highscore.c" */
 extern  int  highscore_mode (void);
@@ -110,6 +118,7 @@ extern  void  clock_adjust_delay (double dt);
 extern  void  clear_queue (void);
 extern  void  add_event (game_time t, callback_fn callback, void *client_data);
 extern  void  remove_event (callback_fn callback);
+extern  void  remove_client_data (void *client_data);
 extern  void  quit_main_loop (void);
 extern  int  main_loop (double dt, void (*key_handler)(game_time));
 
