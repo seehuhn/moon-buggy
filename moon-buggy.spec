@@ -15,7 +15,7 @@ dangerous craters there.  Fortunately your car can jump over them!
 %setup
 
 %build
-CFLAGS="$RPM_OPT_FLAGS" LDFLAGS=-s ./configure --sharedstatedir=/var/games --with-setuid=games
+CFLAGS="$RPM_OPT_FLAGS" LDFLAGS=-s ./configure --sharedstatedir=/var/games --with-setgid=games
 make
 
 %install
