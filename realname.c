@@ -1,8 +1,8 @@
 /* realname.c - query the user's real name
  *
- * Copyright (C) 1998  Jochen Voss.  */
+ * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: realname.c,v 1.4 1999/01/01 17:58:09 voss Exp $";
+static const  char  rcsid[] = "$Id: realname.c,v 1.5 1999/01/02 12:08:08 voss Rel $";
 
 #define _POSIX_SOURCE
 
@@ -21,6 +21,9 @@ static const  char  rcsid[] = "$Id: realname.c,v 1.4 1999/01/01 17:58:09 voss Ex
 
 void
 get_real_user_name (char *buffer, size_t size)
+/* Query the real user name.
+ * Store the result into BUFFER, but do not write more then SIZE
+ * characters.  */
 {
   char *tmp;
 
