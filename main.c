@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.30 1999/07/21 10:41:07 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.31 1999/08/30 20:54:40 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -78,14 +78,17 @@ main (int argc, char **argv)
 {
 #ifdef HAVE_GETOPT_LONG
   struct option  long_options [] = {
-    { "help", no_argument, 0, 'h'},
+    { "create-scores", no_argument, 0, 'c' },
+    { "help", no_argument, 0, 'h' },
     { "no-title", no_argument, 0, 'n' },
-    { "version", no_argument, 0, 'V'},
+    { "show-scores", no_argument, 0, 's' },
+    { "version", no_argument, 0, 'V' },
     { NULL, 0, NULL, 0}
   };
 #endif
-#define RND_SHORT_OPTIONS "hnV"
+#define RND_SHORT_OPTIONS "chnsV"
   int  help_flag = 0;
+  int  highscore_flag = 0;
   int  title_flag = 1;
   int  version_flag = 0;
   int  error_flag = 0;
@@ -108,11 +111,17 @@ main (int argc, char **argv)
 #endif
     if (c == -1)  break;
     switch (c) {
+    case 'c':
+      highscore_flag = 2;
+      break;
     case 'h':
       help_flag = 1;
       break;
     case 'n':
       title_flag = 0;
+      break;
+    case 's':
+      highscore_flag = 1;
       break;
     case 'V':
       version_flag = 1;
@@ -147,13 +156,25 @@ the file named COPYING or press `c' at Moon-Buggy's title screen.");
     FILE *out = error_flag ? stderr : stdout;
     fprintf (out, "usage: %s [options]\n\n", my_name);
     fputs ("The options are\n", out);
-    fputs (OPT("-h","--help    ") "show this message and exit\n", out);
-    fputs (OPT("-n","--no-title") "omit the title screen\n", out);
-    fputs (OPT("-V","--version ") "show the version number and exit\n\n", out);
+    /* --create-scores: create the highscore file (internal use only) */
+    fputs (OPT("-h","--help         ") "show this message and exit\n", out);
+    fputs (OPT("-n","--no-title     ") "omit the title screen\n", out);
+    fputs (OPT("-s","--show-scores  ") "only show the highscore list\n", out);
+    fputs (OPT("-V","--version      ") "show the version number and exit\n\n",
+	   out);
     fputs ("Please report bugs to <voss@mathematik.uni-kl.de>.\n", out);
     exit (error_flag);
   }
 
+  if (highscore_flag) {
+    if (highscore_flag == 1) {
+      show_highscores ();
+    } else {
+      create_highscores ();
+    }
+    exit (0);
+  }
+  
   initialise_signals ();
   init_rnd ();
   
