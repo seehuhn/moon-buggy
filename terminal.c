@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: terminal.c,v 1.2 2000/11/13 20:49:16 voss Exp $";
+static const  char  rcsid[] = "$Id: terminal.c,v 1.3 2001/08/26 20:22:59 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
@@ -50,7 +50,8 @@ term_prepare (int mesg_n_flag)
 
   if (mesg_n_flag) {
     res = fstat (0, &st);
-    if (res < 0)  fatal ("Cannot get terminal attributes: %s", strerror (errno));
+    if (res < 0)
+      fatal ("Cannot get terminal attributes: %s", strerror (errno));
     
     term_mode = st.st_mode;
     term_mode_valid = 1;
