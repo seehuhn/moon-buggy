@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: buggy.c,v 1.20 2000/03/31 11:18:02 voss Rel $";
+static const  char  rcsid[] = "$Id: buggy.c,v 1.21 2000/11/16 17:55:42 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -15,7 +15,10 @@ static const  char  rcsid[] = "$Id: buggy.c,v 1.20 2000/03/31 11:18:02 voss Rel 
 
 
 int  car_x, car_y;
-
+
+/**********************************************************************
+ * display the car
+ */
 
 typedef  struct scene {
   enum car_state  n;		/* image number (index to array `image') */
@@ -88,6 +91,68 @@ print_buggy (void)
   wnoutrefresh (moon);
 }
 
+void
+shift_buggy (int dx)
+/* Horizontally shift the buggy by the amount DX.
+ * Positive values of dx indicate a shift to the right.  */
+{
+  mvwaddstr (moon, LINES-car_y-1, car_x, "       ");
+  mvwaddstr (moon, LINES-car_y, car_x, "       ");
+  car_x += dx;
+  print_buggy ();
+}
+
+/**********************************************************************
+ * display a rolling wheel after a crash
+ */
+
+static int wheel_x, wheel_y;
+
+static void
+wheel_handler (game_time t, void *client_data)
+{
+  int  wheel_crash;
+
+  wheel_crash = (wheel_x<car_x && wheel_y==LINES-5 && ground2[wheel_x]==' ');
+  if (wheel_x < car_x)  mvwaddch (moon, wheel_y, wheel_x, ' ');
+  wheel_x -= 1;
+  switch (car_x - wheel_x) {
+  case 1:
+  case 5:
+  case 7:
+  case 8:
+  case 9:
+    wheel_y = LINES - 6;
+    break;
+  case 2:
+  case 3:
+  case 4:
+    wheel_y = LINES - 7;
+    break;
+  default:
+    wheel_y = LINES - 5;
+    break;
+  }
+  if (wheel_x >= 0 && ! wheel_crash) {
+    mvwaddch (moon, wheel_y, wheel_x, 'o');
+    add_event (t+TICK(2.3), wheel_handler, NULL);
+  } else {
+    crash_detected = 1000;
+  }
+  wnoutrefresh (moon);
+}
+
+static void
+start_wheel (void)
+{
+  wheel_x = car_x;
+  add_event (current_time()+TICK(0.5), wheel_handler, NULL);
+}
+
+/**********************************************************************
+ * handle the jumps
+ */
+
 static void
 jump_handler (game_time t, void *client_data)
 {
@@ -95,11 +160,11 @@ jump_handler (game_time t, void *client_data)
   if (car_y > 5 && state->y == 5) {
     if (meteor_car_hit (car_x, car_x+7)) {
       state = sz_sit;
+      start_wheel ();
       crash_detected = 1;
     }
   }
   print_buggy ();
-  if (state->n == car_RAM2 || crash_check ())  crash_detected = 1;
   if (state->dt >= -0.5) {
     add_event (t+state->dt, jump_handler, state+1);
   }
@@ -118,6 +183,10 @@ can_jump (void)
 {
   return  state->has_ground;
 }
+
+/**********************************************************************
+ * check for crashes
+ */
 
 int
 crash_check (void)
@@ -128,32 +197,24 @@ crash_check (void)
     remove_event (jump_handler);
     state = sz_crash;
     print_buggy ();
+    start_wheel ();
     return 1;
   }
   
   return  0;
 }
 
-void
-shift_buggy (int dx)
-/* Horizontally shift the buggy by the amount DX.
- * Positive values of dx indicate a shift to the right.  */
-{
-  mvwaddstr (moon, LINES-car_y-1, car_x, "       ");
-  mvwaddstr (moon, LINES-car_y, car_x, "       ");
-  car_x += dx;
-  print_buggy ();
-}
-
 int
-car_meteor_hit (game_time t, int x)
-/* Return true, if the car is down a occupies position X.
+car_meteor_hit (int x)
+/* Return true, if the car is down and occupies position X.
  * Then the car crashes immediately.  */
 {
   if (car_y == 5 && x >= car_x && x < car_x+7) {
     remove_event (jump_handler);
-    add_event (t, jump_handler, sz_ram);
+    add_event (current_time (), jump_handler, sz_ram);
     print_buggy ();
+    start_wheel ();
+    crash_detected = 1;
     return 1;
   }
 
