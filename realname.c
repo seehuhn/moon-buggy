@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: realname.c,v 1.2 1998/12/26 11:40:51 voss Exp $";
+static const  char  rcsid[] = "$Id: realname.c,v 1.3 1998/12/29 18:07:29 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -31,18 +31,20 @@ get_real_user_name (char *buffer, size_t size)
     }
   }
 
+  wclear (message);
   if (buffer[0] == '\0') {
-    mvwaddstr (moon, 4, 8, "please enter your name:");
+    waddstr (message, "please enter your name: ");
   } else {
     char  tmpl [100];
-    sprintf (tmpl, "please enter your name (default: \"%%.%ds\"):", size);
-    mvwprintw (moon, 4, 8, tmpl, buffer);
+    sprintf (tmpl, "please enter your name (default: \"%%.%ds\"): ", size);
+    wprintw (message, tmpl, buffer);
   }
+
   echo ();
-  leaveok (moon, FALSE);
-  mvwgetnstr (moon, 5, 10, tmp, size);
+  leaveok (message, FALSE);
+  wgetnstr (message, tmp, size);
   noecho ();
-  leaveok (moon, TRUE);
+  leaveok (message, TRUE);
   if (tmp[0]) {
     strncpy (buffer, tmp, size);
   }
