@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: game.c,v 1.4 1999/01/30 17:09:59 voss Rel $";
+static const  char  rcsid[] = "$Id: game.c,v 1.5 1999/03/02 18:31:36 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -52,7 +52,7 @@ spend_life (void)
 
   clear_queue ();
 
-  initialize_buggy ();
+  initialise_buggy ();
   print_buggy ();
   
   doupdate ();

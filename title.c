@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: title.c,v 1.6 1999/01/09 14:06:13 voss Rel $";
+static const  char  rcsid[] = "$Id: title.c,v 1.7 1999/03/02 18:29:40 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -53,7 +53,7 @@ print_title (void)
   }
 
   if (5 + title_lines + 7 <= LINES) {
-    initialize_buggy ();
+    initialise_buggy ();
     print_buggy ();
   }
 

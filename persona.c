@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: persona.c,v 1.4 1999/01/02 12:10:32 voss Rel $";
+static const  char  rcsid[] = "$Id: persona.c,v 1.5 1999/03/02 18:30:11 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -27,7 +27,7 @@ static  uid_t  user_user_id, game_user_id;
 static  gid_t  user_group_id, game_group_id;
 
 void
-initialize_persona (void)
+initialise_persona (void)
 {
   long int  saved_ids_flag;
 

@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: buggy.c,v 1.6 1999/01/02 12:35:22 voss Rel $";
+static const  char  rcsid[] = "$Id: buggy.c,v 1.7 1999/03/02 18:31:45 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -43,7 +43,7 @@ static  enum car_state  cstate;
 #define  speed  1
 
 void
-initialize_buggy (void)
+initialise_buggy (void)
 {
   state = sz_empty;
   cstate = car_NORMAL;
