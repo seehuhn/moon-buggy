@@ -1,8 +1,8 @@
 /* moon.c - implement the moon
  *
- * Copyright (C) 1998  Jochen Voss.  */
+ * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: moon.c,v 1.5 1999/01/01 18:02:32 voss Exp $";
+static const  char  rcsid[] = "$Id: moon.c,v 1.6 1999/01/02 12:17:02 voss Rel $";
 
 
 #ifdef HAVE_CONFIG_H
