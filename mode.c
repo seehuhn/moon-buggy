@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: mode.c,v 1.1 2000/03/31 11:19:17 voss Exp $";
+static const  char  rcsid[] = "$Id: mode.c,v 1.2 2000/04/01 07:54:02 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -22,6 +22,8 @@ static  int  mode_entered, mode_seed;
 static void
 mode_enter (void)
 {
+  werase (moon);
+  wnoutrefresh (moon);
   describe_keys (current->keys.used, current->keys.data);
   current->enter (mode_seed);
   mode_entered = 1;
@@ -65,8 +67,6 @@ mode_add_key (struct mode *m, int meanings, const char *desc, int res)
 void
 mode_start (const struct mode *m, int seed)
 {
-  wclear (moon);
-  wnoutrefresh (moon);
   wclear (status);
   wnoutrefresh (status);
   wclear (message);
@@ -90,6 +90,8 @@ mode_change (const struct mode *m, int seed)
 void
 mode_redraw (void)
 {
+  werase (moon);
+  wnoutrefresh (moon);
   describe_keys (current->keys.used, current->keys.data);
   current->redraw ();
   doupdate ();
