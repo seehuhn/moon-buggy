@@ -1,7 +1,43 @@
+2000-04-16  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* ChangeLog: added 2000-04-13 to 2000-04-16
+
+	* README: Minor fix.
+
+	* TODO: Added two new items.
+
+	* moon-buggy.texi:
+	Explain more keys and add a reference to the download page.
+
+	* moonman.in: Explain more keys.
+
+2000-04-15  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* configure.in: Changed the version string to "0.4.92".
+
+	* highscore.c (fix_gap): new function
+	(resize_highscore, key_handler): bug fixes
+
+	* moon-buggy.h:
+	Changed the declarations for `clock_thaw' and `handle_signals'.
+
+	* signal.c (handle_signal): added a return value.
+
+	* queue.c (my_select): bug fix.
+	(wait_until): calling syntax changed.
+	(clock_freeze): bug fix.
+	(clock_thaw): calling syntax changed.
+
+2000-04-13  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* mode.c (mode_redraw): bug fix
+
+	* game.c (pause_resize): new function
+
 2000-04-12  Jochen Voss  <voss@tatonka.pfalz.de>
 
 	* ChangeLog: added 2000-03-20 to 2000-04-12
-	
+
 	* configure.in: Change the version string to "0.4.91".
 
 	* keyboard.c (add_key): check for NCURSES_VERSION_MAJOR
