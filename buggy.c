@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: buggy.c,v 1.3 1998/12/20 13:14:21 voss Exp $";
+static const  char  rcsid[] = "$Id: buggy.c,v 1.4 1998/12/23 10:09:24 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -100,7 +100,7 @@ jump (double t)
 
   if (cstate != car_NORMAL) {
     assert (cstate == car_LAND);
-    remove_event (car_NORMAL, &t);
+    remove_event (ev_BUGGY, &t);
   }
   cstate = car_START;
   state = sptr;
