@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: highscore.c,v 1.4 1998/12/23 15:09:42 voss Exp $";
+static const  char  rcsid[] = "$Id: highscore.c,v 1.5 1998/12/27 14:10:21 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -135,7 +135,9 @@ find_tables (int *in_fd, int *out_fd)
   global_name = compose_filename (score_dir, SCORE_FILE);
 
   /* step 1: try read/write access to global score file */
+  set_game_persona ();
   res = do_open (global_name, O_RDWR, 0);
+  set_user_persona ();
   if (res >= 0) {
     do_lock (res, F_WRLCK, global_name);
     *in_fd = *out_fd = res;
@@ -143,7 +145,9 @@ find_tables (int *in_fd, int *out_fd)
   }
   
   /* step 2: try write access to global score file */
+  set_game_persona ();
   res = do_open (global_name, O_WRONLY|O_CREAT, 0);
+  set_user_persona ();
   if (res >= 0) {
     do_lock (res, F_WRLCK, global_name);
     *in_fd = -1;
@@ -175,7 +179,9 @@ find_tables (int *in_fd, int *out_fd)
   *out_fd = res;
   
   /* step 4a: try read access to global score file */
+  set_game_persona ();
   res = do_open (global_name, O_RDONLY, 0);
+  set_user_persona ();
   if (res >= 0) {
     do_lock (res, F_RDLCK, global_name);
     *in_fd = res;
