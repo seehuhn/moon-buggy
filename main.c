@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: main.c,v 1.24 1999/05/30 19:47:19 voss Exp $";
+static const  char  rcsid[] = "$Id: main.c,v 1.25 1999/06/03 12:23:16 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -66,6 +66,7 @@ prepare_for_exit (void)
   wnoutrefresh (message);
   doupdate ();
   endwin ();
+  fflush (NULL);
 }
 
 /************************************************************
