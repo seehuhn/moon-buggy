@@ -2,7 +2,7 @@
  *
  * Copyright (C) 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: level.c,v 1.4 1999/05/26 22:02:06 voss Exp $";
+static const  char  rcsid[] = "$Id: level.c,v 1.5 1999/05/27 16:09:28 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -422,7 +422,6 @@ score_plateau (int width)
 {
   static const  int  score_table [] = { 0, 0, 0, 0, 0, 0, 32, 18, 9 };
   if (width > 8)  return;
-  ground2[1] = '0' + width;
   bonus[0] += score_table [width];
 }
 
