@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: queue.c,v 1.29 2000/03/17 23:02:08 voss Rel $";
+static const  char  rcsid[] = "$Id: queue.c,v 1.30 2000/03/29 07:55:29 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -369,28 +369,29 @@ void
 quit_main_loop_h (game_time t, void *client_data)
 /* This function is a possible callback argument to `add_event'.
  * It causes the main loop to terminate.
- * The arguments T and CLIENT_DATA is ignored.  */
+ * The arguments T and CLIENT_DATA are ignored.  */
 {
   quit_main_loop ();
 }
 
 void
-print_message_h (game_time t, void *client_data)
+print_hint_h (game_time t, void *client_data)
 /* This function is a possible callback argument to `add_event'.
- * It causes the message (const char *)CLIENT_DATA to be displayed
- * for 6 seconds.  */
+ * It causes the level hint (const char *)CLIENT_DATA to be
+ * displayed for 4 seconds.  */
 {
-  print_message (client_data);
-  remove_event (clear_message_h);
-  add_event (t+6, clear_message_h, NULL);
+  print_hint (client_data);
+  remove_event (clear_hint_h);
+  add_event (t+4, clear_hint_h, NULL);
 }
 
 void
-clear_message_h (game_time t, void *client_data)
+clear_hint_h (game_time t, void *client_data)
 /* This function is a possible callback argument to `add_event'.
- * It causes the screen's message area to be cleared.
- * The arguments T and CLIENT_DATA is ignored.  */
+ * It causes the screen's hint area to be cleared.
+ * The arguments T and CLIENT_DATA are ignored.  */
 {
-  werase (message);
-  wnoutrefresh (message);
+  wmove (moon, LINES-11, 0);
+  wclrtoeol (moon);
+  wnoutrefresh (moon);
 }
