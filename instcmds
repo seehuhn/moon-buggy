@@ -1,0 +1,79 @@
+#! /bin/sh
+# instcmds - extract shell commands from the Makefile
+# Copyright 1999  Jochen Voﬂ
+
+version="0.1"
+
+if test "x${AWK+set}" != xset; then
+  AWK=awk
+fi
+
+usage()
+{
+  cat <<EOF
+Usage: instcmds [options] TYPE
+
+Extract shell commands from the Makefile.
+This script may only be interesting to maintainers.
+
+The options are
+  --help            show this message
+  --install         Show the install commands (default)
+  --uninstall       Show the uninstall commands
+  --version         show the version information
+
+TYPE should be one of "pre", "normal", and "post".
+
+Please report bugs to <voss@mathematik.uni-kl.de>.
+EOF
+
+  exit $1
+}
+
+while test $# -gt 0; do
+  case "$1" in
+  -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+  *) optarg= ;;
+  esac
+
+  case "$1" in
+    --version)
+      cat <<EOF
+Instcmds $version
+Copyright (C) 1999 Jochen Voﬂ
+Instcmds come with NO WARRANTY, to the extent permitted by law.
+EOF
+      exit 0
+      ;;
+    --help)
+      usage 0
+      ;;
+    --install)
+      un=
+      UN=
+      ;;
+    --uninstall)
+      un=un
+      UN=UN
+      ;;
+    pre|normal|post)
+      type="$1"
+      ;;
+    *)
+      usage 1
+      ;;
+  esac
+  shift
+done
+
+if [ "x$type" = "x" ]; then
+  usage 1
+fi
+
+make --no-print-directory -n ${un}install -o all \
+  PRE_${UN}INSTALL=prdflv-pre-${un}install \
+  POST_${UN}INSTALL=prdflv-post-${un}install \
+  NORMAL_${UN}INSTALL=prdflv-normal-${un}install \
+| $AWK "\$0 ~ /^[ \t]*prdflv-/ { on = 0 }
+    on {print \$0}
+    \$0 ~ \"^[ \t]*prdflv-\" tpty \"[ \t]*\$\" { on = 1 }" "tpty=$type-${un}install"
