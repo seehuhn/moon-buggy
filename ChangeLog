@@ -1,0 +1,20 @@
+1998-12-18  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* README, TODO, NEWS: initial revision
+
+	* main.c: Jumps give one point.
+
+	* Makefile.am: Added the new files.
+
+	* main.c: Completed a rudimentary version of the game.
+
+	* moon.h: Added prototypes for the new files.
+
+	* lag.c, moon.c, queue.c, buggy.c: initial revision
+
+1998-12-17  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* .cvsignore, acconfig.h, AUTHORS, vclock.c, moon.h, main.c,
+	xstrdup.c, xmalloc.c, error.c, basename.c, configure.in,
+	Makefile.am: initial revision
+

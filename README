@@ -1,0 +1,6 @@
+moon-buggy - drive a strage car across the moon
+
+moon-buggy is a curses based game, where you drive some kinf of car
+across the surface of the moon.  Unfortunately there are dangerous
+craters there.  Fortunately your car can jump!  So just go on, and
+jump over the craters (using the SPACE key).
