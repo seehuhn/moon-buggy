@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: wgetnstr.c,v 1.4 1999/06/06 13:17:19 voss Exp $";
+static const  char  rcsid[] = "$Id: wgetnstr.c,v 1.5 1999/06/13 18:36:32 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -40,7 +40,7 @@ wgetnstr (WINDOW *win, char *str, int n)
       done = 1;
       break;
     case ERR:
-      fatal ("cannot read keyboard input");
+      fatal ("Cannot read keyboard input");
     default:
       if (c == erase && pos > 0) {
 	  --pos;
