@@ -2,9 +2,9 @@
  *
  * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: xgetch.c,v 1.1 1999/01/02 11:45:01 voss Rel $";
+static const  char  rcsid[] = "$Id: xgetch.c,v 1.2 1999/01/30 16:55:57 voss Rel $";
 
-#define _POSIX_SOURCE
+#define _POSIX_SOURCE 1
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
