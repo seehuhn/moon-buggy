@@ -1,6 +1,44 @@
+1998-12-20  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* configure.in: Changed the version string to "0.2".
+
+	* .cvsignore: Added "mbuggy.info", "stamp-vti", and "version.texi".
+
+	* TODO: Added new tasks
+	Removed the scorefile entry
+
+	* README: Explain `--sharedstatedir'
+
+	* NEWS: New news
+
+	* Makefile.am: Added rules for the new files.
+	install/uninstall the score files.
+
+	* mbuggy.texi: Explain `--sharedstatedir'.
+
+	* moon.h: Updated the declarations.
+
+	* buggy.c: Handle the per-crater-bonus.
+
+	* error.c: Reflect the fact, that "moon-buggy" is always interactive.
+
+	* highscore.c: Use the search path from "mbpaths.c".
+
+	* main.c (do_one_game): new function
+	(prepare_for_exit): new function
+	great improvements
+
+	* queue.c (clear_queue): new function
+
+	* mbpaths.c: initial revision
+
+1998-12-19  Jochen Voss  <voss@tatonka.pfalz.de>
+
+	* mbscore.tmpl, mbuggy.texi, realname.c, highscore.c: initial revision
+
 1998-12-18  Jochen Voss  <voss@tatonka.pfalz.de>
 
-	* README, TODO, NEWS: initial revision
+	* ChangeLog, README, TODO, NEWS: initial revision
 
 	* main.c: Jumps give one point.
 
