@@ -1,3 +1,4 @@
+  updates to use autoconf version 2.50
   new "-m" option to simulate the effect of "mesg n"
   added a "redraw screen" key
   removed the maintbuggy script
