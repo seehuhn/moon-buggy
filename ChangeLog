@@ -1,4 +1,61 @@
-2000-10-16  Jochen Voss  <voss@tatonka>
+2000-11-01  Jochen Voss  <voss@mathematik.uni-kl.de>
+
+	* ChangeLog: Added 2000-10-28 to 2000-11-01
+
+	* manpage.in: Fixed the modification date.
+
+	* ground.c (print_ground): remove debugging aid.
+
+	* TODO: Two items done.
+
+	* keyboard.c: Ignore case of input characters.
+
+	* highscore.c: Add a reload key for the highscore list.
+
+	* NEWS: Mention the "-m" option and the redraw key.
+
+	* signal.c (cont_handler): call the new function `prepare_screen'.
+
+	* keyboard.c (install_keys): add the redraw key
+
+	* title.c, pager.c, highscore.c, game.c:
+	call the new function `mode_complete'.
+
+	* main.c (prepare_screen, clear_windows): new functions
+	(main): new option "-m"
+
+	* mode.c (mode_complete): new function
+	(mode_keypress): handle `mbk_redraw'
+
+	* moon-buggy.texi, manpage.in: Explain the "-m" option.
+
+	* moon-buggy.h: Add prototypes for the new file "mesg.c".
+	Add a prototype for `prepare_screen' from "main.c".
+	Add a prototype for `mode_complete' from "mode.c".
+	Add `mbk_redraw' to `enum mb_key'.
+
+	* Makefile.am: Add the new file "mesg.c".
+
+	* mesg.c: initial revision
+
+2000-10-29  Jochen Voss  <voss@mathematik.uni-kl.de>
+
+	* highscore.c (show_highscores, print_scores):
+	fix display of scores greater then 99999.
+
+2000-10-28  Jochen Voss  <voss@mathematik.uni-kl.de>
+
+	* signal.c (install_signal): add a consistency check.
+
+	* TODO: Reordered.  One item done.
+
+2000-10-16  Jochen Voss  <voss@mathematik.uni-kl.de>
+
+	* checklist: new item.
+
+	* configure.in: changed the version string to "0.5.51".
+
+	* NEWS: new news
 
 	* ChangeLog: Added 2000-04-26 to 2000-10-16
 
