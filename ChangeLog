@@ -1,5 +1,22 @@
 1999-06-25  Jochen Voss  <voss@tatonka.pfalz.de>
 
+	* ChangeLog: Added remaining items.
+
+	* mbuggy.h: Fixed the header protection comment.
+
+	* autogen.sh: Added a warning message about uninst.pre.in.
+
+	* main.c, maint.in.in, maintman.in, merge.sed, moonman.in,
+	text2c.sed, title.c, AUTHORS, Makefile.am, img.sed, instcmds: do
+	not use the german letter esszet in the files
+
+	* mbuggy.lsm: initital revision
+
+	* configure.in: Changed the version string to "0.4".
+	Changed the package name to "mbuggy".
+
+	* Makefile.am (install-exec-hook): minor fix.
+
 	* ChangeLog: Added 1999-06-13 to 1999-06-25
 
 	* mbuggy.spec: Updated to moon-buggy version "0.4".
