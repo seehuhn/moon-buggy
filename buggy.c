@@ -2,13 +2,12 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: buggy.c,v 1.9 1999/04/23 22:20:19 voss Exp $";
+static const  char  rcsid[] = "$Id: buggy.c,v 1.10 1999/04/24 17:55:28 voss Exp $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-#include <stdio.h>
 #include <assert.h>
 
 #include "moon.h"
@@ -39,8 +38,6 @@ static  scenario  sz_jump = {
 
 static  struct scene *state;
 static  enum car_state  cstate;
-
-#define  speed  1
 
 void
 initialise_buggy (void)
