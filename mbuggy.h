@@ -2,19 +2,14 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: mbuggy.h,v 1.5 1999/05/22 20:46:52 voss Exp $ */
+ * $Id: mbuggy.h,v 1.6 1999/05/23 14:24:19 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
 
-/* The game's overall speed.
- * You may try to decrease this, if the moon's ground don't move
- * properly. */
+/* The game's overall speed.  High values indicate fast scrolling.
+ * You may try to decrease this, if the animation flickers too much. */
 #define  MB_SPEED  1.0
-
-/* Set to 1 to see additional debugging information.
- * Only used for the game's development.  */
-#define MB_DEBUG 0
 
 #include <curses.h>
 #include <stdlib.h>		/* we use `size_t' */
@@ -75,8 +70,8 @@ extern  int  game_mode (void);
 extern  void  resize_game (void);
 
 /* from "control.c" */
-extern  void  control_init (int);
-extern  int  control_tick (double t);
+extern  void  level_start ();
+extern  int  level_tick (double t);
 
 /* from "moon.c" */
 extern  char *ground1, *ground2;
