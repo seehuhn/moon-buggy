@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: mbuggy.h,v 1.12 1999/06/05 13:37:08 voss Exp $ */
+ * $Id: mbuggy.h,v 1.13 1999/06/06 13:19:33 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -184,8 +184,14 @@ extern  void  unblock (void);
 extern  void  initialise_signals (void);
 extern  void  handle_signals (void);
 
-/* from "xgetch.c" */
-extern  int  xgetch (WINDOW *win);
+/* from "keyboard.c" */
+enum mb_key {
+  mbk_copyright = 1, mbk_down = 2, mbk_end = 4, mbk_fire = 8, mbk_first = 16,
+  mbk_jump = 32, mbk_last = 64, mbk_pagedown = 128, mbk_pageup = 256,
+  mbk_start = 512, mbk_up = 1024, mbk_warranty = 2048
+};
+extern  void  install_keys (void);
+extern  int  read_key (void);
 
 /* from "random.c" */
 extern  void  init_rnd (void);
