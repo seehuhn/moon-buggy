@@ -2,7 +2,7 @@
  *
  * Copyright 1999, 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id: keyboard.c,v 1.11 2000/04/09 13:02:43 voss Exp $";
+static const  char  rcsid[] = "$Id: keyboard.c,v 1.12 2000/04/12 20:24:25 voss Rel $";
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -53,7 +53,7 @@ add_key (int key_code, enum mb_key meaning, int priority)
 {
   struct hash_entry **entry_p;
 
-#ifdef NCURSES_VERSION
+#if NCURSES_VERSION_MAJOR >= 4
   if ((key_code < 0 || key_code > 255) && ! has_key (key_code))  return;
 #endif
   entry_p = locate (key_code);
@@ -289,10 +289,10 @@ choose_keys (int *n, const struct binding *b, struct key_info *keys,
   
   /* Is there enough space to explain all functions?  */
   len = max_len;
-  for (i=0; i<*n && len>3; ++i) {
+  for (i=0; i<*n; ++i) {
     int  x;
-    if (i>0)  --len;		/* " " */
-    x = 2 + strlen(b[i].desc);	/* "x:desc" */
+    x = (i>0) ? 1 : 0;		/* " " */
+    x += 2 + strlen(b[i].desc);	/* "x:desc" */
     if (len >= x) {
       len -= x;
     } else {
@@ -313,18 +313,18 @@ choose_keys (int *n, const struct binding *b, struct key_info *keys,
   for (k=0; ! finished; ++k) {
     finished = 1;
     for (i=0; i<*n; ++i) {
-      if (k < keys[i].k
-	  && (strlen (keys[i].data[k].name) < len
-	      || (first[i] && strlen (keys[i].data[k].name)<=len))) {
-	len -= strlen (keys[i].data[k].name);
-	if (first[i]) {
+      if (k < keys[i].k) {
+	int  x;
+	
+	x = first[i] ? 0 : 1;	/* "," */
+	x += strlen (keys[i].data[k].name);
+	if (x <= len) {
+	  len -= x;
 	  first[i] = 0;
 	} else {
-	  --len;	/* "," */
+	  keys[i].data[k].base_priority = 0;
 	}
 	finished = 0;
-      } else {
-	keys[i].data[k].base_priority = 0;
       }
     }
   }
