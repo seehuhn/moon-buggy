@@ -21,11 +21,12 @@ Verbesserung?
 · Den `fd_set' Teil von "configure.in" verbessern.  Zumindest
 sollte der cache verwendet werden.
 · Portabilität bekümmern
-· Steigenden Schwierigkeitsgrad einführen
 · "--with-suid" sollte den aktuellen Benutzer als default verwenden
 · Remove score files from different versions on installation
 · Irgendwo kurz "curses" erklären
 · entferne MB_DEBUG
+· Hilfetext für den Pager, den man von der Titelseite aus aufrufen
+kann
 
 · rpm Zeugs: "Autoreq: false" ausprobieren, "BuildRoot" wieder einführen
 · rpm Zeugs: "mbuggy.spec" aus "mbuggy.spec.in" erzeugen
