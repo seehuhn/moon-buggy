@@ -1,11 +1,23 @@
+BUGS:
 · Signal handlers dürfen `doupdate' nicht aufrufen.
+· Use sed instead of awk for "instcmds"
+· From: towa@mathematik
+    Schlecht finde ich an dem Programm, dass
+    wenn der default-name zu lang ist, nur noch sehr wenig 
+    Platz für den richtigen Namen ist - in meinem Fall war nur
+    noch Platz für einen Buchstaben. 
+
+IMPROVEMENTS:
 · Portabilität bekümmern
 · Steigenden Schwierigkeitsgrad einführen
-· wgetnstr-Ersatz verbessern
-· Use sed instead of awk for "instcmds"
 · Remove score files from different version on installation
+· Irgendwo kurz "curses" erklären
+
+· rpm Zeugs: "Autoreq: false" ausprobieren, "BuildRoot" wieder einführen
+· rpm Zeugs: "mbuggy.spec" aus "mbuggy.spec.in" erzeugen
+
+· wgetnstr-Ersatz verbessern
 · Score file locking: recover from failure (use an alternative method)
 · Use a timeout when waiting for a file lock
 · Internationalisieren
 · Lars: Ufos und Laser einführen
-· Klären, was es mit /usr/games auf sich hat
