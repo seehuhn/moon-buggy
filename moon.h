@@ -2,16 +2,20 @@
  *
  * Copyright (C) 1998  Jochen Voss.
  *
- * $Id: moon.h,v 1.9 1998/12/30 20:30:50 voss Exp $ */
+ * $Id: moon.h,v 1.10 1999/01/01 18:13:54 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
+
+/* The game's overall speed.
+ * You may try to decrease this, if the moon's ground don't move
+ * properly. */
+#define  MB_SPEED  1.0
 
 #include <curses.h>
 
 /* If key symbols are not defined move them out of the way.
  * Avoid duplicate case labels.  */
-
 #ifndef KEY_BEG
 #define KEY_BEG -1
 #endif
@@ -31,10 +35,7 @@
 #define KEY_UNDO -6
 #endif
 
-/* This defines the game's speed.  */
-#define TICK(x) ((x)*0.08)
-
-extern  long  score, bonus;
+#define TICK(x) ((x)*0.08/(MB_SPEED))
 
 /* from "main.c" */
 extern  const char *my_name;
@@ -58,6 +59,8 @@ extern  void  pager_mode (int);
 extern  void  resize_pager (void);
 
 /* from "game.c" */
+extern  long  score, bonus;
+
 extern  int  game_mode (void);
 extern  void  resize_game (void);
 extern  void  score_bonus (int x);
@@ -126,7 +129,18 @@ extern  void *xrealloc (void *ptr, size_t size);
 extern  char *xstrdup (const char *str);
 extern  char *xstrndup (const char *str, size_t size);
 
-/* from "mbpaths.c" */
+/* from "hpath.c" */
 extern  const char *score_dir;
+
+/* for configure's AC_REPLACE_FUNCS calls */
+#ifndef HAVE_BASENAME
+extern  const char *basename (const char *);
+#endif
+#ifndef HAVE_MVWADDNSTR
+extern  int  mvwaddnstr (WINDOW *win, int y, int x, const char *str, int n);
+#endif
+#ifndef HAVE_WGETNSTR
+extern  int  wgetnstr (WINDOW *win, char *str, int n);
+#endif
 
 #endif /* FILE_MOON_H_SEEN */
