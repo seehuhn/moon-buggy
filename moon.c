@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id: moon.c,v 1.16 1999/05/22 17:12:12 voss Exp $";
+static const  char  rcsid[] = "$Id: moon.c,v 1.17 1999/05/22 20:46:17 voss Exp $";
 
 
 #ifdef HAVE_CONFIG_H
@@ -58,7 +58,7 @@ print_ground (void)
 static void
 scroll_handler (game_time t, void *client_data)
 {
-  char  nextchar = control_tick () ? ' ' : '#';
+  char  nextchar = control_tick (t) ? ' ' : '#';
   
   memmove (ground2+1, ground2, ground_width-1);
   ground2[0] = nextchar;
