@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: moon.h,v 1.17 1999/04/24 17:56:38 voss Exp $ */
+ * $Id: moon.h,v 1.18 1999/04/25 17:11:26 voss Exp $ */
 
 #ifndef FILE_MOON_H_SEEN
 #define FILE_MOON_H_SEEN
@@ -49,6 +49,9 @@ extern  WINDOW *moon, *status, *message;
 enum game_state { INIT, TITLE, PAGER, PLAYING, HIGHSCORE };
 extern  enum game_state  game_state;
 
+extern int  car_base;
+
+
 extern  void  print_message (const char *str);
 extern  void  allocate_windows (void);
 extern  void  prepare_for_exit (void);
@@ -76,8 +79,7 @@ extern  void  print_ground (void);
 extern  void  scroll_ground (void);
 
 /* from "buggy.c" */
-extern  int  car_base, score_base;
-#define  speed  1
+extern  int  car_x, car_y;
 extern  void  initialise_buggy (void);
 extern  int  print_buggy (void);
 extern  void  jump (double t);
