@@ -2,7 +2,7 @@
  *
  * Copyright 1999  Jochen Voss
  *
- * $Id: moon-buggy.h,v 1.7 2000/03/19 18:47:46 voss Rel $ */
+ * $Id: moon-buggy.h,v 1.8 2000/03/31 11:18:58 voss Exp $ */
 
 #ifndef FILE_MOON_BUGGY_H_SEEN
 #define FILE_MOON_BUGGY_H_SEEN
@@ -22,36 +22,56 @@
 #define TICK(x) ((x)*0.08/(MB_SPEED))
 #define BASELINE (LINES-5)
 
+
 /* from "main.c" */
 extern  const char *my_name;
 extern  WINDOW *moon, *status, *message;
 
-enum game_state { INIT, TITLE, PAGER, PLAYING, HIGHSCORE };
-extern  enum game_state  game_state;
-
 extern int  car_base;
 
-
 extern  void  print_message (const char *str);
+extern  void  print_hint (const char *str);
 extern  void  allocate_windows (void);
 extern  void  prepare_for_exit (void);
 
+/* from "queue.c" */
+typedef  double  game_time;
+typedef  void (*callback_fn) (game_time, void *);
+
+extern  game_time  current_time (void);
+
+extern  void  clock_reset (void);
+extern  void  clock_thaw (double dt);
+extern  void  clear_queue (void);
+extern  void  add_event (game_time t, callback_fn callback, void *client_data);
+extern  void  remove_event (callback_fn callback);
+extern  void  remove_client_data (void *client_data);
+extern  void  clock_freeze (void);
+extern  void  quit_main_loop (void);
+extern  void  main_loop (void);
+extern  void  xsleep (double dt);
+
+extern  void  quit_main_loop_h (game_time, void *);
+extern  void  print_hint_h (game_time t, void *client_data);
+extern  void  clear_hint_h (game_time, void *);
+
 /* from "title.c" */
-extern  int  title_mode (void);
-extern  void  resize_title (void);
+extern  struct mode *title_mode;
+extern  void  setup_title_mode (void);
 
 /* from "pager.c" */
-extern  void  pager_mode (int);
-extern  void  resize_pager (void);
+extern  struct mode *pager_mode;
+extern  void  setup_pager_mode (void);
 
 /* from "game.c" */
+extern  struct mode *game_mode;
+extern  struct mode *pause_mode;
 extern  int  crash_detected;
 extern  int  stakes;
 
 extern  void  adjust_score (int val);
-extern  int  game_mode (void);
-extern  void  resize_game (void);
-extern  void  quit_game (void);
+extern  void  print_lives (void);
+extern  void  setup_game_mode (void);
 
 /* from "level.c" */
 extern  void  level_start (int initial);
@@ -69,11 +89,11 @@ extern  void  start_scrolling (double t);
 extern  int  car_x, car_y;
 extern  void  initialise_buggy (void);
 extern  void  print_buggy (void);
-extern  void  jump (double t);
+extern  void  jump (game_time t);
 extern  int  can_jump (void);
 extern  int  crash_check (void);
 extern  void  shift_buggy (int dx);
-extern  int  car_meteor_hit (double t, int x);
+extern  int  car_meteor_hit (game_time t, int x);
 
 /* from "laser.c" */
 extern  void  fire_laser (double t);
@@ -89,36 +109,15 @@ extern  int  meteor_car_hit (int x0, int x1);
 extern  void  resize_meteors (void);
 
 /* from "highscore.c" */
+extern  struct mode *highscore_mode;
 extern  void  create_highscores (void);
 extern  void  show_highscores (void);
-extern  int  highscore_mode (int score, int level);
-extern  void  resize_highscore (void);
+
+extern  void  score_set (int score);
+extern  void  setup_highscore_mode (void);
 
 /* from "realname.c" */
-extern  void  get_real_user_name (char *buffer, size_t size);
-
-/* from "queue.c" */
-typedef  double  game_time;
-typedef  void (*callback_fn) (game_time, void *);
-
-extern  double  sleep_meter;
-
-extern  void  save_queue (void);
-extern  void  restore_queue (void);
-
-extern  void  clock_adjust_delay (double dt);
-extern  void  clear_queue (void);
-extern  void  add_event (game_time t, callback_fn callback, void *client_data);
-extern  void  remove_event (callback_fn callback);
-extern  void  remove_client_data (void *client_data);
-extern  void  fix_game_time (void);
-extern  void  quit_main_loop (void);
-extern  int  main_loop (double dt, void (*key_handler)(game_time));
-extern  void  xsleep (double dt);
-
-extern  void  quit_main_loop_h (game_time, void *);
-extern  void  print_message_h (game_time t, void *client_data);
-extern  void  clear_message_h (game_time, void *);
+extern  int  get_real_user_name (char *buffer, size_t size);
 
 /* from "vclock.c" */
 extern  double  vclock (void);
@@ -149,8 +148,44 @@ enum mb_key {
   mbk_jump = 32, mbk_last = 64, mbk_pagedown = 128, mbk_pageup = 256,
   mbk_start = 512, mbk_up = 1024, mbk_warranty = 2048
 };
+struct binding {
+  int  meanings;
+  const char *desc;
+  int  res;
+};
 extern  void  install_keys (void);
 extern  int  read_key (void);
+extern  void  describe_keys (int n, const struct binding *b);
+
+/* from "mode.c" */
+struct mode {
+  void (*enter) (int seed);
+  void (*leave) (void);
+  void (*redraw) (void);
+  void (*signal) (int signum);
+
+  struct {
+    struct binding *data;
+    int used, slots;
+  } keys;
+  void (*keypress) (game_time, int);
+};
+
+extern  void  mode_update (void);
+
+extern  struct mode *new_mode (void);
+extern  void  mode_add_key (struct mode *m,
+			    int meanings, const char *desc, int res);
+extern  void  mode_start (const struct mode *m, int seed);
+extern  void  mode_change (const struct mode *m, int seed);
+extern  void  mode_redraw (void);
+extern  void  mode_keypress (game_time t);
+extern  void  mode_signal (int signum);
+extern  void  mode_keys (void);
+
+/* from "cursor.c" */
+extern  void  hide_cursor (void);
+extern  void  show_cursor (void);
 
 /* from "random.c" */
 extern  void  init_rnd (void);
