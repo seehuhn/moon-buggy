@@ -1,5 +1,5 @@
 \input texinfo   @c -*-texinfo-*-
-@c $Id: mbuggy.texi,v 1.16 1999/06/13 18:39:49 voss Rel $
+@c $Id: moon-buggy.texi,v 1.1 1999/07/21 09:37:05 voss Exp $
 @c %**start of header
 @setfilename mbuggy.info
 @settitle Moon-Buggy Usage and Maintenance
