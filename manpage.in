@@ -1,4 +1,4 @@
-.\" $Id: manpage.in,v 1.2 1998/12/23 09:42:02 voss Exp $
+.\" $Id: manpage.in,v 1.3 1998/12/30 20:31:25 voss Exp $
 .\"
 .de Op
 .BR \-\\$1 @C@ ", " \-\-\\$2
@@ -7,7 +7,7 @@
 .SH NAME
 moon-buggy \- drive some car across the moon
 .SH SYNOPSIS
-moon-buggy [\-hV] @C@[\-\-help] [\-\-version]
+moon-buggy [\-hV] @C@[\-\-help] [\-\-no-title] [\-\-version]
 .SH DESCRIPTION
 .B moon\-buggy
 is a simple, curses-based game, where you drive some kind of car
@@ -18,6 +18,9 @@ The program understands the following options.
 .TP
 .Op h help
 shows a short but helpful message.
+.TP
+.Op n no-title
+skips the title screen.
 .TP
 .Op V version
 prints the program's version to standard output and exits.
@@ -30,6 +33,14 @@ the global score file
 the local score file.  This is used, if
 .B moon\-buggy
 has no write access to the global score file.
+.SH COPYING
+Copyright \(co 1998  Jochen Vo\(ss
+.PP
+.B Moon-buggy
+is free software.  Read the file
+.I COPYING
+of the source code distribution for details or press `c' at
+moon-buggy's title screen.
 .SH AUTHOR
 The program
 .B moon\-buggy
