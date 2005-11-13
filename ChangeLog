@@ -132,7 +132,7 @@ Mention the new animations and current automake version.
 
 	* terminal.c: white space fix
 
-2001-05-24  Jochen Voss  <jvoss2@gmx.de>
+2001-05-24  Jochen Voss  <voss@seehuhn.de>
 
 	* configure.ac, configure.in: moved configure.in to configure.ac
 
@@ -148,7 +148,7 @@ Mention the new animations and current automake version.
 
 	* manpage.in, moon-buggy.texi: Fix a typo.
 
-2000-11-19  Jochen Voss  <jvoss2@gmx.de>
+2000-11-19  Jochen Voss  <voss@seehuhn.de>
 
 	* configure.in: Changed the version string to "0.5.53".
 
@@ -156,7 +156,7 @@ Mention the new animations and current automake version.
 
 	* meteor.c: Removed some debugging output.
 
-2000-11-16  Jochen Voss  <jvoss2@gmx.de>
+2000-11-16  Jochen Voss  <voss@seehuhn.de>
 
 	* moon-buggy.h:
 	Add a prototype for the new function `scroll_meteors' from "meteor.c".
@@ -174,7 +174,7 @@ Mention the new animations and current automake version.
 	* buggy.c: New code to show a flying wheel.
 	Doc fixes.
 
-2000-11-13  Jochen Voss  <jvoss2@gmx.de>
+2000-11-13  Jochen Voss  <voss@seehuhn.de>
 
 	* game.c: Renamed old `pause_mode' to new `crash_mode'.
 	(leave_crash_mode): doc fix
@@ -200,7 +200,7 @@ Mention the new animations and current automake version.
 
 	* configure.in: Changed the version string to "0.5.52".
 
-2000-11-01  Jochen Voss  <voss@mathematik.uni-kl.de>
+2000-11-01  Jochen Voss  <voss@seehuhn.de>
 
 	* ChangeLog: Added 2000-10-28 to 2000-11-01
 
@@ -240,18 +240,18 @@ Mention the new animations and current automake version.
 
 	* mesg.c: initial revision
 
-2000-10-29  Jochen Voss  <voss@mathematik.uni-kl.de>
+2000-10-29  Jochen Voss  <voss@seehuhn.de>
 
 	* highscore.c (show_highscores, print_scores):
 	fix display of scores greater then 99999.
 
-2000-10-28  Jochen Voss  <voss@mathematik.uni-kl.de>
+2000-10-28  Jochen Voss  <voss@seehuhn.de>
 
 	* signal.c (install_signal): add a consistency check.
 
 	* TODO: Reordered.  One item done.
 
-2000-10-16  Jochen Voss  <voss@mathematik.uni-kl.de>
+2000-10-16  Jochen Voss  <voss@seehuhn.de>
 
 	* checklist: new item.
 
