@@ -1,6 +1,6 @@
 /* title.c - print the title page
  *
- * Copyright 1999, 2000  Jochen Voss  */
+ * Copyright 1999, 2000, 2004  Jochen Voss  */
 
 static const  char  rcsid[] = "$Id$";
 
@@ -39,12 +39,12 @@ print_title (void)
   int  title_lines = sizeof (title) / sizeof (const char *);
 
   mvwaddstr (moon, 0, 0, "  Moon-Buggy version "
-	     VERSION ", Copyright 2000 Jochen Voss\n");
+	     VERSION ", Copyright 2004 Jochen Voss <voss@seehuhn.de>\n");
   waddstr (moon, "  Moon-Buggy comes with ABSOLUTELY NO WARRANTY;"
-	   " for details type `w'.\n");
+	   " for details type 'w'.\n");
   waddstr (moon,
 	   "  This is free software, and you are welcome to redistribute it\n\
-  under certain conditions; type `c' for details.\n");
+  under certain conditions; type 'c' for details.\n");
 
   if (5 + title_lines + 5 <= LINES) {
     int  top = (LINES-title_lines)/3.0 + 0.5;
