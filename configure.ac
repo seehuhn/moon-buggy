@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_REVISION($Revision: 1.4 $)
 
-AC_INIT(moon-buggy, 1.0, voss@seehuhn.de)
+AC_INIT(moon-buggy, 1.0.51, voss@seehuhn.de)
 AC_CONFIG_SRCDIR([moon-buggy.h])
 AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER(config.h)
@@ -9,9 +9,8 @@ AM_CONFIG_HEADER(config.h)
 AC_CANONICAL_HOST
 
 dnl Some systems want _XOPEN_SOURCE to be defined as we use curses.
-case "$host_os" in
-  *bsd*) ;;
-  sparc-sun-solaris2.4) ;;
+case "$host" in
+  *bsd*|sparc-sun-solaris2.4|*-*-darwin*) ;;
   *) AC_DEFINE(_XOPEN_SOURCE,1,[Define this if your system supports it.]) ;;
 esac
 
