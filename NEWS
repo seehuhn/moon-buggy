@@ -1,3 +1,6 @@
+  fix highscore file corruption bug (thanks, Arnd Behring)
+  fix compilation on MacOS X
+
 version 1.0 (27 Dec 2004):
   new animations donated by Piotr Grzybowski
   new "-m" option to simulate the effect of "mesg n"

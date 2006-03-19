@@ -1,6 +1,6 @@
 /* realname.c - query the user's real name
  *
- * Copyright 1999, 2000  Jochen Voss  */
+ * Copyright 1999, 2000, 2006  Jochen Voss  */
 
 static const  char  rcsid[] = "$Id$";
 
@@ -35,16 +35,19 @@ get_real_user_name (char *buffer, size_t size)
 {
   int  res, start;
   char *tmp;
-
-  tmp = xmalloc (size);
   
   if (buffer[0] == '\0') {
     uid_t me = geteuid ();
     struct passwd *my_passwd = getpwuid (me);
     if (my_passwd) {
-      char *w = strchr (my_passwd->pw_gecos, ',');
-      if (w)  *w = '\0';
+      int  i;
       strncpy (buffer, my_passwd->pw_gecos, size);
+      for (i=0; i<size; ++i) {
+	if (buffer[i] == ',') {
+	  buffer[i] = '\0';
+	  break;
+	}
+      }
     }
   }
 
@@ -55,8 +58,9 @@ get_real_user_name (char *buffer, size_t size)
     char  tmpl [100];
     int  def_size;
 
-    def_size = COLS - size - strlen("please enter your name (default: \""
-				  "\"): ");
+    def_size = (COLS 
+		- size 
+		- strlen("please enter your name (default: \"\"): "));
     if (def_size >= (int)xstrnlen(buffer, size)) {
       sprintf (tmpl, "please enter your name (default: \"%%.%ds\"): ", size);
     } else {
@@ -68,6 +72,8 @@ get_real_user_name (char *buffer, size_t size)
     }
     wprintw (message, tmpl, buffer);
   }
+
+  tmp = xmalloc (size+1);
 
   show_cursor ();
   echo ();

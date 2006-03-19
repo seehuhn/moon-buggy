@@ -1,6 +1,6 @@
 /* main.c - moon-buggy main file
  *
- * Copyright 1999, 2000, 2004  Jochen Voss  */
+ * Copyright 1999, 2000, 2004, 2006  Jochen Voss  */
 
 static const  char  rcsid[] = "$Id$";
 
@@ -197,7 +197,7 @@ main (int argc, char **argv)
   
   if (version_flag) {
     puts ("Moon-Buggy " VERSION);
-    puts ("Copyright 1998, 1999, 2000 Jochen Voss");
+    puts ("Copyright 1998-2006  Jochen Voss");
     puts ("\
 Moon-Buggy comes with NO WARRANTY, to the extent permitted by law.");
     puts ("\

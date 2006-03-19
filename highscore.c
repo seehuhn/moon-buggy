@@ -1,6 +1,6 @@
 /* highscore.c - maintain the highscore list
  *
- * Copyright 1999, 2000, 2001  Jochen Voss  */
+ * Copyright 1999, 2000, 2001, 2006  Jochen Voss  */
 
 static const  char  rcsid[] = "$Id$";
 
@@ -622,7 +622,7 @@ enter_name_h (game_time t, void *client_data)
  retry:
   entry.name[0] = '\0';
   res = get_real_user_name (entry.name, MAX_NAME_CHARS);
-  if (res == ERR) {
+  if (res == ERR || ! entry.name[0]) {
     mode_redraw ();
     goto retry;
   }
