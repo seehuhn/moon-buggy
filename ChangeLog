@@ -1,5 +1,48 @@
 ------------------------------------------------------------------------
-r6092 | voss | 2004-12-27 16:34:32 +0100 (Mon, 27 Dec 2004) | 13 lines
+r6825 | voss | 2006-03-19 19:18:39 +0000 (Sun, 19 Mar 2006) | 5 lines
+
+* highscore.c, realname.c: fix highscore file corruption bug
+  (thanks, Arnd Behring)
+* update the NEWS file
+* update the copyright dates
+
+------------------------------------------------------------------------
+r6660 | voss | 2006-01-15 10:57:38 +0000 (Sun, 15 Jan 2006) | 3 lines
+
+Increase the version string to "1.0.51".
+Minor MacOSX compatibility fix.
+
+------------------------------------------------------------------------
+r6588 | voss | 2005-11-13 13:35:07 +0000 (Sun, 13 Nov 2005) | 1 line
+
+fix svn repository path
+------------------------------------------------------------------------
+r6587 | voss | 2005-11-13 13:34:46 +0000 (Sun, 13 Nov 2005) | 1 line
+
+fix my email address
+------------------------------------------------------------------------
+r6586 | voss | 2005-11-13 13:34:29 +0000 (Sun, 13 Nov 2005) | 1 line
+
+cosmetical fixes, update copyright date
+------------------------------------------------------------------------
+r5984 | voss | 2004-12-27 15:58:57 +0000 (Mon, 27 Dec 2004) | 14 lines
+
+* manpage.in:
+  - update the data string
+* ChangeLog:
+  - add revisions up to 5983
+* README:
+  - remove the unstable-version-warning
+  - fix the example configure call
+* buggy.c, main.c:
+  - fix the copyright date
+* ANNOUNCE:
+  - updates for version 1.0
+* checklist:
+  - updates for use with subversion
+
+------------------------------------------------------------------------
+r5983 | voss | 2004-12-27 15:34:32 +0000 (Mon, 27 Dec 2004) | 13 lines
 
 * configure.ac:
   - call AM_INIT_AUTOMAKE without arguments
@@ -15,7 +58,7 @@ r6092 | voss | 2004-12-27 16:34:32 +0100 (Mon, 27 Dec 2004) | 13 lines
   - moon-buggy.6: do not substitute MBNAME any more
 
 ------------------------------------------------------------------------
-r6091 | voss | 2004-12-27 16:13:05 +0100 (Mon, 27 Dec 2004) | 15 lines
+r5982 | voss | 2004-12-27 15:13:05 +0000 (Mon, 27 Dec 2004) | 15 lines
 
 * moon-buggy.texi, instcmds:
   - fix my email address
@@ -33,11 +76,11 @@ r6091 | voss | 2004-12-27 16:13:05 +0100 (Mon, 27 Dec 2004) | 15 lines
   - updates
 
 ------------------------------------------------------------------------
-r5826 | voss | 2004-07-11 21:33:59 +0200 (Sun, 11 Jul 2004) | 1 line
+r5731 | voss | 2004-07-11 20:33:59 +0100 (Sun, 11 Jul 2004) | 1 line
 
 * move moon-buggy into the new project structure
 ------------------------------------------------------------------------
-r5726 | voss | 2004-06-01 23:22:28 +0200 (Tue, 01 Jun 2004) | 15 lines
+r5631 | voss | 2004-06-01 22:22:28 +0100 (Tue, 01 Jun 2004) | 15 lines
 
 * README, AUTHORS, main.c:
   - fix my email address
@@ -55,34 +98,34 @@ r5726 | voss | 2004-06-01 23:22:28 +0200 (Tue, 01 Jun 2004) | 15 lines
   - new entry
 
 ------------------------------------------------------------------------
-r4873 | voss | 2003-04-14 15:21:45 +0200 (Mon, 14 Apr 2003) | 1 line
+r4869 | voss | 2003-04-14 14:21:45 +0100 (Mon, 14 Apr 2003) | 1 line
 
 add jv:section tags for the new make-links.sh script
 ------------------------------------------------------------------------
-r4840 | voss | 2003-04-13 18:56:07 +0200 (Sun, 13 Apr 2003) | 1 line
+r4836 | voss | 2003-04-13 17:56:07 +0100 (Sun, 13 Apr 2003) | 1 line
 
 fix the svn:ignoe property
 ------------------------------------------------------------------------
-r4839 | voss | 2003-04-13 18:50:02 +0200 (Sun, 13 Apr 2003) | 3 lines
+r4835 | voss | 2003-04-13 17:50:02 +0100 (Sun, 13 Apr 2003) | 3 lines
 
 Transition the project from CVS to Subversion.
 Incorporate the changes donated by Piotr Grzybowski.
 
 ------------------------------------------------------------------------
-r4838 | voss | 2003-04-13 18:43:32 +0200 (Sun, 13 Apr 2003) | 1 line
+r4834 | voss | 2003-04-13 17:43:32 +0100 (Sun, 13 Apr 2003) | 1 line
 
 continue CVS -> subversion transition
 ------------------------------------------------------------------------
-r4837 | voss | 2003-04-13 18:42:06 +0200 (Sun, 13 Apr 2003) | 2 lines
+r4833 | voss | 2003-04-13 17:42:06 +0100 (Sun, 13 Apr 2003) | 2 lines
 
 continue the CVS -> Subversion transition
 
 ------------------------------------------------------------------------
-r4836 | voss | 2003-04-13 18:38:47 +0200 (Sun, 13 Apr 2003) | 1 line
+r4832 | voss | 2003-04-13 17:38:47 +0100 (Sun, 13 Apr 2003) | 1 line
 
 continue CVS -> subversion transition
 ------------------------------------------------------------------------
-r4791 | voss | 2003-03-19 21:35:15 +0100 (Wed, 19 Mar 2003) | 2 lines
+r4787 | voss | 2003-03-19 20:35:15 +0000 (Wed, 19 Mar 2003) | 2 lines
 
 Mention the new animations and current automake version.
 
