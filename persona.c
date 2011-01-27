@@ -2,8 +2,6 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id$";
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -42,7 +40,7 @@ initialise_persona (void)
 
   current = pers_GAME;
   method = m_NONE;
-  
+
   user_uid = getuid ();
   game_uid = geteuid ();
   user_gid = getgid ();
@@ -64,7 +62,7 @@ initialise_persona (void)
   method = m_EXCH;
 #else
   fputs ("WARNING: setuid/setgid usage not supported on this system!\n",
-	 stderr);
+         stderr);
   sleep (3);
   setuid (user_uid);
   setgid (user_gid);

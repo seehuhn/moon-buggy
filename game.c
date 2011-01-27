@@ -2,8 +2,6 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id$";
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -179,7 +177,7 @@ static void
 crash_redraw (void)
 {
   resize_ground (0);
-  
+
   print_ground ();
   print_buggy ();
   adjust_score (0);
@@ -190,7 +188,7 @@ static void
 crash_key_handler (game_time t, int val)
 {
   if (t < 0.5)  return;
-  
+
   switch (val) {
   case 1:
     leave_crash_mode (0, NULL);

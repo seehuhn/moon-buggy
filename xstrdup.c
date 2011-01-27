@@ -2,8 +2,6 @@
  *
  * Copyright 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id$";
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -36,10 +34,10 @@ xstrndup (const char *str, size_t size)
 {
   size_t  n = xstrnlen (str, size);
   char *tmp = xmalloc (n + 1);
-  
+
   if (tmp == NULL)  fatal ("Memory exhausted");
   strncpy (tmp, str, n);
   tmp[n] = '\0';
-  
+
   return  tmp;
 }

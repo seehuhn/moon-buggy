@@ -2,9 +2,6 @@
  *
  * Copyright (C) 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id$";
-
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -22,8 +19,8 @@ parse_date (const char *str)
   struct tm  broken;
 
   sscanf (str, "%d-%d-%d %d:%d:%d",
-	  &broken.tm_year, &broken.tm_mon, &broken.tm_mday,
-	  &broken.tm_hour, &broken.tm_min, &broken.tm_sec);
+          &broken.tm_year, &broken.tm_mon, &broken.tm_mday,
+          &broken.tm_hour, &broken.tm_min, &broken.tm_sec);
   broken.tm_year -= 1900;
   broken.tm_mon -= 1;
   broken.tm_isdst = -1;
@@ -53,11 +50,11 @@ format_date (char *buffer, time_t date)
  * The filled-in string is feasible for parsing with `parse_date'.  */
 {
   struct tm *loctime;
-  
+
   loctime = localtime (&date);
   sprintf (buffer, "%d-%d-%d %d:%d:%d",
-	   loctime->tm_year+1900, loctime->tm_mon+1, loctime->tm_mday,
-	   loctime->tm_hour, loctime->tm_min, loctime->tm_sec);
+           loctime->tm_year+1900, loctime->tm_mon+1, loctime->tm_mday,
+           loctime->tm_hour, loctime->tm_min, loctime->tm_sec);
 }
 
 void
@@ -67,10 +64,10 @@ format_display_date (char *buffer, time_t date)
  * is meant to be part of the displayed highscore list.  */
 {
   struct tm *loctime;
-  
+
   loctime = localtime (&date);
   sprintf (buffer, "%4d-%02d-%02d",
-	   loctime->tm_year+1900, loctime->tm_mon+1, loctime->tm_mday);
+           loctime->tm_year+1900, loctime->tm_mon+1, loctime->tm_mday);
 }
 
 void

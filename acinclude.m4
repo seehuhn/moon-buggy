@@ -1,6 +1,5 @@
 dnl acinclude.m4 - aclocal include file for "aclocal.m4"
 dnl Copyright 2000  Jochen Voss
-dnl $Id$
 
 dnl The idea of this tests, is to be as simple, as possible.
 dnl The only special case we check for, is old versions of

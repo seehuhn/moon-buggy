@@ -2,8 +2,6 @@
  *
  * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id$";
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -51,9 +49,9 @@ beam_handler (game_time t, void *client_data)
       mvwaddch (moon, LINES-b->y, b->left, '-');
       mvwaddch (moon, LINES-b->y, b->right, ' ');
       if (b->y == 5 && meteor_laser_hit (b->left, b->right)) {
-	b->count = 0;
+        b->count = 0;
       } else {
-	b->count -= 1;
+        b->count -= 1;
       }
       add_event (t+TICK(0.25), beam_handler, client_data);
     } else {

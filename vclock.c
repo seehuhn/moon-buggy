@@ -2,8 +2,6 @@
  *
  * Copyright 1998  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id$";
-
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

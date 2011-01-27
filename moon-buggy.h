@@ -1,8 +1,7 @@
 /* moon-buggy.h - global moon-buggy header file
  *
  * Copyright 1999, 2000  Jochen Voss
- *
- * $Id$ */
+ */
 
 #ifndef FILE_MOON_BUGGY_H_SEEN
 #define FILE_MOON_BUGGY_H_SEEN
@@ -149,7 +148,7 @@ enum mb_key {
   mbk_copyright = 1, mbk_down = 2, mbk_end = 4, mbk_fire = 8, mbk_first = 16,
   mbk_jump = 32, mbk_last = 64, mbk_pagedown = 128, mbk_pageup = 256,
   mbk_start = 512, mbk_up = 1024, mbk_warranty = 2048, mbk_scores = 4096,
-  
+
   mbk_redraw = 8192		/* specially handled in `mode_keypress' */
 };
 struct binding {
@@ -177,7 +176,7 @@ struct mode {
 
 extern  struct mode *new_mode (void);
 extern  void  mode_add_key (struct mode *m,
-			    int meanings, const char *desc, int res);
+                            int meanings, const char *desc, int res);
 extern  void  mode_complete (struct mode *m);
 extern  void  mode_change (const struct mode *m, int seed);
 extern  void  mode_update (void);
@@ -200,7 +199,7 @@ extern  int  uniform_rnd (unsigned limit);
 /* from "error.c" */
 #ifdef __GNUC__
 extern  void  fatal (const char *format, ...)
-	__attribute__ ((noreturn)) __attribute__ ((format (printf, 1, 2)));
+        __attribute__ ((noreturn)) __attribute__ ((format (printf, 1, 2)));
 #else
 extern  void  fatal (const char *format, ...);
 #endif

@@ -2,8 +2,6 @@
  *
  * Copyright 1999, 2000, 2001  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id$";
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -66,7 +64,7 @@ generic_handler (int signum)
  * signal arrived.  */
 {
   int  i;
-  
+
   signal_arrived = 1;
   for (i=0; i<sig_info_table.used; ++i) {
     if (sig_info_table.data[i].signum == signum)  break;
@@ -91,7 +89,7 @@ my_signal (int signum, void (*handler)(int), int ignore_test)
 
   if (ignore_test) {
     struct sigaction  action;
-    
+
     sigaction (signum, NULL, &action);
     if (action.sa_handler == SIG_IGN)  return;
   }
@@ -148,7 +146,7 @@ winch_handler (int signum)
   delwin (message);
   sleep (1);
   endwin ();
-  
+
   refresh ();
   allocate_windows ();
   hide_cursor ();
@@ -172,7 +170,7 @@ initialise_signals (void)
 #ifdef SIGWINCH
   my_signal (SIGWINCH, winch_handler, 0);
 #endif
-  
+
   sigfillset (&full_set);
 }
 
@@ -182,7 +180,7 @@ handle_signals (void)
  * Return 1, if any action was taken.  */
 {
   int  res = 0;
-  
+
   while (signal_arrived) {
     int  i;
 
@@ -190,8 +188,8 @@ handle_signals (void)
     res = 1;
     for (i=0; i<sig_info_table.used; ++i) {
       if (sig_info_table.data[i].pending) {
-	sig_info_table.data[i].pending = 0;	
-	sig_info_table.data[i].handler (sig_info_table.data[i].signum);
+        sig_info_table.data[i].pending = 0;
+        sig_info_table.data[i].handler (sig_info_table.data[i].signum);
       }
     }
   }

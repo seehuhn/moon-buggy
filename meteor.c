@@ -2,8 +2,6 @@
  *
  * Copyright 1999, 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id$";
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -47,7 +45,7 @@ scroll_one_meteor (struct meteor *m)
 
   m->x += 1;
   if (m->x >= COLS )  return 1;
-  
+
   if (laser_hit (m->x)) {
     m->state += 1;
     if (m->state > ms_SMALL) {
@@ -123,17 +121,17 @@ meteor_laser_hit (int x0, int x1)
     struct meteor *m = meteor_table.data[j];
     if (m->x >= x0 && m->x < x1) {
       int  x = m->x;
-      
+
       m->state += 1;
       wnoutrefresh (moon);
       if (m->state > ms_SMALL) {
-	mvwaddch (moon, BASELINE, m->x, ' ');
-	score_meteor (m);
-	remove_client_data (m);
-	DA_REMOVE_VALUE (meteor_table, struct meteor *, m);
-	free (m);
+        mvwaddch (moon, BASELINE, m->x, ' ');
+        score_meteor (m);
+        remove_client_data (m);
+        DA_REMOVE_VALUE (meteor_table, struct meteor *, m);
+        free (m);
       } else {
-	mvwaddch (moon, BASELINE, m->x, m_image[m->state]);
+        mvwaddch (moon, BASELINE, m->x, m_image[m->state]);
       }
       return  x;
     }

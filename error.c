@@ -2,8 +2,6 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id$";
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -26,7 +24,7 @@ fatal (const char *format, ...)
   va_list  ap;
 
   prepare_for_exit ();
-  
+
   va_start (ap, format);
   fflush (NULL);
   fputs ("Fatal error: ", stderr);

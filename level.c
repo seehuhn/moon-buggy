@@ -2,8 +2,6 @@
  *
  * Copyright 1999  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id$";
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -63,17 +61,17 @@ level0 (double t)
     } else {
       switch (data.l0.state) {
       case 0:
-	data.l0.gap = 13;
-	break;
+        data.l0.gap = 13;
+        break;
       case 1:
-	data.l0.gap = 10;
-	break;
+        data.l0.gap = 10;
+        break;
       case 2:
-	data.l0.gap = 11;
-	break;
+        data.l0.gap = 11;
+        break;
       default:
-	++level;
-	break;
+        ++level;
+        break;
       }
       ++data.l0.state;
     }
@@ -101,19 +99,19 @@ level1 (double t)
     } else {
       switch (data.l1.state) {
       default:
-	data.l1.gap = 12;
-	break;
+        data.l1.gap = 12;
+        break;
       case 1:
-	data.l1.gap = 7;
-	break;
+        data.l1.gap = 7;
+        break;
       case 2:
-	data.l1.gap = 8;
-	break;
+        data.l1.gap = 8;
+        break;
       }
       if (data.l1.state > 2) {
-	++level;
+        ++level;
       } else {
-	++data.l1.state;
+        ++data.l1.state;
       }
     }
   }
@@ -150,9 +148,9 @@ level2 (double t)
     if (data.l2.state == 0) {
       data.l2.gap = 8;
       if (ticks >= 310) {
-	data.l2.state = -1;
+        data.l2.state = -1;
       } else {
-	data.l2.state = 2 + uniform_rnd (3 + (ticks < 190));
+        data.l2.state = 2 + uniform_rnd (3 + (ticks < 190));
       }
     } else if (data.l2.state > 0) {
       data.l2.gap = 12 + uniform_rnd (6);
@@ -160,17 +158,17 @@ level2 (double t)
     } else {
       switch (data.l2.state) {
       case -1:
-	data.l2.gap = 16;
-	break;
+        data.l2.gap = 16;
+        break;
       case -2:
-	data.l2.gap = 13;
-	break;
+        data.l2.gap = 13;
+        break;
       case -4:
-	data.l2.gap = 14;
-	break;
+        data.l2.gap = 14;
+        break;
       default:
-	data.l2.gap = 7;
-	break;
+        data.l2.gap = 7;
+        break;
       }
       --data.l2.state;
     }
@@ -194,7 +192,7 @@ level3 (double t)
     place_meteor ();
     data.l3.state = 0;
   }
-  
+
   if (is_edge) {
     data.l3.gap = 20 + uniform_rnd (10);
     if (ticks > 160)  ++data.l3.state;
@@ -250,11 +248,11 @@ level4 (double t)
       break;
     case 0:
       if (uniform_rnd (2)) {
-	hole = 5;
-	data.l4.next_gap = 9 + uniform_rnd (10);
+        hole = 5;
+        data.l4.next_gap = 9 + uniform_rnd (10);
       } else {
-	hole = 2;
-	data.l4.next_gap = 8;
+        hole = 2;
+        data.l4.next_gap = 8;
       }
       break;
     case -1:
@@ -303,7 +301,7 @@ static void
 level6 (double t)
 {
   int  slip;			/* this many ticks/meteor may the user vaste */
-  
+
   if (is_edge) {
     data.l6.gap = data.l6.next_gap;
     if (data.l6.state == 0) {
@@ -321,11 +319,11 @@ level6 (double t)
       data.l6.next_gap = 15 + uniform_rnd (6) - hole;
     } else {
       if (uniform_rnd (3)) {
-	hole = 5;
-	data.l6.next_gap = 9 + uniform_rnd (10);
+        hole = 5;
+        data.l6.next_gap = 9 + uniform_rnd (10);
       } else {
-	hole = 2 + uniform_rnd (2);
-	data.l6.next_gap = 9;
+        hole = 2 + uniform_rnd (2);
+        data.l6.next_gap = 9;
       }
     }
     data.l6.spare_time -= 11;
@@ -369,11 +367,11 @@ level_fin (double t)
       data.l_fin.next_gap = 15 + uniform_rnd (6) - hole;
     } else {
       if (uniform_rnd (3)) {
-	hole = 5 + uniform_rnd (2);
-	data.l_fin.next_gap = 9 + uniform_rnd (10);
+        hole = 5 + uniform_rnd (2);
+        data.l_fin.next_gap = 9 + uniform_rnd (10);
       } else {
-	hole = 2 + uniform_rnd (3);
-	data.l_fin.next_gap = 9;
+        hole = 2 + uniform_rnd (3);
+        data.l_fin.next_gap = 9;
       }
     }
     data.l_fin.spare_time -= 11;

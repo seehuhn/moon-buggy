@@ -2,8 +2,6 @@
  *
  * Copyright 1999, 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id$";
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -95,7 +93,7 @@ install_keys (void)
 
   add_key (' ', mbk_jump, 100);
   add_key ('j', mbk_jump, 50);
-  
+
   add_key ('>', mbk_last, 90);
 #ifdef KEY_END
   add_key (KEY_END, mbk_last, 100);
@@ -133,7 +131,7 @@ read_key (void)
 {
   int key_code;
   struct hash_entry **entry_p;
-  
+
   do {
     key_code = wgetch (moon);
   } while (key_code == ERR && errno == EINTR);
@@ -167,7 +165,7 @@ key_name (int key)
 {
   static  char  buffer [8];
   int  i;
-  
+
 #ifdef KEY_BACKSPACE
   if (key == KEY_BACKSPACE)  return "BS";
 #endif
@@ -230,7 +228,7 @@ key_name (int key)
     }
   }
 #endif
-  
+
   if (key > 255)  return NULL;
   if (key == ' ')  return "SPC";
   if (key == 10)  return "RET";
@@ -278,7 +276,7 @@ compare_keys (const void *a, const void *b)
 
 static int
 choose_keys (int *n, const struct binding *b, struct key_info *keys,
-	     int max_len)
+             int max_len)
 /* Choose the keys to explain, based on available display space.
  * Input are *N key bindings in the array B and the corresponding key
  * names in KEYS.  The resulting explanation must fit within MAX_LEN
@@ -290,7 +288,7 @@ choose_keys (int *n, const struct binding *b, struct key_info *keys,
   int  finished;
   int  *first;
   int  i, k, len;
-  
+
   /* Is there enough space to explain all functions?  */
   len = max_len;
   for (i=0; i<*n; ++i) {
@@ -318,17 +316,17 @@ choose_keys (int *n, const struct binding *b, struct key_info *keys,
     finished = 1;
     for (i=0; i<*n; ++i) {
       if (k < keys[i].k) {
-	int  x;
-	
-	x = first[i] ? 0 : 1;	/* "," */
-	x += strlen (keys[i].data[k].name);
-	if (x <= len) {
-	  len -= x;
-	  first[i] = 0;
-	} else {
-	  keys[i].data[k].base_priority = 0;
-	}
-	finished = 0;
+        int  x;
+
+        x = first[i] ? 0 : 1;	/* "," */
+        x += strlen (keys[i].data[k].name);
+        if (x <= len) {
+          len -= x;
+          first[i] = 0;
+        } else {
+          keys[i].data[k].base_priority = 0;
+        }
+        finished = 0;
       }
     }
   }
@@ -359,31 +357,31 @@ describe_keys (int n, const struct binding *b)
   }
   for (j=0; j<HASH_SIZE; ++j) {
     struct hash_entry *ent = hash_table[j];
-    
+
     while (ent) {
       for (i=0; i<n; ++i) {
-	if (ent->meaning & b[i].meanings) {
-	  char *name = key_name (ent->key_code);
+        if (ent->meaning & b[i].meanings) {
+          char *name = key_name (ent->key_code);
 
-	  if (name) {
-	    k = keys[i].k++;
-	    strncpy (keys[i].data[k].name, name, 7);
-	    keys[i].data[k].name[7] = 0;
-	    keys[i].data[k].base_priority = ent->priority;
-	    keys[i].data[k].priority = ent->priority;
-	    if (function_key (ent->key_code)) {
-	      if (keys[i].fn == 0)  keys[i].data[k].priority += 1050;
-	      ++keys[i].fn;
-	    } else if (control_key (ent->key_code)) {
-	      if (keys[i].ctrl == 0)  keys[i].data[k].priority += 1000;
-	      ++keys[i].ctrl;
-	    } else {
-	      keys[i].data[k].priority += 1100;
-	      ++keys[i].norm;
-	    }
-	  }
-	  break;
-	}
+          if (name) {
+            k = keys[i].k++;
+            strncpy (keys[i].data[k].name, name, 7);
+            keys[i].data[k].name[7] = 0;
+            keys[i].data[k].base_priority = ent->priority;
+            keys[i].data[k].priority = ent->priority;
+            if (function_key (ent->key_code)) {
+              if (keys[i].fn == 0)  keys[i].data[k].priority += 1050;
+              ++keys[i].fn;
+            } else if (control_key (ent->key_code)) {
+              if (keys[i].ctrl == 0)  keys[i].data[k].priority += 1000;
+              ++keys[i].ctrl;
+            } else {
+              keys[i].data[k].priority += 1100;
+              ++keys[i].norm;
+            }
+          }
+          break;
+        }
       }
       ent = ent->next;
     }
@@ -395,26 +393,26 @@ describe_keys (int n, const struct binding *b)
   max_len = COLS;
   len = choose_keys (&n, b, keys, max_len);
   buffer = xmalloc (max_len+1);
-  
+
   buffer[0] = '\0';
   for (i=0; i<n; ++i) {
     int  first = 1;
     for (k=0; k<keys[i].k; ++k) {
       if (keys[i].data[k].priority) {
-	if (! first) {
-	  strcat (buffer, ",");
-	} else {
-	  if (i>0) {
-	    if (len > 0) {
-	      --len;
-	      strcat (buffer, "  ");
-	    } else {
-	      strcat (buffer, " ");
-	    }
-	  }
-	  first = 0;
-	}
-	strcat (buffer, keys[i].data[k].name);
+        if (! first) {
+          strcat (buffer, ",");
+        } else {
+          if (i>0) {
+            if (len > 0) {
+              --len;
+              strcat (buffer, "  ");
+            } else {
+              strcat (buffer, " ");
+            }
+          }
+          first = 0;
+        }
+        strcat (buffer, keys[i].data[k].name);
       }
     }
     if (keys[i].data[0].priority) {

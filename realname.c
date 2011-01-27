@@ -2,8 +2,6 @@
  *
  * Copyright 1999, 2000, 2006  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id$";
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -35,7 +33,7 @@ get_real_user_name (char *buffer, size_t size)
 {
   int  res, start;
   char *tmp;
-  
+
   if (buffer[0] == '\0') {
     uid_t me = geteuid ();
     struct passwd *my_passwd = getpwuid (me);
@@ -43,10 +41,10 @@ get_real_user_name (char *buffer, size_t size)
       int  i;
       strncpy (buffer, my_passwd->pw_gecos, size);
       for (i=0; i<size; ++i) {
-	if (buffer[i] == ',') {
-	  buffer[i] = '\0';
-	  break;
-	}
+        if (buffer[i] == ',') {
+          buffer[i] = '\0';
+          break;
+        }
       }
     }
   }
@@ -58,9 +56,9 @@ get_real_user_name (char *buffer, size_t size)
     char  tmpl [100];
     int  def_size;
 
-    def_size = (COLS 
-		- size 
-		- strlen("please enter your name (default: \"\"): "));
+    def_size = (COLS
+                - size
+                - strlen("please enter your name (default: \"\"): "));
     if (def_size >= (int)xstrnlen(buffer, size)) {
       sprintf (tmpl, "please enter your name (default: \"%%.%ds\"): ", size);
     } else {
@@ -68,7 +66,7 @@ get_real_user_name (char *buffer, size_t size)
       if (def_size < 6)  def_size = 6;
       assert (size >= 8);
       sprintf (tmpl, "please enter your name (default: \"%%.%ds..\"): ",
-	       def_size);
+               def_size);
     }
     wprintw (message, tmpl, buffer);
   }
@@ -80,7 +78,7 @@ get_real_user_name (char *buffer, size_t size)
   res = wgetnstr (message, tmp, size);
   noecho ();
   hide_cursor ();
-  
+
   start = 0;
   while (start < size && tmp[start] && isspace (tmp[start]))  ++start;
   if (start<size && tmp[start]) {

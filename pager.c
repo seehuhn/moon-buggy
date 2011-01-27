@@ -2,8 +2,6 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id$";
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -38,7 +36,7 @@ print_page (unsigned current_line)
   wnoutrefresh (moon);
 
   mvwprintw (status, 0, 0, "=== COPYING %3d%% ===  ",
-	     lines_used==0 ? 100 :(int)(current_line*100.0/(lines_used-1)+.5));
+             lines_used==0 ? 100 :(int)(current_line*100.0/(lines_used-1)+.5));
   wnoutrefresh (status);
 }
 
@@ -106,8 +104,8 @@ pager_enter (int what)
     current_line = 0;
     for (i=0; i<lines_used; ++i) {
       if (strstr (copying_lines[i], "NO WARRANTY")) {
-	current_line = i;
-	break;
+        current_line = i;
+        break;
       }
     }
   default:

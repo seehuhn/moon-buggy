@@ -2,9 +2,6 @@
  *
  * Copyright 1999  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id$";
-
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -68,12 +65,12 @@ scroll_handler (game_time t, void *client_data)
     level_tick (t);
     print_ground ();
     print_level ();
-    
+
     stakes += bonus[car_x + 7];
-    
+
     if (crash_detected)  shift_buggy (1);
   }
-  
+
   if (crash_detected || crash_check ()) {
     ++crash_detected;
     if (crash_detected > 35)  mode_change (crash_mode, 1);
@@ -83,7 +80,7 @@ scroll_handler (game_time t, void *client_data)
     adjust_score (stakes);
     stakes = 0;
   }
-  
+
   add_event (t+TICK(1), scroll_handler, NULL);
 }
 

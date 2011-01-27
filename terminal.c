@@ -2,8 +2,6 @@
  *
  * Copyright (C) 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id$";
-
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
@@ -44,7 +42,7 @@ term_prepare (int mesg_n_flag)
   struct termios  settings;
 #endif
   int  res;
-  
+
   assert (! term_mode_valid);
   if ( ! isatty (0) )  return;
 
@@ -52,10 +50,10 @@ term_prepare (int mesg_n_flag)
     res = fstat (0, &st);
     if (res < 0)
       fatal ("Cannot get terminal attributes: %s", strerror (errno));
-    
+
     term_mode = st.st_mode;
     term_mode_valid = 1;
-    
+
     st.st_mode &= ~(S_IWGRP|S_IWOTH);
     res = fchmod (0, st.st_mode);
     if (res < 0)
@@ -85,13 +83,13 @@ term_restore (void)
   struct termios  settings;
 #endif
   int  res;
-  
+
 #if HAVE_TERMIOS_H
   if (attributes_changed) {
     res = tcgetattr (0, &settings);
     if (res < 0)
       fatal ("Cannot get terminal attributes: %s", strerror (errno));
-    
+
     settings.c_iflag |= IXON;
     res = tcsetattr (0, TCSANOW, &settings);
     if (res < 0)

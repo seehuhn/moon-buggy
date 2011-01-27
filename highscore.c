@@ -2,8 +2,6 @@
  *
  * Copyright 1999, 2000, 2001, 2006  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id$";
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -117,11 +115,11 @@ merge_entry (const struct score_entry *entry)
   struct score_entry *last;
 
   last = highscore+(HIGHSCORE_SLOTS-1);
-  
+
   if (entry->score > last->score) {
     memcpy (last, entry, sizeof (struct score_entry));
     qsort (highscore, HIGHSCORE_SLOTS, sizeof (struct score_entry),
-	   compare_entries);
+           compare_entries);
     highscore_changed = 1;
   }
 }
@@ -170,7 +168,7 @@ refill_old_entries (void)
     if (expire_date (i, highscore[i].date) < now)  randomize_entry (i);
   }
   qsort (highscore, HIGHSCORE_SLOTS, sizeof (struct score_entry),
-	 compare_entries);
+         compare_entries);
 }
 
 
@@ -196,8 +194,8 @@ read_version2_data (FILE *score_file)
     int  day, month, year;
     char  name [MAX_NAME_CHARS+1];
     res = fscanf (score_file,
-		  "|%d|%d|%d|%d|%d|%" quote(MAX_NAME_CHARS) "[^|]|\n",
-		  &score, &level, &day, &month, &year, name);
+                  "|%d|%d|%d|%d|%d|%" quote(MAX_NAME_CHARS) "[^|]|\n",
+                  &score, &level, &day, &month, &year, name);
     if (res != 6) {
       print_message ("Score file corrupted");
       err = 1;
@@ -210,7 +208,7 @@ read_version2_data (FILE *score_file)
     strncat (highscore[i].name, name, MAX_NAME_CHARS);
   }
   qsort (highscore, HIGHSCORE_SLOTS, sizeof (struct score_entry),
-	 compare_entries);
+         compare_entries);
   refill_old_entries ();
 
   return  err;
@@ -229,9 +227,9 @@ read_version3_data (FILE *score_file)
     char  date [MAX_DATE_CHARS];
     char  name [MAX_NAME_CHARS+1];
     res = fscanf (score_file,
-		  "|%d|%d|%" quote(MAX_DATE_CHARS) "[^|]"
-		  "|%" quote(MAX_NAME_CHARS) "[^|]|\n",
-		  &score, &level, date, name);
+                  "|%d|%d|%" quote(MAX_DATE_CHARS) "[^|]"
+                  "|%" quote(MAX_NAME_CHARS) "[^|]|\n",
+                  &score, &level, date, name);
     if (res != 4) {
       print_message ("Score file corrupted");
       err = 1;
@@ -259,9 +257,9 @@ read_data (FILE *score_file)
   int  version;
   int  err = 0;
   int  res;
-  
+
   res = fscanf (score_file, "moon-buggy hiscore file (version %d)\n",
-		&version);
+                &version);
   if (res != 1) {
     print_message ("Score file corrupted");
     return  0;
@@ -307,9 +305,9 @@ write_data (FILE *score_file)
 
     format_date (date, highscore[i].date);
     res = fprintf (score_file,
-		   "|%d|%d|%s|%." quote(MAX_NAME_CHARS) "s|\n",
-		   highscore[i].score, highscore[i].level, date,
-		   highscore[i].name);
+                   "|%d|%d|%s|%." quote(MAX_NAME_CHARS) "s|\n",
+                   highscore[i].score, highscore[i].level, date,
+                   highscore[i].name);
     if (res < 0)  fatal ("Score file write error (%s)", strerror (errno));
   }
 
@@ -357,7 +355,7 @@ do_open (const char *name, int flags, int lock, int must_succeed)
     lock_done = 0;
 #endif
   }
-  
+
   mode = S_IWUSR|S_IRUSR|S_IRGRP|S_IROTH;
   if ( is_setgid () )  mode |= S_IWGRP;
   mask = umask (0);
@@ -372,12 +370,12 @@ do_open (const char *name, int flags, int lock, int must_succeed)
   if (fd != -1 && ! lock_done) {
     struct flock  l;
     int  res;
-    
+
     l.l_type = (lock == 1) ? F_RDLCK : F_WRLCK;
     l.l_whence = SEEK_SET;
     l.l_start = 0;
     l.l_len = 0;
-    
+
     do {
       res = fcntl (fd, F_SETLKW, &l);
     } while (res == -1 && errno == EINTR);
@@ -385,7 +383,7 @@ do_open (const char *name, int flags, int lock, int must_succeed)
       fatal ("Cannot lock score file \"%s\": %s", name, strerror (errno));
     }
   }
-  
+
   return  fd;
 }
 
@@ -406,33 +404,33 @@ update_score_file (const struct score_entry *entry)
 
   for (method=1; method<=4; ++method) {
     in_fd = out_fd = -1;
-    
+
     switch (method) {
     case 1:
       /* method 1: try read/write access to global score file
-       *	   on success: in_fd == global, out_fd == global */
+       *           on success: in_fd == global, out_fd == global */
       in_pers = out_pers = pers_GAME;
       set_persona (pers_GAME);
       in_fd = out_fd = do_open (global_name, O_RDWR, 2, 0);
       break;
     case 2:
       /* method 2: try write access to global score file
-       *	   on success: in_fd == -1, out_fd == global */
+       *           on success: in_fd == -1, out_fd == global */
       out_pers = pers_GAME;
       set_persona (pers_GAME);
       out_fd = do_open (global_name, O_WRONLY|O_CREAT, 2, 0);
       break;
     case 3:
       /* method 3: try read/write access to local score file
-       *	   on success: in_fd == local, out_fd == local */
+       *           on success: in_fd == local, out_fd == local */
       in_pers = out_pers = pers_USER;
       set_persona (pers_USER);
       in_fd = out_fd = do_open (local_name, O_RDWR, 2, 0);
       break;
     case 4:
       /* method 4: try write access to local score file and
-       *	       read access to global score file
-       *	   on success: in_fd == global or -1, out_fd == local */
+       *               read access to global score file
+       *           on success: in_fd == global or -1, out_fd == local */
       out_pers = pers_USER;
       set_persona (pers_USER);
       out_fd = do_open (local_name, O_WRONLY|O_CREAT, 2, 1);
@@ -441,7 +439,7 @@ update_score_file (const struct score_entry *entry)
       in_fd = do_open (global_name, O_RDONLY, 1, 0);
       break;
     }
-    
+
     if (in_fd != -1) {
       int  read_success;
 
@@ -449,21 +447,21 @@ update_score_file (const struct score_entry *entry)
       f = fdopen (in_fd, in_fd==out_fd ? "r+" : "r");
       read_success = read_data (f);
       if (read_success) {
-	if (in_fd != out_fd) {
-	  res = fclose (f);
-	  if (res == EOF)  fatal ("Score file read error (%s)", strerror (errno));
-	} else {
-	  res = fseek (f, 0, SEEK_SET);
-	  if (res != 0)  fatal ("Score file seek error (%s)", strerror (errno));
-	}
+        if (in_fd != out_fd) {
+          res = fclose (f);
+          if (res == EOF)  fatal ("Score file read error (%s)", strerror (errno));
+        } else {
+          res = fseek (f, 0, SEEK_SET);
+          if (res != 0)  fatal ("Score file seek error (%s)", strerror (errno));
+        }
       } else {
-	fclose (f);
-	if (out_fd == in_fd)
-	  out_fd = -1;
-	in_fd = -1;
+        fclose (f);
+        if (out_fd == in_fd)
+          out_fd = -1;
+        in_fd = -1;
       }
     }
-    
+
     if (out_fd != -1)  break;
   }
   if (in_fd == -1)  generate_data ();
@@ -480,7 +478,7 @@ update_score_file (const struct score_entry *entry)
   }
   res = fclose (f);
   if (res == EOF)  fatal ("Score file write error (%s)", strerror (errno));
-  
+
   set_persona (pers_USER);
   free (local_name);
   free (global_name);
@@ -514,13 +512,13 @@ show_highscores (void)
     char  date [16];
     char  expire [16];
     double  dt;
-    
+
     format_display_date (date, highscore[i].date);
     dt = difftime (expire_date (i, highscore[i].date), now);
     format_relative_time (expire, dt);
     printf ("%3d %8u %-3d  %s %s  %." quote(MAX_NAME_CHARS) "s\n",
-	    i+1, highscore[i].score, highscore[i].level, date, expire,
-	    highscore[i].name);
+            i+1, highscore[i].score, highscore[i].level, date, expire,
+            highscore[i].name);
   }
 }
 
@@ -566,7 +564,7 @@ print_scores (void)
   int  i, line, my_rank;
 
   now = time (NULL);
-  
+
   mvwaddstr (moon, 1, 5, "rank   score lvl     date  expires  name");
   line = 3;
   my_rank = -1;
@@ -574,26 +572,26 @@ print_scores (void)
     char  date [16];
     char  expire [16];
     double  dt;
-    
+
     if (highscore[i].new) {
       if (highscore[i].score == last_score)  my_rank = i+1;
     }
 
     if ((i==3 && gap>0)
-	|| (i<HIGHSCORE_SLOTS-1 && line==max_line)) {
+        || (i<HIGHSCORE_SLOTS-1 && line==max_line)) {
       mvwprintw (moon, line++, 5, "  ...");
       wclrtoeol (moon);
     }
     if ((i>=3 && i<3+gap) || line>max_line)  continue;
-    
+
     format_display_date (date, highscore[i].date);
     dt = difftime (expire_date (i, highscore[i].date), now);
     format_relative_time (expire, dt);
     if (highscore[i].new)  wstandout (moon);
     mvwprintw (moon, line++, 5,
-	       "%3d %8u %-3d  %s %s  %." quote(MAX_NAME_CHARS) "s\n",
-	       i+1, highscore[i].score, highscore[i].level, date, expire,
-	       highscore[i].name);
+               "%3d %8u %-3d  %s %s  %." quote(MAX_NAME_CHARS) "s\n",
+               i+1, highscore[i].score, highscore[i].level, date, expire,
+               highscore[i].name);
     if (highscore[i].new)  wstandend (moon);
   }
   ++line;
@@ -615,7 +613,7 @@ enter_name_h (game_time t, void *client_data)
 {
   struct score_entry  entry;
   int  res;
-    
+
   entry.score = last_score;
   entry.level = last_level;
   entry.date = time (NULL);
@@ -627,7 +625,7 @@ enter_name_h (game_time t, void *client_data)
     goto retry;
   }
   entry.new = 1;
-  
+
   print_message ("writing score file ...");
   doupdate ();
   block_all ();
@@ -641,7 +639,7 @@ highscore_enter (int seed)
 {
   print_ground ();
   print_buggy ();
-  
+
   print_message ("loading score file ...");
   doupdate ();
   block_all ();
@@ -671,7 +669,7 @@ highscore_redraw (void)
   max_line = LINES-11;
   if (max_line > 25)  max_line = 25;
   fix_gap ();
-  
+
   print_ground ();
   adjust_score (0);
   print_lives ();

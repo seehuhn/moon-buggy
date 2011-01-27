@@ -2,9 +2,6 @@
  *
  * Copyright 1999, 2000, 2004  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id$";
-
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -39,17 +36,17 @@ print_title (void)
   int  title_lines = sizeof (title) / sizeof (const char *);
 
   mvwaddstr (moon, 0, 0, "  Moon-Buggy version "
-	     VERSION ", Copyright 2004 Jochen Voss <voss@seehuhn.de>\n");
+             VERSION ", Copyright 2004 Jochen Voss <voss@seehuhn.de>\n");
   waddstr (moon, "  Moon-Buggy comes with ABSOLUTELY NO WARRANTY;"
-	   " for details type 'w'.\n");
+           " for details type 'w'.\n");
   waddstr (moon,
-	   "  This is free software, and you are welcome to redistribute it\n\
+           "  This is free software, and you are welcome to redistribute it\n\
   under certain conditions; type 'c' for details.\n");
 
   if (5 + title_lines + 5 <= LINES) {
     int  top = (LINES-title_lines)/3.0 + 0.5;
     int  i;
-    
+
     if (top < 5)  top = 5;
     for (i=0; i<title_lines; ++i) {
       mvwaddstr (moon, top+i, (COLS-49)/2, title[i]);

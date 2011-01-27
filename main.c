@@ -2,8 +2,6 @@
  *
  * Copyright 1999, 2000, 2004, 2006  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id$";
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -145,14 +143,14 @@ main (int argc, char **argv)
   int  title_flag = 1;
   int  version_flag = 0;
   int  error_flag = 0;
-  
+
   initialise_persona ();
   set_persona (pers_USER);
 
 #ifdef HAVE_SETLOCALE
   setlocale (LC_CTYPE, "");
 #endif
-  
+
   /* `basename' seems to be non-standard.  So we avoid it.  */
   my_name = strrchr (argv[0], '/');
   my_name = xstrdup (my_name ? my_name+1 : argv[0]);
@@ -194,7 +192,7 @@ main (int argc, char **argv)
     fputs ("too many arguments\n", stderr);
     error_flag = 1;
   }
-  
+
   if (version_flag) {
     puts ("Moon-Buggy " VERSION);
     puts ("Copyright 1998-2006  Jochen Voss");
@@ -218,11 +216,11 @@ the file named COPYING or press `c' at Moon-Buggy's title screen.");
     /* --create-scores: create the highscore file (internal use only) */
     fputs (OPT("-h","--help         ") "show this message and exit\n", out);
     fputs (OPT("-m","--mesg         ") "imply the effect of \"mesg n\"\n",
-	   out);
+           out);
     fputs (OPT("-n","--no-title     ") "omit the title screen\n", out);
     fputs (OPT("-s","--show-scores  ") "only show the highscore list\n", out);
     fputs (OPT("-V","--version      ") "show the version number and exit\n\n",
-	   out);
+           out);
     fputs ("Please report bugs to <voss@seehuhn.de>.\n", out);
     exit (error_flag);
   }
@@ -237,9 +235,9 @@ the file named COPYING or press `c' at Moon-Buggy's title screen.");
     }
     exit (0);
   }
-  
+
   initialise_signals ();
-  
+
   allocate_windows ();
   curses_initialised = 1;
   prepare_screen ();
@@ -262,7 +260,7 @@ the file named COPYING or press `c' at Moon-Buggy's title screen.");
   }
   main_loop ();
   mode_change (NULL, 0);
-  
+
   prepare_for_exit ();
   return  0;
 }

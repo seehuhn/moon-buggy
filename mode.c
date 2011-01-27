@@ -2,9 +2,6 @@
  *
  * Copyright (C) 2000  Jochen Voss.  */
 
-static const  char  rcsid[] = "$Id$";
-
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -73,7 +70,7 @@ mode_enter (void)
   werase (moon);
   wnoutrefresh (moon);
   if (! current)  return;
-  
+
   if (current->enter)  current->enter (mode_seed);
   mode_entered = 1;
 }

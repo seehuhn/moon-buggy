@@ -2,8 +2,6 @@
  *
  * Copyright 1999, 2000  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id$";
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -112,7 +110,7 @@ key_ready (void)
 
   do {
     struct timeval  ancient_time;
-    
+
     ancient_time.tv_sec = 0;
     ancient_time.tv_usec = 0;
     res = my_select (&ancient_time);
@@ -142,14 +140,14 @@ wait_until (game_time t, real_time *t_return)
   do {
     double  dt, sec, usec;
     struct timeval  tv;
-    
+
     start = vclock ();
     dt = to_real(t) - start;
     if (dt <= 0) {
       *t_return = start;
       return  key_ready ();
     }
-    
+
     usec = 1e6 * modf (dt, &sec) + 0.5;
     tv.tv_sec = sec + 0.5;
     tv.tv_usec = usec + 0.5;
@@ -240,7 +238,7 @@ add_event (game_time t, callback_fn callback, void *client_data)
 {
   struct event **evp;
   struct event *ev;
-  
+
   evp = &queue;
   while (*evp && (*evp)->t <= t)  evp = &((*evp)->next);
 
@@ -312,7 +310,7 @@ main_loop (void)
     double  t;
 
     mode_update ();
-    
+
     if (queue) {
       retval = wait_until (queue->t, &t);
     } else {
@@ -324,10 +322,10 @@ main_loop (void)
     if (retval>0) {
       int  meaning = read_key ();
       if (meaning != -1) {
-	if (! mode_keypress (to_game (t), meaning))  beep ();
+        if (! mode_keypress (to_game (t), meaning))  beep ();
       }
     }
-    
+
     while (queue && queue->t <= current_time ()) {
       struct event *ev = queue;
       queue = queue->next;

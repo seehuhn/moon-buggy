@@ -2,8 +2,6 @@
  *
  * Copyright 1999, 2004  Jochen Voss  */
 
-static const  char  rcsid[] = "$Id$";
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -88,7 +86,7 @@ print_buggy (void)
   }
   car_y = y;
 
-/* ++pg the changing of the 4 normal states is realized 
+/* ++pg the changing of the 4 normal states is realized
         in the following lines.
 */
   if (n==car_NORMAL)  {
@@ -99,7 +97,7 @@ print_buggy (void)
     mvwaddstr (moon, LINES-y, car_x, image[n][1]);
   }
   nextG++; if (nextG>3) nextG=0;
- 
+
 
   if (n == car_BROKEN) {
     if (ground2[car_x+1] == ' ')  mvwaddch (moon, LINES-4, car_x+1, 'o');
@@ -217,7 +215,7 @@ crash_check (void)
     start_wheel ();
     return 1;
   }
-  
+
   return  0;
 }
 

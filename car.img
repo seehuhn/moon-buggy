@@ -1,6 +1,5 @@
 # car.img - images to animate the buggy
 # this is input for "img.sed"
-# $Id$
 
 NORMAL:
 |   Omm |

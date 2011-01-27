@@ -1,6 +1,5 @@
 ## Process this file with automake to produce Makefile.in
 # Copyright 1999, 2000, 2001  Jochen Voss
-# $Id$
 
 EXTRA_DIST = manpage.in car.img \
 	text2c.sed img.sed ANNOUNCE moon-buggy.lsm \
