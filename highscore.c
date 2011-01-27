@@ -539,12 +539,10 @@ static void
 center_new (void)
 /* Prepare `gap' in order to view values around `last_score'.  */
 {
-  int  limit;
   int  i, pos;
 
   max_line = LINES-11;
   if (max_line > 25)  max_line = 25;
-  limit = HIGHSCORE_SLOTS-(max_line-3);
 
   for (i=1; i<HIGHSCORE_SLOTS; ++i) {
     if (highscore[i].score < last_score)  break;
