@@ -1,5 +1,4 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.4 $)
 
 AC_INIT(moon-buggy, 1.0.51, voss@seehuhn.de)
 AC_CONFIG_SRCDIR([moon-buggy.h])
