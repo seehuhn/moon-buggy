@@ -1,0 +1,19 @@
+name: moon-buggy
+version: 1.0.51
+summary: drive some car across the moon
+description: |
+  Moon-buggy is a simple character graphics game, where you drive some
+  kind of car across the moon's surface.  Unfortunately there are
+  dangerous craters there.  Fortunately your car can jump over them!
+
+apps:
+  moon-buggy:
+    command: moon-buggy
+
+parts:
+  moon-buggy:
+    source: .
+    plugin: autotools
+    build-packages:
+      - libncurses5-dev
+      - texinfo
