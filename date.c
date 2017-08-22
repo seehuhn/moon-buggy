@@ -52,9 +52,13 @@ format_date (char *buffer, time_t date)
   struct tm *loctime;
 
   loctime = localtime (&date);
-  sprintf (buffer, "%d-%d-%d %d:%d:%d",
-           loctime->tm_year+1900, loctime->tm_mon+1, loctime->tm_mday,
-           loctime->tm_hour, loctime->tm_min, loctime->tm_sec);
+  if (loctime) {
+    sprintf (buffer, "%d-%d-%d %d:%d:%d",
+             loctime->tm_year+1900, loctime->tm_mon+1, loctime->tm_mday,
+             loctime->tm_hour, loctime->tm_min, loctime->tm_sec);
+  } else {
+    sprintf (buffer, "sometimes");
+  }
 }
 
 void
@@ -66,8 +70,12 @@ format_display_date (char *buffer, time_t date)
   struct tm *loctime;
 
   loctime = localtime (&date);
-  sprintf (buffer, "%4d-%02d-%02d",
-           loctime->tm_year+1900, loctime->tm_mon+1, loctime->tm_mday);
+  if (loctime) {
+    sprintf (buffer, "%4d-%02d-%02d",
+             loctime->tm_year+1900, loctime->tm_mon+1, loctime->tm_mday);
+  } else {
+    sprintf (buffer, "sometimes");
+  }
 }
 
 void

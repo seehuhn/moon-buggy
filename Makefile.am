@@ -6,7 +6,7 @@ EXTRA_DIST = manpage.in car.img \
 	moon-buggy.png moon-buggy.xpm title.eps
 DISTCLEANFILES = moon-buggy.6
 
-INCLUDES = @CURSES_INCLUDEDIR@
+AM_CPPFLAGS = @CURSES_INCLUDEDIR@
 
 bin_PROGRAMS = moon-buggy
 moon_buggy_SOURCES = moon-buggy.h main.c mode.c title.c pager.c copying.h \

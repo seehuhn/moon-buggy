@@ -60,7 +60,7 @@ get_real_user_name (char *buffer, size_t size)
                 - size
                 - strlen("please enter your name (default: \"\"): "));
     if (def_size >= (int)xstrnlen(buffer, size)) {
-      sprintf (tmpl, "please enter your name (default: \"%%.%ds\"): ", size);
+      sprintf (tmpl, "please enter your name (default: \"%%.%ds\"): ", (int)size);
     } else {
       def_size -= 2;
       if (def_size < 6)  def_size = 6;
