@@ -18,3 +18,7 @@ schotter
 stamp-vti
 texinfo.tex
 version.texi
+parts
+stage
+snap
+*.snap

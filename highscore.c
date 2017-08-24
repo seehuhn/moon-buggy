@@ -79,7 +79,12 @@ local_score_file_name (void)
   uid_t  me = getuid ();
   struct passwd *my_passwd = getpwuid (me);
 
-  if (my_passwd && my_passwd->pw_dir) {
+  /* If SNAP_USER_DATA exists we store there instead */
+  char *SNAP_USER_DATA = getenv("SNAP_USER_DATA");
+
+  if (SNAP_USER_DATA != NULL && strlen(SNAP_USER_DATA) > 0) {
+    return  compose_filename (SNAP_USER_DATA, SCORE_FILE);
+  } else if (my_passwd && my_passwd->pw_dir) {
     return  compose_filename (my_passwd->pw_dir, "." SCORE_FILE);
   } else {
     return  compose_filename (NULL, "." SCORE_FILE);
