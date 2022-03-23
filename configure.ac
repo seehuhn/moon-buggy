@@ -1,9 +1,9 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(moon-buggy, 1.0.51, voss@seehuhn.de)
+AC_INIT([moon-buggy],[1.0.51],[voss@seehuhn.de])
 AC_CONFIG_SRCDIR([moon-buggy.h])
 AM_INIT_AUTOMAKE
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 
 AC_CANONICAL_HOST
 
@@ -24,19 +24,20 @@ AC_SUBST(GAMEGROUP)
 
 dnl Checks for programs.
 AC_PROG_CC
+AC_PROG_CPP
+AC_PROG_EGREP
 
 dnl Checks for libraries.
 AC_CHECK_LIB(m, modf)
 JV_CHECK_CURSES
 
 dnl Checks for header files.
-AC_HEADER_STDC
 AC_CHECK_HEADERS(getopt.h errno.h locale.h termios.h)
 
 # Check if <sys/select.h> needs to be included for fd_set
 AC_MSG_CHECKING([for fd_set])
-AC_TRY_COMPILE([#include <sys/types.h>],
-        [fd_set readMask, writeMask;], mb_ok=yes, mb_ok=no)
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/types.h>]],
+        [[fd_set readMask, writeMask;]])],[mb_ok=yes],[mb_ok=no])
 if test $mb_ok = yes; then
     AC_MSG_RESULT([yes, found in sys/types.h])
 else
@@ -57,7 +58,6 @@ AC_TYPE_UID_T
 AC_TYPE_SIZE_T
 
 dnl Checks for library functions.
-AC_TYPE_SIGNAL
 AC_CHECK_FUNCS(fclean ftruncate getopt_long setreuid setlocale)
 
 AM_CONDITIONAL(short_getopt, test "x$ac_cv_func_getopt_long" != xyes)

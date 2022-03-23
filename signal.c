@@ -45,7 +45,7 @@ unblock (void)
 }
 
 static void
-install_signal (int signum, RETSIGTYPE (*handler) ())
+install_signal (int signum, void (*handler) ())
 /* Emulate the `signal' function via `sigaction'.  */
 {
   struct sigaction  action;
@@ -58,7 +58,7 @@ install_signal (int signum, RETSIGTYPE (*handler) ())
   assert (ret == 0);
 }
 
-static RETSIGTYPE
+static void
 generic_handler (int signum)
 /* Interrupt handlers shouldn't do much.  So we just note that the
  * signal arrived.  */
