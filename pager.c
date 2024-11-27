@@ -3,7 +3,7 @@
  * Copyright 1999, 2000  Jochen Voss  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include <string.h>

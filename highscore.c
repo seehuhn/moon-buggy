@@ -3,7 +3,7 @@
  * Copyright 1999, 2000, 2001, 2006  Jochen Voss  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #ifdef _XOPEN_SOURCE
@@ -224,7 +224,7 @@ read_version3_data (FILE *score_file)
 
   for (i=0; i<HIGHSCORE_SLOTS && ! err; ++i) {
     int  score, level;
-    char  date [MAX_DATE_CHARS];
+    char  date [MAX_DATE_CHARS+1];
     char  name [MAX_NAME_CHARS+1];
     res = fscanf (score_file,
                   "|%d|%d|%" quote(MAX_DATE_CHARS) "[^|]"
@@ -316,11 +316,7 @@ write_data (FILE *score_file)
     int  fd = fileno (score_file);
     long int  pos = ftell (score_file);
     if (pos != -1) {
-#if HAVE_FCLEAN
-      fclean (score_file);
-#else
       fflush (score_file);
-#endif
       ftruncate (fd, pos);
     }
   }
