@@ -1,9 +1,9 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(moon-buggy, 1.0.51, voss@seehuhn.de)
+AC_INIT([moon-buggy],[1.0.51],[voss@seehuhn.de])
 AC_CONFIG_SRCDIR([moon-buggy.h])
 AM_INIT_AUTOMAKE
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 
 AC_CANONICAL_HOST
 
@@ -35,8 +35,7 @@ AC_CHECK_HEADERS(getopt.h errno.h locale.h termios.h)
 
 # Check if <sys/select.h> needs to be included for fd_set
 AC_MSG_CHECKING([for fd_set])
-AC_TRY_COMPILE([#include <sys/types.h>],
-        [fd_set readMask, writeMask;], mb_ok=yes, mb_ok=no)
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/types.h>]],[[fd_set readMask, writeMask;]])],[mb_ok=yes],[mb_ok=no])
 if test $mb_ok = yes; then
     AC_MSG_RESULT([yes, found in sys/types.h])
 else

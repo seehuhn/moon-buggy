@@ -1,3 +1,5 @@
+[This file is no longer updated; please read the git commit entries inatead.]
+
 ------------------------------------------------------------------------
 r6825 | voss | 2006-03-19 19:18:39 +0000 (Sun, 19 Mar 2006) | 5 lines
 
@@ -1389,7 +1391,7 @@ Mention the new animations and current automake version.
 
 	* mbuggy.h: Added declarations for the new file "control.c".
 
-	* TODO: Drei neue Einträge.
+	* TODO: Drei neue EintrÃ¤ge.
 
 	* buggy.c (sz_jump): slightly changed the jump length
 
@@ -1464,7 +1466,7 @@ Mention the new animations and current automake version.
 1999-05-19  Jochen Voss  <voss@seehuhn.de>
 
 	* TODO: Ein Punkt entfert.
-	Dafür zwei neue.
+	DafÃ¼r zwei neue.
 
 	* Makefile.am: Mention the new file "random.c".
 
@@ -1495,7 +1497,7 @@ Mention the new animations and current automake version.
 
 1999-05-15  Jochen Voss  <voss@seehuhn.de>
 
-	* TODO: Viele neue Einträge.
+	* TODO: Viele neue EintrÃ¤ge.
 
 	* Makefile.am: Mention the new file "meteor.c".
 
@@ -2065,7 +2067,7 @@ Mention the new animations and current automake version.
 
 1998-12-27  Jochen Voss  <voss@seehuhn.de>
 
-	* ChangeLog: 19998-12-27 hinzugefügt.
+	* ChangeLog: 19998-12-27 hinzugefÃ¼gt.
 
 	* .cvsignore: Added the temporary TeX files.
 
@@ -2096,7 +2098,7 @@ Mention the new animations and current automake version.
 	* ChangeLog: Added entries from 1998-12-22 to 1998-12-26.
 
 	* TODO: Einige Punkte erledigt.
-	Dafür einen neuen hinzugefügt.
+	DafÃ¼r einen neuen hinzugefÃ¼gt.
 
 	* README: Changed from fsstnd to fhs.
 
