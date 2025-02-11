@@ -45,7 +45,7 @@ unblock (void)
 }
 
 static void
-install_signal (int signum, RETSIGTYPE (*handler) ())
+install_signal (int signum, RETSIGTYPE (*handler) (int))
 /* Emulate the `signal' function via `sigaction'.  */
 {
   struct sigaction  action;
