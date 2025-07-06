@@ -42,7 +42,7 @@ else
     AC_EGREP_HEADER(fd_mask, sys/select.h, mb_ok=yes)
     if test $mb_ok = yes; then
         AC_DEFINE(HAVE_SYS_SELECT_H,1,
-		  [Define if you have the <errno.h> header file.])
+		  [Define if you have the <sys/select.h> header file.])
         AC_MSG_RESULT([yes, found in sys/select.h])
     else
         AC_DEFINE(NO_FD_SET,1,[Define if your system lacks `fd_set'.])

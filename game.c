@@ -6,6 +6,10 @@
 #include "config.h"
 #endif
 
+#ifdef _XOPEN_SOURCE
+#define _XOPEN_SOURCE_EXTENDED 1
+#endif
+
 #include <signal.h>
 
 #include "moon-buggy.h"
@@ -122,14 +126,18 @@ static void
 signal_handler (int signum)
 {
   switch (signum) {
+#ifdef SIGTSTP
   case SIGTSTP:
     if (lives > 1)  lives = 1;
     if (! crash_detected)  crash_detected = 1;
     print_message ("GAME OVER (suspended)");
     break;
+#endif
+#ifdef SIGCONT
   case SIGCONT:
     print_message ("GAME OVER (suspended)");
     break;
+#endif
   }
 }
 
