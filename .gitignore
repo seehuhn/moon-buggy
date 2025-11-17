@@ -19,3 +19,12 @@ schotter
 stamp-vti
 texinfo.tex
 version.texi
+*.o
+.deps/
+Makefile
+config.h
+config.log
+config.status
+moon-buggy
+moon-buggy.6
+stamp-h1

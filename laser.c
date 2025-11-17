@@ -136,7 +136,7 @@ laser_hit (int x)
 
   for (j=0; j<beam_table.used; ++j) {
     struct beam *b = beam_table.data[j];
-    if (b->y == 5 && b->left >= x && b->right < x) {
+    if (b->y == 5 && b->left <= x && b->right > x) {
       if (b->state < bs_CLOUD)  b->count = 0;
       res = 1;
     }

@@ -67,17 +67,15 @@ generic_handler (int signum)
 
   signal_arrived = 1;
   for (i=0; i<sig_info_table.used; ++i) {
-    if (sig_info_table.data[i].signum == signum)  break;
+    if (sig_info_table.data[i].signum == signum) {
+      sig_info_table.data[i].pending = 1;
+      break;
+    }
   }
-  assert (i<sig_info_table.used);
-  sig_info_table.data[i].pending = 1;
-
-  if (signum == SIGINT || signum == SIGHUP || signum == SIGTERM) {
-    /* Pressing `C-c' twice exits, even if the program hangs.  */
-    install_signal (signum, SIG_DFL);
-  } else {
-    install_signal (signum, generic_handler);
-  }
+  /* Note: We don't call assert() or sigaction() here because they are
+   * not async-signal-safe.  With modern sigaction() and sa_flags=0,
+   * handlers persist automatically, so no reinstallation is needed.
+   * If the signal isn't found in our table, we simply ignore it. */
 }
 
 static void
@@ -111,7 +109,8 @@ termination_handler (int signum)
 {
   prepare_for_exit ();
   fprintf (stderr, "GAME ABORTED (signal %d)\n", signum);
-  /* We did `signal (signum, SIG_DFL)' in `generic_handler'.  */
+  /* Restore default handler so pressing C-c twice exits, even if hung. */
+  install_signal (signum, SIG_DFL);
   raise (signum);
 }
 
