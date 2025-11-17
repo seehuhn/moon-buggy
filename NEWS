@@ -1,3 +1,10 @@
+version 1.1.0 (17 November 2025):
+  fix C23 build failures using GCC 15 (thanks, Robert Scheck)
+  fix bugs in laser hit detection and signal handling
+  make use of SIGTSTP and SIGCONT more robust
+  gently modernise the build system
+
+version 1.0.51:
   fix highscore file corruption bug (thanks, Arnd Behring)
   fix compilation on MacOS X
 

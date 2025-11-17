@@ -195,7 +195,7 @@ main (int argc, char **argv)
 
   if (version_flag) {
     puts ("Moon-Buggy " VERSION);
-    puts ("Copyright 1998-2006  Jochen Voss");
+    puts ("Copyright 1998-2025  Jochen Voss");
     puts ("\
 Moon-Buggy comes with NO WARRANTY, to the extent permitted by law.");
     puts ("\
